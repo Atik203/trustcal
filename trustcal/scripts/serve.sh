@@ -27,6 +27,12 @@ elif ! command -v python3 >/dev/null 2>&1; then
   PY_CMD=python
 fi
 
+# Triton compiles a driver helper at vLLM startup. A minimal image without
+# python3-dev fails there after the model is loaded; resolve it before launch.
+# shellcheck source=scripts/python_headers.sh
+. "$(dirname "$0")/python_headers.sh"
+trustcal_ensure_python_headers "$PY_CMD" || exit 1
+
 CMD_FILE=$(mktemp)
 trap 'rm -f "$CMD_FILE"' EXIT
 if [ -z "${PHASE:-}" ]; then

@@ -14,6 +14,16 @@ Approved architecture, hardware, and environment decisions. Add an entry before 
 
 **Why:** a paid session must not depend on the day's nightly wheel or discover an incompatible checkpoint after the A100 clock starts. The 18GB slice is used to validate the same script on the exact checkpoint configs before the cloud run.
 
+## 2026-11-19 - Triton JIT needs Python.h on minimal images
+
+**Status:** approved.
+
+**Finding:** vLLM 0.34.0 starts, loads the checkpoint, then fails during `determine_available_memory` with `subprocess.CalledProcessError` from Triton's `driver.c` compile. The host has no `/usr/include/python3.12/Python.h`; the compiler error is hidden by Triton's `stdout=DEVNULL`.
+
+**Decision:** `scripts/python_headers.sh` resolves the interpreter's include directory, prepends it to `CPATH`, and if the headers are missing uses a user-local `uv python install` (no sudo) to obtain matching headers. `setup.sh` calls it before validation/download; `serve.sh` calls it before launching vLLM. If neither source works, both stop with a clear message instead of a cryptic engine-init failure.
+
+**Why:** this failure happens after the model is loaded, so on a paid host it burns setup time and looks like a model problem. The check is cheap and runs before the 53GB download.
+
 ## 2026-11-19 - Retrieval source circuit breaker
 
 **Status:** approved.

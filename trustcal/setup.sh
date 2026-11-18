@@ -111,6 +111,12 @@ bash scripts/install_vllm.sh
 "$PY_CMD" -m pip check
 echo "Deps installed."
 
+# Triton JIT needs Python.h. Resolve it now, not after a 53GB download and a
+# cryptic "Engine core initialization failed" at server startup.
+# shellcheck source=scripts/python_headers.sh
+. scripts/python_headers.sh
+trustcal_ensure_python_headers "$PY_CMD" || exit 1
+
 # ── 3b) Validate the exact stack BEFORE downloading 53GB of weights ─────────
 # Downloads config/tokenizer/chat-template files only. If an architecture,
 # quantization method, serve flag or reasoning parser is incompatible with this

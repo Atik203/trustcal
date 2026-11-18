@@ -132,6 +132,7 @@ No FP8 precision replication is trusted until that hardware smoke passes and its
 
 - `HF_HOME` defaults to `/workspace/.cache/huggingface` when writable, else `$HOME/.cache/huggingface` — both are on the persistent disk for the supported providers.
 - A dead server shows up as a `FAIL server :<port>` line; read `results/logs/vllm-<port>.log`. OOM → lower that agent's `gpu_memory_utilization` in `models.yaml` and re-run `serve.sh`.
+- Minimal images without `python3-dev`: vLLM 0.34.0's Triton JIT needs `Python.h`. `setup.sh` and `serve.sh` source `scripts/python_headers.sh`, which sets `CPATH` from the interpreter or a user-local `uv` Python. Never ignore its error; the server will fail after loading weights.
 - GPQA/HLE are gated Hugging Face repos: downloads 401 without `HF_TOKEN`. B7 needs `OPENAI_API_KEY`.
 - Vast images ship their own `AGENTS.md`/`CLAUDE.md` plus `vast-capabilities` (installed services, ports, persistence) — prefer those for machine facts.
 
