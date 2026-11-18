@@ -2,6 +2,24 @@
 
 Approved architecture, hardware, and environment decisions. Add an entry before confirmatory work when a decision changes the compute path, driver, CUDA version, or serving environment.
 
+## 2026-11-18 — Dedicated trustcal directory and $50 test-first tranche
+
+**Status:** approved.
+
+**Decision:** use a dedicated `trustcal-fydp/` project directory on the university server. Do not work inside or modify the existing `tool-observation/` project, its venv, or its configs. Share the Hugging Face cache read-only.
+
+**18 GB test stack:**
+
+- 8–9B AWQ with vLLM, one model at a time, 24k context: Qwen3.5-9B (8.37 GiB), Ministral-8B (7.03 GiB), Llama-3.1-8B (5.58 GiB).
+- Q4_K_M main templates with llama.cpp at 4k context, q8 KV, one model at a time: Qwen3.8-27B Q4_K_M (15.43 GB; Q4_0 14.95 GB or Q3_K_M 12.48 GB if tight), Gemma 4 26B Q4_K_M (15.78 GB), Mistral 24B Q4_K_M (13.35 GB).
+- Offload a few layers to the 125 GB system RAM only if a Q4_K_M model is tight. This is test-only, not the AWQ/FP8 stack.
+
+**Bandwidth:** download Q4_K_M test files on the university host, one at a time, and keep the project under 200 GB. Do not download them on a cloud host. The cloud host downloads only the final AWQ/FP8 stack.
+
+**$50 tranche:** spend on the 80 GB 4-bit smoke (~$1–2) and pilot (~$15–20) first. Optionally add one 96 GB 5-question smoke (~$2–8) after the pilot is stable. Keep $20–30 for retries and bandwidth. Do not run a 96 GB pilot (~$37–45), the FP8 precision replication (~$25–40), Core ($175–210), or Full ($210, or ~$104 with reuse) from this tranche.
+
+**Why:** the 18 GB tests are free and prevent paid cloud debugging; the 96 GB path is a secondary precision check, not the main 4-bit result. The first $50 should buy a clean 4-bit smoke and pilot, not a 96 GB pilot.
+
 ## 2026-11-14 — Dev-slice validation before cloud runs
 
 **Status:** approved.

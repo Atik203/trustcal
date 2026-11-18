@@ -47,19 +47,46 @@ The main matrix runs on the **80 GB A100 PCIe** because the 4-bit 24–27B stack
 
 | Scenario | GPU-h | GPU $ | +20% overhead | Present |
 |---|---:|---:|---:|---:|
+| 18 GB test gate (N1.0) | — | $0 | $0 | **$0** |
+| 4-bit 80 GB smoke (N1a) | 4–8 | $0.54–1.09 | $0.65–1.31 | **$1–2** |
 | Pilot (N5/G2) | ~112 | $15 | $18 | **$15–20** |
 | Core run (G3), planned | ~1,067 | $145 | $174 | **$175–210** |
 | Core run (G3), cap | 1,280 | $174 | $209 | **$175–210** |
 | Full run (G4/G5), **32-row gold-evidence default** | 1,280 | $174 | $209 | **$210** |
 | Full run, **36-row gold-answer alternate** | 1,440 | $196 | $235 | **$235** |
-| FP8 precision replication + 96 GB N1 smoke | 60–100 | $20–34 | $24–41 | **$25–40** |
+| 96 GB FP8 5-question smoke (N1b) | 1.5–3 | $0.50–1.00 | $0.60–1.20 | **$2–8** |
+| FP8 precision replication | 60–100 | $20–34 | $24–41 | **$25–40** |
 | Storage and bandwidth | — | — | — | **$40–80** |
 | **Total plan** | — | — | — | **$500–600** |
 | **Hard stop** | — | — | — | **$600** |
 
-**Full design:** the default is **32 rows** with a **gold-evidence oracle on SciClaimBench**; **36 rows** is the gold-answer alternate. The two Full rows are **alternatives**, not additions; the total counts one Full run. The **placebo** is a **cross-agent round-pool**. WP-18 freezes the definition; do not run Full before N1 and WP-18.
+**Full design:** the default is **32 rows** with a **gold-evidence oracle on SciClaimBench**; **36 rows** is the gold-answer alternate. The two Full rows are **alternatives**, not additions; the total counts one Full run. The **placebo** is a **cross-agent round-pool**. WP-18 freezes the definition; do not run Full before N1a and v1.3/WP-18.
 
-**Dev-slice offset (not a cap change).** The free university `uiu-h200` 18 GB slice can run one dev model at a time and the mock three-agent path. It cannot run the 53.26 GB 4-bit matrix stack, the 73.68 GB FP8 stack, or the three-model dev trio. Use it to finalize prompts, parser, answer rendering, serving flags, manifest/resume, and retrieval/verifier checks before renting cloud GPUs. It does not reduce the matrix debate hours; its expected effect is to reduce avoidable setup/debug/retry overhead. Planning offset: **$20–50 direct** (a 5–10% reduction in the 20% overhead line, plus avoided smoke retries). A prevented Core/Full rerun is worth **$175–235**, but that is risk avoidance, not expected savings. Keep the **$500–600** range and **$600** hard stop until actual invoices replace the estimate.
+**Dev-slice offset (not a cap change).** The free university `uiu-h200` 18 GB slice can run one model at a time and the mock three-agent path. It cannot run the 53.26 GB 4-bit matrix stack, the 73.68 GB FP8 stack, or the three-model dev trio. Use it for 8–9B AWQ with vLLM, or Q4_K_M main models with llama.cpp at 4k context, one model at a time. It finalizes prompts, parser, answer rendering, serving flags, manifest/resume, and retrieval/verifier checks before renting cloud GPUs. Do not download Q4_K_M test files on a cloud host; download them on the university host. It does not reduce the matrix debate hours; its expected effect is to reduce avoidable setup/debug/retry overhead. Planning offset: **$20–50 direct** (a 5–10% reduction in the 20% overhead line, plus avoided smoke retries). A prevented Core/Full rerun is worth **$175–235**, but that is risk avoidance, not expected savings. Keep the **$500–600** range and **$600** hard stop until actual invoices replace the estimate.
+
+**96 GB smoke vs pilot vs precision.** The 96 GB rate is **$0.336/GPU-h**, about 2.5× the A100:
+
+| 96 GB job | GPU time | GPU cost | All-in estimate |
+|---|---:|---:|---:|
+| 5-question smoke | 1.5–3 h | $0.50–1.00 | **$2–8** |
+| 20-question quality check | 3.5–5 h | $1.20–1.70 | **$4–12** |
+| 100–150-question pilot | 110–120 h | $37–40 | **$37–45** |
+| FP8 precision, 150–200 questions, 3 arms | 60–100 h | $20–34 | **$25–40** |
+
+The **$25–40 line is the precision replication, not a smoke**. A 96 GB smoke is only **$2–8**.
+
+**$50 tranche.** Spend it in this order:
+
+| Priority | Item | Cost |
+|---|---:|---:|
+| 1 | 18 GB test-only validation | **$0** |
+| 2 | 80 GB A100 4-bit 5-question smoke | **$1–2** |
+| 3 | 80 GB A100 pilot (100–150 questions) | **$15–20** |
+| 4 | Optional 96 GB 5-question smoke, only after a stable pilot | **$2–8** |
+| — | Reserve for retries/bandwidth | **$20–30** |
+| — | **Total** | **$18–30** |
+
+Do not run a 96 GB pilot ($37–45), the FP8 precision replication ($25–40), Core ($175–210), or Full ($210, or ~$104 with reuse) from the $50 tranche. The first $50 buys a clean 4-bit smoke and pilot, not a 96 GB pilot.
 
 **Fallback:** if the 80 GB A100 spot is unavailable and the main runs use the 96 GB card at **$0.336/GPU-h**, the plan becomes **$1,050–1,150** and requires **re-approval**. This is a fallback, not the default, and must not be presented as the plan.
 
@@ -86,23 +113,32 @@ The main matrix runs on the **80 GB A100 PCIe** because the 4-bit 24–27B stack
 - **Storage/bandwidth:** **$40–80** all-in for the plan; persist the cache, copy results, and destroy instances.
 - **Spot discipline:** batch sessions, keep the model cache, and checkpoint/resume so an interruption does not restart a run.
 - **B7 external ceiling (optional):** ~$3–9 per 1,000 questions, appendix-only; not part of the $500–600 plan.
+- **18 GB test gate:** free; one 8–9B AWQ or Q4_K_M model + two mocks; Q4_K_M downloads happen on the university host, never in the cloud.
+- **96 GB smoke vs precision:** a 5-question smoke is **$2–8**; the 150–200-question precision replication is **$25–40**. They are separate stages.
 
 ---
 
 ## 4. Recommendation
 
+### 18 GB test gate
+
+- **GPU:** university H200 MIG `1g.18gb`, free, `uiu-h200` only.
+- **Use:** one 8–9B AWQ model with vLLM, or one Q4_K_M main template with llama.cpp at 4k context, plus two mocks.
+- **Do not:** run three models, the main 27B AWQ, FP8, or any confirmatory row. Do not download Q4_K_M files in the cloud.
+- **Value:** catches code/prompt/parser/serving failures before paid cloud time.
+
 ### Main matrix
 
 - **GPU:** one **80 GB A100 PCIe** spot at **$0.136/GPU-h**, 4-bit 24–27B final families.
 - **Why:** the 4-bit stack fits in 80 GB and keeps Core + Full inside the $600 hard stop.
-- **Sessions:** batch pilot/Core/Full into long sessions; persist the cache and resume from JSONL.
+- **Sessions:** run the 4-bit smoke and pilot in one session; batch Core and Full into long sessions; persist the cache and resume from JSONL.
 - **Do not** move the main matrix to the 96 GB card unless the A100 spot is unavailable and the fallback is re-approved.
 
 ### FP8 precision path
 
 - **GPU:** **RTX PRO 6000 96 GB class** spot at **$0.336/GPU-h**.
-- **Why:** N1 must prove the pinned **73.68 GB** FP8 stack serves all three checkpoints; the precision replication checks that the 4-bit main result is not a quantisation artifact.
-- **Scope:** **60–100 GPU-h** total, **$25–40**. Do not run the full matrix on this stack.
+- **Why:** N1b must prove the pinned **73.68 GB** FP8 stack serves all three checkpoints; the precision replication checks that the 4-bit main result is not a quantisation artifact.
+- **Scope:** a 5-question smoke is **$2–8**; the precision replication is **60–100 GPU-h / $25–40**. Run both after the 4-bit pilot/Core. Do not run the full matrix on this stack.
 
 ### Bandwidth and storage
 
@@ -126,18 +162,25 @@ The main matrix runs on the **80 GB A100 PCIe** because the 4-bit 24–27B stack
 4. **Running the old 15×5×3×1,000 matrix.** ~30,000 GPU-h; impossible.
 5. **Idle GPUs while debugging prompts.** Prepare prompts/configs before renting; use mocks.
 6. **Forgetting to copy results** before destroy. Re-running is the most expensive mistake.
-7. **Starting Full without WP-18 or N1.** A wrong 32-vs-36-row definition can waste a large share of the Full envelope.
+7. **Starting Full without WP-18 or N1a.** A wrong 32-vs-36-row definition, or an unproven 4-bit stack, can waste a large share of the Full envelope.
+8. **Running a 96 GB pilot or precision replication from the $50 tranche.** A 96 GB pilot is $37–45 and leaves no retry budget.
+9. **Downloading Q4_K_M test files in the cloud.** Download them on the university host; cloud ingress is paid and slow.
+10. **Working inside `tool-observation/`.** Use a dedicated `trustcal-fydp/` project directory; share only the HF cache read-only.
 
 ---
 
 ## 6. One-page summary for the experiment plan
 
+- **18 GB test gate:** free; 8–9B AWQ one at a time, or Q4_K_M main templates at 4k context; no cloud Q4 downloads.
 - **Main matrix:** one **80 GB A100 PCIe** spot, **$0.136/GPU-h**, 4-bit 24–27B final families.
+- **4-bit smoke:** 4–8 GPU-h / **$1–2**; run in the pilot session.
 - **Pilot:** ~112 GPU-h / **$15–20**.
 - **Core:** 1,280 GPU-h cap (~1,067 planned) / **$175–210**.
 - **Full default:** 32-row gold-evidence oracle on SciClaimBench, 1,280 GPU-h / **$210**.
 - **Full alternate:** 36-row gold-answer, 1,440 GPU-h / **$235**.
-- **FP8 precision replication + N1 smoke:** 60–100 GPU-h at **$0.336/h** / **$25–40**.
+- **96 GB 5-question smoke:** 1.5–3 GPU-h / **$2–8**; optional after a stable pilot.
+- **FP8 precision replication:** 60–100 GPU-h at **$0.336/h** / **$25–40**; not the same as the smoke.
+- **$50 tranche:** 18 GB tests ($0) + 80 GB smoke ($1–2) + 80 GB pilot ($15–20); keep **$20–30** reserve. Do not run a 96 GB pilot or precision from it.
 - **Storage/bandwidth:** **$40–80**.
 - **Total:** **$500–600**; **hard stop $600**.
 - **Fallback:** 96 GB main runs at $0.336/h = **$1,050–1,150**, re-approval required; not the default.

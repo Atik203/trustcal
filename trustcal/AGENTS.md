@@ -6,7 +6,7 @@ Canonical agent instructions for this directory: the P0-released implementation 
 
 - **vLLM owns the GPU.** `scripts/serve.sh` is the only GPU-touching file; everything else is plain Python over the OpenAI-compatible APIs at `127.0.0.1:8000-8002`. Use `127.0.0.1`, never `localhost`: the Windows IPv6 fallback costs about 2s per request.
 - **`configs/models.yaml` is the only model switch** (Dev ↔ Final). Serve commands are generated from it by `scripts/gen_serve_cmds.py` — never hand-edit commands into `serve.sh`, and never rename a served model (`--served-model-name` mismatches caused request 404s in an earlier draft).
-- **Order discipline (blueprint §13 / roadmap):** 4-bit smoke → pilot → Core matrix → Full matrix; the 96 GB FP8 N1 smoke and GPQA precision replication follow the 4-bit pilot/Core. Never run a matrix before the pilot. The Core matrix is four conditions × 3 datasets × 2 seeds = 24 rows; the six-arm Full target is a separate later design.
+- **Order discipline (blueprint §13 / roadmap):** 18 GB test gate → 4-bit smoke → pilot → Core matrix → 96 GB FP8 smoke/precision → Full matrix. Never run a matrix before the pilot. The Core matrix is four conditions × 3 datasets × 2 seeds = 24 rows; the six-arm Full target is a separate later design. The 96 GB smoke is not a gate for the 4-bit Full matrix.
 - **The Core matrix source is `configs/experiments_fourbit.yaml`**, not `configs/datasets.yaml`. `datasets.yaml` carries dataset revisions/provenance and loader defaults; its `seeds` and `sample_caps` are not the matrix values. `configs/experiments.yaml` is the released historical Core config. Do not add the six-arm target to it; WP-18 added a separate `configs/experiments_full.yaml`.
 - **`results/` is gitignored and load-bearing** (Gate 0 logs, trust trajectories, matrix summaries). Copy artifacts off the box before destroying an instance.
 - **Never commit secrets.** `.env` is gitignored. `HF_TOKEN` (gated GPQA/HLE downloads), `OPENAI_API_KEY` (B7), and the optional retrieval keys come from the environment or `.env`; never paste a real key into a doc or a commit.
@@ -131,7 +131,19 @@ No FP8 precision replication is trusted until that hardware smoke passes and its
 
 ## University H200 slice (18 GB)
 
-The current approved GPU is the university H200 MIG `1g.18gb` slice, reached only through the local SSH alias `uiu-h200`. The full rules are in the repository-root `AGENTS.md`. The slice has 18 GB of VRAM and cannot serve the 53.26 GB `fourbit` stack, the 73.68 GB `final` stack, or the ~25 GB dev trio. Do not schedule a multi-model smoke, the Core/Full matrices, or the FP8 precision replication on it. It is limited to single small-model interface, prompt, parser, or retrieval checks; ask the user before any GPU run. Do not expose ports. Record approved hardware, driver, CUDA, or environment changes in `docs/DECISIONS.md`.
+The current approved GPU is the university H200 MIG `1g.18gb` slice, reached only through the local SSH alias `uiu-h200`. The full rules are in the repository-root `AGENTS.md`. The slice has 18 GB of VRAM and cannot serve the 53.26 GB `fourbit` stack, the 73.68 GB `final` stack, or the ~25 GB dev trio. Do not schedule a multi-model smoke, the Core/Full matrices, or the FP8 precision replication on it.
+
+Use a dedicated `trustcal-fydp/` project directory. Never work inside or modify the existing `tool-observation/` project, its venv, or its configs; share the Hugging Face cache read-only.
+
+The test-only stack is:
+
+- **8–9B AWQ with vLLM:** cached Qwen3.5-9B (8.37 GiB), Ministral-8B (7.03 GiB), and Llama-3.1-8B (5.58 GiB), one model at a time, 24k context, 0.85 utilization.
+- **Q4_K_M main templates with llama.cpp:** Qwen3.8-27B Q4_K_M 15.43 GB (Q4_0 14.95 GB, Q3_K_M 12.48 GB if tight), Gemma 4 26B Q4_K_M 15.78 GB, Mistral 24B Q4_K_M 13.35 GB. Use 4k context, q8 KV, `--n-gpu-layers 99`; offload a few layers to the 125 GB system RAM only if needed. This tests the actual template/parser, not the AWQ stack.
+- **One real model plus two mocks** is the allowed integration test. Do not load three real models on this slice.
+
+Download Q4_K_M test files on the university host, one at a time, not in the cloud; keep the project under 200 GB. The cloud host downloads only the final AWQ/FP8 stack.
+
+With the current **$50** tranche, the allowed spend is the 80 GB 4-bit smoke (~$1–2), the 80 GB pilot (~$15–20), and optionally one 96 GB 5-question smoke (~$2–8) after the pilot is stable. Do not run a 96 GB pilot (~$37–45) or the FP8 precision replication (~$25–40) from this tranche. Ask the user before any GPU run; do not expose ports; record approved hardware/driver/CUDA/environment changes in `docs/DECISIONS.md`.
 
 ## Managing the GPU instance from a local machine (Vast.ai)
 
