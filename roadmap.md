@@ -155,6 +155,8 @@ Run **one model at a time** with llama.cpp, `--ctx-size 4096`, q8 KV cache, and 
 
 **Status (18 Nov 2026):** PASS for the 8–9B vLLM trio and the Q4_K_M main templates. 8–9B: Qwen3.5-9B 26.3 s / 13,880 MiB; Ministral-8B 37.5 s / 15,461 MiB; Llama-3.1-8B 27.2 s / 15,666 MiB. Q4_K_M: Qwen3.8-27B 145.8 s / 15,796 MiB; Gemma 4 26B 58.9 s / 3,384 MiB with `-cmoe`; Mistral 24B 74.6 s / 14,018 MiB. All schema valid. See [`experiments/n1_smoke/README.md`](experiments/n1_smoke/README.md).
 
+**Status (19 Nov 2026, pre-N1a revalidation):** PASS. Dedicated venv with vLLM 0.34.0 / torch 2.14.0+cu130 / transformers 5.22.2; `validate_stack.py` passed all three exact 4-bit checkpoint configs (architecture, quant, flags, parser, context, chat template); GPQA/MMLU-Pro/HLE loaded at pinned revisions; one real model + two mocks passed B3, B8, injection, placebo, and gold-answer oracle; Qwen3.8-27B Q4_K_M B8 passed at 62.3 s / 15,786 MiB; `--stop-after` prefix/resume works; **633 tests + P0 13/13** on the host. Two latent cloud failures were fixed: missing `Python.h` for Triton and a hidden GPU cross-encoder in retrieval. See the same README.
+
 **Cost:** $0 GPU. Time and university bandwidth only.
 
 ### N1a — 4-bit three-model cloud smoke (Nov–Dec 2026)
@@ -165,14 +167,19 @@ Run **one model at a time** with llama.cpp, `--ctx-size 4096`, q8 KV cache, and 
 cd trustcal
 PHASE=fourbit bash setup.sh
 python scripts/check_stack.py --phase fourbit
+python scripts/validate_stack.py --phase fourbit --offline
 python scripts/preflight.py --phase fourbit --offline
 python scripts/verify_env.py --check-servers
-python scripts/smoke_test.py --phase fourbit --limit 5
+python scripts/run_matrix.py --config configs/experiments_fourbit.yaml --dry-run
+python scripts/smoke_test.py --phase fourbit --limit 5 --arm B8
+python scripts/smoke_test.py --phase fourbit --limit 5 --arm injection
+python scripts/smoke_test.py --phase fourbit --limit 5 --arm B8-placebo
+python scripts/smoke_test.py --phase fourbit --limit 5 --arm B8-oracle
 ```
 
-**Acceptance:** three `server OK` lines; 5-question smoke PASS; peak `nvidia-smi` and per-model weights recorded. Run this in the same session as the pilot when possible.
+**Acceptance:** three `server OK` lines; all four smoke invocations PASS; every model has a completed 5-question run; `nvidia-smi` peak and per-model weights recorded. `B8-oracle` here uses `gold_answer` because GPQA has no gold evidence; the `gold_evidence` oracle is SciClaimBench-only and stays covered by the mock/P0 test until that dataset is frozen.
 
-**Cost:** 4–8 GPU-h, **$1–2** at $0.136/h.
+**Cost:** 4–8 GPU-h, **$1–2** at $0.136/h. Do not add the separate $15–20 100–150-question pilot; use the Core-prefix gate (`§14.1`) after the smoke.
 
 ### N1b — FP8 final-stack smoke and precision (Feb 2027)
 
@@ -205,9 +212,10 @@ Then run `configs/experiments_precision.yaml`.
 - `B8-oracle`: gold-evidence-only on SciClaimBench by default; gold-answer trust is the 36-row alternate.
 - 32-row Full default; 36-row alternate.
 - Full config hash recorded in v1.3.
-- If the team wants the $400 path, add a **Core → Full subset-reuse** amendment before Core/Full unblinding.
+- **Full is blocked until `sciclaim_180` exists in both `eval/datasets.py` and `configs/datasets.yaml`.** The current `run_matrix.py --config configs/experiments_full.yaml --dry-run` fails offline plan validation by design.
+- If the team wants the $400 path, add a **new v1.4** Core → Full subset-reuse amendment: Full `gpqa_main: 400`, `mmlu_pro: 400`, `sciclaim_180: 300`, plus a new config hash. The current v1.3 draft uses 300/dataset and does not assume reuse.
 
-**Acceptance:** v1.3 signed; mock placebo/oracle records validate; `run_matrix.py --dry-run` shows 24 Core and 32/36 Full rows; no change to the 13/13 gate.
+**Acceptance:** v1.3 signed; mock placebo/oracle records validate; Core dry-run shows 24 rows; Full dry-run shows 32/36 rows **after** the SciClaimBench loader entry exists; no change to the 13/13 gate.
 
 ---
 
@@ -289,12 +297,12 @@ Then run `configs/experiments_precision.yaml`.
 
 ### Core → Full subset reuse (conditional)
 
-- Full 32 rows = 24 core + 6 placebo + 2 oracle.
-- Reusable GPQA + MMLU-Pro core rows: **16 rows**.
-- New Full work: 8 SciClaimBench core rows + 6 placebo + 2 oracle = **16 rows / 4,800 debates / 640 GPU-h**.
+- Full 32 rows = 24 core-arm rows + 6 placebo + 2 oracle.
+- Reusable rows: **16** (4 core arms × 2 datasets × 2 seeds), **only if** Full `gpqa_main` and `mmlu_pro` caps are **400**, with the same model revisions, prompts, dataset revisions, seeds, flags, and `limit`.
+- **A 300-item Full sample is not a subset of the 400-item Core sample.** `stratified_sample` uses different per-stratum allocations and independent draws, `question_id` indexes shift, and the manifest includes `limit`; the runner refuses to resume across caps. Reuse is an exact-row identity, not a subset extraction.
+- New Full work: 8 SciClaimBench core rows (300) + 6 placebo (300) + 2 oracle (300) = **16 rows / 4,800 debates / 640 GPU-h**.
 - Full incremental cost: **~$104** instead of $210; saving **~$106**.
-- Conditions: same model revisions, prompts, dataset revision, seeds, and deterministic sample order; Full 300 must be a subset of Core 400.
-- Must be pre-registered in v1.3 before unblinding. If not signed, Full is a full 32-row run at $210.
+- Must be pre-registered in a **new v1.4** before unblinding, with the new config hash. The current v1.3 draft uses 300/dataset and says it does not assume reuse. If v1.4 is not signed, Full is a full 32-row run at $210.
 
 **G4/G5 pass:** placebo does not match B8; oracle separates; the sign reversal appears at the predicted q/ρ boundary; one external-validity check replicates the sign.
 

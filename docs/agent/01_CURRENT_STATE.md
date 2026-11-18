@@ -1,6 +1,6 @@
 # 01 — Current State
 
-**Snapshot:** 18 November 2026. **Branches:** `main` = `dev` = `v0.2.1`. **Tags:** `p0-gate` = `055a244`; `p0-release` = `7f2c11f`. **P0 is released; no efficacy results exist.**
+**Snapshot:** 19 November 2026. **Branches:** `main` = `v0.2.1`; `dev` is ahead with pre-N1a hardening. **Tags:** `p0-gate` = `055a244`; `p0-release` = `7f2c11f`. **P0 is released; no efficacy results exist.**
 
 This file is the status source of truth. If code and this file disagree, **code wins**; update this file and report the discrepancy. The order of work is `roadmap.md`.
 
@@ -16,13 +16,14 @@ Legend: ✅ real / tested / released; 🟡 implemented but partially wired, unva
 | vLLM serving (Dev) | ✅ | Gate 0 | Three quantized models on one A6000 48 GB |
 | 4-bit main stack offline check | ✅ | `trustcal/scripts/check_stack.py --phase fourbit` | Qwen3.8-27B-AWQ-INT4 / Gemma-4-26B-A4B-AWQ / Mistral-24B-AWQ = **53.26 GB** pinned |
 | Final stack offline check | ✅ | `trustcal/scripts/check_stack.py --phase final` | Qwen3.8-27B-FP8 / Gemma-4-26B-A4B-FP8 / Mistral-24B-AWQ = **73.68 GB** pinned |
-| 18 GB test environment | ✅ | `experiments/n1_smoke/` | 8–9B vLLM trio + Q4_K_M main templates PASS with two mocks; all six schema valid. Qwen3.8-27B 145.8 s / 15,796 MiB; Gemma 4 26B 58.9 s / 3,384 MiB with `-cmoe`; Mistral 24B 74.6 s / 14,018 MiB |
-| 4-bit 80 GB smoke | 🔴 | Not run | Three-model 53.26 GB stack; gate **N1a** |
+| 18 GB test environment | ✅ | `experiments/n1_smoke/` | 8–9B vLLM trio + Q4_K_M main templates PASS with two mocks. 19 Nov revalidation on vLLM 0.34.0: exact 4-bit configs pass architecture/quant/flag/template checks; B3/B8/injection/placebo/oracle pass with one real model + mocks; Qwen3.8-27B Q4_K_M B8 62.3 s / 15,786 MiB; 633 tests + P0 13/13 |
+| 4-bit 80 GB smoke | 🟡 | Not run; N1a ready | Code, configs, and 18 GB tests are ready. Blocked only on Vast credit (balance ~$0.59) and the top-up. |
+| 4-bit exact-checkpoint validation | ✅ | `validate_stack.py`, 19 Nov | Qwen3.8/Gemma 4/Mistral 3 architectures, quant methods, flags, parsers, context, and chat templates pass vLLM 0.34.0 before any weight download |
 | Final-stack 96 GB smoke | 🔴 | Not run | Three-model 73.68 GB FP8 stack; gate **N1b**, after the 4-bit pilot/Core |
 | Debate loop | ✅ | `orchestrator/debate.py`; tests | Runs with options, evidence, injection, and trust; no paid run yet |
 | Trust math | ✅ | `trust/update.py`; 10k-input tests | Simplex projection with floor/ceiling; neutral no-op; claim-count normalization |
 | Injection | ✅ | `orchestrator/injection.py`; tests | One-shot external consensus; neutral control; ties excluded |
-| Retrieval clients | 🟡 | `retrieval/sources.py` | Real HTTP code; live APIs are not exercised in CI |
+| Retrieval clients | 🟡 | `retrieval/sources.py` | Real HTTP code; live B8 smoke on 19 Nov returned evidence and verdicts. Not all APIs/edge cases are exercised in CI. A 3-failure per-source circuit breaker bounds a dead API. |
 | Verdicts | 🟡 | `retrieval/verifier.py` | Verifier interface landed; default is lexical. Synthetic audit: **0.58 balanced accuracy**. Human audit is **N4, pending** (target ≥0.75, κ ≥0.60) |
 | Accuracy / CMR / CCR-0 / CCR-E / MPR-weighted / ARR | ✅ | `eval/metrics.py`; tests | Endpoints computed with raw counts and CIs; MPR uses the actual weighted answer |
 | Trust AUROC / Brier / vote calibration | ✅ | `eval/metrics.py` | Secondary endpoints; compare against a constant-1/3 predictor |
@@ -66,7 +67,7 @@ Experiment-ready means:
 4. The trust operator satisfies its stated bound. — **True.**
 5. The baseline comparisons are matched (same retrieval, prompts, compute). — **True** for B8 vs B8-no-trust and B4-matched.
 6. The matrix fits the time budget. — **True:** 24 Core rows, 1,280 GPU-h cap.
-7. A pilot has passed a pre-registered behavioral gate. — **Pending (N5/G2, Dec 2026).**
+7. A pilot has passed a pre-registered behavioral gate. — **Pending.** The $15–20 N5/G2 run is replaced by the Core-prefix gate (first 25–50 Core B8/B8-no-trust questions, `--stop-after`), which needs a signed amendment; the 25-item Month-1 file is not authored.
 
 **Status: 1/2/4/5/6 true; 3 and 7 pending.** P0 released the engineering; it did not run the pilot or the human audit.
 
