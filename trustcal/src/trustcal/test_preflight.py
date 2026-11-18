@@ -44,6 +44,7 @@ def test_servers_detect_wrong_model_name() -> None:
 def test_cache_ok_and_missing(tmp_path) -> None:
     good = tmp_path / "hub" / "models--org--name" / "snapshots" / "abc"
     good.mkdir(parents=True)
+    (good / "config.json").write_text("{}", encoding="utf-8")
     (good / "model.safetensors").write_text("x", encoding="utf-8")
     agents = [
         AgentConfig(role="agent1", model="org/name", port=1),
@@ -53,6 +54,33 @@ def test_cache_ok_and_missing(tmp_path) -> None:
     assert results[0].ok is True
     assert results[1].ok is False
     assert "re-download" in results[1].detail
+
+
+def test_cache_rejects_partial_download(tmp_path) -> None:
+    root = tmp_path / "hub" / "models--org--name"
+    snapshot = root / "snapshots" / "abc"
+    snapshot.mkdir(parents=True)
+    (snapshot / "config.json").write_text("{}", encoding="utf-8")
+    (snapshot / "model.safetensors").write_text("x", encoding="utf-8")
+    blobs = root / "blobs"
+    blobs.mkdir()
+    (blobs / "deadbeef.incomplete").write_text("partial", encoding="utf-8")
+    results = check_cache(
+        [AgentConfig(role="agent1", model="org/name", port=1)], tmp_path
+    )
+    assert results[0].ok is False
+    assert "incomplete" in results[0].detail
+
+
+def test_cache_requires_weights_not_just_config(tmp_path) -> None:
+    snapshot = tmp_path / "hub" / "models--org--name" / "snapshots" / "abc"
+    snapshot.mkdir(parents=True)
+    (snapshot / "config.json").write_text("{}", encoding="utf-8")
+    results = check_cache(
+        [AgentConfig(role="agent1", model="org/name", port=1)], tmp_path
+    )
+    assert results[0].ok is False
+    assert "weight files" in results[0].detail
 
 
 def test_disk_check(tmp_path) -> None:

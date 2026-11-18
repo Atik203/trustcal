@@ -75,7 +75,7 @@ while IFS= read -r cmd; do
   echo "launched :$PORT (pid $PID) — waiting for readiness (log: $LOG)"
   READY=0
   for _ in $(seq 1 60); do
-    if curl -sf -m 3 "http://localhost:${PORT}/v1/models" >/dev/null 2>&1; then READY=1; break; fi
+    if curl -sf -m 3 "http://127.0.0.1:${PORT}/v1/models" >/dev/null 2>&1; then READY=1; break; fi
     kill -0 "$PID" 2>/dev/null || break
     sleep 10
   done

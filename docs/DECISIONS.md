@@ -2,7 +2,19 @@
 
 Approved architecture, hardware, and environment decisions. Add an entry before confirmatory work when a decision changes the compute path, driver, CUDA version, or serving environment.
 
-## 2026-11-18 — Dedicated trustcal directory and $50 test-first tranche
+## 2026-11-19 - Pinned vLLM 0.34.0 and config-only stack validation
+
+**Status:** approved.
+
+**Decision:** the `fourbit` and `final` phases use **vLLM 0.34.0** from PyPI, not a nightly wheel. That release already contains `Qwen3_5ForConditionalGeneration`, `Gemma4ForConditionalGeneration`, `Gemma4UnifiedForConditionalGeneration`, `Mistral3ForConditionalGeneration`, and the `qwen3` reasoning parser. `VLLM_NIGHTLY=1` remains a fallback only.
+
+**Dependency alignment:** `huggingface_hub>=2.0,<3.0`, `transformers>=5.16.1,<5.23.0`, `datasets>=3.6,<6.0`, `sentence-transformers>=6.0,<7.0`. vLLM 0.34.0 pins `torch==2.14.0` and requires hub 2.x; the old `hub<2.0` / `transformers<5.17` pins were for vLLM 0.29.x and would either conflict or silently drift under `-U`.
+
+**Pre-download gate:** `setup.sh` runs `scripts/validate_stack.py --phase "$PHASE" --download-configs` after installing vLLM and before downloading weights. It checks architecture registration, quantization method vs. serve flag, every serve flag, the reasoning-parser name, the context window, and the checkpoint chat template using config/tokenizer files only (a few MB). A mismatch stops the session before 53GB of ingress.
+
+**Why:** a paid session must not depend on the day's nightly wheel or discover an incompatible checkpoint after the A100 clock starts. The 18GB slice is used to validate the same script on the exact checkpoint configs before the cloud run.
+
+## 2026-11-18 - Dedicated trustcal directory and $50 test-first tranche
 
 **Status:** approved.
 

@@ -31,7 +31,8 @@ Canonical agent instructions for this directory: the P0-released implementation 
 | `src/trustcal/preflight.py` | cost-safety checks (servers, cache, disk, context, keys) |
 | `scripts/gen_serve_cmds.py` | prints `vllm serve` commands from `models.yaml` |
 | `scripts/serve.sh` | launches the three servers; `DRY_RUN=1` prints commands |
-| `scripts/install_vllm.sh` | nightly vLLM (required: `gemma4_unified` is not in stable) |
+| `scripts/install_vllm.sh` | pinned vLLM 0.34.0 (Gemma 4 / Gemma 4 Unified / Qwen3.5 / Mistral3 are in stable); `VLLM_NIGHTLY=1` is the fallback |
+| `scripts/validate_stack.py` | config-only pre-download gate: architecture, quant method, serve flags, reasoning parser, context, chat template |
 | `scripts/repro_mad.py` | Gate 0; writes `results/gate0/transcript-*.json` + `summary-*.md` |
 | `scripts/run_experiment.py` | runs an arm (`B1`–`B10`, `pilot`, `injection`); resume + summary |
 | `scripts/run_matrix.py` | conditions × datasets × seeds matrix; `--config` selects Core or Full YAML |
@@ -60,7 +61,9 @@ The released Core matrix runs four conditions:
 
 The **six-arm target** adds `B8-placebo` (cross-agent round-pool verdict shuffle, trust-weighted) and `B8-oracle` (gold-evidence oracle on SciClaimBench, or gold-answer trust in the 36-row alternate). It is **not** in `experiments.yaml`. WP-18 implemented the `placebo_mode` / `oracle_mode` flags, the separate Full config, and the frozen definitions of the placebo shuffle unit/seed and the oracle semantics. `B7` is an optional 3-sample GPT-6 Luna external-answer ceiling, not `B8-oracle`. The B1-B10 appendix grid stays out of the pre-registered matrix.
 
-`python scripts/run_matrix.py --config configs/experiments_fourbit.yaml --dry-run` shows the 24 Core rows on the 4-bit stack. `python scripts/run_matrix.py --config configs/experiments_full.yaml --dry-run` shows the Full plan: 32 rows with the gold-evidence oracle on SciClaimBench, or 36 if `B8-oracle` uses gold-answer trust. `configs/experiments_precision.yaml` is the 3-row GPQA FP8 precision replication. The Core matrix's gate cap stays 1,280 GPU-h.
+`python scripts/run_matrix.py --config configs/experiments_fourbit.yaml --dry-run` shows the 24 Core rows on the 4-bit stack. `python scripts/run_matrix.py --config configs/experiments_full.yaml --dry-run` now runs offline plan validation first: the Full config names `sciclaim_180`, which has no loader entry in `eval/datasets.py` or `configs/datasets.yaml`, so it fails before a row is planned. Add the frozen v1.2 SciClaimBench dataset entry before any Full run. `configs/experiments_precision.yaml` is the 3-row GPQA FP8 precision replication. The Core matrix's gate cap stays 1,280 GPU-h.
+
+**Core → Full reuse is not executable yet.** A run row can be reused only when `dataset`, `limit`, `seed`, `phase`, every trust/retrieval flag, and the sample seed are identical (they are all in the manifest hash). Core uses `gpqa_main` 400 / `mmlu_pro` 400 / `hle` 200; Full uses `gpqa_main` 300 / `mmlu_pro` 300 / `sciclaim_180` 300. Nothing matches. Reuse requires a signed v1.3 amendment that aligns the caps and the third dataset, plus the SciClaimBench loader; do not budget the reuse saving before that.
 
 ## Dev stack (RTX A6000 48GB)
 
@@ -72,7 +75,10 @@ Quantized checkpoints pinned in `models.yaml` — the model names stay the roadm
 
 ```bash
 python scripts/check_stack.py --phase fourbit
+python scripts/validate_stack.py --phase fourbit --offline   # after setup.sh downloaded configs
 ```
+
+The Mistral checkpoint is named `awq-sym` but its config says `quant_method: compressed-tensors`; `models.yaml` sets that explicitly. Gemma 4 26B A4B is text+image, so its MM limit is `{"image": 0}` (no `audio` key); Mistral gets the same limit. `setup.sh` runs `validate_stack.py` before the weight download, so an architecture/flag mismatch stops the session before 53GB of ingress.
 
 ## Final stack (RTX PRO 6000 Blackwell 96GB)
 
@@ -97,7 +103,7 @@ No FP8 precision replication is trusted until that hardware smoke passes and its
 
 | Command | Does |
 | --- | --- |
-| `HF_TOKEN=hf_... [VENV=1] bash setup.sh` | install deps + nightly vLLM + checkpoints (~31GB), start servers, verify. `VENV=1` on any image that blocks system pip (PEP 668): Thunder Compute, Vast PyTorch images |
+| `HF_TOKEN=hf_... [VENV=1] bash setup.sh` | install deps + pinned vLLM 0.34.0 + validate checkpoints + download checkpoints (~31GB) + start servers + verify. `VENV=1` on any image that blocks system pip (PEP 668): Thunder Compute, Vast PyTorch images |
 | `python scripts/verify_env.py --check-servers` | gate: three `server OK` lines |
 | `python scripts/p0_gate.py` | 13-check P0 engineering gate; exits non-zero on any failure |
 | `python scripts/check_stack.py --phase fourbit` | offline 80 GB 4-bit matrix weight/utilization check |
