@@ -30,7 +30,9 @@ trustcal_ensure_python_headers() {
   if [ -x "$uv_bin" ] && [ -n "$version" ]; then
     "$uv_bin" python install "$version" >/dev/null 2>&1 || true
     local uv_py prefix
-    uv_py=$("$uv_bin" python find "$version" 2>/dev/null || true)
+    # --managed-python avoids resolving the project's .venv (whose include/
+    # directory is empty). Older uv versions fall back to a neutral cwd.
+    uv_py=$(unset VIRTUAL_ENV; "$uv_bin" python find --managed-python "$version" 2>/dev/null || (cd /tmp && "$uv_bin" python find "$version" 2>/dev/null) || true)
     if [ -n "$uv_py" ]; then
       prefix=$(dirname "$(dirname "$uv_py")")
       if [ -f "$prefix/include/python$version/Python.h" ]; then
