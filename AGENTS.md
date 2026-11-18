@@ -109,6 +109,7 @@ Paper reviews live in `literature_review/papers/NN-slug-author-year.md` and foll
 The university GPU is the current approved compute path. Use it only for this project, and only under these rules. If an action is not explicitly allowed here, ask the user first.
 
 - **Access:** SSH through the local alias `uiu-h200` only. Do not expose ports or create another connection method.
+- **Project directory:** clone this repo into a dedicated `trustcal-fydp/` directory. Never work inside or modify the existing `tool-observation/` project, its venv, or its configs. Share the Hugging Face cache read-only.
 - **GPU:** H200 MIG `1g.18gb`, 18 GB VRAM maximum. Use only this slice.
 - **Driver / CUDA:** NVIDIA driver `580.178.04`, CUDA `13.5`. Do not change, overwrite, reinstall, or upgrade either; do not replace system libraries.
 - **Host changes:** do not change GPU clocks, power limits, MIG settings, the SSH daemon, host keys, the account name, the login method, or other users' `authorized_keys`.
@@ -119,7 +120,9 @@ The university GPU is the current approved compute path. Use it only for this pr
 - **Policy:** follow the university's monitoring, acceptable-use, and data-handling policies.
 - **Change control:** record approved hardware, driver, CUDA, or environment changes in `docs/DECISIONS.md` before confirmatory work.
 
-The 18 GB slice cannot hold the 53.26 GB 4-bit matrix stack, the 73.68 GB FP8 stack, or the ~25 GB dev trio. Do not schedule the Core/Full matrices, the multi-model smoke, or the FP8 precision replication on it. Use it only for single small-model interface, prompt, parser, or retrieval checks, and ask the user before a GPU run.
+The 18 GB slice cannot hold the 53.26 GB 4-bit matrix stack, the 73.68 GB FP8 stack, or the ~25 GB dev trio. Do not schedule the Core/Full matrices, the multi-model smoke, or the FP8 precision replication on it. Use it only for single-model interface, prompt, parser, or retrieval checks: 8–9B AWQ with vLLM, or Q4_K_M main models with llama.cpp at 4k context, one model at a time. Do not download Q4_K_M test files on a cloud host; download them on the university host and keep the project under 200 GB.
+
+With the current **$50** tranche, do not run a 96 GB pilot or precision replication. The allowed spend is the 80 GB 4-bit smoke (~$1–2), the 80 GB pilot (~$15–20), and optionally one 96 GB 5-question smoke (~$2–8) after the pilot is stable; keep $20–30 as a retry/bandwidth reserve.
 
 ## Cache discipline (why this file is structured this way)
 
