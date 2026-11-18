@@ -23,8 +23,15 @@ class FakeClient:
         return f"Answer: {self.answer}"
 
 
-def _cfg(tmp_path, arm: str = "B1", limit: int = 2) -> RunConfig:
-    return RunConfig(arm=arm, limit=limit, seed=7, out_root=tmp_path, rounds=3)
+def _cfg(tmp_path, arm: str = "B1", limit: int = 2, stop_after: int | None = None) -> RunConfig:
+    return RunConfig(
+        arm=arm,
+        limit=limit,
+        stop_after=stop_after,
+        seed=7,
+        out_root=tmp_path,
+        rounds=3,
+    )
 
 
 def test_b1_writes_records_and_summary(tmp_path) -> None:
@@ -54,6 +61,20 @@ def test_resume_skips_completed_questions(tmp_path) -> None:
     run(cfg, clients=[client], questions=QUESTIONS)
     assert client.calls == 2
     assert len(read_records(records_path(cfg))) == 2
+
+
+def test_stop_after_pauses_and_resumes_under_the_same_manifest(tmp_path) -> None:
+    client = FakeClient("cytoplasm")
+    first = _cfg(tmp_path, stop_after=1)
+    run(first, clients=[client], questions=QUESTIONS)
+    assert len(read_records(records_path(first))) == 1
+    assert client.calls == 1
+
+    # Only the session budget changed; the manifest must be identical.
+    second = _cfg(tmp_path)
+    run(second, clients=[client], questions=QUESTIONS)
+    assert len(read_records(records_path(second))) == 2
+    assert client.calls == 2
 
 
 def test_b3_debate_records_three_rounds(tmp_path) -> None:

@@ -161,8 +161,9 @@ if [ "${SKIP_SERVE:-0}" != "1" ]; then
   nohup bash scripts/serve.sh > results/vllm.log 2>&1 &
   echo $! > results/vllm.pid
 
-  # wait for the three servers (up to 10 minutes — quantized first load is slow)
-  for i in $(seq 1 60); do
+  # wait for the three servers (up to 30 minutes — serve.sh loads quantized
+  # models sequentially, and a cold 27B checkpoint can take several minutes)
+  for i in $(seq 1 180); do
     if "$PY_CMD" scripts/verify_env.py --check-servers >/dev/null 2>&1; then break; fi
     sleep 10
   done

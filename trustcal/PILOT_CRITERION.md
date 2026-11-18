@@ -2,6 +2,8 @@
 
 **Status:** fixed 2026-09-16, before Phase 1 build starts. Required by `roadmap.md` (Phase 0 checklist) and `docs/blueprint.md` §13 step 4. Do not soften this after seeing the numbers.
 
+> **2026-11-19 execution note.** The frozen 25-item file is still missing (`experiments/pilot-month1/questions.json` has only a template), and the **$15–20 / ~112 GPU-h** line in the cost docs is a different 100–150-question calibration run, not this criterion. The cheaper substitute is the **Core-prefix gate** (`roadmap.md` §14.1): the first 25–50 questions of the actual Core `B8` and `B8-no-trust` rows, run with `--limit 400 --stop-after N`, compared on the same questions, then resumed only if trust changes the winner in the correct direction. That substitution is a protocol change and needs a signed amendment; the criterion below remains the frozen standard until then.
+
 **What it tests (blueprint §0, Assumption 3 / Challenge C):** do trust-weight changes *causally* shift the final aggregation output, or do they just sit in the context without behaving? This is the highest-risk assumption in the project; the pilot exists so it is answered on ~25 toy questions, not after months of engineering.
 
 ## Setup

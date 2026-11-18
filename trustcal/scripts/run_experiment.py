@@ -40,6 +40,12 @@ def main() -> None:
     parser.add_argument("--arm", required=True, choices=ARMS, help="B1-B10, pilot, or injection")
     parser.add_argument("--dataset", default="gpqa")
     parser.add_argument("--limit", type=int, default=10)
+    parser.add_argument(
+        "--stop-after",
+        type=int,
+        default=None,
+        help="pause after N new questions; the manifest keeps --limit, so the same row can resume",
+    )
     parser.add_argument("--seed", type=int, default=1)
     parser.add_argument("--rounds", type=int, default=3)
     parser.add_argument("--out", default="results")
@@ -93,6 +99,7 @@ def main() -> None:
         arm=args.arm,
         dataset=args.dataset,
         limit=args.limit,
+        stop_after=args.stop_after,
         seed=args.seed,
         rounds=args.rounds,
         out_root=_out_root(args),

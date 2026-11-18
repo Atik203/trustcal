@@ -347,11 +347,14 @@ Then run `configs/experiments_precision.yaml`.
 | Priority | Item | Cost | Rule |
 |---|---|---:|---|
 | 1 | 18 GB test-only validation | **$0** | 8–9B AWQ one at a time; optional Q4_K_M main template |
-| 2 | 80 GB A100 4-bit smoke | **$1–2** | Must pass before pilot |
-| 3 | 80 GB A100 pilot | **$15–20** | Run in the same session as the smoke |
-| 4 | 96 GB 5-question smoke | **$2–8** | Optional; only after the 80 GB pilot is stable |
-| — | Reserve for retries/bandwidth | **$20–30** | Do not spend on 96 GB pilot/precision |
-| — | **Total** | **$18–30** | Leaves a real buffer |
+| 2 | 80 GB A100 4-bit smoke | **$1–2** | Must pass before Core |
+| 3 | Core-prefix gate: first 25–50 questions of the Core B8 and B8-no-trust rows | **~$1–2** | Part of Core; use `--stop-after` and resume the same rows only if it passes |
+| 4 | Optional 25-question injection mini-gate | **<$1** | Only if the Core prefix is inconclusive |
+| 5 | Optional 96 GB 5-question smoke | **$2–8** | Only after a stable Core prefix |
+| — | Reserve for retries/bandwidth | **$35–45** | Do not spend on 96 GB pilot/precision |
+| — | **Total** | **$5–15** | Leaves a real buffer |
+
+**Pilot replacement.** The old **$15–20 / ~112 GPU-h pilot** was a 100–150-question calibration run, not the 25-item Month-1 criterion. It duplicated questions Core will run anyway. Replace it with the **Core-prefix gate**: run the first 25–50 questions of the actual Core `B8` and `B8-no-trust` rows with `--limit 400 --stop-after N`, compare paired winners, and resume the same rows only if trust changes the outcome in the correct direction. The prefix is part of Core, so the gate adds no separate GPU spend. The Month-1 25-item toy pilot remains a v1.0 requirement, but its questions file is not authored; if the team wants it, it costs <$1, not $15–20.
 
 **Do not run with $50:**
 
@@ -366,7 +369,7 @@ Then run `configs/experiments_precision.yaml`.
 |---|---:|---:|
 | 18 GB dev validation | — | **$0** |
 | 4-bit 80 GB smoke | 4–8 | **$1–2** |
-| Pilot | ~112 | **$15–20** |
+| N5/G2 calibration pilot (optional; replaced by the Core prefix) | ~112 | **$15–20** |
 | Core | 1,280 cap (planned ~1,067) | **$175–210** |
 | Full 32-row default | 1,280 | **$210** |
 | Full 36-row alternate | 1,440 | **$235** |
@@ -384,15 +387,17 @@ With the free 18 GB tests and a signed Core → Full subset-reuse amendment:
 |---|---:|
 | 18 GB tests | $0 |
 | 4-bit smoke | $1–2 |
-| Pilot | $15–20 |
+| Core-prefix gate | $0 extra (part of Core) |
 | Core | $175–210 |
-| Full incremental | ~$104 |
+| Full incremental (16 reused rows) | ~$104 |
 | 96 GB FP8 smoke | $2–8 |
 | FP8 precision replication | $25–40 |
 | Storage | $40–60 |
-| **Total** | **~$360–450** |
+| **Total** | **~$345–445** |
 
 Under $400 is possible with Core at the low end, storage around $40–60, and the A100 at $0.136/GPU-h. The **$500–600** envelope remains approved; the $400 path is a planning option only after the reuse amendment is signed.
+
+**Reuse is not authorized by the current v1.3 draft.** That draft sets Full to 300 items/dataset and says the envelope "does not assume reuse." Core uses 400/400/200. No row matches, so the 16-row reuse above requires a **new signed amendment (v1.4)** that sets Full `gpqa_main: 400`, `mmlu_pro: 400`, `sciclaim_180: 300`, adds the SciClaimBench loader, and records the new config hash. Until then, budget Full at **$210** and the plan at **~$440–530**.
 
 ### 14.4 Bandwidth discipline
 

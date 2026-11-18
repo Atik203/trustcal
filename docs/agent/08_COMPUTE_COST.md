@@ -49,7 +49,8 @@ The main matrix runs on the **80 GB A100 PCIe** because the 4-bit 24–27B stack
 |---|---:|---:|---:|---:|
 | 18 GB test gate (N1.0) | — | $0 | $0 | **$0** |
 | 4-bit 80 GB smoke (N1a) | 4–8 | $0.54–1.09 | $0.65–1.31 | **$1–2** |
-| Pilot (N5/G2) | ~112 | $15 | $18 | **$15–20** |
+| Month-1 behavioral pilot (25 items) | ~3.3 | $0.45 | $0.54 | **<$1** |
+| N5/G2 calibration pilot (100–150 q, optional) | ~112 | $15 | $18 | **$15–20** |
 | Core run (G3), planned | ~1,067 | $145 | $174 | **$175–210** |
 | Core run (G3), cap | 1,280 | $174 | $209 | **$175–210** |
 | Full run (G4/G5), **32-row gold-evidence default** | 1,280 | $174 | $209 | **$210** |
@@ -59,6 +60,8 @@ The main matrix runs on the **80 GB A100 PCIe** because the 4-bit 24–27B stack
 | Storage and bandwidth | — | — | — | **$40–80** |
 | **Total plan** | — | — | — | **$500–600** |
 | **Hard stop** | — | — | — | **$600** |
+
+**Pilot correction.** The **$15–20 / ~112 GPU-h** line is a 100–150-question calibration run, not the 25-item Month-1 criterion. It duplicates questions Core will run. Replace it with the **Core-prefix gate**: run the first 25–50 questions of the actual Core `B8` and `B8-no-trust` rows using `--limit 400 --stop-after N`, compare paired winners, then resume the same rows only if the trust effect is in the correct direction. The prefix is part of Core, so the gate adds no separate GPU spend. If the team still wants the Month-1 pilot, it costs **<$1**, but `experiments/pilot-month1/questions.json` is not authored.
 
 **Full design:** the default is **32 rows** with a **gold-evidence oracle on SciClaimBench**; **36 rows** is the gold-answer alternate. The two Full rows are **alternatives**, not additions; the total counts one Full run. The **placebo** is a **cross-agent round-pool**. WP-18 freezes the definition; do not run Full before N1a and v1.3/WP-18.
 
@@ -81,10 +84,13 @@ The **$25–40 line is the precision replication, not a smoke**. A 96 GB smoke i
 |---|---:|---:|
 | 1 | 18 GB test-only validation | **$0** |
 | 2 | 80 GB A100 4-bit 5-question smoke | **$1–2** |
-| 3 | 80 GB A100 pilot (100–150 questions) | **$15–20** |
-| 4 | Optional 96 GB 5-question smoke, only after a stable pilot | **$2–8** |
-| — | Reserve for retries/bandwidth | **$20–30** |
-| — | **Total** | **$18–30** |
+| 3 | Core-prefix gate: first 25–50 Core B8 / B8-no-trust questions | **~$1–2** |
+| 4 | Optional 25-question injection mini-gate | **<$1** |
+| 5 | Optional 96 GB 5-question smoke, only after a stable Core prefix | **$2–8** |
+| — | Reserve for retries/bandwidth | **$35–45** |
+| — | **Total** | **$5–15** |
+
+Do not run a 96 GB pilot ($37–45), the FP8 precision replication ($25–40), Core ($175–210), or Full ($210, or ~$104 with reuse) from the $50 tranche. The first $50 buys a clean 4-bit smoke and a Core prefix, not a 96 GB pilot.
 
 Do not run a 96 GB pilot ($37–45), the FP8 precision replication ($25–40), Core ($175–210), or Full ($210, or ~$104 with reuse) from the $50 tranche. The first $50 buys a clean 4-bit smoke and pilot, not a 96 GB pilot.
 
@@ -173,14 +179,16 @@ Do not run a 96 GB pilot ($37–45), the FP8 precision replication ($25–40), C
 
 - **18 GB test gate:** free; 8–9B AWQ one at a time, or Q4_K_M main templates at 4k context; no cloud Q4 downloads.
 - **Main matrix:** one **80 GB A100 PCIe** spot, **$0.136/GPU-h**, 4-bit 24–27B final families.
-- **4-bit smoke:** 4–8 GPU-h / **$1–2**; run in the pilot session.
-- **Pilot:** ~112 GPU-h / **$15–20**.
+- **4-bit smoke:** 4–8 GPU-h / **$1–2**; run in the same session as the Core prefix.
+- **Month-1 pilot:** 25 items, ~3.3 GPU-h / **<$1**; file not authored.
+- **N5/G2 calibration pilot:** ~112 GPU-h / **$15–20**; optional and redundant with Core — replace it with the Core-prefix gate.
 - **Core:** 1,280 GPU-h cap (~1,067 planned) / **$175–210**.
 - **Full default:** 32-row gold-evidence oracle on SciClaimBench, 1,280 GPU-h / **$210**.
 - **Full alternate:** 36-row gold-answer, 1,440 GPU-h / **$235**.
-- **96 GB 5-question smoke:** 1.5–3 GPU-h / **$2–8**; optional after a stable pilot.
+- **Full reuse:** the v1.3 draft uses 300 items/dataset and explicitly does not assume reuse. The 16-row Core→Full reuse needs a signed **v1.4** setting Full `gpqa_main: 400`, `mmlu_pro: 400`, `sciclaim_180: 300`, plus the SciClaimBench loader. Until then, budget Full at **$210** (total ~**$440–530**).
+- **96 GB 5-question smoke:** 1.5–3 GPU-h / **$2–8**; optional after a stable Core prefix.
 - **FP8 precision replication:** 60–100 GPU-h at **$0.336/h** / **$25–40**; not the same as the smoke.
-- **$50 tranche:** 18 GB tests ($0) + 80 GB smoke ($1–2) + 80 GB pilot ($15–20); keep **$20–30** reserve. Do not run a 96 GB pilot or precision from it.
+- **$50 tranche:** 18 GB tests ($0) + 80 GB smoke ($1–2) + Core prefix (~$1–2); keep **$35–45** reserve. Do not run a 96 GB pilot or precision from it.
 - **Storage/bandwidth:** **$40–80**.
 - **Total:** **$500–600**; **hard stop $600**.
 - **Fallback:** 96 GB main runs at $0.336/h = **$1,050–1,150**, re-approval required; not the default.
