@@ -243,11 +243,16 @@ Assumptions: 6.2 min/debate at Gate 0 (no retrieval); 8 min with retrieval/trust
 | **Full default** (B8-oracle = gold-evidence on SciClaimBench) | 6 | 300/dataset; oracle on SciClaimBench | 2 | 900/cell | **9,600** (32 rows) | **1,280** | **$210** |
 | **Full alternate** (B8-oracle = gold-answer trust) | 6 | 300/dataset | 2 | 900/cell | **10,800** (36 rows) | **1,440** | **$235** |
 | Pilot (N5) | 3–4 | pilot subset | 1–2 | 100–150 | — | ~112 | $15–20 |
-| FP8 precision replication + N1 smoke | — | GPQA subset | 1 | 150–200 | — | 60–100 | $25–40 |
+| 18 GB test gate (N1.0) | 1 real + 2 mocks | 8–9B AWQ / Q4_K_M | 1 | 1–5 | — | 0 (university) | **$0** |
+| 4-bit 80 GB smoke (N1a) | 3 | 5 questions | 1 | 5 | — | 4–8 | **$1–2** |
+| 96 GB 5-question smoke (N1b) | 3 | 5 questions | 1 | 5 | — | 1.5–3 | **$2–8** |
+| FP8 precision replication | 3 | GPQA subset | 1 | 150–200 | — | 60–100 | $25–40 |
 | Storage and bandwidth | — | — | — | — | — | — | $40–80 |
 | **Total plan** | — | — | — | — | — | — | **$500–600** |
 
-**Budget rules:** The main matrix runs on one **80 GB A100 PCIe** spot at **$0.136/GPU-h** with the **4-bit 24–27B final families**. Core and Full use the same stack, so cells are reusable only where model revisions, prompts, and configs match. The **96 GB FP8 stack** at **$0.336/GPU-h** is only the N1 smoke plus the GPQA precision replication (B3/B8-no-trust/B8, 150–200 questions, 1 seed). The Full default is 32 rows (gold-evidence oracle on SciClaimBench); 36 rows is the gold-answer alternate. **Hard stop: $600.** If the 80 GB A100 spot is unavailable and the main runs use 96 GB at $0.336/h, the plan is **$1,050–1,150** and requires re-approval; that fallback is not the default. Law-testing is outside this envelope. The exact Full caps are **not frozen** until WP-18.
+**Budget rules:** The main matrix runs on one **80 GB A100 PCIe** spot at **$0.136/GPU-h** with the **4-bit 24–27B final families**. Core and Full use the same stack, so cells are reusable only where model revisions, prompts, and configs match. The free 18 GB gate runs first (8–9B AWQ with vLLM; Q4_K_M main templates with llama.cpp; one model at a time). Then the 4-bit 80 GB smoke, pilot, and Core. The **96 GB FP8 stack** at **$0.336/GPU-h** is only a 5-question smoke plus the GPQA precision replication (B3/B8-no-trust/B8, 150–200 questions, 1 seed), and it follows the 4-bit pilot/Core. Its 5-question smoke is **$2–8**; the precision replication is **$25–40**. The Full default is 32 rows (gold-evidence oracle on SciClaimBench); 36 rows is the gold-answer alternate. **Hard stop: $600.** If the 80 GB A100 spot is unavailable and the main runs use 96 GB at $0.336/h, the plan is **$1,050–1,150** and requires re-approval; that fallback is not the default. Law-testing is outside this envelope. The exact Full caps are **not frozen** until WP-18.
+
+**$50 tranche:** 18 GB tests ($0) + 4-bit 80 GB smoke ($1–2) + pilot ($15–20), with $20–30 held for retries/bandwidth. A 96 GB 5-question smoke ($2–8) is optional only after a stable pilot. Do not run a 96 GB pilot ($37–45) or the precision replication ($25–40) from this tranche.
 
 Full price table and formulas: [`08_COMPUTE_COST.md`](08_COMPUTE_COST.md).
 
@@ -290,7 +295,9 @@ Full price table and formulas: [`08_COMPUTE_COST.md`](08_COMPUTE_COST.md).
 |---|---|---|---|
 | **G0 — Wiring** | Done 2026-09-16 | 10/10 vanilla MAD debates; 90/90 positions | — |
 | **P0 — Engineering** | Done 2026-11-09 | 13/13 checks; 514 tests; 0 undefined refs; 600 DPI figures | — |
-| **N1 — Final-stack smoke** | Nov 2026 | `check_stack.py --phase final`; `preflight.py --phase final --offline`; three `server OK`; `smoke_test.py --phase final` PASS | Do not start Full; fix `gpu_memory_utilization` or quantization and re-run |
+| **N1.0 — 18 GB dev gate** | Nov 2026 | One real 8–9B AWQ or Q4_K_M model + two mocks; schema-valid record; no cloud spend | Fix template/parser/serving on the free slice |
+| **N1a — 4-bit smoke** | Nov–Dec 2026 | `check_stack.py --phase fourbit`; three `server OK`; `smoke_test.py --phase fourbit --limit 5` PASS | Do not start pilot; fix `gpu_memory_utilization` or quantization and re-run |
+| **N1b — FP8 smoke** | Feb 2027 | `check_stack.py --phase final`; `preflight.py --phase final --offline`; three `server OK`; 5-question smoke PASS | Do not claim FP8 precision; fix and re-run |
 | **N2 — WP-18** | Nov–Dec 2026 | Mock B8-placebo/B8-oracle validate; placebo ≠ B8; oracle ≥ B8; dry-run shows 24 Core rows; **Full count (32 default or 36 alternate) frozen** | Do not start Full |
 | **N3 — Benchmark calibration** | Nov 2026–Feb 2027 | 24-item report; 180-item freeze with κ and defect rate; 300 only if clean | Cut to 120; do not build 600/800 |
 | **N4 — Verifier audit** | Nov–Dec 2026 | 150–200 pairs, 2 annotators; balanced accuracy ≥0.75; κ ≥0.60 | 0.60–0.75: swap to NLI/LLM judge and re-audit. <0.60: measurement/negative paper; do not claim a high-q result |
@@ -303,7 +310,7 @@ Full price table and formulas: [`08_COMPUTE_COST.md`](08_COMPUTE_COST.md).
 
 **Kill criterion:** if N4 and G2 both fail, stop the trust-mechanism work. Write the negative/boundary paper from the harness and pilot. That is still publishable; continuing is not.
 
-**Do not reorder:** final-stack smoke → WP-18 → benchmark calibration/verifier audit → pilot → Core → Full. The pilot and Core are gates, not warm-ups.
+**Do not reorder:** 18 GB test gate (N1.0) → 4-bit 80 GB smoke (N1a) → v1.3/WP-18 → benchmark calibration/verifier audit → pilot → Core → FP8 96 GB smoke (N1b) → Full. The pilot and Core are gates, not warm-ups. N1b is not a gate for the 4-bit Full matrix.
 
 ---
 
@@ -379,11 +386,11 @@ ACL/EMNLP main remains a stretch, not the planning target.
 
 | Window | Work |
 |---|---|
-| Nov 2026 | N1 final-stack 96 GB smoke (not run yet); N2 WP-18 starts; N3 24-item calibration; N4 verifier audit starts |
+| Nov 2026 | N1.0 free 18 GB test gate; N1a 4-bit smoke; N2 WP-18 starts; N3 24-item calibration; N4 verifier audit starts |
 | Nov–Dec 2026 | WP-18 placebo/oracle + Full config; verifier audit (150–200 pairs) |
-| Dec 2026 | N5 pilot / **G2** |
-| Jan 2027 | **G3 Core run**; 180-item benchmark freeze (v1.2) |
-| Feb 2027 | **G4/G5 Full run**; 300-item target if the 180 set is clean |
+| Dec 2026–Jan 2027 | N5 pilot / **G2** |
+| Jan–Feb 2027 | **G3 Core run**; 180-item benchmark freeze (v1.2) |
+| Feb 2027 | N1b FP8 5-question smoke + precision replication; **G4/G5 Full run**; 300-item target if the 180 set is clean |
 | Mar 2027 | Human evaluation / SDT |
 | Apr 2027 | Results freeze; law-testing only if the effect is real |
 | May–Jun 2027 | Thesis chapters; internal review; **thesis submission June 2027** |

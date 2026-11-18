@@ -50,7 +50,7 @@ This is the level-one data flow: seven processes, four entities, three data stor
 
 ### Slide 9 — Experimental Setup
 
-To run this, we use two stacks: a four-bit 24–27B final-family stack on one 80 GB A100 for the main matrix, and an FP8 96 GB stack for the hardware smoke and a small precision replication, both on vLLM. Each debate runs three rounds; the matrix uses two seeds. The stress test injects a fake expert consensus between rounds one and two; baselines B1 to B4 skip it. We validate with annotation agreement and bootstrap confidence intervals. Total compute: about two thousand five hundred GPU-hours across the Core and Full plans. Salman will present the results and the engineering check.
+To run this, we use a free 18 GB university slice for test-only code and template checks, a four-bit 24–27B final-family stack on one 80 GB A100 for the main matrix, and an FP8 96 GB stack only for a five-question smoke and a small precision replication. The 18 GB tests use one 8–9B AWQ or Q4_K_M model at a time plus mocks. Each debate runs three rounds; the matrix uses two seeds. The stress test injects a fake expert consensus between rounds one and two; baselines B1 to B4 skip it. We validate with annotation agreement and bootstrap confidence intervals. Total compute: about two thousand five hundred GPU-hours across the Core and Full plans. Salman will present the results and the engineering check.
 
 ### Slide 10 — Project Results
 
@@ -235,8 +235,8 @@ Thank you for your attention. We are happy to take your questions.
 
 **Slide 9 — Experimental Setup**
 
-- **Q: Why two model stacks?**
-  **A:** The main causal matrix runs 4-bit 24–27B final-family models on one 80 GB A100. The 96 GB FP8 stack is only for the N1 hardware smoke and a small GPQA precision replication. The code path is identical — only the config changes.
+- **Q: Why three compute paths?**
+  **A:** The free 18 GB university slice is test-only: one 8–9B AWQ or Q4_K_M model plus mocks. The main causal matrix runs 4-bit 24–27B final-family models on one 80 GB A100. The 96 GB FP8 stack is only a five-question smoke plus a small GPQA precision replication, after the 4-bit pilot/Core. The code path is identical — only the config changes.
 - **Q: Why four-bit for the main matrix and FP8 for the check?**
   **A:** Four-bit 24–27B fits on an 80 GB A100 at one hundred thirty-six thousandths of a dollar per GPU-hour, which keeps the matrix inside the budget. The FP8 96 GB stack proves the pinned full-precision checkpoints load and gives a small precision check.
 - **Q: Why three rounds and two seeds?**
@@ -269,7 +269,7 @@ Thank you for your attention. We are happy to take your questions.
 - **Q: Why six minutes per debate?**
   **A:** Three models, three rounds, retrieval and four-bit inference on one GPU. That is the current cost; batching and caching will reduce it.
 - **Q: When will the full matrix run?**
-  **A:** After the gates: Final-stack smoke, WP-18 placebo/oracle, 24-item calibration, verifier audit, pilot, then Core and Full.
+  **A:** After the gates: 18 GB test gate, 4-bit 80 GB smoke, v1.3/WP-18, 24-item calibration, verifier audit, pilot, Core, then the FP8 96 GB smoke and Full.
 
 **Slide 11 — Why Complex Engineering**
 
@@ -314,7 +314,7 @@ Thank you for your attention. We are happy to take your questions.
 - **Q: Where does the design apply?**
   **A:** Scientific question answering, research assistants, and any evidence-rich domain such as law or medicine.
 - **Q: What comes next?**
-  **A:** Final-stack smoke, WP-18 placebo/oracle, calibration, the verifier audit, the pilot, then Core and Full, followed by the thesis and paper.
+  **A:** 18 GB test gate, 4-bit 80 GB smoke, v1.3/WP-18, calibration, verifier audit, pilot, Core, FP8 96 GB smoke, then Full, followed by the thesis and paper.
 
 **Slide 14 — Thank You**
 

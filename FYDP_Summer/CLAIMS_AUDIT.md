@@ -128,11 +128,11 @@ The report uses three figures: `fig-pipeline.png` (Introduction), `fig-context.p
 
 | Item | Status | Action |
 |---|---|---|
-| 514 tests | P0 release (`7f2c11f`); the audit itself was written at `8417dc7` (478+). | Re-run `pytest` in `trustcal/` only if the code changes; update the number if it differs. |
+| 615 tests (514 at P0 release) | P0 release (`7f2c11f`); current suite after the fourbit/WP-18 work. | Re-run `pytest` in `trustcal/` only if the code changes; update the number if it differs. |
 | A100 80GB at USD 1.78/hour | Author estimate from the earlier draft; not re-verified against a current provider. | Verify or replace with a dated Vast.ai/RunPod quote. |
 | "about 77 billion parameters" | Approximate from model names; not independently counted. | Verify from model cards if the exact parameter count matters. |
 | MIT licence | `LICENSE` is present at the repository root (MIT). | No action; keep the licence with the release. |
-| Final-stack smoke test | Not run. | Run `smoke_test.py --phase final` on the 96GB stack before the matrix. |
+| 4-bit and FP8 smoke tests | Not run. | Run `smoke_test.py --phase fourbit --limit 5` on the 80GB A100 first; run the FP8 96GB smoke after the 4-bit pilot/Core. |
 | Verifier human audit | Not run. | Complete 150--200 pairs, two annotators, balanced accuracy and κ. |
 | B8-no-trust and B8+injection | Landed in the P0 release; gate 13/13. | No action; the remaining slice is WP-18 (placebo/oracle). |
 | Runner record adapter | Wired in the P0 release (`manifest_hash`, `final_answer`, trust-field copies). | Verify a sample record before the paid run. |

@@ -625,7 +625,7 @@ Qwen3.8-27B-FP8 (29.95 GB), Gemma 4 26B-A4B FP8 (28.67 GB), and Mistral 24B AWQ
 (15.06 GB), totalling 73.68 GB; the Qwen revision is
 `c3a462cc3d38cf351f3b26cbd763469eeb74ef81`, and the Gemma and Mistral
 revisions are unchanged from the v1.0 freeze record (§9). It also serves as the
-N1 Final-stack hardware smoke. It is a directional precision check on the
+N1b Final-stack hardware smoke, after the 4-bit pilot/Core. It is a directional precision check on the
 higher-precision stack: not an equivalence test, not a powered replication, and
 not a confirmatory endpoint. It does not enter the Holm families or the decision
 rule. A failed hardware smoke stops the FP8 path; it does not authorize a 96 GB

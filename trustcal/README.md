@@ -68,13 +68,14 @@ python scripts/mock_vllm.py --ports 8000,8001,8002 --mode divergent
 
 ## Order of work
 
-1. 4-bit 5-question smoke
-2. pilot
-3. 24-row Core matrix
-4. 32-row Full matrix
-5. 96 GB FP8 smoke and 3-row precision replication
+1. Free 18 GB test gate: one 8–9B AWQ model (or one Q4_K_M model with llama.cpp) plus two mocks; no cloud spend.
+2. 4-bit 80 GB 5-question smoke
+3. pilot
+4. 24-row Core matrix
+5. 96 GB FP8 5-question smoke, then the 3-row precision replication
+6. 32-row Full matrix
 
-Never run a matrix before the pilot. The execution plan and costs are in [`../roadmap.md`](../roadmap.md); serving and instance rules are in [`AGENTS.md`](AGENTS.md); per-component status is in [`IMPLEMENTATION_STATUS.md`](IMPLEMENTATION_STATUS.md).
+Never run a matrix before the pilot. The 96 GB smoke is not a gate for the 4-bit Full matrix; it is required before any FP8 precision claim. The execution plan and costs are in [`../roadmap.md`](../roadmap.md); serving and instance rules are in [`AGENTS.md`](AGENTS.md); per-component status is in [`IMPLEMENTATION_STATUS.md`](IMPLEMENTATION_STATUS.md).
 
 ## Security
 

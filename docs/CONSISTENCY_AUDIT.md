@@ -2,7 +2,7 @@
 
 > **Historical snapshot (9 Nov 2026, pre-release).** This file records the pre-release reconciliation and is superseded by the P0 release at `2ae56a3` (13/13 gate, 514 tests; WP-09 complete; WP-18 placebo/oracle pending; only `main` and `dev`). The body's **11/13 gate**, **478-test count**, **`feat/*` branch model**, **WP-13 placebo/oracle naming**, and **Core-prefix/top-up cost note** are all superseded. In this historical text, `WP-13` was used for the placebo/oracle slice; current WP-13 is the landed B8-no-trust split. The comparison body below is preserved as history, not current status.
 
-> **Current budget (9 November 2026; supersedes all cost lines below):** main matrix on one **80 GB A100 PCIe** at **$0.136/GPU-h**; Core **$175–210**; Full **$210** (32-row gold-evidence default) or **$235** (36-row gold-answer alternate); FP8 precision replication + N1 smoke **$25–40**; storage/bandwidth **$40–80**; **total $500–600**; **hard stop $600**. See `docs/agent/08_COMPUTE_COST.md`.
+> **Current budget (18 November 2026; supersedes all cost lines below):** 18 GB test gate **$0**; 4-bit 80 GB smoke **$1–2**; pilot **$15–20**; Core **$175–210**; Full **$210** (32-row gold-evidence default) or **$235** (36-row gold-answer alternate); 96 GB FP8 5-question smoke **$2–8**; precision replication **$25–40**; storage/bandwidth **$40–80**; **total $500–600**; **hard stop $600**. The **$50** tranche is 18 GB tests + 4-bit smoke + pilot, with $20–30 reserve. See `docs/agent/08_COMPUTE_COST.md`.
 
 **Date:** 9 November 2026  
 **Branch:** `docs/repo-consistency`  

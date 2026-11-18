@@ -4,26 +4,30 @@
 
 > **Status at P0 release (9 November 2026):** **13/13** gate checks, **514** tests, released at tag `p0-release` (`7f2c11f`); `main` = `dev` = `2ae56a3`. The old **WP-13** was the landed **B8-no-trust prompt split** (trust-line removal). The pending placebo/oracle slice is **WP-18**, not WP-13.
 
-## Post-P0 checklist (9 November 2026 — current)
+## Post-P0 checklist (18 November 2026 — current)
 
 Work in this order. Record commands and exact output in `experiments/next/WP-<id>.md`.
 
-- [ ] **N1 — Final-stack 96 GB smoke (Nov 2026).** Not run yet. On the 96 GB GPU:
+- [ ] **N1.0 — Free 18 GB test gate (Nov 2026).** Use a dedicated `trustcal-fydp/` directory; do not modify `tool-observation/`. Test one 8–9B AWQ model with vLLM plus two mocks, and optionally one Q4_K_M main model with llama.cpp at 4k context. **Pass:** schema-valid record from one real model + two mocks; no cloud spend; `nvidia-smi` peak recorded. Cost **$0**.
+- [ ] **N1a — 4-bit 80 GB smoke (Nov–Dec 2026).** On the 80 GB A100:
   ```bash
   cd trustcal
-  PHASE=final bash setup.sh
+  PHASE=fourbit bash setup.sh
   python scripts/verify_env.py --check-servers
-  python scripts/check_stack.py --phase final
-  HF_HUB_OFFLINE=1 python scripts/preflight.py --phase final --offline
-  python scripts/smoke_test.py --phase final --limit 20
+  python scripts/check_stack.py --phase fourbit
+  HF_HUB_OFFLINE=1 python scripts/preflight.py --phase fourbit --offline
+  python scripts/smoke_test.py --phase fourbit --limit 5
   ```
-  **Pass:** three `server OK`; all preflight checks OK; smoke PASS; record peak `nvidia-smi` and loaded weights. Cost 60–100 GPU-h on the 96 GB card at $0.336/GPU-h / $25–40 (includes the FP8 precision replication).
-- [ ] **N2 — WP-18 placebo/oracle (Nov–Dec 2026).** Implement B8-placebo and B8-oracle, prompt/config switches, tests, and `configs/experiments_full.yaml`. **Freeze the Full definition:** default 32 runs with a gold-evidence oracle on SciClaimBench (1,280 GPU-h / $210); 36 runs with gold-answer trust is the alternate (1,440 GPU-h / $235). **Not implemented.**
+  **Pass:** three `server OK`; preflight OK; smoke PASS; record peak `nvidia-smi` and loaded weights. Cost **$1–2**. Run in the pilot session.
+- [ ] **N2 — WP-18 placebo/oracle and v1.3 sign-off (Nov–Dec 2026).** Implementation is landed; **freeze the Full definition and sign v1.3.** Default 32 runs with a gold-evidence oracle on SciClaimBench (1,280 GPU-h / $210); 36 runs with gold-answer trust is the alternate (1,440 GPU-h / $235). If the $400 path is chosen, add the Core → Full subset-reuse amendment before Core.
+- [ ] **N1b — FP8 96 GB smoke (Feb 2027).** Only after the 4-bit pilot/Core. A 5-question smoke is **$2–8**; the full precision replication is **$25–40**. Do not run either from the current $50 tranche.
 - [ ] **N3 — Benchmark calibration (Nov 2026–Feb 2027).** 24-item calibration first; if clean, 180-item **v1.2 freeze** (Core floor); 300-item Full target only if the 180 set is clean; 600 stretch; 800 no-go.
 - [ ] **N4 — Verifier audit (Nov–Dec 2026).** 150–200 claim–passage pairs, 2 annotators. Target balanced accuracy ≥0.75, κ ≥0.60. Current lexical verifier: **0.58** on the synthetic audit. **Pending.**
-- [ ] **N5/G2 — Pilot (Dec 2026).** Baseline CCR ≥0.30; trust AUROC ≥0.65; ≥65% correct-direction changes; injection κ ≥0.75; no schema-invalid records.
-- [ ] **G3 — Core run (Jan 2027).** 4 conditions (B3, B4-matched, B8-no-trust, B8) × 3 datasets (`gpqa_main` 400, `mmlu_pro` 400, `hle` 200) × 2 seeds = 24 runs. 8,000 debates ≈ 1,067 GPU-h planned; 1,280 cap.
-- [ ] **G4/G5 — Full run (Feb 2027).** 6-arm target; default 32-row gold-evidence on SciClaimBench / 36-row gold-answer alternate; placebo ≠ B8; oracle separates; sign reversal at the predicted q/ρ boundary; external validity.
+- [ ] **N5/G2 — Pilot (Dec 2026–Jan 2027).** Baseline CCR ≥0.30; trust AUROC ≥0.65; ≥65% correct-direction changes; injection κ ≥0.75; no schema-invalid records.
+- [ ] **G3 — Core run (Jan–Feb 2027).** 4 conditions (B3, B4-matched, B8-no-trust, B8) × 3 datasets (`gpqa_main` 400, `mmlu_pro` 400, `hle` 200) × 2 seeds = 24 runs. 8,000 debates ≈ 1,067 GPU-h planned; 1,280 cap.
+- [ ] **G4/G5 — Full run (Feb–Mar 2027).** 6-arm target; default 32-row gold-evidence on SciClaimBench / 36-row gold-answer alternate; placebo ≠ B8; oracle separates; sign reversal at the predicted q/ρ boundary; external validity.
+
+**Current $50 tranche:** N1.0 ($0) → N1a ($1–2) → pilot ($15–20). Hold $20–30 for retries/bandwidth. Optional N1b 5-question smoke ($2–8) only after a stable pilot. Do not run a 96 GB pilot or precision replication from this tranche.
 - [ ] **Results freeze (Apr 2027).** CIs, negative results, pre-registered contrasts, manifest trace.
 - [ ] **Thesis (Jun 2027), defence (Jun/Jul 2027), paper (Aug–Dec 2027).** No paper deadline before the defence.
 

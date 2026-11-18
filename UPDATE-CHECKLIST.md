@@ -22,7 +22,9 @@
 | Frontend | `npm run build` passes and prerenders all routes; `npm run lint` exits 0 |
 | Main stack (4-bit) | Qwen3.8-27B-AWQ-INT4 / Gemma-4-26B-A4B-AWQ / Mistral-24B-AWQ, **~53.3 GB** pinned |
 | Final stack | Qwen3.8-27B-FP8 / Gemma-4-26B-A4B-FP8 / Mistral-24B-AWQ, **73.68 GB** pinned |
-| Final-stack smoke | **NOT RUN** — offline budget check only (73.68 GB < 96 GB); the 96 GB hardware smoke is the next gate |
+| 18 GB test gate | **NOT RUN** — `uiu-h200` 18 GB; 8–9B AWQ cache + Q4_K_M test route |
+| 4-bit 80 GB smoke | **NOT RUN** — the next hardware gate |
+| FP8 96 GB smoke | **NOT RUN** — after the 4-bit pilot/Core; not a Full-matrix gate |
 
 **P0 is engineering readiness, not efficacy evidence.** No accuracy, CMR, or sign-reversal claim exists yet.
 
@@ -101,7 +103,10 @@ A 300-item set with clean gold is better than a 600-item set with bad gold.
 
 | Path | Cost |
 |---|---:|
-| FP8 precision replication + 96 GB N1 smoke | $25–40 |
+| 18 GB test gate | $0 |
+| 4-bit 80 GB smoke | $1–2 |
+| 96 GB 5-question FP8 smoke | $2–8 |
+| FP8 precision replication | $25–40 |
 | Pilot | $15–20 |
 | Core run | **$175–210** |
 | Full run, 32-row gold-evidence default | **$210** |

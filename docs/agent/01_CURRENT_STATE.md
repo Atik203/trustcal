@@ -1,6 +1,6 @@
 # 01 — Current State
 
-**Snapshot:** 11 November 2026. **Branches:** `main` = `dev` = `v0.2.1`. **Tags:** `p0-gate` = `055a244`; `p0-release` = `7f2c11f`. **P0 is released; no efficacy results exist.**
+**Snapshot:** 18 November 2026. **Branches:** `main` = `dev` = `v0.2.1`. **Tags:** `p0-gate` = `055a244`; `p0-release` = `7f2c11f`. **P0 is released; no efficacy results exist.**
 
 This file is the status source of truth. If code and this file disagree, **code wins**; update this file and report the discrepancy. The order of work is `roadmap.md`.
 
@@ -16,7 +16,9 @@ Legend: ✅ real / tested / released; 🟡 implemented but partially wired, unva
 | vLLM serving (Dev) | ✅ | Gate 0 | Three quantized models on one A6000 48 GB |
 | 4-bit main stack offline check | ✅ | `trustcal/scripts/check_stack.py --phase fourbit` | Qwen3.8-27B-AWQ-INT4 / Gemma-4-26B-A4B-AWQ / Mistral-24B-AWQ = **53.26 GB** pinned |
 | Final stack offline check | ✅ | `trustcal/scripts/check_stack.py --phase final` | Qwen3.8-27B-FP8 / Gemma-4-26B-A4B-FP8 / Mistral-24B-AWQ = **73.68 GB** pinned |
-| Final-stack 96 GB smoke | 🔴 | Not run | Hardware load/KV-cache/three-server test is **N1** |
+| 18 GB test environment | 🟡 | Server inspection | `uiu-h200` H200 MIG 18 GB; vLLM 0.33.0 and 8–9B AWQ cache available; Q4_K_M test route planned; no test run yet |
+| 4-bit 80 GB smoke | 🔴 | Not run | Three-model 53.26 GB stack; gate **N1a** |
+| Final-stack 96 GB smoke | 🔴 | Not run | Three-model 73.68 GB FP8 stack; gate **N1b**, after the 4-bit pilot/Core |
 | Debate loop | ✅ | `orchestrator/debate.py`; tests | Runs with options, evidence, injection, and trust; no paid run yet |
 | Trust math | ✅ | `trust/update.py`; 10k-input tests | Simplex projection with floor/ceiling; neutral no-op; claim-count normalization |
 | Injection | ✅ | `orchestrator/injection.py`; tests | One-shot external consensus; neutral control; ties excluded |
@@ -28,7 +30,7 @@ Legend: ✅ real / tested / released; 🟡 implemented but partially wired, unva
 | B1–B10 runner | ✅ | `runner.py`, `strategies.py` | Core arms executable; approximate baselines carry a fidelity label |
 | Datasets and routing | ✅ | `configs/datasets.yaml` | Revisions pinned; claim-domain routing; stratified sampling; eligible n reported |
 | Core matrix | ✅ | `configs/experiments.yaml`; `run_matrix.py --dry-run` | 4 conditions × 3 datasets (`gpqa_main`, `mmlu_pro`, `hle`) × 2 seeds = **24 rows**; 1,280 GPU-h cap |
-| WP-18 placebo/oracle | 🔴 | Not implemented | B8-placebo/B8-oracle and `configs/experiments_full.yaml` are the next design slice |
+| WP-18 placebo/oracle | ✅ | `configs/experiments_full.yaml`; tests | B8-placebo/B8-oracle implemented; v1.3 sign-off pending |
 | Human evaluation | 🟡 | `scripts/human_eval.py` | Tooling exists; no data; planned for March 2027 |
 | Statistics | ✅ | `eval/stats.py` | Bootstrap/d/McNemar/Holm implemented; analysis waits for data |
 | Docs | ✅ | `docs/agent/` | This set refreshed 9 Nov 2026; `02`, `04`, `06`, `09` are explicitly historical |
@@ -94,7 +96,9 @@ The full fix record is `02_P0_FIXES.md` and `experiments/p0/WP-*.md`. Summary:
 
 | Item | Owner phase | Acceptance |
 |---|---|---|
-| Final-stack 96 GB smoke | **N1**, Nov 2026 | `check_stack.py --phase final`; `preflight.py --phase final --offline`; three `server OK`; `smoke_test.py --phase final` PASS. **Not run.** |
+| 18 GB test gate | **N1.0**, Nov 2026 | One real 8–9B AWQ or Q4_K_M model + two mocks; schema-valid record; no cloud spend. **Not run.** |
+| 4-bit 80 GB smoke | **N1a**, Nov–Dec 2026 | `check_stack.py --phase fourbit`; three `server OK`; `smoke_test.py --phase fourbit --limit 5` PASS. **Not run.** |
+| FP8 96 GB smoke | **N1b**, Feb 2027 | `check_stack.py --phase final`; three `server OK`; 5-question smoke PASS. Follows the 4-bit pilot/Core. **Not run.** |
 | WP-18 B8-placebo/B8-oracle + Full matrix | **N2**, Nov–Dec 2026 | Mock records validate; placebo ≠ B8; oracle ≥ B8; dry-run shows 24 Core rows and the conditional Full rows; **freezes 32-vs-36-run definition** |
 | 24-item calibration → 180 → 300 | **N3**, Nov 2026–Feb 2027 | Calibration report; 180-item freeze with κ and defect rate; 300 only if clean |
 | Human verifier audit | **N4**, Nov–Dec 2026 | 150–200 pairs, 2 annotators; balanced accuracy ≥0.75, κ ≥0.60. Current lexical verifier 0.58 on the synthetic audit |
@@ -147,12 +151,14 @@ The detailed pre-P0 findings (injection without retrieval, CCR=0 in B8, `evidenc
 - Any claim of a formal bound or the R6 law; the theory is derived/not proved until an independent check.
 - Any claim of "no prior work"; see `04_LITERATURE_AND_GAPS.md`.
 - Any claim that the final stack serves on 96 GB; the hardware smoke is **not run**.
+- Any claim based on 18 GB 8–9B or Q4_K_M outputs; they are test-only.
+- Any claim that the 4-bit three-model stack serves on 80 GB; the 4-bit smoke is **not run**.
 
 ---
 
 ## 9. Definition of done for the next release (P0 → G2)
 
-- [x] `pytest` green: **514 passed** at `p0-release`.
+- [x] `pytest` green: **615 passed** (514 at `p0-release`).
 - [x] B8 + injection runs end-to-end on mocks, with `consensus`, `targets`, `evidence_introduced`, `final_answer`.
 - [x] Accuracy, CMR, CCR-0, CCR-E, MPR-weighted, ARR, trust AUROC/Brier computed and unit-tested.
 - [x] Trust update satisfies `min >= floor`, `sum == 1` on 10k random inputs.
@@ -160,7 +166,9 @@ The detailed pre-P0 findings (injection without retrieval, CCR=0 in B8, `evidenc
 - [x] B8 vs B8-no-trust differs only in the trust line (historical WP-13).
 - [x] Dataset revisions pinned; eligible n reported per dataset.
 - [x] Core matrix ≤1,500 GPU-h; pre-registration v1.0 + v1.1 erratum frozen.
-- [ ] WP-18 placebo/oracle + Full matrix config. **Not implemented.**
-- [ ] Final-stack 96 GB smoke. **Not run.**
-- [ ] Pilot passes G2. **Pending Dec 2026.**
+- [x] WP-18 placebo/oracle + Full matrix config implemented; **v1.3 sign-off pending**.
+- [ ] N1.0 18 GB test gate. **Not run.**
+- [ ] N1a 4-bit 80 GB smoke. **Not run.**
+- [ ] N1b 96 GB FP8 smoke. **Not run; after the 4-bit pilot/Core.**
+- [ ] Pilot passes G2. **Pending Dec 2026–Jan 2027.**
 - [x] Docs updated; `main` = `dev` with the full pipeline.

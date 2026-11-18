@@ -25,10 +25,10 @@ The pass makes the preprint honest about the current P0 implementation. It is **
 The P0 facts used in the text are:
 
 - Gate 0: 10/10 debates, 3/3 rounds each, 90/90 non-empty positions, 370.8 s mean, 3,708.1 s total.
-- Tests: 523 current; 514 at the P0 release. The audit was written against 478; `experiments/p0/WAVE2.md` at `f777852` records 465.
+- Tests: 615 current; 514 at the P0 release. The audit was written against 478; `experiments/p0/WAVE2.md` at `f777852` records 465.
 - P0 gate: 13 passed, 0 failed, 0 pending at the P0 release (11 passed and 2 pending when this audit was written).
 - Matrix: 24 rows (4 arms x 3 datasets x 2 seeds), 1,280 GPU-h conservative gate, `PRE_REGISTRATION.md` v1.0.
-- Not yet: verifier human audit, SciClaimBench, 24-item calibration batch, WP-18 placebo/oracle slice, final-stack smoke, and the paid Core-run matrix.
+- Not yet: verifier human audit, SciClaimBench, 24-item calibration batch, the 18 GB test gate, the 4-bit 80 GB smoke, the FP8 96 GB smoke/precision, and the paid Core-run matrix. WP-18 is implemented; v1.3 sign-off is pending.
 
 ## Old -> new table
 

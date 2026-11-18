@@ -385,4 +385,4 @@ The engineering gate passed. The two human-validation items below were explicitl
 - [x] P0-11 manifest/resume test passes.
 - [x] P0-12 branch/docs updated: `main` = `dev`; manuscripts rewritten as engineering reports.
 
-**Current next gate:** N1 final-stack smoke (not run) → N2 WP-18 → N4 verifier audit → N5 pilot/G2. See `roadmap.md`.
+**Current next gate:** N1.0 free 18 GB test gate → N1a 4-bit 80 GB smoke → N2 WP-18/v1.3 → N4 verifier audit → N5 pilot/G2 → Core → N1b FP8. See `roadmap.md`.

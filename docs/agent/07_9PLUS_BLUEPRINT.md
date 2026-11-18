@@ -661,17 +661,17 @@ These are judgments, not guarantees. The expected-value-maximizing plan is the r
 
 ---
 
-## 11. Current calendar (9 November 2026)
+## 11. Current calendar (18 November 2026)
 
 **Source of truth: `roadmap.md`.** Do not use the old week-numbered plan.
 
 | Window | Work | Gate |
 |---|---|---|
-| Nov 2026 | **N1** final-stack 96 GB smoke (not run); **N2** WP-18 starts; **N3** 24-item calibration; **N4** verifier audit starts | N1 PASS |
+| Nov 2026 | **N1.0** free 18 GB test gate; **N1a** 4-bit 80 GB smoke; **N2** WP-18/v1.3; **N3** 24-item calibration; **N4** verifier audit starts | N1.0/N1a PASS |
 | Nov–Dec 2026 | WP-18 B8-placebo/B8-oracle + Full config; verifier audit (150–200 pairs) | N2/N4 |
-| Dec 2026 | **N5 pilot** | **G2:** baseline CCR ≥0.30; trust AUROC ≥0.65; ≥65% correct-direction changes; injection κ ≥0.75 |
-| Jan 2027 | **Core run**; 180-item benchmark v1.2 freeze | **G3** |
-| Feb 2027 | **Full run**; 300-item target if the 180 set is clean | **G4/G5** |
+| Dec 2026–Jan 2027 | **N5 pilot** | **G2:** baseline CCR ≥0.30; trust AUROC ≥0.65; ≥65% correct-direction changes; injection κ ≥0.75 |
+| Jan–Feb 2027 | **Core run**; 180-item benchmark v1.2 freeze | **G3** |
+| Feb 2027 | **N1b** FP8 96 GB smoke + precision; **Full run**; 300-item target if the 180 set is clean | **G4/G5** |
 | Mar 2027 | Human evaluation / SDT | κ ≥0.60 |
 | Apr 2027 | Results freeze; law-testing only if the effect is real | — |
 | May–Jun 2027 | Thesis chapters; internal review; **submission June 2027** | — |

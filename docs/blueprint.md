@@ -242,9 +242,9 @@ Empirically, the debate pipeline behaves identically regardless of which models 
 |-------|---------|---------|---------|-----|-----------|
 | **Dev** (Ph 0-2) | [Qwen3.5-9B](https://huggingface.co/Qwen/Qwen3.5-9B) | [Gemma 4 12B](https://huggingface.co/google/gemma-4-12B) | [Ministral-3-14B-Instruct-2512](https://huggingface.co/mistralai/Ministral-3-14B-Instruct-2512) | RTX A6000 48GB (P0 engineering; not the main causal budget) | Gate 0 actual ≈$4.29 |
 | **Main matrix** (Ph 3-5) | Qwen3.8-27B (4-bit) | Gemma-4-26B-A4B (4-bit) | Mistral-24B (4-bit) | A100 PCIe 80GB (spot **$0.136/GPU-h**) | Core **$175–210**; Full **$210/$235** |
-| **Precision check** (Ph 3-5) | Qwen3.8-27B-FP8 | Gemma-4-26B-A4B-FP8 | Mistral-24B-AWQ | RTX PRO 6000 96GB (spot **$0.336/GPU-h**) | N1 smoke + replication **$25–40** |
+| **Precision check** (Ph 3-5) | Qwen3.8-27B-FP8 | Gemma-4-26B-A4B-FP8 | Mistral-24B-AWQ | RTX PRO 6000 96GB (spot **$0.336/GPU-h**) | 5-question smoke **$2–8**; precision replication **$25–40**; after the 4-bit pilot/Core |
 
-During development, all pipeline code (claim decomposition, retrieval, trust update, state machine, injection protocol) is written and debugged using the smaller Dev models (at 4-bit quantisation, ~28GB total) on a cheap RTX A6000 48GB. The Core and Full runs then use the **4-bit 24–27B final families on one 80 GB A100 PCIe** (Qwen3.8-27B-AWQ-INT4 ~21.0 GB, Gemma-4-26B-A4B AWQ ~17.2 GB, Mistral-24B-AWQ 15.06 GB; ~53.3 GB total) — no code changes needed, only a model-name/config swap. The **96 GB FP8 stack** is only the N1 hardware smoke plus a small GPQA precision replication; it is not the matrix host.
+During development, all pipeline code (claim decomposition, retrieval, trust update, state machine, injection protocol) is written and debugged on the free 18 GB university slice: one 8–9B AWQ model with vLLM, or one Q4_K_M main template with llama.cpp at 4k context, plus two mocks. The Core and Full runs then use the **4-bit 24–27B final families on one 80 GB A100 PCIe** (Qwen3.8-27B-AWQ-INT4 ~21.0 GB, Gemma-4-26B-A4B AWQ ~17.2 GB, Mistral-24B-AWQ 15.06 GB; ~53.3 GB total) — no code changes needed, only a model-name/config swap. The **96 GB FP8 stack** is only the N1b 5-question smoke plus a small GPQA precision replication, after the 4-bit pilot/Core; it is not the matrix host.
 
 - **Purpose:** independently reason about the question, then defend or revise positions across rounds based on evidence and each other's arguments.
 - **Responsibilities:** (1) produce an initial answer + reasoning trace, (2) decompose own claims into atomic propositions for retrieval, (3) revise position in light of evidence and peer arguments, (4) maintain awareness of own accumulating trust score.
@@ -339,7 +339,7 @@ The staged strategy keeps compute costs manageable for a student team. All pipel
 
 | Stage | When | GPU-h | Cash | Notes |
 |------|------|------:|------:|-------|
-| **FP8 precision replication + 96 GB N1 smoke** | Nov 2026 | 60–100 | $25–40 | 96 GB RTX PRO 6000 at $0.336/GPU-h; **NOT RUN** — offline 73.68 GB check only |
+| **FP8 96 GB smoke + precision replication** | Feb 2027 | 5-question smoke: 1.5–3 h; precision: 60–100 h | Smoke **$2–8**; precision **$25–40** | 96 GB RTX PRO 6000 at $0.336/GPU-h; **NOT RUN** — offline 73.68 GB check only; after the 4-bit pilot/Core |
 | **Pilot** | Dec 2026 | ~112 | $15–20 | 100–150 questions; 4-bit 24–27B on the 80 GB A100 |
 | **Core run** | Jan 2027 | 1,280 cap (planned ~1,067) | $175–210 | 24 runs; 8,000 planned debates; 4-bit 24–27B on the 80 GB A100 |
 | **Full run, default** | Feb 2027 | 1,280 | $210 | 32 rows; gold-evidence oracle on SciClaimBench; B8-placebo is a cross-agent round-pool |
@@ -479,7 +479,7 @@ Proceeding to **Phase 3 (Sections 9–12)**.
 | **Timeline**       | Nov 2026–Jan 2027 overloaded — smoke + WP-18 + calibration + verifier audit + pilot + Core                                              | **High**                                     | High                                 | Keep the order; do not start Core before G2. WP-18 is the only pre-run design addition; freeze the oracle scope before the Full config.                                                                                                                          |
 | **Publication**    | Two of four core related-work citations are preprint/workshop-tier, not main-conference                                     | Medium (perception risk, not technical risk) | Moderate                             | Disclose proactively and precisely (see prior meeting-prep guidance) — actually strengthens credibility if handled this way                                                                                                                                             |
 | **Implementation** | iMAD reimplementation fidelity to original paper                                                                            | Medium                                       | Moderate                             | ~10-day dedicated estimate already budgeted; explicit divergence documentation required                                                                                                                                                                                 |
-| **Implementation** | Main-matrix compute ceiling under the 4-condition Core / 6-arm Full × multi-dataset × 2-seed matrix                         | Medium                                       | Moderate                             | Main matrix on one 80 GB A100 PCIe (spot $0.136/GPU-h) with the 4-bit 24–27B final families; the 96 GB FP8 stack ($0.336/GPU-h) is only the N1 smoke plus a small precision replication. Core $175–210; Full $210 (32-row gold-evidence default) or $235 (36-row gold-answer alternate); total $500–600; hard stop $600. The 96 GB main-run fallback is $1,050–1,150 and needs re-approval. |
+| **Implementation** | Main-matrix compute ceiling under the 4-condition Core / 6-arm Full × multi-dataset × 2-seed matrix                         | Medium                                       | Moderate                             | Main matrix on one 80 GB A100 PCIe (spot $0.136/GPU-h) with the 4-bit 24–27B final families; the free 18 GB slice is test-only; the 96 GB FP8 stack ($0.336/GPU-h) is only a $2–8 smoke plus the $25–40 precision replication, after the 4-bit pilot/Core. Core $175–210; Full $210 (32-row gold-evidence default) or $235 (36-row gold-answer alternate); total $500–600; hard stop $600. The 96 GB main-run fallback is $1,050–1,150 and needs re-approval. |
 
 ---
 
@@ -488,16 +488,16 @@ Proceeding to **Phase 3 (Sections 9–12)**.
 _Post-P0 calendar. The July–October 2026 record — Gate 0, the trust operator, claim-domain routing, and P0 hardening — lives in `experiments/p0/` and is not repeated here._
 
 > [!IMPORTANT]
-> **Order: Final-stack smoke → WP-18 → 24-item calibration → verifier audit → pilot (G2) → Core (G3) → Full (G4/G5).** The pilot and Core run are gates, not optional warm-ups.
+> **Order: 18 GB test gate (N1.0) → 4-bit 80 GB smoke (N1a) → v1.3/WP-18 → 24-item calibration → verifier audit → pilot (G2) → Core (G3) → FP8 96 GB smoke (N1b) → Full (G4/G5).** The pilot and Core run are gates, not optional warm-ups. N1b is not a gate for the 4-bit Full matrix.
 
-**GPU economics:** The main matrix runs on one rented **80 GB A100 PCIe** (Vast.ai spot **$0.136/GPU-h**) with the **4-bit 24–27B final families**. The **96 GB FP8 stack** at **$0.336/GPU-h** is reserved for the N1 smoke plus a small GPQA precision replication. Stage costs: FP8 smoke/replication **$25–40**, pilot **$15–20**, Core **$175–210**, Full **$210** (32-row gold-evidence default) or **$235** (36-row gold-answer alternate), storage/bandwidth **$40–80**; **total $500–600**; **hard stop $600**. Law-testing is outside the envelope. The 96 GB main-run fallback is **$1,050–1,150** and needs re-approval. See `docs/agent/08_COMPUTE_COST.md`.
+**GPU economics:** The free 18 GB university slice (`uiu-h200`) is test-only: one 8–9B AWQ model with vLLM, or one Q4_K_M main model with llama.cpp at 4k context, plus two mocks. The main matrix runs on one rented **80 GB A100 PCIe** (spot **$0.136/GPU-h**) with the **4-bit 24–27B final families**. The **96 GB FP8 stack** at **$0.336/GPU-h** is reserved for an N1b 5-question smoke (**$2–8**) plus a small GPQA precision replication (**$25–40**), after the 4-bit pilot/Core. Stage costs: 4-bit smoke **$1–2**, pilot **$15–20**, Core **$175–210**, Full **$210** (32-row gold-evidence default) or **$235** (36-row gold-answer alternate), storage/bandwidth **$40–80**; **total $500–600**; **hard stop $600**. The current **$50** tranche buys the 18 GB tests, the 4-bit smoke, and the pilot; do not run a 96 GB pilot or precision from it. Law-testing is outside the envelope. The 96 GB main-run fallback is **$1,050–1,150** and needs re-approval. See `docs/agent/08_COMPUTE_COST.md`.
 
 | Month | Objectives | Development | Experiments | Deliverables |
 | --- | --- | --- | --- | --- |
-| **Nov 2026** | Final-stack readiness, WP-18, calibration, verifier audit start | 96 GB smoke (**NOT RUN**; offline 73.68 GB check only); B8-placebo/B8-oracle switches | 24-item calibration | smoke PASS; 6-arm support; calibration report |
-| **Dec 2026** | Verifier audit; pilot run | 150–200 claim–passage pairs; 100–150 pilot questions | Injection κ; baseline collapse check | **G2**; verifier report |
-| **Jan 2027** | Core run | 4-condition matrix, GPQA 400 + MMLU-Pro 400 + HLE 200, 2 seeds | 24 runs; 1,280 GPU-h cap | **G3**; SciClaimBench-180 freeze (v1.2) |
-| **Feb 2027** | Full run | 6-arm config; 300-item benchmark target | 32-row gold-evidence default (36-row gold-answer alternate); human eval starts | **G4/G5** |
+| **Nov 2026** | 18 GB test gate, 4-bit smoke, WP-18, calibration, verifier audit start | N1.0 one-model + two-mock test; N1a 4-bit 80 GB smoke; B8-placebo/B8-oracle switches | 24-item calibration | N1.0/N1a PASS; 6-arm support; calibration report |
+| **Dec 2026–Jan 2027** | Verifier audit; pilot run | 150–200 claim–passage pairs; 100–150 pilot questions | Injection κ; baseline collapse check | **G2**; verifier report |
+| **Jan–Feb 2027** | Core run | 4-condition matrix, GPQA 400 + MMLU-Pro 400 + HLE 200, 2 seeds | 24 runs; 1,280 GPU-h cap | **G3**; SciClaimBench-180 freeze (v1.2) |
+| **Feb–Mar 2027** | FP8 smoke; Full run | N1b 5-question smoke; 6-arm config; 300-item benchmark target | 32-row gold-evidence default (36-row gold-answer alternate); human eval starts | **G4/G5** |
 | **Mar 2027** | Human evaluation and SDT | 150–200 paired items, 3 raters, expert ceiling | κ/ICC; SDT axes | Analysis freeze |
 | **Apr 2027** | Law-testing and ablations | q sweep, ρ, granularity, shared-error floor | Only if the effect is real | Results freeze |
 | **May–Jun 2027** | Thesis | Chapters, internal review, reproducibility package | — | Thesis submission June 2027 |
@@ -534,9 +534,9 @@ _Post-P0 calendar. The July–October 2026 record — Gate 0, the trust operator
 
 10. **Baselines B9–B10 (iMAD and ConsensAgent reimplementations)** — deliberately sequenced _last_ among baselines because they are the highest-difficulty components (Section 7's difficulty ranking) and benefit from the team having already built confidence-scoring-adjacent code that shares some logic.
 
-11. **Final-stack smoke (critical two-phase gate)** — before committing to the main matrix, rent an RTX PRO 6000 Blackwell 96GB for **60–100 GPU-h (~$25–40)**. From `trustcal/`, run `PHASE=final bash setup.sh`, `python scripts/check_stack.py --phase final`, `python scripts/preflight.py --phase final --offline`, `python scripts/verify_env.py --check-servers`, then `python scripts/smoke_test.py --phase final --limit 20`. Load all three Final models and verify (a) claim tags parse correctly for every model, (b) injection affects all three as expected, (c) trust math runs without NaNs, (d) the state machine completes K=3 rounds for every model combination. **Status: NOT RUN**; only the offline 73.68 GB check passes.
+11. **Hardware readiness in three stages** — first the free 18 GB test gate (one 8–9B AWQ or Q4_K_M model + two mocks); then the 4-bit 80 GB smoke (`PHASE=fourbit`, `check_stack.py --phase fourbit`, `smoke_test.py --phase fourbit --limit 5`); then, after the 4-bit pilot/Core, the FP8 96 GB smoke (`PHASE=final`, `check_stack.py --phase final`, `smoke_test.py --phase final --limit 5`). The 96 GB smoke is **$2–8**; the separate precision replication is **$25–40**. Load all three models and verify (a) claim tags parse for every model, (b) injection affects all three, (c) trust math has no NaNs, (d) K=3 rounds complete for every model combination. **Status: NOT RUN.**
 
-12. **Core and Full experiment matrix execution** — Core only after the pilot (G2) and step 11 pass; Full only after Core (G3) and WP-18.
+12. **Core and Full experiment matrix execution** — Core only after the pilot (G2), N1a, and v1.3; Full only after Core (G3) and WP-18. N1b is required before any FP8 precision claim, not before the 4-bit Full matrix.
 
 13. **Human evaluation + failure analysis** — last, since it requires completed experimental results to annotate against.
 
@@ -744,10 +744,11 @@ Proceeding to **Phase 5 (Sections 16–18)** — the final phase.
 
 **Recommended pre-Core actions, in priority order:**
 
-1. Run the 96 GB Final-stack smoke (currently NOT RUN; offline check only).
-2. Finalize WP-18's oracle scope (gold-answer vs gold-evidence-only on SciClaimBench) before freezing the Full config.
+1. Run the free 18 GB test gate (N1.0) and the 4-bit 80 GB smoke (N1a).
+2. Finalize WP-18's oracle scope and sign v1.3 before freezing the Full config.
 3. Add the compute-cost-vs-accuracy/CMR table to the planned evaluation outputs.
 4. Freeze the 24-item calibration batch and start the verifier audit.
+5. Run the FP8 96 GB smoke and precision replication only after the 4-bit pilot/Core.
 
 ---
 

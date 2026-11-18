@@ -25,7 +25,7 @@ Do not mix them. The current 70-page artifact is the report; the 19-page artifac
 
 ## 2. Readiness at a glance
 
-| Item | State (9 Nov 2026) | Implication |
+| Item | State (18 Nov 2026) | Implication |
 |---|---|---|
 | Report | 70 pp; 80 cited works; 0 errors/undefined refs | Compiles; engineering report |
 | Journal | 19 pp; 71 cited works; 0 errors/undefined refs | Compiles; engineering report |
@@ -34,7 +34,9 @@ Do not mix them. The current 70-page artifact is the report; the 19-page artifac
 | Efficacy results | **None** | No accuracy/CMR/CCR claim may be written |
 | Claim audit | Resolved 9 Nov 2026 | See the two `CLAIMS_AUDIT.md` files |
 | Benchmark | 24 calibration → 180 v1.2 → 300 Full | 600 stretch; 800 no-go |
-| Final-stack smoke | **Not run** | Do not claim 96 GB serving |
+| 18 GB test gate | Environment ready; test run **not started** | Test-only; never cite as evidence |
+| 4-bit 80 GB smoke | **Not run** | Do not claim the three-model 4-bit stack serves |
+| 96 GB FP8 smoke | **Not run** | Do not claim 96 GB serving; after 4-bit pilot/Core |
 
 ---
 

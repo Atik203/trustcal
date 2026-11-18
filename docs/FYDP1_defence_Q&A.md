@@ -2,7 +2,7 @@
 
 **Group 6 · Team Phantom Devs · CSE 4000A (B) · Final Defence**
 
-> **P0 release note (2026-11-09):** P0 is released on `main` = `dev` = `2ae56a3` (tags `p0-gate` = `055a244`, `p0-release` = `7f2c11f`). Gate 13/13; 514 tests; WP-09 complete; WP-13 is the landed B8-no-trust prompt split; **WP-18** (B8-placebo/B8-oracle) is pending. Next order: 96 GB Final-stack smoke (**NOT RUN**; offline check only) → WP-18 → 24-item calibration → verifier audit → pilot → Core → Full. Core matrix: 4 conditions × 3 datasets × 2 seeds = 24 runs, 1,280 GPU-h conservative cap. `PRE_REGISTRATION.md` v1.0. Older "stub / not wired" lines are historical and labelled where they remain.
+> **P0 release note (2026-11-09; order updated 2026-11-18):** P0 is released on `main` = `dev` = `v0.2.1` (tags `p0-gate` = `055a244`, `p0-release` = `7f2c11f`). Gate 13/13; 615 tests; WP-18 is implemented; v1.3 sign-off pending. Next order: 18 GB test gate (N1.0) → 4-bit 80 GB smoke (N1a) → v1.3/WP-18 → 24-item calibration → verifier audit → pilot → Core → FP8 96 GB smoke (N1b) → Full. The 96 GB path is not a gate for the 4-bit Full matrix. Core matrix: 4 conditions × 3 datasets × 2 seeds = 24 runs, 1,280 GPU-h conservative cap. Older "stub / not wired" lines are historical and labelled where they remain.
 >
 > Deep-dive rehearsal file: system mechanics, code pointers, what-if behavior, and honest status.
 > The slide-by-slide speech and quick judge questions live in `docs/presentation.md` — do not duplicate them here.
@@ -77,7 +77,7 @@
 
 If asked "explain your project in two minutes," say this:
 
-"Three language models answer the same science question. Most debate systems then take a majority vote, so a confident wrong pair can outvote a correct third model and pressure it into changing its answer — we call that sycophantic consensus. We replace the vote with an evidence-grounded trust score. Each answer is split into atomic claims, every claim is checked against scientific literature, and each model's trust updates every round from what the sources say. The final answer is a trust-weighted vote, not a head count. Today the debate loop, the injection stress test, retrieval and logging run end to end — Gate 0 completed ten of ten debates and ninety of ninety positions. Next are the 96 GB Final-stack smoke, WP-18 placebo/oracle, the 24-item calibration, the verifier audit, then the pilot, Core and Full runs."
+"Three language models answer the same science question. Most debate systems then take a majority vote, so a confident wrong pair can outvote a correct third model and pressure it into changing its answer — we call that sycophantic consensus. We replace the vote with an evidence-grounded trust score. Each answer is split into atomic claims, every claim is checked against scientific literature, and each model's trust updates every round from what the sources say. The final answer is a trust-weighted vote, not a head count. Today the debate loop, the injection stress test, retrieval and logging run end to end — Gate 0 completed ten of ten debates and ninety of ninety positions. Next are the free 18 GB code-path tests, the 4-bit 80 GB smoke, v1.3/WP-18, the 24-item calibration, the verifier audit, then the pilot, Core, FP8 96 GB smoke and Full runs."
 
 ### 1.2 Quick Status Card
 
@@ -796,7 +796,7 @@ Config: `trustcal/configs/datasets.yaml`; blueprint table `docs/blueprint.md` §
 
 **What Gate 0 proves / does not prove:** proves serving, orchestration and parsing work end to end at 4-bit on one GPU; it does not measure collapse, retrieval or trust.
 
-**Pending:** 96 GB Final-stack smoke (**NOT RUN**; offline check only), WP-18 placebo/oracle, 24-item calibration, verifier audit (150–200 pairs), pilot (100–150 questions), paid Core run (GPQA 400 + MMLU-Pro 400 + HLE 200, 2 seeds), ablations A1–A4, human study. Retrieval and trust wiring are done.
+**Pending:** free 18 GB test gate (**NOT RUN**), 4-bit 80 GB smoke (**NOT RUN**), v1.3/WP-18 sign-off, 24-item calibration, verifier audit (150–200 pairs), pilot (100–150 questions), paid Core run (GPQA 400 + MMLU-Pro 400 + HLE 200, 2 seeds), 96 GB FP8 smoke/precision, ablations A1–A4, human study. Retrieval and trust wiring are done.
 
 **Ablations:** A1 no trust, A2 no progressive retrieval, A3 no claim-domain routing, A4 no adaptive triggering (blueprint §9).
 
@@ -834,17 +834,21 @@ Config: `trustcal/configs/datasets.yaml`; blueprint table `docs/blueprint.md` §
 ## 15. Compute, Cost & Feasibility
 
 - Current Core matrix: 1,280 GPU-h conservative cap, planned ~1,067 GPU-h (`PRE_REGISTRATION.md` §5). The earlier report figure was ≈300 GPU-h (`FYDP_Summer/3.design.tex:168`; `5.sic.tex:305`).
-- Stage costs: FP8 precision replication + 96 GB N1 smoke $25–40; pilot $15–20; Core $175–210; Full $210 (32-row gold-evidence default) or $235 (36-row gold-answer alternate); storage/bandwidth $40–80; total $500–600.
-- **Hard stop: $600.** The main matrix runs on one **80 GB A100 PCIe** at **$0.136/GPU-h** with the **4-bit 24–27B final families**. The 96 GB FP8 stack at **$0.336/GPU-h** is only the N1 smoke plus the GPQA precision replication (B3/B8-no-trust/B8, 150–200 questions, 1 seed; 60–100 GPU-h). If the A100 spot is unavailable and the main runs use 96 GB, the plan is **$1,050–1,150** and needs **re-approval**; it is not the default. Law-testing is outside this envelope.
-- Feasibility: main matrix on one 80 GB A100 PCIe; 96 GB FP8 stack only for N1 and the precision replication; inference-only, no training. The 96 GB smoke is **NOT RUN**; only the offline 73.68 GB check passes.
+- Stage costs: 18 GB test gate $0; 4-bit 80 GB smoke $1–2; pilot $15–20; Core $175–210; Full $210 (32-row gold-evidence default) or $235 (36-row gold-answer alternate); 96 GB 5-question FP8 smoke $2–8; FP8 precision replication $25–40; storage/bandwidth $40–80; total $500–600.
+- **Hard stop: $600.** The main matrix runs on one **80 GB A100 PCIe** at **$0.136/GPU-h** with the **4-bit 24–27B final families**. The 96 GB FP8 stack at **$0.336/GPU-h** is only a 5-question smoke (**$2–8**) plus the GPQA precision replication (B3/B8-no-trust/B8, 150–200 questions, 1 seed; 60–100 GPU-h; **$25–40**), after the 4-bit pilot/Core. If the A100 spot is unavailable and the main runs use 96 GB, the plan is **$1,050–1,150** and needs **re-approval**; it is not the default. Law-testing is outside this envelope.
+- **$50 tranche:** 18 GB tests ($0) + 4-bit smoke ($1–2) + pilot ($15–20), with $20–30 held for retries/bandwidth. Do not run a 96 GB pilot ($37–45) or precision replication ($25–40) from it.
+- Feasibility: main matrix on one 80 GB A100 PCIe; 96 GB FP8 stack only for the N1b smoke and precision replication; inference-only, no training. Neither the 4-bit nor the 96 GB smoke is **RUN**; only the offline checks pass.
 - If GPUs are short: reduce seeds or questions per set for the pilot, never change the gate criteria.
 
 ### 15.1 Budget Table
 
 | Item | Estimate | Source |
 | --- | --- | --- |
-| FP8 precision replication + 96 GB N1 smoke | 60–100 GPU-h; $25–40 | `roadmap.md` §13; **NOT RUN** |
-| Pilot | ~112 GPU-h; $15–20 | `roadmap.md` §13 |
+| 18 GB test gate | $0; university slice | `roadmap.md` §2.1; **NOT RUN** |
+| 4-bit 80 GB smoke | 4–8 GPU-h; $1–2 | `roadmap.md` §3; **NOT RUN** |
+| 96 GB 5-question FP8 smoke | 1.5–3 GPU-h; $2–8 | `roadmap.md` §3; **NOT RUN** |
+| FP8 precision replication | 60–100 GPU-h; $25–40 | `roadmap.md` §3; **NOT RUN** |
+| Pilot | ~112 GPU-h; $15–20 | `roadmap.md` §7 |
 | Core run | 1,280 GPU-h cap (planned ~1,067); $175–210 | `PRE_REGISTRATION.md` §5 |
 | Full run, 32-row gold-evidence default | 1,280 GPU-h; $210 | `roadmap.md` §13; WP-18 freezes |
 | Full run, 36-row gold-answer alternate | 1,440 GPU-h; $235 | `roadmap.md` §13; WP-18 freezes |
@@ -1009,7 +1013,7 @@ The uncomfortable questions, with answers that hold up.
 - **If asked "what did you personally do?":** answer from Section 19.
 - **If asked "what are you most confident about?":** the debate loop runs end to end (Gate 0: 10/10, 90/90) and the trust math is bounded and tested; the remaining work is the paid matrix and the human verifier audit.
 - **If asked "what is the weakest part?":** retrieval coverage; unverifiable claims are excluded, so sparse fields weaken the signal. Say it before they do.
-- **If asked a budget question:** "Core is $175–210; the Full run is $210 in the 32-row gold-evidence default or $235 in the 36-row gold-answer alternate; the total plan is $500–600 with a $600 hard stop. The main matrix runs on an 80 GB A100 at $0.136 per GPU-hour; the 96 GB FP8 path is only the smoke and precision replication."
+- **If asked a budget question:** "Core is $175–210; the Full run is $210 in the 32-row gold-evidence default or $235 in the 36-row gold-answer alternate; the total plan is $500–600 with a $600 hard stop. The main matrix runs on an 80 GB A100 at $0.136 per GPU-hour. The free 18 GB slice does the code-path tests, the 4-bit 80 GB smoke is $1–2, and the 96 GB FP8 path is only a $2–8 smoke plus a $25–40 precision replication. The current $50 buys the 4-bit smoke and pilot, not a 96 GB pilot."
 - **If asked "why should this project continue?"** Three reasons: the failure is documented in the literature (over 20% ignored-correct cases; 41–86.7% MAS failure rates), the fix is bounded and testable, and the harness is reusable across evidence domains.
 - **If a judge requests a specific file:** open `E:\FYDP` and show — `trustcal/src/trustcal/trust/update.py` (math), `orchestrator/injection.py` (stress test), `eval/metrics.py` (CCR/MPR), `experiments/gate0/` (evidence).
 - **If the demo laptop fails:** switch to the deck; the code map in Section 11 is on every member's copy, and the mock-server path can run anywhere.

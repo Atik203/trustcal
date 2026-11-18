@@ -68,10 +68,10 @@ No overfull box comes from the new prose or the new equations. The final PDF was
 
 ## Remaining work before submission
 
-1. Re-run `pytest` only if the code changes; the current count is 523, with 514 at the P0 release.
+1. Re-run `pytest` only if the code changes; the current count is 615, with 514 at the P0 release.
 2. Confirm every regenerated figure matches its caption.
 3. `LICENSE` (MIT) is present at the repository root; no action.
 4. Verify dataset licence statements against the live cards.
 5. Add page numbers for the five new bibliography entries.
 6. Run the injection kappa validation before using injection results.
-7. Complete the final-stack smoke test, the WP-18 placebo/oracle slice, the 24-item calibration batch, and the verifier human audit before the paid matrix. The 13/13 gate is achieved; no efficacy result is claimed.
+7. Complete the free 18 GB test gate, the 4-bit 80 GB smoke, the v1.3/WP-18 sign-off, the 24-item calibration batch, and the verifier human audit before the paid matrix. The FP8 96 GB smoke follows the 4-bit pilot/Core. The 13/13 gate is achieved; no efficacy result is claimed.

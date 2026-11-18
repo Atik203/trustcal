@@ -1,6 +1,6 @@
 # Project Structure — Runtime Implementation
 
-Reference layout for the Python codebase that implements the debate pipeline described in `docs/blueprint.md`. This is the repo you build on a rented Vast.ai GPU instance (RTX A6000 48GB for Dev; 80 GB A100 PCIe for the Core/Full main matrix; 96 GB RTX PRO 6000 only for the N1 FP8 smoke and precision replication) and push to GitHub; see "Pod workflow" at the bottom for how it interacts with the rented GPU. Execution order is in `roadmap.md`; per-component status is in `trustcal/IMPLEMENTATION_STATUS.md`.
+Reference layout for the Python codebase that implements the debate pipeline described in `docs/blueprint.md`. The free university 18 GB slice is test-only: one 8–9B AWQ model with vLLM, or one Q4_K_M main template with llama.cpp, plus mocks. The main matrix runs on a rented 80 GB A100 PCIe; the 96 GB RTX PRO 6000 is only for the FP8 5-question smoke and precision replication, after the 4-bit pilot/Core. Execution order is in `roadmap.md`; per-component status is in `trustcal/IMPLEMENTATION_STATUS.md`.
 
 > **Status note (2026-11-09):** this is the reference layout, not a status report. The current implementation uses a plain-Python debate runner, claim-domain retrieval routing, and the P0 trust operator (logit accumulation → one softmax → floor/ceiling simplex projection). `trustcal/IMPLEMENTATION_STATUS.md` is the status source.
 
@@ -39,7 +39,7 @@ trustcal/
 │   ├── verifier_audit.py         # 150–200 claim–passage audit harness
 │   ├── mock_vllm.py              # mock OpenAI-compatible servers (GPU-free tests)
 │   ├── annotate.py               # annotation sheets + Cohen's κ
-│   └── smoke_test.py             # 20-question Final-stack smoke gate
+│   └── smoke_test.py             # 5-question 4-bit/FP8 smoke gate
 └── results/                      # gitignored; one folder per experiment run
 ```
 

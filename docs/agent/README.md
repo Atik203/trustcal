@@ -14,8 +14,11 @@
 | Tests | **615 passed** (514 at the P0 release) |
 | Report | `FYDP_Summer/out/fydp.pdf` - 70 pages, 80 cited works, 0 errors/undefined refs |
 | Journal | `Papev_Summer26_6/out/cas-sc-template.pdf` - 19 pages, 71 cited works, 0 errors/undefined refs |
+| Main stack | Qwen3.8-27B-AWQ-INT4 / Gemma-4-26B-A4B-AWQ / Mistral-24B-AWQ, **53.26 GB** pinned |
 | Final stack | Qwen3.8-27B-FP8 / Gemma-4-26B-A4B-FP8 / Mistral-24B-AWQ, **73.68 GB** pinned |
-| Final-stack 96 GB smoke | **Not run** |
+| 18 GB dev gate | H200 MIG `1g.18gb`; 8–9B AWQ cache + Q4_K_M test route; **not run** |
+| 4-bit 80 GB smoke | **Not run** |
+| FP8 96 GB smoke | **Not run**; after the 4-bit pilot/Core |
 
 **P0 is engineering readiness, not efficacy evidence.** No accuracy, CCR, or sign-reversal claim exists yet. The first efficacy claim waits for the pilot (G2) and the Core run (G3).
 
@@ -38,13 +41,14 @@ These docs are for LLM coding agents and human teammates. They are deliberately 
 
 **Team-facing one-pager:** [`../../UPDATE-CHECKLIST.md`](../../UPDATE-CHECKLIST.md) — share this with the whole team.
 
-## Current status (9 November 2026)
+## Current status (18 November 2026)
 
 - **P0 is released.** `main` and `dev` are the only branches, both at the `v0.2.1` release line; `p0-gate` and `p0-release` tag the P0 release. Feature branches and extra worktrees are deleted; only the `E:\FYDP` worktree exists.
-- **No efficacy results.** P0 proves the engineering path: 13/13 gate checks, 514 tests, two compiled manuscripts, and an offline final-stack fit check.
+- **No efficacy results.** P0 proves the engineering path: 13/13 gate checks, 615 tests, two compiled manuscripts, and an offline final-stack fit check.
 - **Core v1.0 is executable:** 4 conditions (B3, B4-matched, B8-no-trust, B8) × 3 datasets (`gpqa_main`, `mmlu_pro`, `hle`) × 2 seeds = **24 runs**. Planned 8,000 debates ≈ **1,067 GPU-h**; conservative gate cap **1,280 GPU-h**. SciClaimBench is **not** in Core v1.0.
-- **Full is a target, not a frozen matrix:** the default is **32 runs** with a gold-evidence oracle on SciClaimBench (1,280 GPU-h); the alternate is **36 runs** with gold-answer trust (1,440 GPU-h). **WP-18** freezes this.
-- **Next work, in order:** N1 final-stack 96 GB smoke (Nov) → N2 WP-18 placebo/oracle (Nov–Dec) → N3 24-item benchmark calibration (Nov–Feb) → N4 verifier audit (Nov–Dec) → N5 pilot/G2 (Dec) → Core/G3 (Jan 2027) → Full/G4-G5 (Feb 2027).
+- **Full is a target, not a frozen matrix:** the default is **32 runs** with a gold-evidence oracle on SciClaimBench (1,280 GPU-h); the alternate is **36 runs** with gold-answer trust (1,440 GPU-h). **WP-18** is implemented; v1.3 sign-off is pending.
+- **Next work, in order:** N1.0 free 18 GB test gate → N1a 4-bit 80 GB smoke → N2 v1.3/WP-18 → N3 calibration → N4 verifier audit → N5 pilot/G2 → N6 Core/G3 → N1b FP8 smoke/precision → N7 Full/G4-G5.
+- **$50 tranche:** N1.0 ($0) → N1a ($1–2) → pilot ($15–20); hold $20–30 for retries/bandwidth. Do not run a 96 GB pilot or precision from it.
 - **`roadmap.md` is the task board.** `06_AGENT_CHECKLIST.md` is historical plus a short post-P0 checklist.
 
 ## Source-of-truth hierarchy
@@ -93,8 +97,10 @@ These docs are for LLM coding agents and human teammates. They are deliberately 
 
 ## What still needs updating
 
-- **N1:** run the final-stack 96 GB smoke (not run); `check_stack.py --phase final`, `preflight.py --phase final --offline`, then `smoke_test.py --phase final`.
-- **N2/WP-18:** implement B8-placebo/B8-oracle and `configs/experiments_full.yaml`; freeze the 32-vs-36-run Full definition.
+- **N1.0:** run the free 18 GB test gate (8–9B AWQ with vLLM or Q4_K_M with llama.cpp, one model + two mocks); no cloud spend.
+- **N1a:** run the 4-bit 80 GB smoke; `check_stack.py --phase fourbit`, `preflight.py --phase fourbit --offline`, then `smoke_test.py --phase fourbit --limit 5`.
+- **N1b:** run the FP8 96 GB 5-question smoke after the 4-bit pilot/Core; the precision replication is **$25–40**, not a smoke.
+- **N2/WP-18:** implementation is landed; freeze the 32-vs-36-run Full definition and sign v1.3; add subset reuse only if approved.
 - **N3:** 24-item benchmark calibration, then the 180-item v1.2 freeze and 300-item Full target.
 - **N4:** human verifier audit (150–200 pairs, 2 annotators; target ≥0.75 balanced accuracy, κ ≥0.60). The lexical verifier scored 0.58 on the synthetic audit.
 - **N5/G2:** pilot in December 2026.

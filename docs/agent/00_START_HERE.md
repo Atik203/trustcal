@@ -1,13 +1,13 @@
 # 00 — Start Here
 
-**Status date:** 11 November 2026. **P0 engineering is released.** `main` = `dev` = `v0.2.1`; tags `p0-gate` = `055a244` and `p0-release` = `7f2c11f`.
+**Status date:** 18 November 2026. **P0 engineering is released.** `main` = `dev` = `v0.2.1`; tags `p0-gate` = `055a244` and `p0-release` = `7f2c11f`.
 
 **Project title:** *The Boundaries of Evidence-Grounded Trust in Multi-Agent Scientific Debate, with a Controlled Benchmark for Sycophantic Consensus.*
 
 > **TL;DR for an agent**
 > - P0 is **released**, not proposed: 13/13 gate checks, 514 tests, both manuscripts compile with 0 errors/undefined refs. There are **no efficacy results**.
 > - Read `roadmap.md` for the current order of work. `06_AGENT_CHECKLIST.md` is historical plus a short post-P0 checklist.
-> - Next: **N1** final-stack 96 GB smoke (not run) → **N2** WP-18 placebo/oracle → **N3** 24-item benchmark calibration → **N4** verifier audit → **N5** pilot/G2.
+> - Next: **N1.0** free 18 GB test gate (8–9B AWQ or Q4_K_M, one model + two mocks) → **N1a** 4-bit 80 GB smoke → **N2** v1.3/WP-18 → **N3** calibration → **N4** verifier audit → **N5** pilot/G2 → **N6** Core → **N1b** FP8 smoke/precision → **N7** Full.
 > - Do **not** run the Core matrix before the pilot passes G2.
 > - **Core v1.0:** 4 conditions (B3, B4-matched, B8-no-trust, B8) × 3 datasets (`gpqa_main`, `mmlu_pro`, `hle`) × 2 seeds = **24 runs**. Planned 8,000 debates ≈ **1,067 GPU-h**; conservative gate cap **1,280 GPU-h**. SciClaimBench is **not** in Core v1.0.
 > - **Full default:** 32 rows with a gold-evidence oracle on SciClaimBench = 1,280 GPU-h / **$210**. The 36-row gold-answer alternate is 1,440 GPU-h / **$235**. **WP-18 freezes it.**
@@ -20,7 +20,7 @@
 
 Three heterogeneous LLM agents answer a hard scientific question, debate for up to three rounds, and revise. Each answer is split into claims; each claim is checked against retrieved scientific evidence (PubMed, arXiv, Semantic Scholar). Each agent has a bounded trust weight that rises when its claims are supported and falls when they are contradicted. The final answer is a trust-weighted vote, not a majority vote. The target failure is **sycophantic collapse**: a correct minority abandons its answer under pressure from a confident wrong majority. Evaluation uses a **fabricated-consensus injection** plus accuracy / CMR / trust AUROC / calibration.
 
-**Current reality (9 Nov 2026):** P0 engineering is released and the instrument is wired. The verifier is not yet human-audited; the final-stack 96 GB smoke has not run; no paid experiment beyond Gate 0 exists. Gate 0 (vanilla MAD, 10 GPQA debates) is the only real GPU evidence.
+**Current reality (18 Nov 2026):** P0 engineering is released and the instrument is wired. The verifier is not yet human-audited; neither the 4-bit 80 GB smoke nor the 96 GB FP8 smoke has run; no paid experiment beyond Gate 0 exists. Gate 0 (vanilla MAD, 10 GPQA debates) is the only real GPU evidence. The 18 GB university slice and its 8–9B AWQ cache are available for free test-only validation.
 
 ---
 
@@ -30,12 +30,14 @@ Use `docs/GLOSSARY.md` everywhere. The current names are **Core run** and **Full
 
 | Stage | Scope | Cost |
 |---|---|---:|
+| **18 GB test gate (N1.0)** | One real 8–9B AWQ or Q4_K_M model + two mocks; 4k context; test-only | **$0** |
+| **4-bit smoke (N1a)** | Three-model 53.26 GB stack on the 80 GB A100; 5 questions | 4–8 GPU-h; **$1–2** |
 | **Pilot run (N5/G2)** | ~100–150 questions; 4-bit 24–27B stack on the 80 GB A100; B3, B8-no-trust, B8; injection on/off; trust on/off | ~112 GPU-h; $15–20 |
 | **Core run (G3)** | 4 conditions (B3, B4-matched, B8-no-trust, B8) × 3 datasets (`gpqa_main` 400, `mmlu_pro` 400, `hle` 200) × 2 seeds = **24 runs**; 8,000 debates; 180-item SciClaimBench is **not** in v1.0 | ~1,067 GPU-h planned; **1,280 cap**; $175–210 |
 | **Full run (G4/G5)** | Default: 32 rows with a gold-evidence oracle on SciClaimBench = 1,280 GPU-h. Alternate: 36 rows with a gold-answer oracle at 300 items/dataset = 1,440 GPU-h. WP-18 freezes it. | $210 default; $235 alternate |
 | **Law-testing (N9)** | q/ρ sweeps, granularity, shared-error floor, robustness | Outside the $500–600 envelope; separate approval required |
 
-**Hard stop: $600.** The main matrix runs on one **80 GB A100 PCIe** at **$0.136/GPU-h**; the 96 GB FP8 stack at **$0.336/GPU-h** is only the N1 smoke plus the GPQA precision replication (60–100 GPU-h, $25–40). Fallback if the A100 spot is unavailable: 96 GB main runs = $1,050–1,150, re-approval required; not the default. **SciClaimBench ladder:** 24 calibration → 180 v1.2 floor → 300 Full target → 600 stretch → 800 no-go. The 180-item set joins at the benchmark freeze under v1.2, not in the v1.0 Core matrix.
+**Hard stop: $600.** The main matrix runs on one **80 GB A100 PCIe** at **$0.136/GPU-h**. The **96 GB FP8 stack** at **$0.336/GPU-h** is only a 5-question smoke ($2–8) plus the GPQA precision replication (60–100 GPU-h, $25–40), and it follows the 4-bit pilot/Core. Fallback if the A100 spot is unavailable: 96 GB main runs = $1,050–1,150, re-approval required; not the default. The current **$50 tranche** buys the 18 GB tests ($0), the 4-bit smoke ($1–2), and the pilot ($15–20), with $20–30 held for retries/bandwidth; do not run a 96 GB pilot or precision from it. **SciClaimBench ladder:** 24 calibration → 180 v1.2 floor → 300 Full target → 600 stretch → 800 no-go. The 180-item set joins at the benchmark freeze under v1.2, not in the v1.0 Core matrix.
 
 ### Historical score projections (8 November 2026)
 
@@ -151,12 +153,19 @@ python scripts/run_experiment.py --arm B8 --dataset mock --limit 1 \
 # 4. Zero-server integration test
 pytest src/trustcal/test_integration_mock.py
 
-# 5. Final-stack readiness (on the 96 GB GPU; smoke NOT run yet)
+# 5a. 4-bit main-stack readiness (on the 80 GB A100; smoke NOT run yet)
+PHASE=fourbit bash setup.sh
+python scripts/verify_env.py --check-servers
+python scripts/check_stack.py --phase fourbit
+HF_HUB_OFFLINE=1 python scripts/preflight.py --phase fourbit --offline
+python scripts/smoke_test.py --phase fourbit --limit 5
+
+# 5b. FP8 final-stack readiness (on the 96 GB GPU; after the 4-bit pilot/Core)
 PHASE=final bash setup.sh
 python scripts/verify_env.py --check-servers
 python scripts/check_stack.py --phase final
 HF_HUB_OFFLINE=1 python scripts/preflight.py --phase final --offline
-python scripts/smoke_test.py --phase final --limit 20
+python scripts/smoke_test.py --phase final --limit 5
 
 # 6. Real experiment (only after G2 and a GPU)
 python scripts/run_experiment.py --arm B8 --dataset gpqa_main --limit 20 --seed 1 --inject
