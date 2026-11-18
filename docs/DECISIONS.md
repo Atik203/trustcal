@@ -24,6 +24,16 @@ Approved architecture, hardware, and environment decisions. Add an entry before 
 
 **Why:** this failure happens after the model is loaded, so on a paid host it burns setup time and looks like a model problem. The check is cheap and runs before the 53GB download.
 
+## 2026-11-19 - Retrieval reranking defaults to lexical
+
+**Status:** approved.
+
+**Finding:** `Retriever.retrieve()` called `verdicts.rerank()` without a scorer. `rerank()` tries `sentence-transformers` first, so a runner process on the same GPU as the three vLLM servers loaded `cross-encoder/ms-marco-MiniLM-L-6-v2` (105 weight tensors) and competed with the served models. On the 18 GB slice this produced CUDA OOM warnings during the Qwen3.8-27B B8 test; on the 80 GB matrix stack it would eat into the 8 GB non-vLLM headroom.
+
+**Decision:** `RetrievalConfig.rerank` defaults to `"lexical"` and passes an explicit lexical scorer into `rerank()`. `"cross-encoder"` and `"auto"` remain available for an intentional ablation. The lexical verifier already forced its own scorer; this makes the retriever match it and keeps the serving GPU for vLLM.
+
+**Why:** the pre-registered matrix declares the lexical verifier; a hidden cross-encoder changes passage ranking and adds GPU memory/latency that the cost model does not include.
+
 ## 2026-11-19 - Retrieval source circuit breaker
 
 **Status:** approved.

@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import pytest
+
 from .pipeline import RetrievalConfig, Retriever, StaticRetriever, evidence_block, select_evidence
 from .sources import ARXIV, MATH_CS, PUBMED, SEMANTIC_SCHOLAR, SearchResult
 
@@ -118,6 +120,25 @@ def test_cache_prevents_duplicate_requests() -> None:
     retriever.retrieve(0, MATH_CLAIM)
     retriever.retrieve(0, MATH_CLAIM)
     assert calls == [MATH_CLAIM]  # first source alone supplies top_k
+
+
+def test_default_rerank_is_lexical_not_cross_encoder(monkeypatch) -> None:
+    seen = []
+
+    def fake_rerank(claim, passages, top_k=3, scorer=None):
+        seen.append(scorer)
+        return [(passage, 1.0) for passage in passages][:top_k]
+
+    monkeypatch.setattr("trustcal.retrieval.pipeline.rerank", fake_rerank)
+    retriever = Retriever(search_fn=lambda source, query, top_k: [_result(source)])
+    retriever.retrieve(0, MATH_CLAIM)
+    # An explicit scorer means rerank() cannot silently load a GPU cross-encoder.
+    assert seen and seen[0] is not None
+
+
+def test_unknown_reranker_is_rejected() -> None:
+    with pytest.raises(ValueError, match="unknown rerank"):
+        RetrievalConfig(rerank="magic")
 
 
 def test_search_failure_is_isolated() -> None:

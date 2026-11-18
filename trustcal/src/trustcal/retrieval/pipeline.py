@@ -23,7 +23,7 @@ from dataclasses import dataclass, field
 from typing import Callable, Iterable
 
 from . import sources
-from .verdicts import rerank
+from .verdicts import lexical_score, rerank
 
 SearchFn = Callable[..., list[sources.SearchResult]]
 
@@ -35,9 +35,19 @@ class RetrievalConfig:
     max_chars: int = 1200
     partition: bool = True
     progressive: bool = True
+    # Passage ranking must match the declared verifier. `auto` preserves the
+    # old try-cross-encoder-then-lexical behaviour; the default is explicit so a
+    # sentence-transformers install cannot put a hidden GPU model in the runner.
+    rerank: str = "lexical"
     # Cost guard: a keyless API that is down must not add 60s to every claim.
     # After this many consecutive failures the source is skipped for the run.
     max_source_failures: int = 3
+
+    def __post_init__(self) -> None:
+        if self.rerank not in {"lexical", "cross-encoder", "auto"}:
+            raise ValueError(
+                f"unknown rerank {self.rerank!r}; expected lexical, cross-encoder, or auto"
+            )
 
 
 def _rotate(items: tuple[str, ...], offset: int) -> tuple[str, ...]:
@@ -45,6 +55,10 @@ def _rotate(items: tuple[str, ...], offset: int) -> tuple[str, ...]:
         return items
     index = offset % len(items)
     return items[index:] + items[:index]
+
+
+def _lexical_scorer(claim: str, passages: list[str]) -> list[float]:
+    return [lexical_score(claim, passage) for passage in passages]
 
 
 def select_evidence(passages: Iterable[str], k: int) -> list[str]:
@@ -159,7 +173,8 @@ class Retriever:
         results = self.search(agent_index, claim, round_number)
         unique = sources.dedupe_results(results)
         passages = [sources.passage_text(r, self.config.max_chars) for r in unique]
-        ranked = [p for p, _ in rerank(claim, passages, top_k=self.config.top_k)]
+        scorer = _lexical_scorer if self.config.rerank == "lexical" else None
+        ranked = [p for p, _ in rerank(claim, passages, top_k=self.config.top_k, scorer=scorer)]
         return select_evidence(ranked, self.config.prompt_passages)
 
 
