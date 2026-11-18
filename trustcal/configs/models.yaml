@@ -82,16 +82,21 @@ fourbit_phase:
       max_model_len: 8192
       extra_args:
         - "--limit-mm-per-prompt"
-        - '{"image": 0, "audio": 0}'   # text-only debates: skip MM profiling
+        - '{"image": 0}'                 # 26B A4B is text+image; audio is not a modality
     - role: "agent3"
       model: "jeffcookio/Mistral-Small-3.2-24B-Instruct-2506-awq-sym"
       revision: "49ec31ec0975e46a1aeef24186a45f11be3042b8"
       port: 8002
-      quant: "auto"
+      # Despite the repo name, this is llm-compressor pack-quantized
+      # (quant_method=compressed-tensors), not AutoAWQ. Set it explicitly so a
+      # detection miss cannot kill a paid startup.
+      quant: "compressed-tensors"
       weights_gb: 15.06
       gpu_memory_utilization: 0.30
       max_model_len: 8192
-      extra_args: []                    # standard HF-format repo; no mistral-format flags
+      extra_args:
+        - "--limit-mm-per-prompt"
+        - '{"image": 0}'                 # drop the Pixtral vision path from text debates
 
 # Final phase (Ph 3-5) runs on an RTX PRO 6000 Blackwell 96GB. Checkpoints and
 # revisions pinned 2026-11-09 from the HF API. For Qwen `weights_gb` is the
@@ -130,13 +135,15 @@ final_phase:
       max_model_len: 8192
       extra_args:
         - "--limit-mm-per-prompt"
-        - '{"image": 0, "audio": 0}'
+        - '{"image": 0}'                 # 26B A4B is text+image; audio is not a modality
     - role: "agent3"
       model: "jeffcookio/Mistral-Small-3.2-24B-Instruct-2506-awq-sym"
       revision: "49ec31ec0975e46a1aeef24186a45f11be3042b8"
       port: 8002
-      quant: "auto"
+      quant: "compressed-tensors"
       weights_gb: 15.06
       gpu_memory_utilization: 0.26
       max_model_len: 8192
-      extra_args: []
+      extra_args:
+        - "--limit-mm-per-prompt"
+        - '{"image": 0}'

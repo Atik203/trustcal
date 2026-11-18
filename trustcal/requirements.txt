@@ -1,10 +1,12 @@
-# Pinned ranges — verified against Python 3.10-3.12. Keep the upper bounds;
-# they are what stops a fresh install from pulling a breaking release.
+# Pinned ranges — verified against Python 3.11-3.13. Keep the upper bounds; they
+# are what stops a fresh install from pulling a breaking release.
 #
-# vLLM is NOT pinned here: the gemma-4-12B (gemma4_unified) architecture needs a
-# nightly wheel, which pip requirements can't express cleanly. setup.sh installs
-# it via scripts/install_vllm.sh. `import vllm` in verify_env is the check.
-huggingface_hub>=0.30,<2.0
+# vLLM 0.34.0 is installed by scripts/install_vllm.sh, not here. That release
+# pins torch==2.14.0, requires huggingface_hub>=2.0 and transformers>=5.16.1,
+# and already ships the Gemma 4 / Qwen3.5 / Mistral3 model classes. The old
+# "nightly is mandatory" note applied to vLLM 0.29.x; it is no longer true for
+# the four-bit and Final stacks.
+huggingface_hub>=2.0,<3.0
 openai>=1.40,<2.0
 # Imported directly by inference/test_client.py to build request/response objects.
 # openai pulls it in transitively, but the test must not depend on that.
@@ -16,9 +18,9 @@ requests>=2.31,<3.0
 numpy>=1.26,<3.0
 scipy>=1.11,<2.0
 scikit-learn>=1.4,<2.0
-sentence-transformers>=3.0,<4.0
-# vLLM nightly (0.29.x) imports PixtralRotaryEmbedding, which transformers renamed
-# to PixtralVisionRotaryEmbedding in 5.17.0 — keep transformers below that.
-transformers>=5.16,<5.17
-datasets>=2.19,<4.0
+# Optional cross-encoder verifier only; the matrix default is the lexical
+# verifier. 6.x is the first line that accepts transformers 5.x and hub 2.x.
+sentence-transformers>=6.0,<7.0
+transformers>=5.16.1,<5.23.0
+datasets>=3.6,<6.0
 pytest>=8.0,<9.0

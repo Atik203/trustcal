@@ -58,3 +58,12 @@ def test_explicit_flags_work_on_plain_b8() -> None:
 def test_conflicting_smoke_choices_fail(args) -> None:
     with pytest.raises(ValueError):
         smoke_test._resolve_modes(*args)
+
+
+def test_smoke_modes_get_distinct_out_dirs() -> None:
+    # B8, B8-placebo and B8-oracle all use runner arm B8. They must not share
+    # results/smoke/B8/gpqa/seed1 or the second run hits the manifest guard.
+    labels = ["B8", "B8 (shuffle_verdicts)", "B8 (gold_answer)"]
+    slugs = [smoke_test._out_slug(label) for label in labels]
+    assert slugs == ["b8", "b8-shuffle-verdicts", "b8-gold-answer"]
+    assert len(set(slugs)) == len(slugs)
