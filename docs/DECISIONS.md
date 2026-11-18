@@ -10,8 +10,9 @@ Approved architecture, hardware, and environment decisions. Add an entry before 
 
 **18 GB test stack:**
 
-- 8–9B AWQ with vLLM, one model at a time, 24k context: Qwen3.5-9B (8.37 GiB), Ministral-8B (7.03 GiB), Llama-3.1-8B (5.58 GiB).
+- 8–9B AWQ with vLLM, one model at a time, 4k context: Qwen3.5-9B (8.37 GiB), Ministral-8B (7.03 GiB), Llama-3.1-8B (5.58 GiB).
 - Q4_K_M main templates with llama.cpp at 4k context, q8 KV, one model at a time: Qwen3.8-27B Q4_K_M (15.43 GB; Q4_0 14.95 GB or Q3_K_M 12.48 GB if tight), Gemma 4 26B Q4_K_M (15.78 GB), Mistral 24B Q4_K_M (13.35 GB).
+- GGUF serving uses the **llama.cpp b12521 CUDA 12.8** prebuilt. The CUDA 13.5 prebuilt fails with `PTX was compiled with an unsupported toolchain` on driver `580.178.04`. Gemma Q4_K_M needs `-cmoe` (MoE experts on CPU); GPU peak drops to ~3.4 GiB.
 - Offload a few layers to the 125 GB system RAM only if a Q4_K_M model is tight. This is test-only, not the AWQ/FP8 stack.
 
 **Bandwidth:** download Q4_K_M test files on the university host, one at a time, and keep the project under 200 GB. Do not download them on a cloud host. The cloud host downloads only the final AWQ/FP8 stack.

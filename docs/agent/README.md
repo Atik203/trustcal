@@ -47,8 +47,8 @@ These docs are for LLM coding agents and human teammates. They are deliberately 
 - **No efficacy results.** P0 proves the engineering path: 13/13 gate checks, 615 tests, two compiled manuscripts, and an offline final-stack fit check.
 - **Core v1.0 is executable:** 4 conditions (B3, B4-matched, B8-no-trust, B8) × 3 datasets (`gpqa_main`, `mmlu_pro`, `hle`) × 2 seeds = **24 runs**. Planned 8,000 debates ≈ **1,067 GPU-h**; conservative gate cap **1,280 GPU-h**. SciClaimBench is **not** in Core v1.0.
 - **Full is a target, not a frozen matrix:** the default is **32 runs** with a gold-evidence oracle on SciClaimBench (1,280 GPU-h); the alternate is **36 runs** with gold-answer trust (1,440 GPU-h). **WP-18** is implemented; v1.3 sign-off is pending.
-- **Next work, in order:** N1.0 free 18 GB test gate → N1a 4-bit 80 GB smoke → N2 v1.3/WP-18 → N3 calibration → N4 verifier audit → N5 pilot/G2 → N6 Core/G3 → N1b FP8 smoke/precision → N7 Full/G4-G5.
-- **$50 tranche:** N1.0 ($0) → N1a ($1–2) → pilot ($15–20); hold $20–30 for retries/bandwidth. Do not run a 96 GB pilot or precision from it.
+- **Next work, in order:** N1a 4-bit 80 GB smoke → N2 v1.3/WP-18 → N3 calibration → N4 verifier audit → N5 pilot/G2 → N6 Core/G3 → N1b FP8 smoke/precision → N7 Full/G4-G5. N1.0 passed on 18 November.
+- **$50 tranche:** N1.0 ($0, passed) → N1a ($1–2) → pilot ($15–20); hold $20–30 for retries/bandwidth. Do not run a 96 GB pilot or precision from it.
 - **`roadmap.md` is the task board.** `06_AGENT_CHECKLIST.md` is historical plus a short post-P0 checklist.
 
 ## Source-of-truth hierarchy

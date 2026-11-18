@@ -7,7 +7,7 @@
 > **TL;DR for an agent**
 > - P0 is **released**, not proposed: 13/13 gate checks, 514 tests, both manuscripts compile with 0 errors/undefined refs. There are **no efficacy results**.
 > - Read `roadmap.md` for the current order of work. `06_AGENT_CHECKLIST.md` is historical plus a short post-P0 checklist.
-> - Next: **N1.0** free 18 GB test gate (8–9B AWQ or Q4_K_M, one model + two mocks) → **N1a** 4-bit 80 GB smoke → **N2** v1.3/WP-18 → **N3** calibration → **N4** verifier audit → **N5** pilot/G2 → **N6** Core → **N1b** FP8 smoke/precision → **N7** Full.
+> - **N1.0 PASS**, 18 November 2026: 8–9B vLLM trio + Q4_K_M main templates, one model + two mocks, all schema valid. Next: **N1a** 4-bit 80 GB smoke → **N2** v1.3/WP-18 → **N3** calibration → **N4** verifier audit → **N5** pilot/G2 → **N6** Core → **N1b** FP8 smoke/precision → **N7** Full.
 > - Do **not** run the Core matrix before the pilot passes G2.
 > - **Core v1.0:** 4 conditions (B3, B4-matched, B8-no-trust, B8) × 3 datasets (`gpqa_main`, `mmlu_pro`, `hle`) × 2 seeds = **24 runs**. Planned 8,000 debates ≈ **1,067 GPU-h**; conservative gate cap **1,280 GPU-h**. SciClaimBench is **not** in Core v1.0.
 > - **Full default:** 32 rows with a gold-evidence oracle on SciClaimBench = 1,280 GPU-h / **$210**. The 36-row gold-answer alternate is 1,440 GPU-h / **$235**. **WP-18 freezes it.**

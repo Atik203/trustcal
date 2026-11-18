@@ -6,7 +6,7 @@ Index of every experimental run for the trustcal pipeline. One folder per experi
 | --- | --- | --- | --- | --- | --- | --- |
 | `gate0` | 2026-09-16 | Ph 0 | Vanilla MAD reproduction (Du et al. 2023) — Gate 0 | ✅ PASS | see report | [gate0/README.md](gate0/README.md) |
 | `p0` | 2026-11-09 | Ph 0 | P0 engineering hardening and release | ✅ RELEASED — gate 13/13, 514 tests | 0 (local/offline) | [p0/README.md](p0/README.md) |
-| `n1_smoke` | 2026-11-18 | N1.0 | 18 GB test-only smoke: Qwen3.5-9B / Ministral-8B / Llama-3.1-8B + two mocks | ✅ PASS — 3 debates, schema valid | **$0** (university slice) | [n1_smoke/README.md](n1_smoke/README.md) |
+| `n1_smoke` | 2026-11-18 | N1.0 | 18 GB test-only smoke: 8–9B vLLM trio + Qwen3.8/Gemma/Mistral Q4_K_M + two mocks | ✅ PASS — 6 debates, schema valid | **$0** (university slice) | [n1_smoke/README.md](n1_smoke/README.md) |
 
 **P0 is an engineering record, not an efficacy result.** No Core or Full matrix has run; no accuracy, CCR, CMR, or sign-reversal claim exists. The `p0/` folder records the gate, the integration history, and the release tags only.
 
