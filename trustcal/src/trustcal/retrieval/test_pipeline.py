@@ -130,6 +130,25 @@ def test_search_failure_is_isolated() -> None:
     assert "api down" in retriever.errors[0]
 
 
+def test_repeated_source_failures_trip_a_breaker() -> None:
+    calls: dict[str, int] = {}
+
+    def broken(source, query, top_k):
+        calls[source] = calls.get(source, 0) + 1
+        raise RuntimeError("api down")
+
+    retriever = Retriever(
+        search_fn=broken,
+        config=RetrievalConfig(max_source_failures=2),
+    )
+    for index in range(5):
+        retriever._search(ARXIV, f"claim {index}", 3)
+    # Two failures disable arXiv; the next three calls are free.
+    assert calls[ARXIV] == 2
+    assert ARXIV in retriever._dead_sources
+    assert any("skipped for the rest of the run" in error for error in retriever.errors)
+
+
 def test_static_retriever_and_evidence_block() -> None:
     retriever = StaticRetriever({0: {"claim": ["p1", "p2"]}}, fallback=["fallback"])
     assert retriever.retrieve(0, "claim") == ["p1", "p2"]

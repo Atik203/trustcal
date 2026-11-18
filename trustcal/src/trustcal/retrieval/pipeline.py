@@ -35,6 +35,9 @@ class RetrievalConfig:
     max_chars: int = 1200
     partition: bool = True
     progressive: bool = True
+    # Cost guard: a keyless API that is down must not add 60s to every claim.
+    # After this many consecutive failures the source is skipped for the run.
+    max_source_failures: int = 3
 
 
 def _rotate(items: tuple[str, ...], offset: int) -> tuple[str, ...]:
@@ -73,6 +76,8 @@ class Retriever:
     routes: list[dict] = field(default_factory=list)
     _cache: dict[tuple[str, str, int], list[sources.SearchResult]] = field(default_factory=dict, repr=False)
     _route_cache: dict[str, sources.ClaimRoute] = field(default_factory=dict, repr=False)
+    _failures: dict[str, int] = field(default_factory=dict, repr=False)
+    _dead_sources: set[str] = field(default_factory=set, repr=False)
 
     def __post_init__(self) -> None:
         if self.search_fn is None:
@@ -102,6 +107,8 @@ class Retriever:
         return _rotate(routed, agent_index)
 
     def _search(self, source: str, query: str, top_k: int) -> list[sources.SearchResult]:
+        if source in self._dead_sources:
+            return []
         key = (source, query, top_k)
         if key in self._cache:
             return self._cache[key]
@@ -109,7 +116,16 @@ class Retriever:
             results = list(self.search_fn(source, query, top_k=top_k))
         except Exception as exc:  # noqa: BLE001 - retrieval must not kill the run
             self.errors.append(f"{source}: {exc}")
+            failures = self._failures.get(source, 0) + 1
+            self._failures[source] = failures
+            if failures >= self.config.max_source_failures:
+                self._dead_sources.add(source)
+                self.errors.append(
+                    f"{source}: skipped for the rest of the run after {failures} consecutive failures"
+                )
             results = []
+        else:
+            self._failures.pop(source, None)
         self._cache[key] = results
         return results
 

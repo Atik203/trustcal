@@ -41,7 +41,7 @@ from trustcal.eval.datasets import DATASETS, load_dataset, revision_status  # no
 from trustcal.eval.stats import summarize as summarize_values  # noqa: E402
 from trustcal.orchestrator import GOLD_EVIDENCE_DATASETS  # noqa: E402
 from trustcal.preflight import format_report, run_preflight  # noqa: E402
-from trustcal.runner import ARMS, RunConfig, run  # noqa: E402
+from trustcal.runner import ARMS, RunConfig, run, run_dir  # noqa: E402
 
 
 @dataclass
@@ -247,7 +247,7 @@ def _build_plan(matrix: Matrix, out_root: Path) -> list[tuple[dict, RunConfig]]:
 
 
 def _run_dir(cfg: RunConfig) -> Path:
-    return cfg.out_root / cfg.arm / cfg.dataset / f"seed{cfg.seed}"
+    return run_dir(cfg)
 
 
 def _validate_plan(plan: list[tuple[dict, RunConfig]]) -> list[str]:

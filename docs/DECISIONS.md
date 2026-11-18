@@ -14,6 +14,14 @@ Approved architecture, hardware, and environment decisions. Add an entry before 
 
 **Why:** a paid session must not depend on the day's nightly wheel or discover an incompatible checkpoint after the A100 clock starts. The 18GB slice is used to validate the same script on the exact checkpoint configs before the cloud run.
 
+## 2026-11-19 - Retrieval source circuit breaker
+
+**Status:** approved.
+
+**Decision:** `RetrievalConfig.max_source_failures` defaults to 3. After three consecutive failures of one keyless source (PubMed, arXiv, Semantic Scholar, OpenAlex), the retriever skips that source for the rest of the run and records it in `routes.json` errors. A success resets the counter.
+
+**Why:** `sources._get_with_retry` can spend ~60s per failed query (20s timeout x 3 attempts). A dead Semantic Scholar endpoint could add tens of minutes to every B8/B4 debate, which is a direct GPU-cost risk. The breaker changes nothing when the APIs are healthy; when a source is already failing, the run records the degradation instead of silently paying for retries.
+
 ## 2026-11-18 - Dedicated trustcal directory and $50 test-first tranche
 
 **Status:** approved.
