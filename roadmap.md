@@ -153,6 +153,8 @@ Run **one model at a time** with llama.cpp, `--ctx-size 4096`, q8 KV cache, and 
 
 **Acceptance:** a schema-valid record from at least one 8–9B AWQ model and one Q4_K_M main model; `nvidia-smi` peak recorded; no system changes; no modification of `tool-observation/`.
 
+**Status (18 Nov 2026):** PASS for Qwen3.5-9B + two mocks; 1 debate, 3 rounds, 26.3 s, schema valid, 13,880 MiB peak. See [`experiments/n1_smoke/README.md`](experiments/n1_smoke/README.md). Ministral-8B, Llama-3.1-8B, and the Qwen3.8-27B Q4_K_M template check remain.
+
 **Cost:** $0 GPU. Time and university bandwidth only.
 
 ### N1a — 4-bit three-model cloud smoke (Nov–Dec 2026)

@@ -6,10 +6,11 @@ Index of every experimental run for the trustcal pipeline. One folder per experi
 | --- | --- | --- | --- | --- | --- | --- |
 | `gate0` | 2026-09-16 | Ph 0 | Vanilla MAD reproduction (Du et al. 2023) — Gate 0 | ✅ PASS | see report | [gate0/README.md](gate0/README.md) |
 | `p0` | 2026-11-09 | Ph 0 | P0 engineering hardening and release | ✅ RELEASED — gate 13/13, 514 tests | 0 (local/offline) | [p0/README.md](p0/README.md) |
+| `n1_smoke` | 2026-11-18 | N1.0 | 18 GB test-only smoke: Qwen3.5-9B + two mocks | ✅ PASS — 1 debate, schema valid | **$0** (university slice) | [n1_smoke/README.md](n1_smoke/README.md) |
 
 **P0 is an engineering record, not an efficacy result.** No Core or Full matrix has run; no accuracy, CCR, CMR, or sign-reversal claim exists. The `p0/` folder records the gate, the integration history, and the release tags only.
 
-**WP naming note.** The landed P0 [`p0/WP-13.md`](p0/WP-13.md) is the B8-no-trust prompt split. The pending placebo/oracle slice is **WP-18**, planned in [`next/WP-18.md`](next/WP-18.md); do not reuse WP-13 for the placebo or oracle arms.
+**WP naming note.** The landed P0 [`p0/WP-13.md`](p0/WP-13.md) is the B8-no-trust prompt split. The placebo/oracle slice is **WP-18** (implemented; v1.3 sign-off pending). **WP-19** records the 18 GB test-only validation plan; its run report is [`n1_smoke/`](n1_smoke/README.md).
 
 ## Annotation gates in progress
 

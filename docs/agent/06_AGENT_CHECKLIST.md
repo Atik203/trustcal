@@ -8,7 +8,7 @@
 
 Work in this order. Record commands and exact output in `experiments/next/WP-<id>.md`.
 
-- [ ] **N1.0 — Free 18 GB test gate (Nov 2026).** Use a dedicated `trustcal-fydp/` directory; do not modify `tool-observation/`. Test one 8–9B AWQ model with vLLM plus two mocks, and optionally one Q4_K_M main model with llama.cpp at 4k context. **Pass:** schema-valid record from one real model + two mocks; no cloud spend; `nvidia-smi` peak recorded. Cost **$0**.
+- [x] **N1.0 — Free 18 GB test gate (Nov 2026).** Qwen3.5-9B + two mocks PASS: 1 debate, 3 rounds, 26.3 s, schema valid, 13,880 MiB peak. See `experiments/n1_smoke/`. Ministral-8B, Llama-3.1-8B, and the Qwen3.8-27B Q4_K_M template check remain. Cost **$0**.
 - [ ] **N1a — 4-bit 80 GB smoke (Nov–Dec 2026).** On the 80 GB A100:
   ```bash
   cd trustcal
