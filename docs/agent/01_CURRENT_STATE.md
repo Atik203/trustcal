@@ -16,7 +16,7 @@ Legend: ✅ real / tested / released; 🟡 implemented but partially wired, unva
 | vLLM serving (Dev) | ✅ | Gate 0 | Three quantized models on one A6000 48 GB |
 | 4-bit main stack offline check | ✅ | `trustcal/scripts/check_stack.py --phase fourbit` | Qwen3.8-27B-AWQ-INT4 / Gemma-4-26B-A4B-AWQ / Mistral-24B-AWQ = **53.26 GB** pinned |
 | Final stack offline check | ✅ | `trustcal/scripts/check_stack.py --phase final` | Qwen3.8-27B-FP8 / Gemma-4-26B-A4B-FP8 / Mistral-24B-AWQ = **73.68 GB** pinned |
-| 18 GB test environment | 🟡 | `experiments/n1_smoke/` | Qwen3.5-9B + two mocks PASS: 1 debate, 3 rounds, 26.3 s, schema valid, 13,880 MiB peak; Ministral-8B, Llama-3.1-8B, and Qwen3.8-27B Q4_K_M remain |
+| 18 GB test environment | 🟡 | `experiments/n1_smoke/` | 8–9B trio PASS with two mocks: Qwen3.5-9B 26.3 s / 13,880 MiB; Ministral-8B 37.5 s / 15,461 MiB; Llama-3.1-8B 27.2 s / 15,666 MiB; all schema valid. Qwen3.8-27B Q4_K_M remains |
 | 4-bit 80 GB smoke | 🔴 | Not run | Three-model 53.26 GB stack; gate **N1a** |
 | Final-stack 96 GB smoke | 🔴 | Not run | Three-model 73.68 GB FP8 stack; gate **N1b**, after the 4-bit pilot/Core |
 | Debate loop | ✅ | `orchestrator/debate.py`; tests | Runs with options, evidence, injection, and trust; no paid run yet |
@@ -96,7 +96,7 @@ The full fix record is `02_P0_FIXES.md` and `experiments/p0/WP-*.md`. Summary:
 
 | Item | Owner phase | Acceptance |
 |---|---|---|
-| 18 GB test gate | **N1.0**, Nov 2026 | One real 8–9B AWQ or Q4_K_M model + two mocks; schema-valid record; no cloud spend. **Qwen3.5-9B + two mocks PASS; remaining models pending.** |
+| 18 GB test gate | **N1.0**, Nov 2026 | One real 8–9B AWQ or Q4_K_M model + two mocks; schema-valid record; no cloud spend. **8–9B trio PASS; Qwen3.8-27B Q4_K_M pending.** |
 | 4-bit 80 GB smoke | **N1a**, Nov–Dec 2026 | `check_stack.py --phase fourbit`; three `server OK`; `smoke_test.py --phase fourbit --limit 5` PASS. **Not run.** |
 | FP8 96 GB smoke | **N1b**, Feb 2027 | `check_stack.py --phase final`; three `server OK`; 5-question smoke PASS. Follows the 4-bit pilot/Core. **Not run.** |
 | WP-18 B8-placebo/B8-oracle + Full matrix | **N2**, Nov–Dec 2026 | Mock records validate; placebo ≠ B8; oracle ≥ B8; dry-run shows 24 Core rows and the conditional Full rows; **freezes 32-vs-36-run definition** |
@@ -167,7 +167,7 @@ The detailed pre-P0 findings (injection without retrieval, CCR=0 in B8, `evidenc
 - [x] Dataset revisions pinned; eligible n reported per dataset.
 - [x] Core matrix ≤1,500 GPU-h; pre-registration v1.0 + v1.1 erratum frozen.
 - [x] WP-18 placebo/oracle + Full matrix config implemented; **v1.3 sign-off pending**.
-- [x] N1.0 18 GB test gate: Qwen3.5-9B + two mocks PASS; Ministral-8B, Llama-3.1-8B, and Qwen3.8-27B Q4_K_M pending.
+- [x] N1.0 18 GB test gate: Qwen3.5-9B, Ministral-8B, and Llama-3.1-8B PASS with two mocks; Qwen3.8-27B Q4_K_M pending.
 - [ ] N1a 4-bit 80 GB smoke. **Not run.**
 - [ ] N1b 96 GB FP8 smoke. **Not run; after the 4-bit pilot/Core.**
 - [ ] Pilot passes G2. **Pending Dec 2026–Jan 2027.**

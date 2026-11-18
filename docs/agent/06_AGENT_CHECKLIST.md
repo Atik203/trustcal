@@ -8,7 +8,7 @@
 
 Work in this order. Record commands and exact output in `experiments/next/WP-<id>.md`.
 
-- [x] **N1.0 — Free 18 GB test gate (Nov 2026).** Qwen3.5-9B + two mocks PASS: 1 debate, 3 rounds, 26.3 s, schema valid, 13,880 MiB peak. See `experiments/n1_smoke/`. Ministral-8B, Llama-3.1-8B, and the Qwen3.8-27B Q4_K_M template check remain. Cost **$0**.
+- [x] **N1.0 — Free 18 GB test gate (Nov 2026).** 8–9B trio + two mocks PASS: Qwen3.5-9B 26.3 s / 13,880 MiB; Ministral-8B 37.5 s / 15,461 MiB; Llama-3.1-8B 27.2 s / 15,666 MiB; all schema valid. See `experiments/n1_smoke/`. The Qwen3.8-27B Q4_K_M template check remains. Cost **$0**.
 - [ ] **N1a — 4-bit 80 GB smoke (Nov–Dec 2026).** On the 80 GB A100:
   ```bash
   cd trustcal
