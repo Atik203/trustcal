@@ -126,6 +126,12 @@ def main() -> int:
         if not all(check.ok for check in report):
             return 1
 
+    label = args.arm
+    if placebo_mode != "off":
+        label += f" ({placebo_mode})"
+    if oracle_mode != "off":
+        label += f" ({oracle_mode})"
+
     runner_arm = "injection" if args.arm == "injection" else "B8"
     try:
         cfg = RunConfig(
@@ -146,11 +152,6 @@ def main() -> int:
         print(f"error: {exc}", file=sys.stderr)
         return 1
 
-    label = args.arm
-    if placebo_mode != "off":
-        label += f" ({placebo_mode})"
-    if oracle_mode != "off":
-        label += f" ({oracle_mode})"
     print(f"running {label} on {cfg.limit} items ({cfg.phase} stack)...", flush=True)
     run(cfg)
 
