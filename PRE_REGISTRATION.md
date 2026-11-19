@@ -467,6 +467,7 @@ stack above remains the precision-replication stack.
 | 1.2 | benchmark freeze | Add SciClaimBench-180 as the third primary dataset and the gold-evidence testbed | pending |
 | 1.3 | 11 November 2026 (draft) | **v1.3 draft — pending team sign-off.** Records placebo/oracle semantics, the 32-row Full default (36-row gold-answer alternate), the 4-bit/80 GB execution stack, the FP8 precision replication, and a $500–600 budget with a $600 hard stop. Renames the benchmark from EG-SSS to SciClaimBench and updates the Full config hash. No endpoint, hypothesis, or analysis family changes. | draft — pending team sign-off |
 | 1.4 | 9 November 2026 | B7 provider: Gemini retired; OpenAI gpt-6-luna | frozen |
+| 1.5 | draft | **v1.5 draft — pending team sign-off.** Core→Full reuse only: Full `gpqa_main: 400`, `mmlu_pro: 400`, `sciclaim_180: 300`; new Full config hash. No endpoint, hypothesis, test, exclusion, or analysis change. Requires the SciClaimBench loader and v1.3 sign-off first. | draft — pending team sign-off |
 
 Amendments are made only before unblinding. Once the first confirmatory row is
 inspected, the version is closed; a later change is a new pre-registration, not

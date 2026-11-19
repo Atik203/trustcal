@@ -213,7 +213,7 @@ Then run `configs/experiments_precision.yaml`.
 - 32-row Full default; 36-row alternate.
 - Full config hash recorded in v1.3.
 - **Full is blocked until `sciclaim_180` exists in both `eval/datasets.py` and `configs/datasets.yaml`.** The current `run_matrix.py --config configs/experiments_full.yaml --dry-run` fails offline plan validation by design.
-- If the team wants the $400 path, add a **new v1.4** Core → Full subset-reuse amendment: Full `gpqa_main: 400`, `mmlu_pro: 400`, `sciclaim_180: 300`, plus a new config hash. The current v1.3 draft uses 300/dataset and does not assume reuse.
+- If the team wants the $400 path, add a **new v1.5** Core → Full subset-reuse amendment: Full `gpqa_main: 400`, `mmlu_pro: 400`, `sciclaim_180: 300`, plus a new config hash. The current v1.3 draft uses 300/dataset and does not assume reuse. (v1.4 is the frozen B7-provider erratum.)
 
 **Acceptance:** v1.3 signed; mock placebo/oracle records validate; Core dry-run shows 24 rows; Full dry-run shows 32/36 rows **after** the SciClaimBench loader entry exists; no change to the 13/13 gate.
 
@@ -302,7 +302,7 @@ Then run `configs/experiments_precision.yaml`.
 - **A 300-item Full sample is not a subset of the 400-item Core sample.** `stratified_sample` uses different per-stratum allocations and independent draws, `question_id` indexes shift, and the manifest includes `limit`; the runner refuses to resume across caps. Reuse is an exact-row identity, not a subset extraction.
 - New Full work: 8 SciClaimBench core rows (300) + 6 placebo (300) + 2 oracle (300) = **16 rows / 4,800 debates / 640 GPU-h**.
 - Full incremental cost: **~$104** instead of $210; saving **~$106**.
-- Must be pre-registered in a **new v1.4** before unblinding, with the new config hash. The current v1.3 draft uses 300/dataset and says it does not assume reuse. If v1.4 is not signed, Full is a full 32-row run at $210.
+- Must be pre-registered in a **new v1.5** before unblinding, with the new config hash. The current v1.3 draft uses 300/dataset and says it does not assume reuse. If v1.5 is not signed, Full is a full 32-row run at $210.
 
 **G4/G5 pass:** placebo does not match B8; oracle separates; the sign reversal appears at the predicted q/ρ boundary; one external-validity check replicates the sign.
 
@@ -405,7 +405,7 @@ With the free 18 GB tests and a signed Core → Full subset-reuse amendment:
 
 Under $400 is possible with Core at the low end, storage around $40–60, and the A100 at $0.136/GPU-h. The **$500–600** envelope remains approved; the $400 path is a planning option only after the reuse amendment is signed.
 
-**Reuse is not authorized by the current v1.3 draft.** That draft sets Full to 300 items/dataset and says the envelope "does not assume reuse." Core uses 400/400/200. No row matches, so the 16-row reuse above requires a **new signed amendment (v1.4)** that sets Full `gpqa_main: 400`, `mmlu_pro: 400`, `sciclaim_180: 300`, adds the SciClaimBench loader, and records the new config hash. Until then, budget Full at **$210** and the plan at **~$440–530**.
+**Reuse is not authorized by the current v1.3 draft.** That draft sets Full to 300 items/dataset and says the envelope "does not assume reuse." Core uses 400/400/200. No row matches, so the 16-row reuse above requires a **new signed amendment (v1.5)** that sets Full `gpqa_main: 400`, `mmlu_pro: 400`, `sciclaim_180: 300`, adds the SciClaimBench loader, and records the new config hash. (v1.4 is the frozen B7-provider erratum.) Until then, budget Full at **$210** and the plan at **~$440–530**.
 
 ### 14.4 Bandwidth discipline
 

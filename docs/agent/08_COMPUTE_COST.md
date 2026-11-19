@@ -185,7 +185,7 @@ Do not run a 96 GB pilot ($37–45), the FP8 precision replication ($25–40), C
 - **Core:** 1,280 GPU-h cap (~1,067 planned) / **$175–210**.
 - **Full default:** 32-row gold-evidence oracle on SciClaimBench, 1,280 GPU-h / **$210**.
 - **Full alternate:** 36-row gold-answer, 1,440 GPU-h / **$235**.
-- **Full reuse:** the v1.3 draft uses 300 items/dataset and explicitly does not assume reuse. The 16-row Core→Full reuse needs a signed **v1.4** setting Full `gpqa_main: 400`, `mmlu_pro: 400`, `sciclaim_180: 300`, plus the SciClaimBench loader. A 300-item Full sample is **not** a subset of the 400-item Core sample: the stratified allocations differ, question ids shift, and the manifest includes `limit`. Reuse requires identical rows, not a subset. Until v1.4 is signed, budget Full at **$210** (total ~**$440–530**).
+- **Full reuse:** the v1.3 draft uses 300 items/dataset and explicitly does not assume reuse. The 16-row Core→Full reuse needs a signed **v1.5** setting Full `gpqa_main: 400`, `mmlu_pro: 400`, `sciclaim_180: 300`, plus the SciClaimBench loader. (v1.4 is the frozen B7-provider erratum.) A 300-item Full sample is **not** a subset of the 400-item Core sample: the stratified allocations differ, question ids shift, and the manifest includes `limit`. Reuse requires identical rows, not a subset. Until v1.5 is signed, budget Full at **$210** (total ~**$440–530**).
 - **96 GB 5-question smoke:** 1.5–3 GPU-h / **$2–8**; optional after a stable Core prefix.
 - **FP8 precision replication:** 60–100 GPU-h at **$0.336/h** / **$25–40**; not the same as the smoke.
 - **$50 tranche:** 18 GB tests ($0) + 80 GB smoke ($1–2) + Core prefix (~$1–2); keep **$35–45** reserve. Do not run a 96 GB pilot or precision from it.
