@@ -23,7 +23,7 @@ Phase-by-phase execution plan for **November 2026 – December 2027**. This file
 | 18 GB cache | vLLM 0.33.0 and 8–9B AWQ checkpoints in the existing `tool-observation` project; shared read-only |
 | 4-bit smoke (N1a) | **PASS 20 Nov 2026** — three 24–27B 4-bit models on 96 GB spot hosts (vLLM 0.34.0); B8, injection, placebo 5/5; oracle 4/4 valid (5th lost to a spot eviction) |
 | Core prefix | **25+25 COMPLETE 20 Nov 2026** — `gpqa_main` seed 1, B8 vs B8-no-trust; feasibility/timing only, not efficacy |
-| FP8 smoke (N1b) | **IN PROGRESS** — 73.68 GB stack downloaded; serving fixes applied; no result yet |
+| FP8 smoke (N1b) | **PASS 20 Nov 2026** - 73.68 GB FP8 stack serves 3/3 on 96 GB; B8 5/5 valid, accuracy 4/5 (noise at n=5); mean 282.4 s vs 299.6 s 4-bit on same 5 questions |
 
 **P0 is engineering readiness, not efficacy evidence.** No accuracy, CMR, or sign-reversal claim exists yet. The 25+25 Core prefix (+0.08 at n=25) is a feasibility/timing gate, not an efficacy result.
 
@@ -202,7 +202,7 @@ Then run `configs/experiments_precision.yaml`.
 
 **Acceptance:** three FP8 servers OK; precision result recorded; no FP8 precision claim before this.
 
-**Status (20 Nov 2026): IN PROGRESS.** 96 GB host; 73.68 GB stack downloaded; serving fixes for KV-cache sizing applied. No FP8 result yet; do not cite one.
+**Status (20 Nov 2026): PASS.** 96 GB host; 73.68 GB stack served 3/3 (KV-cache fix: 4096 ctx, max 16 seqs/server); B8 5/5 valid, accuracy 4/5 (n=5 noise), mean 282.4 s vs 299.6 s 4-bit on the same questions. No precision claim yet; the subset replication is still ahead.
 
 **Cost:** 5-question smoke **$2–8** all-in; full precision replication **$25–40**. Do not run the precision replication with the current $50 tranche.
 

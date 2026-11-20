@@ -1,6 +1,6 @@
 # 01 — Current State
 
-**Snapshot:** 20 November 2026. **Branches:** `main` = `v0.2.1`; `dev` is ahead with pre-N1a hardening plus the N1a smoke and 25+25 Core-prefix records. **Tags:** `p0-gate` = `055a244`; `p0-release` = `7f2c11f`. **P0 is released; N1a smoke PASS; 25+25 prefix complete as feasibility/timing only; FP8 smoke in progress; no efficacy results exist.**
+**Snapshot:** 20 November 2026. **Branches:** `main` = `v0.2.1`; `dev` is ahead with pre-N1a hardening plus the N1a smoke and 25+25 Core-prefix records. **Tags:** `p0-gate` = `055a244`; `p0-release` = `7f2c11f`. **P0 is released; N1a smoke PASS; 25+25 prefix complete as feasibility/timing only; FP8 smoke PASS (serving); thread-parallel build implemented, locally verified, cloud proof pending; no running host (destroyed after a bidding war, $1.20 credit left, awaiting top-up); no efficacy results exist.**
 
 This file is the status source of truth. If code and this file disagree, **code wins**; update this file and report the discrepancy. The order of work is `roadmap.md`.
 
@@ -20,7 +20,7 @@ Legend: ✅ real / tested / released; 🟡 implemented but partially wired, unva
 | 4-bit 80 GB smoke | ✅ | N1a PASS 20 Nov 2026 (`experiments/core_prefix/README.md`; mirror `trustcal/results/n1a/`) | B8/injection/placebo 5/5, oracle 4/4 valid (5th lost to a spot eviction) on 96 GB spot hosts, vLLM 0.34.0. |
 | Core prefix (`gpqa_main` seed 1, B8 vs B8-no-trust) | ✅ complete (feasibility/timing) | `experiments/core_prefix/README.md`; mirror `trustcal/results/n1a/` | 25+25 unique records, no duplicates or torn lines; B8 accuracy 0.64 vs control 0.56 (+0.08 at n=25 is noise, not efficacy); mean 245.5 / 185.5 s per debate. |
 | 4-bit exact-checkpoint validation | ✅ | `validate_stack.py`, 19 Nov | Qwen3.8/Gemma 4/Mistral 3 architectures, quant methods, flags, parsers, context, and chat templates pass vLLM 0.34.0 before any weight download |
-| Final-stack 96 GB smoke | 🟡 | 73.68 GB stack downloaded; KV-cache serving fixes applied | IN PROGRESS 20 Nov 2026; no FP8 result yet. Gate **N1b**, after the 4-bit prefix. |
+| Final-stack 96 GB smoke | ✅ | 73.68 GB stack served 3/3; B8 5/5 valid | **PASS 20 Nov 2026.** Gate **N1b** done; precision replication still ahead. |
 | Debate loop | ✅ | `orchestrator/debate.py`; tests | Runs with options, evidence, injection, and trust; N1a smoke + 25+25 prefix ran 20 Nov 2026 (feasibility/timing only) |
 | Trust math | ✅ | `trust/update.py`; 10k-input tests | Simplex projection with floor/ceiling; neutral no-op; claim-count normalization |
 | Injection | ✅ | `orchestrator/injection.py`; tests | One-shot external consensus; neutral control; ties excluded |
@@ -144,7 +144,7 @@ The detailed pre-P0 findings (injection without retrieval, CCR=0 in B8, `evidenc
 - The code paths for vanilla MAD, mock end-to-end, options/parser, trust projection, metrics, manifest, and verifier interface.
 - The N1a 4-bit smoke: B8/injection/placebo 5/5 PASS, oracle 4/4 valid records (5th lost to a spot eviction), per-debate times recorded; local mirror `trustcal/results/n1a/` (gitignored).
 - The 25+25 Core-prefix counts and timings (`experiments/core_prefix/README.md`): 25/25 unique records per arm, no duplicates or torn lines; B8 mean 245.5 s, control 185.5 s per debate.
-- The offline final-stack fit check (73.68 GB), **not** a hardware serving result — the FP8 smoke is in progress with no result yet.
+- The 73.68 GB FP8 stack serving 3/3 on 96 GB (PASS 20 Nov 2026: B8 5/5 valid); the subset precision replication is still ahead.
 - The compiled page counts and the absence of LaTeX errors/undefined references.
 - The model-serving lessons from Gate 0 (quantization, vLLM nightly, sequential startup).
 
@@ -155,7 +155,7 @@ The detailed pre-P0 findings (injection without retrieval, CCR=0 in B8, `evidenc
 - Any claim that B8 beats B4/iMAD/ConsensAgent; the prefix is underpowered (n=25/arm) and the approximate baselines carry fidelity labels.
 - Any claim of a formal bound or the R6 law; the theory is derived/not proved until an independent check.
 - Any claim of "no prior work"; see `04_LITERATURE_AND_GAPS.md`.
-- Any claim that the final stack serves on 96 GB; the FP8 hardware smoke is **in progress with no result**.
+- Any claim that the final stack's precision beats 4-bit; the FP8 smoke proves serving (5/5 valid), not superiority (4/5 vs 2/5 at n=5 is noise).
 - Any claim based on 18 GB 8–9B or Q4_K_M outputs; they are test-only.
 - Any claim that the 4-bit three-model stack serves on 80 GB; the 4-bit smoke **passed on 96 GB spot hosts** (same 4-bit stack) and the 80 GB A100 run is still ahead.
 
@@ -163,7 +163,7 @@ The detailed pre-P0 findings (injection without retrieval, CCR=0 in B8, `evidenc
 
 ## 9. Definition of done for the next release (P0 → G2)
 
-- [x] `pytest` green: **615 passed** (514 at `p0-release`).
+- [x] `pytest` green: **639 passed** (514 at `p0-release`).
 - [x] B8 + injection runs end-to-end on mocks, with `consensus`, `targets`, `evidence_introduced`, `final_answer`.
 - [x] Accuracy, CMR, CCR-0, CCR-E, MPR-weighted, ARR, trust AUROC/Brier computed and unit-tested.
 - [x] Trust update satisfies `min >= floor`, `sum == 1` on 10k random inputs.
@@ -175,6 +175,6 @@ The detailed pre-P0 findings (injection without retrieval, CCR=0 in B8, `evidenc
 - [x] N1.0 18 GB test gate: 8–9B vLLM trio and Q4_K_M main templates PASS with two mocks.
 - [x] N1a 4-bit smoke. **PASS 20 Nov 2026** (96 GB spot hosts, same 4-bit stack, vLLM 0.34.0).
 - [x] Core-prefix gate. **25+25 COMPLETE 20 Nov 2026** — feasibility/timing only, not a G2 pass.
-- [ ] N1b 96 GB FP8 smoke. **IN PROGRESS 20 Nov 2026; no result yet.**
+- [x] N1b 96 GB FP8 smoke. **PASS 20 Nov 2026** (B8 5/5 valid; serving only, no precision claim).
 - [ ] Pilot passes G2. **Pending Dec 2026–Jan 2027.**
 - [x] Docs updated; `main` = `dev` with the full pipeline.
