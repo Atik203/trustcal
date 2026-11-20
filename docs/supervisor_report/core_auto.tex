@@ -1,30 +1,23 @@
 \section*{3. Core milestone results (\texttt{gpqa\_main}, seed 1)}\label{sec:core}
 
-At this checkpoint the row holds \textbf{122 debates} (60 B8, 62 control), 1098 agent-round responses, 4,293 claim-level verdicts, and 795 retrieved passages. The row has consumed approximately 2.5 GPU-hours; the mean question pair takes 152\,s (median 137\,s for B8). Both arms run concurrently, so a pair finishes in the slower arm's time rather than their sum. Milestones completed: 60; next milestone: 100. Question 27 is quarantined (options are literal letters) and is excluded from the denominators; the row resumes at the first question id without a record.
+At this checkpoint the row holds \textbf{132 debates} (65 B8, 67 control), 1188 agent-round responses, 4,658 claim-level verdicts, and 870 retrieved passages. The row has consumed approximately 2.8 GPU-hours; the mean question pair takes 153\,s (median 137\,s for B8). Both arms run concurrently, so a pair finishes in the slower arm's time rather than their sum. Milestones completed: 65; next milestone: 100. Question 27 is quarantined (options are literal letters) and is excluded from the denominators; the row resumes at the first question id without a record.
 
-{\Large\setlength{\tabcolsep}{6pt}
-\begin{tabular}{lcccccc}
+{\Large\setlength{\tabcolsep}{10pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{lcc}
 \toprule
-Questions & B8 acc (95\% CI) & Control acc (95\% CI) & B8 MPR & Control MPR & B8 ARR (n) & Control ARR (n) \\
+Metric & B8 (trust, n=65) & Control (majority, n=65) \\
 \midrule
-current (60) & 0.67 (0.55--0.78) & 0.62 (0.48--0.75) & 0.79 & 0.71 & 0.57 (40) & 0.72 (32) \\
-\bottomrule
-\end{tabular}
-}
-
-{\Large\setlength{\tabcolsep}{6pt}
-\begin{tabular}{lccccc}
-\toprule
-Questions & B8 CCR-e (n) & Control CCR-e (n) & B8 AUROC (n) & B8 Brier (n) & Pair mean (s) \\
-\midrule
-current (60) & 0.07 (42) & 0.15 (39) & 0.56 (28) & 0.27 (41) & 152 \\
+Accuracy (95\% CI) & 0.66 (0.55--0.77) & 0.60 (0.48--0.72) \\
+MPR & 0.77 & 0.72 \\
+ARR (n) & 0.60 (47) & 0.76 (37) \\
+CCR-e (n) & 0.09 (44) & 0.17 (40) \\
+Trust AUROC (n) & 0.57 (30) & n/a \\
+Trust Brier (n) & 0.27 (46) & n/a \\
+Evidence coverage & 60/65 & 60/65 \\
+Median time & 137\,s & 134\,s \\
 \bottomrule
 \end{tabular}
 }
 
 {\normalsize\textit{Abbreviations:} MPR = minority-position retention; ARR = adaptation rate when the majority is correct; CCR-e = collapse rate on evidence-exposed items; AUROC = area under the ROC curve; Brier = Brier score (lower is better); n = applicable debates.}
 
-\clearpage
-\begin{center}
-\includegraphics[width=24cm,height=15cm,keepaspectratio]{core_figures.png}
-\end{center}

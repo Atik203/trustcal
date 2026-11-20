@@ -59,6 +59,7 @@ def metrics(rows: list[dict]) -> dict:
         "mean": statistics.mean(times),
         "median": statistics.median(times),
         "verdicts": sum(len(row.get("verdicts") or []) for row in rows),
+        "evidence": sum(1 for row in rows if row.get("evidence")),
         "passages": sum(
             len(block.get("passages") or [])
             for row in rows
@@ -133,6 +134,8 @@ def main() -> int:
 
     total = metrics(b8)
     total_c = metrics(ctl)
+    cur8 = metrics(cut(b8, current))
+    curc = metrics(cut(ctl, current))
     debates = len(b8) + len(ctl)
     verdicts = (total.get("verdicts", 0) or 0) + (total_c.get("verdicts", 0) or 0)
     passages = (total.get("passages", 0) or 0) + (total_c.get("passages", 0) or 0)
@@ -160,22 +163,21 @@ def main() -> int:
     )
 
     table = (
-        "{\\Large\\setlength{\\tabcolsep}{6pt}\n"
-        "\\begin{tabular}{lcccccc}\n"
+        "{\\Large\\setlength{\\tabcolsep}{10pt}\\renewcommand{\\arraystretch}{1.25}\n"
+        "\\begin{tabular}{lcc}\n"
         "\\toprule\n"
-        "Questions & B8 acc (95\\% CI) & Control acc (95\\% CI) & B8 MPR & Control MPR & "
-        "B8 ARR (n) & Control ARR (n) \\\\\n"
+        f"Metric & B8 (trust, n={current}) & Control (majority, n={current}) \\\\\n"
         "\\midrule\n"
-        + ("\n".join(rows_a) if rows_a else "% no data")
-        + "\n\\bottomrule\n\\end{tabular}\n}\n\n"
-        "{\\Large\\setlength{\\tabcolsep}{6pt}\n"
-        "\\begin{tabular}{lccccc}\n"
-        "\\toprule\n"
-        "Questions & B8 CCR-e (n) & Control CCR-e (n) & B8 AUROC (n) & B8 Brier (n) & "
-        "Pair mean (s) \\\\\n"
-        "\\midrule\n"
-        + ("\n".join(rows_b) if rows_b else "% no data")
-        + "\n\\bottomrule\n\\end{tabular}\n}\n\n"
+        f"Accuracy (95\\% CI) & {cur8['acc']:.2f} ({cur8['ci'][0]:.2f}--{cur8['ci'][1]:.2f}) & "
+        f"{curc['acc']:.2f} ({curc['ci'][0]:.2f}--{curc['ci'][1]:.2f}) \\\\\n"
+        f"MPR & {cur8['mpr']:.2f} & {curc['mpr']:.2f} \\\\\n"
+        f"ARR (n) & {pair(*cur8['arr'])} & {pair(*curc['arr'])} \\\\\n"
+        f"CCR-e (n) & {pair(*cur8['ccr'])} & {pair(*curc['ccr'])} \\\\\n"
+        f"Trust AUROC (n) & {pair(*cur8['auroc'])} & n/a \\\\\n"
+        f"Trust Brier (n) & {pair(*cur8['brier'])} & n/a \\\\\n"
+        f"Evidence coverage & {cur8['evidence']}/{current} & {curc['evidence']}/{current} \\\\\n"
+        f"Median time & {cur8['median']:.0f}\\,s & {curc['median']:.0f}\\,s \\\\\n"
+        "\\bottomrule\n\\end{tabular}\n}\n\n"
     )
 
     abbrev = (
@@ -277,13 +279,7 @@ def main() -> int:
         fig.tight_layout()
         fig.savefig(fig_path, dpi=600, bbox_inches="tight")
         plt.close(fig)
-        figures = (
-            "\\clearpage\n"
-            "\\begin{center}\n"
-            "\\includegraphics[width=24cm,height=15cm,keepaspectratio]"
-            "{core_figures.png}\n"
-            "\\end{center}\n"
-        )
+        figures = ""
 
     Path(args.out).write_text(prose + table + abbrev + figures, encoding="utf-8")
     print(f"wrote {args.out}: {len(points)} point(s), current n={current}")
