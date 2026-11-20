@@ -1197,6 +1197,8 @@ def run(
     records, _duplicates = read_records_repaired(path)
     summary = summarize(records)
     quarantine = read_quarantine(out / QUARANTINE_NAME)
+    resolved = {record["question_id"] for record in records}
+    unresolved = [entry for entry in quarantine if entry["question_id"] not in resolved]
     summary_path = _write_summary(
         cfg,
         summary,
@@ -1205,7 +1207,7 @@ def run(
         manifest_path,
         condition_hash=condition_hash,
         provenance_hash=provenance_hash,
-        quarantine=len(quarantine),
+        quarantine=len(unresolved),
     )
     print(f"summary: {summary_path}  {summary.as_dict()}")
     return summary
