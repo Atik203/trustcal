@@ -167,6 +167,10 @@ def main() -> int:
         f"The row has consumed approximately {gpu_h:.1f} GPU-hours; the mean question pair takes "
         f"{mean_pair:.0f}\\,s (median {total.get('median', 0):.0f}\\,s for B8). "
         "Both arms run concurrently, so a pair finishes in the slower arm's time rather than their sum. "
+        f"This pair is \\textbf{{2 of the 24 Core rows}} and, at completion, contributes "
+        "\\textbf{800 of the 8,000 Core debates (10\\%)}, 2,400 of 24,000 agent trajectories, and "
+        "7,200 of 72,000 agent-rounds. "
+        f"Progress against that target: {2 * current}/8,000 debates ({200.0 * current / 8000:.1f}\\%). "
         f"Milestones completed: "
         + (", ".join(str(point["n"]) for point in points) if points else "none")
         + f"; next milestone: {next((m for m in MILESTONES if m > current), 400)}. "
