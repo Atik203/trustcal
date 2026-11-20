@@ -211,7 +211,10 @@ def main() -> int:
         f"B8 alone on {paired['only_b8']}, control alone on {paired['only_ctl']}, and neither on "
         f"{paired['neither']} (exact McNemar p = {paired['p']:.3f}). "
         f"Milestones completed: "
-        + (", ".join(str(point["n"]) for point in points) if points else "none")
+        + (
+            ", ".join(str(point["n"]) for point in points if point["n"] in MILESTONES)
+            or "none"
+        )
         + f"; next milestone: {next((m for m in MILESTONES if m > current), 400)}. "
         "Question 27 is quarantined (options are literal letters) and is excluded from the denominators; "
         "the row resumes at the first question id without a record.\n\n"
