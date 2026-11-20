@@ -14,13 +14,16 @@ from . import datasets as datasets_module
 from .datasets import (
     DATASETS,
     EmptyAnswerError,
+    _drop_degenerate_rows,
     _row_to_question,
     eligible_counts,
     load_dataset,
     pinned_revision,
+    question_errors,
     revision_audit,
     revision_status,
     stratified_sample,
+    validate_questions,
     write_eligible_n,
 )
 
@@ -80,6 +83,56 @@ def test_gpqa_letter_answer_uses_correct_text() -> None:
     assert out["options"] == ["right", "wrong1", "wrong2", "wrong3"]
 
 
+def test_question_errors_flags_gold_outside_options() -> None:
+    question = {"question": "Q?", "answer": "c", "options": ["right", "a", "b", "d"]}
+    errors = question_errors(question, 3)
+    assert any("question[3]" in error and "not among the options" in error for error in errors)
+
+
+def test_validate_questions_accepts_clean_sample() -> None:
+    question = {"question": "Q?", "answer": "right", "options": ["right", "a", "b", "d"]}
+    assert validate_questions([question]) == []
+
+
+def test_validate_questions_flags_exact_duplicates_and_bad_options() -> None:
+    first = {"question": "same?", "answer": "x", "options": ["x", "y"]}
+    copy = {"question": "same?", "answer": "x", "options": ["x", "y"]}
+    bad = {"question": "bad?", "answer": "x", "options": ["x", "x"]}
+    problems = validate_questions([first, copy, bad])
+    assert any("exact duplicate of question[0]" in problem for problem in problems)
+    assert any("duplicate option text" in problem for problem in problems)
+
+
+def test_validate_questions_allows_stem_variants() -> None:
+    first = {"question": "same?", "answer": "x", "options": ["x", "y"]}
+    variant = {"question": "same?", "answer": "z", "options": ["z", "w"]}
+    assert validate_questions([first, variant]) == []
+
+
+def test_validate_questions_flags_contradiction() -> None:
+    first = {"question": "same?", "answer": "x", "options": ["x", "y"]}
+    contradiction = {"question": "same?", "answer": "y", "options": ["x", "y"]}
+    problems = validate_questions([first, contradiction])
+    assert any("contradicts question[0]" in problem for problem in problems)
+
+
+def test_drop_degenerate_rows() -> None:
+    rows = [
+        {"question": "q1", "answer": "a", "options": ["a", "b"]},
+        {"question": "q1", "answer": "a", "options": ["a", "b"]},  # exact duplicate
+        {"question": "q2", "answer": "a", "options": ["a", "a"]},  # duplicate option
+        {"question": "q3", "answer": "a", "options": ["a", "b"]},
+        {"question": "q3", "answer": "b", "options": ["a", "b"]},  # contradiction
+    ]
+    kept, counts = _drop_degenerate_rows(rows)
+    assert [row["question"] for row in kept] == ["q1"]
+    assert counts == {
+        "duplicate_options": 1,
+        "exact_duplicate": 1,
+        "contradictory": 2,
+    }
+
+
 def test_gold_answer_is_an_answer_column() -> None:
     row = {"problem": "P?", "gold_answer": "42", "solution": "long proof"}
     out = _row_to_question(row, "brokermath")
@@ -136,7 +189,17 @@ def test_train_split_is_refused_for_eval() -> None:
 
 
 def test_gpqa_train_is_the_documented_benchmark_exception(fake_hf) -> None:
-    fake_hf([{"Question": "Q?", "Correct Answer": "A", "Incorrect Answer 1": "B"}])
+    fake_hf(
+        [
+            {
+                "Question": "Q?",
+                "Correct Answer": "A",
+                "Incorrect Answer 1": "B",
+                "Incorrect Answer 2": "C",
+                "Incorrect Answer 3": "D",
+            }
+        ]
+    )
     rows = load_dataset("gpqa", sample_cap=1)
     assert len(rows) == 1
     assert rows[0]["options"][0] == "A"

@@ -443,6 +443,52 @@ def _normalize_rows(raw_rows: list[dict], name: str) -> tuple[list[dict], int]:
     return rows, skipped
 
 
+def _drop_degenerate_rows(rows: list[dict]) -> tuple[list[dict], dict[str, int]]:
+    """Drop rows no benchmark item should keep, before any sampling.
+
+    Reasons: duplicate or empty option text (the gold can appear twice, so the
+    item has no unique correct choice), exact duplicate rows, and contradictory
+    rows (same stem and options with different golds). Rows that share a stem
+    but ship different options are legitimate variants and are kept.
+    """
+    counts = {
+        "empty_options": 0,
+        "duplicate_options": 0,
+        "exact_duplicate": 0,
+        "contradictory": 0,
+    }
+    golds_by_stem: dict[tuple[str, tuple[str, ...]], set[str]] = {}
+    for row in rows:
+        options = tuple(str(option).strip() for option in (row.get("options") or []))
+        text = str(row.get("question") or "").strip()
+        gold = str(row.get("answer") or "").strip()
+        if options:
+            golds_by_stem.setdefault((text, options), set()).add(gold)
+
+    kept: list[dict] = []
+    seen: set[tuple[str, tuple[str, ...], str]] = set()
+    for row in rows:
+        options = tuple(str(option).strip() for option in (row.get("options") or []))
+        text = str(row.get("question") or "").strip()
+        gold = str(row.get("answer") or "").strip()
+        if options and any(not option for option in options):
+            counts["empty_options"] += 1
+            continue
+        if options and len(set(options)) != len(options):
+            counts["duplicate_options"] += 1
+            continue
+        if len(golds_by_stem.get((text, options), set())) > 1:
+            counts["contradictory"] += 1
+            continue
+        signature = (text, options, gold)
+        if signature in seen:
+            counts["exact_duplicate"] += 1
+            continue
+        seen.add(signature)
+        kept.append(row)
+    return kept, {key: value for key, value in counts.items() if value}
+
+
 def load_dataset(
     name: str = "gpqa",
     split: str | None = None,
@@ -506,6 +552,10 @@ def load_dataset(
 
     rows, skipped = _normalize_rows([dict(row) for row in ds], name)
 
+    # Drop malformed items before sampling so the cap is spent on valid rows.
+    rows, degenerate = _drop_degenerate_rows(rows)
+    skipped += sum(degenerate.values())
+
     # STEM allow-list first: the cap must never be spent on excluded categories.
     stem_only, categories = _stem_spec(name)
     filter_stats: dict | None = None
@@ -523,6 +573,11 @@ def load_dataset(
         if root:
             target = Path(root) / name / "eligible_n.json"
     if target is not None:
+        extra: dict[str, Any] = {}
+        if filter_stats is not None:
+            extra["stem_filter"] = filter_stats
+        if degenerate:
+            extra["dropped_rows"] = degenerate
         write_eligible_n(
             sampled,
             target,
@@ -533,6 +588,72 @@ def load_dataset(
             available=len(rows),
             skipped=skipped,
             seed=used_seed,
-            extra={"stem_filter": filter_stats} if filter_stats is not None else None,
+            extra=extra or None,
         )
     return sampled
+
+
+def question_errors(question: dict, index: int | None = None) -> list[str]:
+    """Cheap schema checks on a normalized question, before any model call.
+
+    Mirrors the record-level invariants the runner enforces after a debate:
+    a non-empty gold that is one of the options, distinct non-empty options,
+    and non-empty question text. Catching these at load time costs nothing;
+    catching them at write time destroys a whole run (GPQA question 28).
+    """
+    label = f"question[{index}]" if index is not None else "question"
+    errors: list[str] = []
+    text = str(question.get("question") or "").strip()
+    if not text:
+        errors.append(f"{label}: empty question text")
+    gold = str(question.get("answer") or "").strip()
+    if not gold:
+        errors.append(f"{label}: empty gold answer")
+    options = question.get("options") or []
+    if options:
+        texts = [str(option).strip() for option in options]
+        if len(texts) < 2:
+            errors.append(f"{label}: fewer than two options")
+        if any(not option for option in texts):
+            errors.append(f"{label}: empty option text")
+        if len(set(texts)) != len(texts):
+            errors.append(f"{label}: duplicate option text")
+        if gold and gold not in texts:
+            errors.append(f"{label}: gold {gold!r} is not among the options")
+    return errors
+
+
+def validate_questions(questions: list[dict]) -> list[str]:
+    """Every question-level problem in a sample; empty means safe to run.
+
+    A shared stem with different options is a legitimate variant (MMLU-Pro
+    ships many) and is allowed. Only exact duplicate rows and rows that
+    contradict each other (same stem and options, different gold) are flagged.
+    """
+    problems: list[str] = []
+    seen_exact: dict[tuple[str, tuple[str, ...], str], int] = {}
+    golds_by_stem: dict[tuple[str, tuple[str, ...]], dict[str, int]] = {}
+    for index, question in enumerate(questions):
+        problems.extend(question_errors(question, index))
+        text = str(question.get("question") or "").strip()
+        if not text:
+            continue
+        options = tuple(str(option).strip() for option in (question.get("options") or []))
+        gold = str(question.get("answer") or "").strip()
+        signature = (text, options, gold)
+        if signature in seen_exact:
+            problems.append(f"question[{index}]: exact duplicate of question[{seen_exact[signature]}]")
+            continue
+        seen_exact[signature] = index
+        if options:
+            prior = golds_by_stem.setdefault((text, options), {})
+            if gold in prior:
+                continue
+            conflicting = next(iter(prior.items()), None)
+            if conflicting is not None:
+                problems.append(
+                    f"question[{index}]: contradicts question[{conflicting[1]}] "
+                    "(same stem and options, different gold)"
+                )
+            prior[gold] = index
+    return problems
