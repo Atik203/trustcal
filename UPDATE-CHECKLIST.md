@@ -15,7 +15,7 @@
 | Release tip | `v0.2.1` on both `main` and `dev`; `p0-release` tag = `7f2c11f`. |
 | Tags | `p0-gate` = `055a244`; `p0-release` = `7f2c11f` |
 | P0 gate | **13/13 passed, 0 failed, 0 pending** |
-| Tests | **615 passed** (514 at the P0 release) |
+| Tests | **639 passed** (514 at the P0 release) |
 | Report | `FYDP_Summer/out/fydp.pdf` - 70 pages, 80 cited works, explicit pdfLaTeX, 0 errors/undefined refs |
 | Journal | `Papev_Summer26_6/out/cas-sc-template.pdf` - 19 pages, 71 cited works, explicit pdfLaTeX, 0 errors/undefined refs |
 | Figures | six journal + two report-only figures at 6000 × 3375 (600+ DPI) |
@@ -25,7 +25,7 @@
 | 18 GB test gate | **NOT RUN** — `uiu-h200` 18 GB; 8–9B AWQ cache + Q4_K_M test route |
 | 4-bit 80 GB smoke | **PASS 20 Nov 2026** — three 24–27B 4-bit models on 96 GB spot hosts (vLLM 0.34.0); B8/injection/placebo 5/5, oracle 4/4 valid (5th lost to a spot eviction) |
 | Core-prefix gate | **25+25 COMPLETE 20 Nov 2026** — `gpqa_main` seed 1, B8 vs B8-no-trust; feasibility/timing only (+0.08 at n=25 is noise, not efficacy) |
-| FP8 96 GB smoke | **IN PROGRESS 20 Nov 2026** — 73.68 GB stack downloaded, serving fixes applied, no result yet; not a Full-matrix gate |
+| FP8 96 GB smoke | **PASS 20 Nov 2026** - B8 5/5 valid, accuracy 4/5 (n=5 noise); mean 282.4 s vs 299.6 s 4-bit; not a Full-matrix gate |
 
 **P0 is engineering readiness, not efficacy evidence.** No accuracy, CMR, or sign-reversal claim exists yet. The 25+25 prefix is feasibility/timing only.
 
@@ -72,7 +72,7 @@ The manuscript is now honest and internally consistent, but it is **not a result
 
 | When | Work | Gate / output |
 |---|---|---|
-| **Nov 2026** | N1a 4-bit smoke (PASS 20 Nov); 25+25 Core-prefix gate (COMPLETE 20 Nov, feasibility/timing); FP8 smoke (IN PROGRESS); WP-18 placebo/oracle; 24-item calibration; verifier audit start | smoke PASS; prefix timings; 6-arm support; calibration report |
+| **Nov 2026** | N1a 4-bit smoke (PASS 20 Nov); 25+25 Core-prefix gate (COMPLETE 20 Nov, feasibility/timing); FP8 smoke (PASS 20 Nov, serving only); WP-18 placebo/oracle; 24-item calibration; verifier audit start | smoke PASS; prefix timings; 6-arm support; calibration report |
 | **Dec 2026** | Pilot run 100–150 questions; injection κ | **G2** |
 | **Jan 2027** | Core run: 4 arms, GPQA 400 + MMLU-Pro 400 + HLE 200, 2 seeds; 1,280 GPU-h cap; SciClaimBench-180 freeze (v1.2) | **G3** |
 | **Feb 2027** | Full run: 6 arms; 300 benchmark; human eval start | **G4/G5** |
