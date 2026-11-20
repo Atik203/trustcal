@@ -5,10 +5,12 @@
 \documentclass[11pt,a4paper]{article}
 \usepackage[margin=1.8cm]{geometry}
 \usepackage{booktabs}
+\usepackage{graphicx}
 \usepackage{hyperref}
 \usepackage{enumitem}
 \usepackage{pgfplots}
 \pgfplotsset{compat=1.18}
+\usepgfplotslibrary{groupplots}
 \usepackage{pdflscape}
 \setlist{topsep=2pt,itemsep=2pt}
 \hypersetup{colorlinks=true,linkcolor=blue,urlcolor=blue}
@@ -40,7 +42,7 @@ Three heterogeneous LLMs answer the same scientific multiple-choice question, re
 \textbf{N1a 4-bit cloud smoke: passed.} The full 53\,GB three-model 4-bit stack serves together on one 96\,GB card; every harness path runs end to end:
 
 \begin{center}
-{\small
+{\normalsize
 \begin{tabular}{lcccc}
 \toprule
 Arm & Records & Accuracy & MPR & Mean time \\
@@ -56,14 +58,12 @@ B8-oracle & 4/4 valid, 3 rounds & 1.00 (4/4) & --- & $\sim$280 s/debate \\
 
 Two findings came out of the smoke itself. First, one injection item showed a \emph{transient} effect the check initially missed: the targeted agent moved D\,$\to$\,C under the injected consensus in round 2, then reverted to D by round 3. The smoke check compared only round 1 with round 3, so it reported a failure on a real delivered effect; the check now detects any post-injection change, with a regression test, and injection passes 5/5. Second, the oracle arm's fifth record was lost to a spot eviction, not to the pipeline; the 4 completed records are all valid and all final answers correct.
 
-\begin{landscape}
 \input{core_auto}
-\end{landscape}
 
 \textbf{FP8 precision smoke: passed.} The 73.68\,GB FP8 stack serves all three models together (5/5 valid records, 3 rounds). Serving needed one config fix first: FP8 weights are roughly twice the 4-bit size, so the 8192-token context left no room for KV cache; context is 4096 with max 16 concurrent sequences per server (worst-case prompt 2438 tokens $<$ 3072 available, verified by preflight). Same 5 questions as the 4-bit smoke, so the pace is directly comparable:
 
 \begin{center}
-{\small
+{\normalsize
 \begin{tabular}{lccccc}
 \toprule
  & Q0 & Q1 & Q2 & Q3 & Q4 \\
@@ -76,5 +76,11 @@ FP8 (s) & 420.1 & 239.7 & 185.5 & 277.9 & 288.6 \\
 \end{center}
 
 Mean 299.6\,s (4-bit) vs.\ 282.4\,s (FP8): effectively the same pace --- FP8 is a fidelity check, not a speed-up (FP8 endpoints: MPR 0.75, ARR 0.60, CCR-e 0.0). Accuracy 2/5 vs.\ 4/5 at $n=5$ is noise in both directions and is not reported as a finding.
+
+\begin{landscape}
+\begin{center}
+\includegraphics[width=24cm,height=16cm,keepaspectratio]{core_figures.png}
+\end{center}
+\end{landscape}
 
 \end{document}
