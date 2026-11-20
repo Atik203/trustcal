@@ -252,6 +252,52 @@ def test_invalid_record_is_quarantined_not_appended(tmp_path) -> None:
     assert "empty string" in entries[0]["error"]
 
 
+def test_bad_question_quarantines_and_run_continues(tmp_path) -> None:
+    cfg = RunConfig(arm="B1", dataset="local", limit=3, seed=1, out_root=tmp_path)
+    questions = [
+        {"question": "Q0?", "answer": "42"},
+        {"question": "Bad?", "answer": ""},
+        {"question": "Q2?", "answer": "42"},
+    ]
+    summary = run(cfg, clients=[FakeClient("42")], questions=questions)
+    assert summary.n_debates == 2
+    entries = [
+        json.loads(line)
+        for line in (run_dir(cfg) / "quarantine.jsonl").read_text(encoding="utf-8").splitlines()
+    ]
+    assert [entry["question_id"] for entry in entries] == ["local-0001"]
+
+
+def test_resume_repairs_torn_line_and_requires_provenance_consent(tmp_path, monkeypatch) -> None:
+    import trustcal.runner as runner_module
+
+    cfg = RunConfig(arm="B1", dataset="local", limit=3, seed=1, out_root=tmp_path)
+    questions = [
+        {"question": "Q0?", "answer": "42"},
+        {"question": "Q1?", "answer": "42"},
+        {"question": "Q2?", "answer": "42"},
+    ]
+    run(cfg, clients=[FakeClient("42")], questions=questions)
+    path = records_path(cfg)
+    lines = path.read_text(encoding="utf-8").splitlines()
+    assert len(lines) == 3
+    path.write_text("\n".join(lines[:2]) + "\n" + lines[2][:20], encoding="utf-8")
+
+    monkeypatch.setattr(
+        runner_module,
+        "build_provenance",
+        lambda: {"provenance_hash": "changed", "provenance": {"code_commit": "changed"}},
+    )
+    with pytest.raises(ManifestMismatch, match="accept-provenance-change"):
+        run(cfg, clients=[FakeClient("42")], questions=questions)
+
+    cfg.accept_provenance_change = "test: resilience layer"
+    cfg.operator = "tester"
+    summary = run(cfg, clients=[FakeClient("42")], questions=questions)
+    assert summary.n_debates == 3
+    assert len(read_records(path)) == 3
+
+
 def test_injection_record_defaults_delivered_and_source(tmp_path) -> None:
     cfg = _cfg(tmp_path, arm="injection", rounds=2)
     clients = [FakeClient("beta"), FakeClient("beta"), FakeClient("alpha")]
