@@ -2,7 +2,47 @@
 
 Approved architecture, hardware, and environment decisions. Add an entry before confirmatory work when a decision changes the compute path, driver, CUDA version, or serving environment.
 
-## 2026-11-18 — Dedicated trustcal directory and $50 test-first tranche
+## 2026-11-19 - Pinned vLLM 0.34.0 and config-only stack validation
+
+**Status:** approved.
+
+**Decision:** the `fourbit` and `final` phases use **vLLM 0.34.0** from PyPI, not a nightly wheel. That release already contains `Qwen3_5ForConditionalGeneration`, `Gemma4ForConditionalGeneration`, `Gemma4UnifiedForConditionalGeneration`, `Mistral3ForConditionalGeneration`, and the `qwen3` reasoning parser. `VLLM_NIGHTLY=1` remains a fallback only.
+
+**Dependency alignment:** `huggingface_hub>=2.0,<3.0`, `transformers>=5.16.1,<5.23.0`, `datasets>=3.6,<6.0`, `sentence-transformers>=6.0,<7.0`. vLLM 0.34.0 pins `torch==2.14.0` and requires hub 2.x; the old `hub<2.0` / `transformers<5.17` pins were for vLLM 0.29.x and would either conflict or silently drift under `-U`.
+
+**Pre-download gate:** `setup.sh` runs `scripts/validate_stack.py --phase "$PHASE" --download-configs` after installing vLLM and before downloading weights. It checks architecture registration, quantization method vs. serve flag, every serve flag, the reasoning-parser name, the context window, and the checkpoint chat template using config/tokenizer files only (a few MB). A mismatch stops the session before 53GB of ingress.
+
+**Why:** a paid session must not depend on the day's nightly wheel or discover an incompatible checkpoint after the A100 clock starts. The 18GB slice is used to validate the same script on the exact checkpoint configs before the cloud run.
+
+## 2026-11-19 - Triton JIT needs Python.h on minimal images
+
+**Status:** approved.
+
+**Finding:** vLLM 0.34.0 starts, loads the checkpoint, then fails during `determine_available_memory` with `subprocess.CalledProcessError` from Triton's `driver.c` compile. The host has no `/usr/include/python3.12/Python.h`; the compiler error is hidden by Triton's `stdout=DEVNULL`.
+
+**Decision:** `scripts/python_headers.sh` resolves the interpreter's include directory, prepends it to `CPATH`, and if the headers are missing uses a user-local `uv python install` (no sudo) to obtain matching headers. `setup.sh` calls it before validation/download; `serve.sh` calls it before launching vLLM. If neither source works, both stop with a clear message instead of a cryptic engine-init failure.
+
+**Why:** this failure happens after the model is loaded, so on a paid host it burns setup time and looks like a model problem. The check is cheap and runs before the 53GB download.
+
+## 2026-11-19 - Retrieval reranking defaults to lexical
+
+**Status:** approved.
+
+**Finding:** `Retriever.retrieve()` called `verdicts.rerank()` without a scorer. `rerank()` tries `sentence-transformers` first, so a runner process on the same GPU as the three vLLM servers loaded `cross-encoder/ms-marco-MiniLM-L-6-v2` (105 weight tensors) and competed with the served models. On the 18 GB slice this produced CUDA OOM warnings during the Qwen3.8-27B B8 test; on the 80 GB matrix stack it would eat into the 8 GB non-vLLM headroom.
+
+**Decision:** `RetrievalConfig.rerank` defaults to `"lexical"` and passes an explicit lexical scorer into `rerank()`. `"cross-encoder"` and `"auto"` remain available for an intentional ablation. The lexical verifier already forced its own scorer; this makes the retriever match it and keeps the serving GPU for vLLM.
+
+**Why:** the pre-registered matrix declares the lexical verifier; a hidden cross-encoder changes passage ranking and adds GPU memory/latency that the cost model does not include.
+
+## 2026-11-19 - Retrieval source circuit breaker
+
+**Status:** approved.
+
+**Decision:** `RetrievalConfig.max_source_failures` defaults to 3. After three consecutive failures of one keyless source (PubMed, arXiv, Semantic Scholar, OpenAlex), the retriever skips that source for the rest of the run and records it in `routes.json` errors. A success resets the counter.
+
+**Why:** `sources._get_with_retry` can spend ~60s per failed query (20s timeout x 3 attempts). A dead Semantic Scholar endpoint could add tens of minutes to every B8/B4 debate, which is a direct GPU-cost risk. The breaker changes nothing when the APIs are healthy; when a source is already failing, the run records the degradation instead of silently paying for retries.
+
+## 2026-11-18 - Dedicated trustcal directory and $50 test-first tranche
 
 **Status:** approved.
 

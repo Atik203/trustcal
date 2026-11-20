@@ -1,5 +1,5 @@
 {
-  "snapshot": "2026-11-09",
+  "snapshot": "2026-11-19",
   "gate": "SciClaimBench 24-item calibration",
   "target_items": 24,
   "strata": {
@@ -7,23 +7,24 @@
     "physics_chemistry": 8,
     "math_cs": 8
   },
-  "items_authored": 0,
-  "items_unfilled": 24,
-  "claims_authored": 0,
-  "evidence_passages": 0,
+  "items_authored": 24,
+  "items_unfilled": 0,
+  "claims_authored": 216,
+  "evidence_passages": 234,
   "human_label_rows": 0,
-  "real_items": 0,
-  "placeholders": 24,
-  "note": "The 24 slots are unfilled; no item text, evidence, or human label exists.",
+  "real_items": 24,
+  "placeholders": 0,
+  "note": "24 candidate items drafted and schema-validated (8/8/8, 216 claims, 234 passages); blind sheets generated. No human verification, labels, adjudication, or defect review yet.",
   "target_kappa": 0.75,
   "max_defect_rate": 0.15,
   "max_unresolved_rate": 0.05,
   "max_h_attempt_hours": 2.0,
   "blocked": true,
   "blocked_on": [
-    "24 item stems, three positions, 3-6 atomic claims per position, and cited gold evidence must be authored by the team",
-    "two annotators have not labelled the claims",
-    "no adjudicator has filled adjudication.csv"
+    "author/editor must verify every claim, evidence link, locator, and candidate verdict",
+    "two annotators have not labelled the 216 claims in the blind sheets",
+    "no adjudicator has filled adjudication.csv",
+    "defect review and effort logging are not done"
   ],
   "files": {
     "protocol": "experiments/calibration/README.md",
@@ -31,7 +32,10 @@
     "template": "experiments/calibration/item.template.json",
     "seed_batch": "experiments/calibration/items.seed.jsonl",
     "validator": "experiments/calibration/validate_items.py",
-    "sheet_templates": "experiments/calibration/annotation/"
+    "sheet_templates": "experiments/calibration/annotation/",
+    "draft_batch": "experiments/calibration/private/calibration_items.jsonl",
+    "blind_sheets": "experiments/calibration/private/calibration/sheets/",
+    "annotator_guide": "experiments/calibration/private/ANNOTATOR_GUIDE.md"
   },
-  "next_command": "python experiments/calibration/validate_items.py check --items experiments/calibration/items.seed.jsonl --strict"
+  "next_command": "python experiments/calibration/validate_items.py score --rater1 experiments/calibration/private/calibration/sheets/rater1.csv --rater2 experiments/calibration/private/calibration/sheets/rater2.csv --adjudication experiments/calibration/private/calibration/sheets/adjudication.csv --effort experiments/calibration/private/calibration/sheets/effort.csv --min-kappa 0.75 --max-defect 0.15 --max-hours 2.0 --max-unresolved 0.05"
 }

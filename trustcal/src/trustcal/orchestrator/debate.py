@@ -21,6 +21,7 @@ or round 3.
 
 from __future__ import annotations
 
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
 from typing import Callable
 
@@ -93,6 +94,17 @@ class DebateRunner:
     seed: int = 0
     question_id: str | None = None
     gold: str | None = None
+    # Throughput: within one round the agents are independent (round N+1 reads
+    # round N, but agents within a round never read each other mid-round), so
+    # their LLM calls fan out over threads while result order stays identical
+    # to the serial loop. Each agent owns its VLLMClient (own httpx session)
+    # and its own seed, and each agent talks to a different model server, so
+    # there is no shared mutable state on this path. Retrieval fans out the
+    # same way; its shared caches are lock-guarded with idempotent inserts
+    # (pipeline.Retriever). Serial output is reproduced exactly; see
+    # test_debate_parallel.py. Kill-switch without a config change:
+    # TRUSTCAL_SERIAL=1 (runner) restores the serial loop for forensics.
+    parallel_calls: bool = True
     # WP-18 causal controls. Both default off so every released arm is unchanged.
     placebo_mode: str = "off"
     placebo_unit: str = DEFAULT_PLACEBO_UNIT
@@ -174,6 +186,30 @@ class DebateRunner:
             return list(self.retrieve(agent_index, claim))
         return []
 
+    def _complete_all(self, jobs: list[tuple[object, str, str]]) -> list[str]:
+        """One chat completion per ``(client, system, prompt)`` job.
+
+        Order-preserving: ``executor.map`` returns results in submission
+        order, so the positions list is identical to the serial loop's.
+        Single-job (or serial-mode) calls skip the pool entirely.
+        """
+        if not self.parallel_calls or len(jobs) <= 1:
+            return [client.complete(system, prompt) for client, system, prompt in jobs]
+        with ThreadPoolExecutor(max_workers=len(jobs)) as pool:
+            return list(pool.map(lambda job: job[0].complete(job[1], job[2]), jobs))
+
+    def _retrieve_all(self, tasks: list[tuple[int, str]], round_number: int) -> list[list[str]]:
+        """Passages for every ``(agent_index, claim)`` task, in task order.
+
+        The network-bound ``_passages`` calls fan out over a bounded pool;
+        verdict scoring stays serial in the caller, over these ordered
+        results, so records match the serial loop exactly.
+        """
+        if not self.parallel_calls or len(tasks) <= 1:
+            return [self._passages(i, claim, round_number) for i, claim in tasks]
+        with ThreadPoolExecutor(max_workers=min(len(tasks), 16)) as pool:
+            return list(pool.map(lambda task: self._passages(task[0], task[1], round_number), tasks))
+
     def _evidence_for(
         self,
         positions: list[str],
@@ -195,21 +231,35 @@ class DebateRunner:
         evidence: list[list[str]] = []
         verdicts: list[list[str]] = []
         verdict_records: list[dict] = []
-        for i, position in enumerate(positions):
-            claims = list(
-                dict.fromkeys(
-                    claim_texts(position, max_claims=self.trust_config.max_claims)
-                )
-            )
+        # Pass 1 (pure/local): per-agent deduplicated claims, in agent order.
+        per_agent_claims: list[list[str]] = [
+            list(dict.fromkeys(claim_texts(position, max_claims=self.trust_config.max_claims)))
+            for position in positions
+        ]
+        # Fan out the network-bound fetches; results come back in task order.
+        if self.oracle_mode == "gold_evidence":
+            fetched: list[list[str]] = []
+            for i in range(len(positions)):
+                fetched.append(list(gold_evidence_passages(self.gold_evidence, i)))
+        else:
+            fetch_tasks = [
+                (i, claim)
+                for i, claims in enumerate(per_agent_claims)
+                for claim in claims
+            ]
+            flat = self._retrieve_all(fetch_tasks, round_number)
+            fetched = []
+            it = iter(flat)
+            for claims in per_agent_claims:
+                fetched.append([next(it) for _ in claims])
+        # Pass 2 (serial, unchanged logic): select, judge, record.
+        for i, claims in enumerate(per_agent_claims):
             candidates: list[str] = []
             if self.oracle_mode == "gold_evidence":
-                # WP-18: same prompts and verifier, gold passages instead of
-                # retrieved ones. Never fall back to retrieval on a missing
-                # passage: __post_init__ rejects that configuration.
-                candidates.extend(gold_evidence_passages(self.gold_evidence, i))
+                candidates.extend(fetched[i])
             else:
-                for claim in claims:
-                    candidates.extend(self._passages(i, claim, round_number))
+                for shown_passages in fetched[i]:
+                    candidates.extend(shown_passages)
             shown = self._select_passages(candidates)
             agent_verdicts: list[str] = []
             agent_records: list[dict] = []
@@ -322,18 +372,21 @@ class DebateRunner:
         # The trust switch is a prompt slot (P0-13). The initial round has no
         # score yet, so it carries only the policy line when trust is enabled.
         initial_trust = trust_prompt_line(None, enabled=self.trust_config.use_trust)
-        positions = [
-            client.complete(
-                system,
-                AGENT_INITIAL.format(
-                    agent_id=i,
-                    question=question,
-                    options_block=rendered.block,
-                    trust_line=initial_trust,
-                ),
-            )
-            for i, (client, system) in enumerate(zip(self.clients, systems), start=1)
-        ]
+        positions = self._complete_all(
+            [
+                (
+                    client,
+                    system,
+                    AGENT_INITIAL.format(
+                        agent_id=i,
+                        question=question,
+                        options_block=rendered.block,
+                        trust_line=initial_trust,
+                    ),
+                )
+                for i, (client, system) in enumerate(zip(self.clients, systems), start=1)
+            ]
+        )
         transcript.append({"round": 1, "positions": positions})
 
         # P0-9: decide the injection once from round-1 answers. It is delivered
@@ -390,7 +443,7 @@ class DebateRunner:
                     )
 
             peers = "\n\n".join(f"Agent {i}: {p[:1500]}" for i, p in enumerate(positions, start=1))
-            new_positions = []
+            jobs: list[tuple[object, str, str]] = []
             for i, client in enumerate(self.clients, start=1):
                 score = float(trust.scores[i - 1])
                 line = trust_prompt_line(score, enabled=self.trust_config.use_trust)
@@ -430,8 +483,8 @@ class DebateRunner:
                 ):
                     prompt = prompt + "\n\n" + plan.message
                     delivered = True
-                new_positions.append(client.complete(systems[i - 1], prompt))
-            positions = new_positions
+                jobs.append((client, systems[i - 1], prompt))
+            positions = self._complete_all(jobs)
             transcript.append(
                 {
                     "round": r,

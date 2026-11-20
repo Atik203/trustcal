@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import pytest
+
 from .pipeline import RetrievalConfig, Retriever, StaticRetriever, evidence_block, select_evidence
 from .sources import ARXIV, MATH_CS, PUBMED, SEMANTIC_SCHOLAR, SearchResult
 
@@ -120,6 +122,25 @@ def test_cache_prevents_duplicate_requests() -> None:
     assert calls == [MATH_CLAIM]  # first source alone supplies top_k
 
 
+def test_default_rerank_is_lexical_not_cross_encoder(monkeypatch) -> None:
+    seen = []
+
+    def fake_rerank(claim, passages, top_k=3, scorer=None):
+        seen.append(scorer)
+        return [(passage, 1.0) for passage in passages][:top_k]
+
+    monkeypatch.setattr("trustcal.retrieval.pipeline.rerank", fake_rerank)
+    retriever = Retriever(search_fn=lambda source, query, top_k: [_result(source)])
+    retriever.retrieve(0, MATH_CLAIM)
+    # An explicit scorer means rerank() cannot silently load a GPU cross-encoder.
+    assert seen and seen[0] is not None
+
+
+def test_unknown_reranker_is_rejected() -> None:
+    with pytest.raises(ValueError, match="unknown rerank"):
+        RetrievalConfig(rerank="magic")
+
+
 def test_search_failure_is_isolated() -> None:
     def broken(source, query, top_k):
         raise RuntimeError("api down")
@@ -128,6 +149,25 @@ def test_search_failure_is_isolated() -> None:
     assert retriever.retrieve(0, MATH_CLAIM) == []
     assert len(retriever.errors) == 2
     assert "api down" in retriever.errors[0]
+
+
+def test_repeated_source_failures_trip_a_breaker() -> None:
+    calls: dict[str, int] = {}
+
+    def broken(source, query, top_k):
+        calls[source] = calls.get(source, 0) + 1
+        raise RuntimeError("api down")
+
+    retriever = Retriever(
+        search_fn=broken,
+        config=RetrievalConfig(max_source_failures=2),
+    )
+    for index in range(5):
+        retriever._search(ARXIV, f"claim {index}", 3)
+    # Two failures disable arXiv; the next three calls are free.
+    assert calls[ARXIV] == 2
+    assert ARXIV in retriever._dead_sources
+    assert any("skipped for the rest of the run" in error for error in retriever.errors)
 
 
 def test_static_retriever_and_evidence_block() -> None:

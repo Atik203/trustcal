@@ -17,11 +17,35 @@ from trustcal.config import PHASES, agents_for_phase, default_phase, load_models
 from trustcal.runner import ARMS, RunConfig, run  # noqa: E402
 
 
+def _out_root(args) -> Path:
+    """Keep standalone B8 variants out of the plain-B8 directory.
+
+    The matrix separates conditions by out_root already. The standalone CLI did
+    not, so ``--arm B8 --no-trust`` after a plain B8 run hit the manifest guard.
+    """
+    base = Path(args.out)
+    if args.arm != "B8":
+        return base
+    if args.no_trust:
+        return base / "B8-no-trust"
+    if args.placebo_mode != "off":
+        return base / f"B8-placebo-{args.placebo_unit}"
+    if args.oracle_mode != "off":
+        return base / f"B8-oracle-{args.oracle_mode}"
+    return base
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Run an experiment arm")
     parser.add_argument("--arm", required=True, choices=ARMS, help="B1-B10, pilot, or injection")
     parser.add_argument("--dataset", default="gpqa")
     parser.add_argument("--limit", type=int, default=10)
+    parser.add_argument(
+        "--stop-after",
+        type=int,
+        default=None,
+        help="pause after N new questions; the manifest keeps --limit, so the same row can resume",
+    )
     parser.add_argument("--seed", type=int, default=1)
     parser.add_argument("--rounds", type=int, default=3)
     parser.add_argument("--out", default="results")
@@ -75,9 +99,10 @@ def main() -> None:
         arm=args.arm,
         dataset=args.dataset,
         limit=args.limit,
+        stop_after=args.stop_after,
         seed=args.seed,
         rounds=args.rounds,
-        out_root=Path(args.out),
+        out_root=_out_root(args),
         model_config=args.config,
         questions_file=Path(args.questions_file) if args.questions_file else None,
         phase=args.phase,

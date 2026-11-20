@@ -24,9 +24,28 @@ from .config import (
 )
 
 MIN_FREE_GB = 10.0
+MIN_FREE_GB_BY_PHASE = {"dev": 30.0, "fourbit": 70.0, "final": 90.0}
 CHARS_PER_TOKEN = 4
 PEER_TRUNCATE_CHARS = 1500  # must match orchestrator/debate.py
 OWN_POSITION_EST_CHARS = 4096  # one generation at the 1024-token output cap
+
+
+def resolve_hf_home(explicit: Path | str | None = None) -> Path:
+    """The cache directory setup.sh and serve.sh use, in the same order.
+
+    A new shell does not inherit setup.sh's exports, so preflight must resolve
+    the same path itself or it reports a false cache miss on a perfectly good
+    pod. Keep this in sync with ``setup.sh`` and ``scripts/serve.sh``.
+    """
+    if explicit is not None:
+        return Path(explicit)
+    env = os.getenv("HF_HOME", "").strip()
+    if env:
+        return Path(env)
+    workspace = Path("/workspace")
+    if workspace.is_dir() and os.access(workspace, os.W_OK):
+        return workspace / ".cache" / "huggingface"
+    return Path.home() / ".cache" / "huggingface"
 
 
 @dataclass
@@ -60,18 +79,42 @@ def _cache_dir(hf_home: Path, model_id: str) -> Path:
     return Path(hf_home) / "hub" / f"models--{model_id.replace('/', '--')}"
 
 
+def _cache_state(path: Path) -> tuple[bool, str]:
+    """A snapshot is usable only with config + weights and no partial blobs.
+
+    ``hf download`` writes ``*.incomplete`` under ``blobs/`` until a file is
+    finished. Checking only "some file exists" (the old behaviour) let a killed
+    download pass preflight and fail later during vLLM startup — after the GPU
+    clock had started.
+    """
+    path = Path(path)
+    snapshots = path / "snapshots"
+    if not snapshots.is_dir():
+        return False, f"missing {snapshots}"
+
+    incomplete = list((path / "blobs").glob("*.incomplete"))
+    if incomplete:
+        return False, f"{len(incomplete)} incomplete blob(s) under {path / 'blobs'}"
+
+    for snapshot in sorted(snapshots.iterdir()):
+        if not snapshot.is_dir():
+            continue
+        if not (snapshot / "config.json").is_file():
+            continue
+        weights = list(snapshot.glob("*.safetensors")) + list(snapshot.glob("*.bin"))
+        if weights:
+            return True, str(snapshot)
+    return False, f"no snapshot with config.json + weight files under {snapshots}"
+
+
 def check_cache(agents: list[AgentConfig], hf_home: Path) -> list[CheckResult]:
-    """Model weights are already on disk — a miss means paid ingress on Vast."""
+    """Model weights are already on disk and complete — a miss means paid ingress."""
     results = []
     for agent in agents:
         name = f"cache:{agent.role}"
         path = _cache_dir(hf_home, agent.model)
-        snapshots = path / "snapshots"
-        has_files = snapshots.is_dir() and any(p.is_file() for p in snapshots.rglob("*"))
-        if has_files:
-            results.append(CheckResult(name, True, str(path)))
-        else:
-            results.append(CheckResult(name, False, f"missing under {path} — expect a re-download"))
+        ok, detail = _cache_state(path)
+        results.append(CheckResult(name, ok, detail if ok else f"{detail} — expect a re-download"))
     return results
 
 
@@ -129,12 +172,12 @@ def run_preflight(
     cfg: ModelConfig = load_models(model_config)
     selected = phase or default_phase()
     agents = agents_for_phase(cfg, selected)
-    home = Path(hf_home) if hf_home else Path(os.getenv("HF_HOME") or (Path.home() / ".cache" / "huggingface"))
+    home = resolve_hf_home(hf_home)
 
     results: list[CheckResult] = []
     results += check_servers(agents)
     results += check_cache(agents, home)
-    results.append(check_disk(home))
+    results.append(check_disk(home, MIN_FREE_GB_BY_PHASE.get(selected, MIN_FREE_GB)))
     results.append(check_context_budget(max_model_len_for_phase(cfg, selected), max_tokens))
     results.append(check_hf_token())
     results.append(check_offline(home, offline))

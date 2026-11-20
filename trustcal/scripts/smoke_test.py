@@ -17,6 +17,7 @@ any failed check so a bad stack never reaches the matrix.
 from __future__ import annotations
 
 import argparse
+import re
 import sys
 from pathlib import Path
 
@@ -69,6 +70,17 @@ def _resolve_modes(arm: str, placebo_mode: str, oracle_mode: str) -> tuple[str, 
     return placebo_mode, oracle_mode
 
 
+def _out_slug(label: str) -> str:
+    """A per-mode directory name.
+
+    B8, B8-placebo and B8-oracle all use runner arm ``B8``; without a distinct
+    out_root they would share ``results/smoke/B8/gpqa/seed1`` and the second
+    invocation would hit the manifest-mismatch guard. That is exactly the
+    sequence N1a runs, so the collision must be impossible.
+    """
+    return re.sub(r"[^a-z0-9]+", "-", label.lower()).strip("-") or "run"
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Model-swap smoke test on a small subset")
     parser.add_argument("--config", default="configs/models.yaml")
@@ -114,6 +126,12 @@ def main() -> int:
         if not all(check.ok for check in report):
             return 1
 
+    label = args.arm
+    if placebo_mode != "off":
+        label += f" ({placebo_mode})"
+    if oracle_mode != "off":
+        label += f" ({oracle_mode})"
+
     runner_arm = "injection" if args.arm == "injection" else "B8"
     try:
         cfg = RunConfig(
@@ -122,7 +140,7 @@ def main() -> int:
             limit=args.limit,
             seed=1,
             rounds=args.rounds,
-            out_root=Path(args.out),
+            out_root=Path(args.out) / _out_slug(label),
             model_config=args.config,
             phase=args.phase,
             questions_file=Path(args.questions_file) if args.questions_file else None,
@@ -134,11 +152,6 @@ def main() -> int:
         print(f"error: {exc}", file=sys.stderr)
         return 1
 
-    label = args.arm
-    if placebo_mode != "off":
-        label += f" ({placebo_mode})"
-    if oracle_mode != "off":
-        label += f" ({oracle_mode})"
     print(f"running {label} on {cfg.limit} items ({cfg.phase} stack)...", flush=True)
     run(cfg)
 

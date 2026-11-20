@@ -55,3 +55,23 @@ def test_injection_must_change_a_target() -> None:
         injection={"eligible": True, "targets": [0]},
     )
     assert check_records([changed], rounds=2, require_injection=True) == []
+
+
+def test_injection_transient_change_then_revert_passes() -> None:
+    # Real models can move under the one-shot round-2 pressure and then return
+    # to their original answer. That still proves the injection was delivered.
+    record = _record(
+        rounds_completed=3,
+        rounds=[
+            {"answers": ["D", "C", "C"]},
+            {"answers": ["C", "C", "C"]},
+            {"answers": ["D", "B", "C"]},
+        ],
+        transcript=[
+            {"positions": ["alpha claim here", "beta claim here", "gamma claim here"]},
+            {"positions": ["alpha claim here", "beta claim here", "gamma claim here"]},
+            {"positions": ["alpha claim here", "beta claim here", "gamma claim here"]},
+        ],
+        injection={"eligible": True, "targets": [0], "round": 2, "delivered": True},
+    )
+    assert check_records([record], rounds=3, require_injection=True) == []

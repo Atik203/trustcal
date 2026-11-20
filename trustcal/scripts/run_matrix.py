@@ -28,6 +28,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+import tempfile
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -36,9 +37,11 @@ import yaml
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from trustcal.config import PHASES, agents_for_phase, default_phase, load_models  # noqa: E402
+from trustcal.eval.datasets import DATASETS, load_dataset, revision_status  # noqa: E402
 from trustcal.eval.stats import summarize as summarize_values  # noqa: E402
 from trustcal.orchestrator import GOLD_EVIDENCE_DATASETS  # noqa: E402
-from trustcal.runner import ARMS, RunConfig, run  # noqa: E402
+from trustcal.preflight import format_report, run_preflight  # noqa: E402
+from trustcal.runner import ARMS, RunConfig, run, run_dir  # noqa: E402
 
 
 @dataclass
@@ -244,7 +247,67 @@ def _build_plan(matrix: Matrix, out_root: Path) -> list[tuple[dict, RunConfig]]:
 
 
 def _run_dir(cfg: RunConfig) -> Path:
-    return cfg.out_root / cfg.arm / cfg.dataset / f"seed{cfg.seed}"
+    return run_dir(cfg)
+
+
+def _validate_plan(plan: list[tuple[dict, RunConfig]]) -> list[str]:
+    """Offline checks that must pass before the first paid GPU-second.
+
+    The Full config currently names ``sciclaim_180``, whose loader entry is not
+    in ``eval.datasets`` yet. A dry run used to print 32 happy rows and the real
+    run then failed only after finishing the first four rows. This check turns
+    that into a pre-spend failure.
+    """
+    errors: list[str] = []
+    seen: set[tuple[str, str]] = set()
+    for condition, cfg in plan:
+        key = (condition["key"], cfg.dataset)
+        if key in seen:
+            continue
+        seen.add(key)
+        if cfg.dataset not in DATASETS:
+            errors.append(
+                f"{condition['key']}: dataset {cfg.dataset!r} has no loader entry "
+                "(add it to trustcal/eval/datasets.py and configs/datasets.yaml)"
+            )
+            continue
+        status = revision_status(cfg.dataset)
+        if status != "pinned":
+            errors.append(
+                f"{condition['key']}: dataset {cfg.dataset!r} revision status is "
+                f"{status!r}; every matrix dataset needs a 40-character commit SHA"
+            )
+        if cfg.oracle_mode == "gold_evidence" and cfg.dataset not in GOLD_EVIDENCE_DATASETS:
+            errors.append(
+                f"{condition['key']}: oracle_mode='gold_evidence' needs gold evidence; "
+                f"{cfg.dataset!r} is not one of {sorted(GOLD_EVIDENCE_DATASETS)}"
+            )
+    return errors
+
+
+def _prefetch_datasets(plan: list[tuple[dict, RunConfig]]) -> list[str]:
+    """Load one row of every planned dataset before the paid loop starts.
+
+    This proves gated access (GPQA/HLE) and the pinned revision actually work,
+    and it warms the Hugging Face cache. A few minutes of download is far
+    cheaper than discovering a 401 after the A100 has been rented.
+    """
+    failures: list[str] = []
+    seen: list[str] = []
+    for _, cfg in plan:
+        if cfg.dataset not in seen:
+            seen.append(cfg.dataset)
+    root = Path(tempfile.gettempdir()) / "trustcal-data-check"
+    for name in seen:
+        try:
+            load_dataset(
+                name,
+                sample_cap=1,
+                eligible_path=root / name / "eligible_n.json",
+            )
+        except Exception as exc:  # noqa: BLE001 - report every dataset, then stop
+            failures.append(f"{name}: {exc}")
+    return failures
 
 
 def _aggregate(rows: list[dict]) -> list[dict]:
@@ -318,6 +381,21 @@ def main() -> int:
     parser.add_argument("--seed", type=int, default=None, help="run only this seed")
     parser.add_argument("--phase", choices=PHASES, default=None, help="model stack; defaults to config phase")
     parser.add_argument("--dry-run", action="store_true", help="print planned rows; write nothing")
+    parser.add_argument(
+        "--skip-preflight",
+        action="store_true",
+        help="skip server/cache/disk/HF-token checks (mock or local runs only)",
+    )
+    parser.add_argument(
+        "--skip-data-check",
+        action="store_true",
+        help="skip the one-row dataset load before the paid loop",
+    )
+    parser.add_argument(
+        "--fail-fast",
+        action="store_true",
+        help="stop at the first failed row instead of continuing the matrix",
+    )
     args = parser.parse_args()
 
     try:
@@ -326,6 +404,13 @@ def main() -> int:
         plan = _build_plan(matrix, out_root)
     except (OSError, ValueError) as exc:
         print(f"error: {exc}", file=sys.stderr)
+        return 1
+
+    plan_errors = _validate_plan(plan)
+    if plan_errors:
+        print("error: the plan cannot run as configured:", file=sys.stderr)
+        for message in plan_errors:
+            print(f"  - {message}", file=sys.stderr)
         return 1
 
     stack = " / ".join(a.model for a in agents_for_phase(load_models("configs/models.yaml"), matrix.phase))
@@ -339,8 +424,25 @@ def main() -> int:
                 f"{condition['key']:<12} {cfg.arm:<10} {cfg.dataset:<12} "
                 f"{cfg.seed:>4} {cfg.limit:>6}  {_run_dir(cfg)}"
             )
+        print("dataset/loader checks: OK")
         print("nothing written")
         return 0
+
+    if not args.skip_preflight:
+        report = run_preflight(model_config="configs/models.yaml", phase=matrix.phase)
+        print(format_report(report))
+        if not all(check.ok for check in report):
+            print("error: preflight failed; no matrix row was started", file=sys.stderr)
+            return 1
+
+    if not args.skip_data_check:
+        data_errors = _prefetch_datasets(plan)
+        if data_errors:
+            print("error: dataset check failed; no matrix row was started:", file=sys.stderr)
+            for message in data_errors:
+                print(f"  - {message}", file=sys.stderr)
+            return 1
+        print("dataset check: OK (one row loaded per planned dataset)")
 
     rows: list[dict] = []
     errors: list[dict] = []
@@ -362,6 +464,9 @@ def main() -> int:
                 }
             )
             print(f"error: {cfg.arm} / {cfg.dataset} / seed{cfg.seed}: {exc}", file=sys.stderr, flush=True)
+            if args.fail_fast:
+                print("fail-fast: stopping the matrix after the first failed row", file=sys.stderr, flush=True)
+                break
             continue
         metrics = summary.as_dict()
         rows.append(

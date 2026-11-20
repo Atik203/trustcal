@@ -1,0 +1,82 @@
+% Supervisor progress report — Group 6, Team Phantom Devs.
+% Title below is the paper title (2026-11); the registered FYDP title and the
+% reason for the change are noted under the heading, per docs/title_rationale.md.
+% Compile: pdflatex main.tex (twice for references).
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=2cm]{geometry}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\setlist{topsep=2pt,itemsep=2pt}
+\hypersetup{colorlinks=true,linkcolor=blue,urlcolor=blue}
+\setlength{\parskip}{4pt}
+\setlength{\parindent}{0pt}
+\pagestyle{plain}
+
+\begin{document}
+
+\begin{center}
+{\large\bfseries The Boundaries of Evidence-Grounded Trust in Multi-Agent Scientific Debate, with a Controlled Benchmark for Sycophantic Consensus\par}
+\vspace{4pt}
+{\normalsize Supervisor Progress Report --- Group 6 \textperiodcentered\ Team Phantom Devs --- 20 November 2026\par}
+\end{center}
+\vspace{2pt}
+\hrule
+\vspace{6pt}
+
+\textit{On the title.} The registered FYDP title is ``Trust-Calibrated Multi-Agent Scientific Deliberation for Mitigating Sycophantic Consensus in LLM Reasoning'' and stays on the FYDP cover until a change is approved. The paper title above is used here because the registered title promises a mitigation (``for Mitigating'') the experiments have not yet measured. The paper's defensible contribution is narrower: it formalises \emph{when} evidence-grounded trust helps and when it amplifies a wrong majority, builds a controlled benchmark for the failure, and tests the sign reversal. The paper title states that contribution without claiming an unmeasured efficacy result.
+
+\section*{1. Project update}
+
+Three heterogeneous LLMs answer the same scientific multiple-choice question, read one another's reasoning over three rounds, and revise. The treatment arm (B8) aggregates the final answer with trust weights computed from how well each agent's claims check out against retrieved external evidence (PubMed, arXiv, Semantic Scholar); the control arm (B8-no-trust) runs identical prompts, evidence, and source partitioning but aggregates by majority vote. The failure under study is \emph{sycophantic consensus}: a confidently wrong majority pressures a correct minority agent into agreeing, after which the vote records the wrong answer as consensus. The confirmatory endpoints (accuracy and Correct-Minority Retention on pressure-eligible items) are frozen in the pre-registration; no result below claims them.
+
+\section*{2. Results}
+
+\textbf{Engineering gates (readiness, not findings).} P0 gate 13/13 passed; 639 local tests green. University 18\,GB slice checks (one 8--9\,B model plus two mocks; Q4\_K\_M main-model templates) return schema-valid records. These prove the pipeline is built correctly; they say nothing about whether trust-weighting works.
+
+\textbf{N1a 4-bit cloud smoke: passed.} The full 53\,GB three-model 4-bit stack serves together; every harness path runs end to end (5 debates each):
+
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+Arm & Records & Mean time \\
+\midrule
+B8 & 5/5 valid & 299.6 s/debate \\
+Injection & 5/5 valid & 137.3 s/debate \\
+B8-placebo & 5/5 valid & 258.1 s/debate \\
+B8-oracle & 4/4 valid & $\sim$280 s/debate \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Core prefix 25\,+\,25: complete.} The first 25 questions of the actual Core B8 row and the first 25 of the Core control row, run with checkpointing so the work counts toward Core rather than being thrown away:
+
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+Arm & Accuracy & 95\% CI & Mean time \\
+\midrule
+B8 (trust-weighted) & 0.64 (16/25) & 0.44--0.84 & 245.5 s/debate \\
+Control (majority) & 0.56 (14/25) & 0.36--0.76 & 185.5 s/debate \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+CIs are question-clustered percentile bootstrap. The intervals overlap almost completely and the two-observation gap (16 vs.\ 14) is noise; pressure-eligible endpoints are mostly not applicable with no pressure arms in the prefix. This is a feasibility and timing sample, not an efficacy result.
+
+\textbf{FP8 precision smoke: passed.} The 73.68\,GB FP8 stack serves all three models together (5/5 valid records, 3 rounds). Same 5 questions as the 4-bit smoke, so the pace is directly comparable:
+
+\begin{center}
+\begin{tabular}{lccccc}
+\toprule
+ & Q0 & Q1 & Q2 & Q3 & Q4 \\
+\midrule
+4-bit (s) & 414.9 & 297.2 & 272.4 & 285.4 & 228.0 \\
+FP8 (s) & 420.1 & 239.7 & 185.5 & 277.9 & 288.6 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Mean 299.6\,s (4-bit) vs.\ 282.4\,s (FP8): effectively the same pace --- FP8 is a fidelity check, not a speed-up. Accuracy 2/5 vs.\ 4/5 at $n=5$ is noise in both directions and is not reported as a finding.
+
+\end{document}

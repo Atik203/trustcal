@@ -107,8 +107,11 @@ def test_fourbit_agent_flags_match_their_architectures() -> None:
     assert gemma.quant == "compressed-tensors"
     assert "--limit-mm-per-prompt" in gemma.extra_args
     assert '"image": 0' in " ".join(gemma.extra_args)
-    assert '"audio": 0' in " ".join(gemma.extra_args)
-    assert mistral.quant == "auto"
+    # 26B A4B is text+image; it has no audio encoder, so an audio key is wrong.
+    assert '"audio": 0' not in " ".join(gemma.extra_args)
+    assert mistral.quant == "compressed-tensors"
+    assert "--limit-mm-per-prompt" in mistral.extra_args
+    assert '"image": 0' in " ".join(mistral.extra_args)
 
 
 def test_fourbit_weights_fit_80gb_and_leave_kv_headroom() -> None:

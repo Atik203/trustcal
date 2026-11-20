@@ -27,6 +27,12 @@ elif ! command -v python3 >/dev/null 2>&1; then
   PY_CMD=python
 fi
 
+# Triton compiles a driver helper at vLLM startup. A minimal image without
+# python3-dev fails there after the model is loaded; resolve it before launch.
+# shellcheck source=scripts/python_headers.sh
+. "$(dirname "$0")/python_headers.sh"
+trustcal_ensure_python_headers "$PY_CMD" || exit 1
+
 CMD_FILE=$(mktemp)
 trap 'rm -f "$CMD_FILE"' EXIT
 if [ -z "${PHASE:-}" ]; then
@@ -75,7 +81,7 @@ while IFS= read -r cmd; do
   echo "launched :$PORT (pid $PID) — waiting for readiness (log: $LOG)"
   READY=0
   for _ in $(seq 1 60); do
-    if curl -sf -m 3 "http://localhost:${PORT}/v1/models" >/dev/null 2>&1; then READY=1; break; fi
+    if curl -sf -m 3 "http://127.0.0.1:${PORT}/v1/models" >/dev/null 2>&1; then READY=1; break; fi
     kill -0 "$PID" 2>/dev/null || break
     sleep 10
   done

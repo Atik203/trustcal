@@ -10,17 +10,22 @@
 #   HF_TOKEN=hf_... VENV=1 bash setup.sh             # recommended when the image
 #                                                    # blocks system pip (PEP 668)
 #
-# Does, in order: checks Python + GPU → installs pinned deps → installs nightly
-# vLLM (gemma4_unified needs it) → installs trustcal editable → downloads the
+# Does, in order: checks Python + GPU + disk → installs pinned deps → installs
+# pinned vLLM 0.34.0 → installs trustcal editable → validates every checkpoint's
+# architecture/quant/flags/chat template using config files only → downloads the
 # checkpoints for PHASE (pinned revisions from configs/models.yaml) → starts vLLM
 # on :8000-8002 → verifies imports, versions and server health.
+#
+# The validation step is the important one: it fails BEFORE the 53GB download if
+# a checkpoint or serve flag is incompatible with the installed vLLM.
 #
 # Options:  PHASE=dev|fourbit|final  model stack (default dev)
 #           VENV=1          create .venv and install everything into it (recommended
 #                           on Thunder Compute; on RunPod the system env is fine)
 #           SKIP_SERVE=1   install + download only (no servers)
 #           SKIP_MODELS=1  install only (skip model downloads)
-#           CUDA_TAG=cu130|cu129  override the auto-detected vLLM wheel index
+#           SKIP_VALIDATE=1 skip the config-only stack validation
+#           CUDA_TAG=cu130|cu129  override the auto-detected torch wheel index
 # ─────────────────────────────────────────────────────────────────────────────
 set -euo pipefail
 cd "$(dirname "$0")"
@@ -88,12 +93,38 @@ else
   echo "WARN: HF_TOKEN not set — gated downloads (GPQA dataset) will fail."
 fi
 
-# ── 3) Install pinned deps + nightly vLLM + the package itself ──────────────
+# Disk is the second paid-session killer after a bad checkpoint: a 100GB Vast
+# disk has ~90GB free, which is enough for fourbit but not for final + results.
+"$PY_CMD" - "$PHASE" "$HF_HOME" <<'PY'
+import shutil, sys
+need = {"dev": 35.0, "fourbit": 65.0, "final": 85.0}[sys.argv[1]]
+free = shutil.disk_usage(sys.argv[2]).free / 1e9
+print(f"disk: {free:.1f}GB free (need >= {need:.0f}GB for {sys.argv[1]})")
+raise SystemExit(0 if free >= need else 1)
+PY
+
+# ── 3) Install pinned deps + pinned vLLM + the package itself ───────────────
 "$PY_CMD" -m pip install --upgrade pip >/dev/null
 "$PY_CMD" -m pip install -r requirements.txt
 bash scripts/install_vllm.sh
 "$PY_CMD" -m pip install -e . --no-deps
+"$PY_CMD" -m pip check
 echo "Deps installed."
+
+# Triton JIT needs Python.h. Resolve it now, not after a 53GB download and a
+# cryptic "Engine core initialization failed" at server startup.
+# shellcheck source=scripts/python_headers.sh
+. scripts/python_headers.sh
+trustcal_ensure_python_headers "$PY_CMD" || exit 1
+
+# ── 3b) Validate the exact stack BEFORE downloading 53GB of weights ─────────
+# Downloads config/tokenizer/chat-template files only. If an architecture,
+# quantization method, serve flag or reasoning parser is incompatible with this
+# vLLM release, the script stops here instead of after a long paid download.
+if [ "${SKIP_VALIDATE:-0}" != "1" ]; then
+  echo "Validating checkpoints and serve flags (config files only) ..."
+  "$PY_CMD" scripts/validate_stack.py --config configs/models.yaml --phase "$PHASE" --download-configs
+fi
 
 # ── 4) Download the checkpoints for PHASE (pinned revisions) ─────────────────
 hf_download() {
@@ -130,8 +161,9 @@ if [ "${SKIP_SERVE:-0}" != "1" ]; then
   nohup bash scripts/serve.sh > results/vllm.log 2>&1 &
   echo $! > results/vllm.pid
 
-  # wait for the three servers (up to 10 minutes — quantized first load is slow)
-  for i in $(seq 1 60); do
+  # wait for the three servers (up to 30 minutes — serve.sh loads quantized
+  # models sequentially, and a cold 27B checkpoint can take several minutes)
+  for i in $(seq 1 180); do
     if "$PY_CMD" scripts/verify_env.py --check-servers >/dev/null 2>&1; then break; fi
     sleep 10
   done

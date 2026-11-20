@@ -45,13 +45,19 @@ def check_records(records: list[dict], rounds: int, require_injection: bool = Fa
                 if not targets:
                     failures.append(f"{qid}: injection eligible but no targets")
                 else:
+                    # The injection is a one-shot round-2 message. A model can
+                    # change under it and then revert by round 3; that is still
+                    # proof the message was delivered and acted on. Check any
+                    # round at or after delivery, not only the final round.
                     first_answers = (entries[0].get("answers") if entries else []) or []
-                    last_answers = (entries[-1].get("answers") if entries else []) or []
+                    injection_round = int(injection.get("round") or 2)
+                    post_rounds = entries[max(0, injection_round - 1):] if entries else []
                     changed = any(
                         i < len(first_answers)
-                        and i < len(last_answers)
-                        and first_answers[i] != last_answers[i]
+                        and i < len(entry.get("answers") or [])
+                        and first_answers[i] != entry["answers"][i]
                         for i in targets
+                        for entry in post_rounds
                     )
                     if not changed:
                         failures.append(f"{qid}: injection did not change any targeted agent")

@@ -4,7 +4,7 @@ Phase-by-phase execution plan for **November 2026 – December 2027**. This file
 
 **Paper title:** *The Boundaries of Evidence-Grounded Trust in Multi-Agent Scientific Debate, with a Controlled Benchmark for Sycophantic Consensus.*
 
-**Current release (18 November 2026):**
+**Current status (20 November 2026):**
 
 | Item | Value |
 |---|---|
@@ -21,9 +21,11 @@ Phase-by-phase execution plan for **November 2026 – December 2027**. This file
 | Final stack (FP8) | Qwen3.8-27B-FP8 / Gemma-4-26B-A4B-FP8 / Mistral-24B-AWQ, **73.68 GB** pinned |
 | University GPU | `uiu-h200`, H200 MIG `1g.18gb`, 18 GB, driver `580.178.04`, CUDA `13.5` |
 | 18 GB cache | vLLM 0.33.0 and 8–9B AWQ checkpoints in the existing `tool-observation` project; shared read-only |
-| Cloud smoke | **NOT RUN** — 4-bit 80 GB and FP8 96 GB paths both unproven on hardware |
+| 4-bit smoke (N1a) | **PASS 20 Nov 2026** — three 24–27B 4-bit models on 96 GB spot hosts (vLLM 0.34.0); B8, injection, placebo 5/5; oracle 4/4 valid (5th lost to a spot eviction) |
+| Core prefix | **25+25 COMPLETE 20 Nov 2026** — `gpqa_main` seed 1, B8 vs B8-no-trust; feasibility/timing only, not efficacy |
+| FP8 smoke (N1b) | **IN PROGRESS** — 73.68 GB stack downloaded; serving fixes applied; no result yet |
 
-**P0 is engineering readiness, not efficacy evidence.** No accuracy, CMR, or sign-reversal claim exists yet. The first claim waits for the pilot and Core run.
+**P0 is engineering readiness, not efficacy evidence.** No accuracy, CMR, or sign-reversal claim exists yet. The 25+25 Core prefix (+0.08 at n=25) is a feasibility/timing gate, not an efficacy result.
 
 ---
 
@@ -155,6 +157,8 @@ Run **one model at a time** with llama.cpp, `--ctx-size 4096`, q8 KV cache, and 
 
 **Status (18 Nov 2026):** PASS for the 8–9B vLLM trio and the Q4_K_M main templates. 8–9B: Qwen3.5-9B 26.3 s / 13,880 MiB; Ministral-8B 37.5 s / 15,461 MiB; Llama-3.1-8B 27.2 s / 15,666 MiB. Q4_K_M: Qwen3.8-27B 145.8 s / 15,796 MiB; Gemma 4 26B 58.9 s / 3,384 MiB with `-cmoe`; Mistral 24B 74.6 s / 14,018 MiB. All schema valid. See [`experiments/n1_smoke/README.md`](experiments/n1_smoke/README.md).
 
+**Status (19 Nov 2026, pre-N1a revalidation):** PASS. Dedicated venv with vLLM 0.34.0 / torch 2.14.0+cu130 / transformers 5.22.2; `validate_stack.py` passed all three exact 4-bit checkpoint configs (architecture, quant, flags, parser, context, chat template); GPQA/MMLU-Pro/HLE loaded at pinned revisions; one real model + two mocks passed B3, B8, injection, placebo, and gold-answer oracle; Qwen3.8-27B Q4_K_M B8 passed at 62.3 s / 15,786 MiB; `--stop-after` prefix/resume works; **633 tests + P0 13/13** on the host. Two latent cloud failures were fixed: missing `Python.h` for Triton and a hidden GPU cross-encoder in retrieval. See the same README.
+
 **Cost:** $0 GPU. Time and university bandwidth only.
 
 ### N1a — 4-bit three-model cloud smoke (Nov–Dec 2026)
@@ -165,14 +169,21 @@ Run **one model at a time** with llama.cpp, `--ctx-size 4096`, q8 KV cache, and 
 cd trustcal
 PHASE=fourbit bash setup.sh
 python scripts/check_stack.py --phase fourbit
+python scripts/validate_stack.py --phase fourbit --offline
 python scripts/preflight.py --phase fourbit --offline
 python scripts/verify_env.py --check-servers
-python scripts/smoke_test.py --phase fourbit --limit 5
+python scripts/run_matrix.py --config configs/experiments_fourbit.yaml --dry-run
+python scripts/smoke_test.py --phase fourbit --limit 5 --arm B8
+python scripts/smoke_test.py --phase fourbit --limit 5 --arm injection
+python scripts/smoke_test.py --phase fourbit --limit 5 --arm B8-placebo
+python scripts/smoke_test.py --phase fourbit --limit 5 --arm B8-oracle
 ```
 
-**Acceptance:** three `server OK` lines; 5-question smoke PASS; peak `nvidia-smi` and per-model weights recorded. Run this in the same session as the pilot when possible.
+**Acceptance:** three `server OK` lines; all four smoke invocations PASS; every model has a completed 5-question run; `nvidia-smi` peak and per-model weights recorded. `B8-oracle` here uses `gold_answer` because GPQA has no gold evidence; the `gold_evidence` oracle is SciClaimBench-only and stays covered by the mock/P0 test until that dataset is frozen.
 
-**Cost:** 4–8 GPU-h, **$1–2** at $0.136/h.
+**Status (20 Nov 2026): PASS.** Three 24–27B 4-bit models on RTX PRO 6000 96 GB spot hosts, vLLM 0.34.0. B8 5/5 PASS (per-debate 414.9, 297.2, 272.4, 285.4, 228.0 s; accuracy 0.40); injection 5/5 PASS (129.2, 151.7, 105.3, 140.7, 159.6 s; one item showed a transient D→C→D change under injection, which motivated a fixed smoke check); B8-placebo 5/5 PASS (299.9, 255.4, 177.5, 265.8, 292.0 s); B8-oracle 4/4 valid records, all final answers correct (5th record lost to a spot eviction, not rerun). Local mirror: `trustcal/results/n1a/` (gitignored). Full per-arm record: `experiments/core_prefix/README.md`.
+
+**Cost:** 4–8 GPU-h, **$1–2** at $0.136/h. Do not add the separate $15–20 100–150-question pilot; use the Core-prefix gate (`§14.1`) after the smoke.
 
 ### N1b — FP8 final-stack smoke and precision (Feb 2027)
 
@@ -191,6 +202,8 @@ Then run `configs/experiments_precision.yaml`.
 
 **Acceptance:** three FP8 servers OK; precision result recorded; no FP8 precision claim before this.
 
+**Status (20 Nov 2026): IN PROGRESS.** 96 GB host; 73.68 GB stack downloaded; serving fixes for KV-cache sizing applied. No FP8 result yet; do not cite one.
+
 **Cost:** 5-question smoke **$2–8** all-in; full precision replication **$25–40**. Do not run the precision replication with the current $50 tranche.
 
 ---
@@ -205,9 +218,10 @@ Then run `configs/experiments_precision.yaml`.
 - `B8-oracle`: gold-evidence-only on SciClaimBench by default; gold-answer trust is the 36-row alternate.
 - 32-row Full default; 36-row alternate.
 - Full config hash recorded in v1.3.
-- If the team wants the $400 path, add a **Core → Full subset-reuse** amendment before Core/Full unblinding.
+- **Full is blocked until `sciclaim_180` exists in both `eval/datasets.py` and `configs/datasets.yaml`.** The current `run_matrix.py --config configs/experiments_full.yaml --dry-run` fails offline plan validation by design.
+- If the team wants the $400 path, add a **new v1.5** Core → Full subset-reuse amendment: Full `gpqa_main: 400`, `mmlu_pro: 400`, `sciclaim_180: 300`, plus a new config hash. The current v1.3 draft uses 300/dataset and does not assume reuse. (v1.4 is the frozen B7-provider erratum.)
 
-**Acceptance:** v1.3 signed; mock placebo/oracle records validate; `run_matrix.py --dry-run` shows 24 Core and 32/36 Full rows; no change to the 13/13 gate.
+**Acceptance:** v1.3 signed; mock placebo/oracle records validate; Core dry-run shows 24 rows; Full dry-run shows 32/36 rows **after** the SciClaimBench loader entry exists; no change to the 13/13 gate.
 
 ---
 
@@ -289,12 +303,12 @@ Then run `configs/experiments_precision.yaml`.
 
 ### Core → Full subset reuse (conditional)
 
-- Full 32 rows = 24 core + 6 placebo + 2 oracle.
-- Reusable GPQA + MMLU-Pro core rows: **16 rows**.
-- New Full work: 8 SciClaimBench core rows + 6 placebo + 2 oracle = **16 rows / 4,800 debates / 640 GPU-h**.
+- Full 32 rows = 24 core-arm rows + 6 placebo + 2 oracle.
+- Reusable rows: **16** (4 core arms × 2 datasets × 2 seeds), **only if** Full `gpqa_main` and `mmlu_pro` caps are **400**, with the same model revisions, prompts, dataset revisions, seeds, flags, and `limit`.
+- **A 300-item Full sample is not a subset of the 400-item Core sample.** `stratified_sample` uses different per-stratum allocations and independent draws, `question_id` indexes shift, and the manifest includes `limit`; the runner refuses to resume across caps. Reuse is an exact-row identity, not a subset extraction.
+- New Full work: 8 SciClaimBench core rows (300) + 6 placebo (300) + 2 oracle (300) = **16 rows / 4,800 debates / 640 GPU-h**.
 - Full incremental cost: **~$104** instead of $210; saving **~$106**.
-- Conditions: same model revisions, prompts, dataset revision, seeds, and deterministic sample order; Full 300 must be a subset of Core 400.
-- Must be pre-registered in v1.3 before unblinding. If not signed, Full is a full 32-row run at $210.
+- Must be pre-registered in a **new v1.5** before unblinding, with the new config hash. The current v1.3 draft uses 300/dataset and says it does not assume reuse. If v1.5 is not signed, Full is a full 32-row run at $210.
 
 **G4/G5 pass:** placebo does not match B8; oracle separates; the sign reversal appears at the predicted q/ρ boundary; one external-validity check replicates the sign.
 
@@ -347,11 +361,18 @@ Then run `configs/experiments_precision.yaml`.
 | Priority | Item | Cost | Rule |
 |---|---|---:|---|
 | 1 | 18 GB test-only validation | **$0** | 8–9B AWQ one at a time; optional Q4_K_M main template |
-| 2 | 80 GB A100 4-bit smoke | **$1–2** | Must pass before pilot |
-| 3 | 80 GB A100 pilot | **$15–20** | Run in the same session as the smoke |
-| 4 | 96 GB 5-question smoke | **$2–8** | Optional; only after the 80 GB pilot is stable |
-| — | Reserve for retries/bandwidth | **$20–30** | Do not spend on 96 GB pilot/precision |
-| — | **Total** | **$18–30** | Leaves a real buffer |
+| 2 | 80 GB A100 4-bit smoke | **$1–2** | **PASS 20 Nov 2026** — ran on 96 GB spot hosts (same 4-bit stack, vLLM 0.34.0); B8/injection/placebo 5/5, oracle 4/4 valid |
+| 3 | Core-prefix gate: first 25–50 questions of the Core B8 and B8-no-trust rows | **~$1–2** | **COMPLETE 20 Nov 2026 — 25+25** (`gpqa_main` seed 1, same 4-bit stack); B8 accuracy 0.64 (16/25), control 0.56 (14/25); feasibility/timing only |
+| 4 | Optional 25-question injection mini-gate | **<$1** | Not needed — prefix ran clean; run only if a later prefix is inconclusive |
+| 5 | Optional 96 GB 5-question smoke | **$2–8** | **IN PROGRESS 20 Nov 2026** — FP8 stack downloaded, serving fixes applied, no result yet |
+| — | Reserve for retries/bandwidth | **$35–45** | Do not spend on 96 GB pilot/precision |
+| — | **Total** | **$5–15** | Leaves a real buffer |
+
+**Pilot replacement.** The old **$15–20 / ~112 GPU-h pilot** was a 100–150-question calibration run, not the 25-item Month-1 criterion. It duplicated questions Core will run anyway. Replace it with the **Core-prefix gate**: run the first 25–50 questions of the actual Core `B8` and `B8-no-trust` rows with `--limit 400 --stop-after N`, compare paired winners, and resume the same rows only if trust changes the outcome in the correct direction. The prefix is part of Core, so the gate adds no separate GPU spend. The Month-1 25-item toy pilot remains a v1.0 requirement, but its questions file is not authored; if the team wants it, it costs <$1, not $15–20.
+
+**Core-prefix result (20 Nov 2026).** `gpqa_main` seed 1, 25 debates per arm on the same 4-bit stack: B8 (trust-weighted) 25/25 unique records, accuracy 0.64 (16/25, 95% CI 0.44–0.84), MPR 0.790, MPR-weighted 0.64, ARR 0.722 (n=18), CCR 0.0 (0 exposed cases — expected, no pressure arms), CCR-e 0.133 (2/15), trust AUROC 0.568 (n=11), Brier 0.278, mean 245.5 s/debate (median 257.2); B8-no-trust (majority) 25/25 unique, accuracy 0.56 (14/25, CI 0.36–0.76), MPR 0.75, ARR 0.714, mean 185.5 s/debate. No duplicates, no torn lines. The +0.08 prefix delta at n=25 is noise — record as feasibility/timing, NOT efficacy. Mean ~4.1 min (B8) / ~3.1 min (control) per debate puts the full 2-seed Core at ~470 GPU-hours, ~$400–460 on an $0.80–0.86/h A100 80 GB on-demand, inside the $600 hard stop. Local mirror: `trustcal/results/n1a/` (gitignored). Full record: `experiments/core_prefix/README.md`.
+
+**Next gates.** Parallel-code verification (order-preserving threaded calls; `TRUSTCAL_SERIAL=1` restores the serial loop), then Core tranche 1 on the next top-up. Funding arrives in ~$30 top-ups; the $600 hard stop stands. Host rental rules live in `AGENTS.md` ("Cloud GPU rental"); the host ledger is `docs/agent/08_COMPUTE_COST.md` Appendix B.
 
 **Do not run with $50:**
 
@@ -366,7 +387,7 @@ Then run `configs/experiments_precision.yaml`.
 |---|---:|---:|
 | 18 GB dev validation | — | **$0** |
 | 4-bit 80 GB smoke | 4–8 | **$1–2** |
-| Pilot | ~112 | **$15–20** |
+| N5/G2 calibration pilot (optional; replaced by the Core prefix) | ~112 | **$15–20** |
 | Core | 1,280 cap (planned ~1,067) | **$175–210** |
 | Full 32-row default | 1,280 | **$210** |
 | Full 36-row alternate | 1,440 | **$235** |
@@ -384,15 +405,17 @@ With the free 18 GB tests and a signed Core → Full subset-reuse amendment:
 |---|---:|
 | 18 GB tests | $0 |
 | 4-bit smoke | $1–2 |
-| Pilot | $15–20 |
+| Core-prefix gate | $0 extra (part of Core) |
 | Core | $175–210 |
-| Full incremental | ~$104 |
+| Full incremental (16 reused rows) | ~$104 |
 | 96 GB FP8 smoke | $2–8 |
 | FP8 precision replication | $25–40 |
 | Storage | $40–60 |
-| **Total** | **~$360–450** |
+| **Total** | **~$345–445** |
 
 Under $400 is possible with Core at the low end, storage around $40–60, and the A100 at $0.136/GPU-h. The **$500–600** envelope remains approved; the $400 path is a planning option only after the reuse amendment is signed.
+
+**Reuse is not authorized by the current v1.3 draft.** That draft sets Full to 300 items/dataset and says the envelope "does not assume reuse." Core uses 400/400/200. No row matches, so the 16-row reuse above requires a **new signed amendment (v1.5)** that sets Full `gpqa_main: 400`, `mmlu_pro: 400`, `sciclaim_180: 300`, adds the SciClaimBench loader, and records the new config hash. (v1.4 is the frozen B7-provider erratum.) Until then, budget Full at **$210** and the plan at **~$440–530**.
 
 ### 14.4 Bandwidth discipline
 

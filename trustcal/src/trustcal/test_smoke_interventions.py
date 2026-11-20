@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import argparse
 import sys
 from pathlib import Path
 
@@ -10,6 +11,7 @@ import pytest
 ROOT = Path(__file__).resolve().parents[2]  # trustcal/
 sys.path.insert(0, str(ROOT / "scripts"))
 
+import run_experiment  # noqa: E402
 import smoke_test  # noqa: E402
 
 
@@ -58,3 +60,34 @@ def test_explicit_flags_work_on_plain_b8() -> None:
 def test_conflicting_smoke_choices_fail(args) -> None:
     with pytest.raises(ValueError):
         smoke_test._resolve_modes(*args)
+
+
+def test_smoke_modes_get_distinct_out_dirs() -> None:
+    # B8, B8-placebo and B8-oracle all use runner arm B8. They must not share
+    # results/smoke/B8/gpqa/seed1 or the second run hits the manifest guard.
+    labels = ["B8", "B8 (shuffle_verdicts)", "B8 (gold_answer)"]
+    slugs = [smoke_test._out_slug(label) for label in labels]
+    assert slugs == ["b8", "b8-shuffle-verdicts", "b8-gold-answer"]
+    assert len(set(slugs)) == len(slugs)
+
+
+def test_standalone_b8_variants_get_distinct_out_roots() -> None:
+    base = dict(
+        out="results",
+        arm="B8",
+        no_trust=False,
+        placebo_mode="off",
+        placebo_unit="round_pool",
+        oracle_mode="off",
+    )
+
+    def root(**overrides):
+        return run_experiment._out_root(argparse.Namespace(**{**base, **overrides}))
+
+    roots = [
+        root(),
+        root(no_trust=True),
+        root(placebo_mode="shuffle_verdicts"),
+        root(oracle_mode="gold_answer"),
+    ]
+    assert len({str(path) for path in roots}) == len(roots)

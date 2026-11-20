@@ -18,6 +18,7 @@ appended.
 from __future__ import annotations
 
 import json
+import os
 import time
 from collections import Counter
 from dataclasses import dataclass, field
@@ -70,6 +71,7 @@ class RunConfig:
     arm: str
     dataset: str = "gpqa"
     limit: int = 10
+    stop_after: int | None = None  # session budget only; excluded from the manifest
     seed: int = 1
     rounds: int = 3
     temperature: float = 0.7
@@ -109,6 +111,8 @@ class RunConfig:
             raise ValueError(f"unknown phase {self.phase!r}; expected one of {PHASES}")
         if self.agents < 1:
             raise ValueError("agents must be >= 1")
+        if self.stop_after is not None and self.stop_after < 1:
+            raise ValueError("stop_after must be >= 1 or None")
         if self.injection_scope not in ("minority", "all"):
             raise ValueError(
                 f"unknown injection_scope {self.injection_scope!r}; expected 'minority' or 'all'"
@@ -219,7 +223,9 @@ def _run_config_dict(cfg: RunConfig, rounds: int) -> dict:
 
     ``out_root`` is excluded (moving a results tree does not change a result);
     ``limit`` is included because the stratified sample changes with the cap, so
-    the same question id can denote a different item.
+    the same question id can denote a different item. ``stop_after`` is excluded
+    on purpose: it is a session budget, and a prefix run must resume under the
+    same manifest as the full run.
     """
     return {
         "arm": cfg.arm,
@@ -736,6 +742,10 @@ def _make_runner(
         clients=clients,
         rounds=rounds,
         retriever=retriever,
+        # Throughput-only switch (verified bit-identical in
+        # test_debate_parallel.py): env, never a RunConfig field, so the
+        # manifest hash is unaffected. TRUSTCAL_SERIAL=1 restores serial.
+        parallel_calls=os.environ.get("TRUSTCAL_SERIAL") != "1",
         injection_scope=injection_scope,
         injection_arm=cfg.injection_arm,
         injection_source=cfg.injection_source,
@@ -926,6 +936,7 @@ def run(
         probe = _RetrieverProbe(_retriever(cfg))
         retriever = probe
 
+    written = 0
     for index, question in enumerate(questions):
         qid = f"{cfg.dataset}-{index:04d}"
         if qid in done:
@@ -1057,6 +1068,14 @@ def run(
         _append_record(path, record)
         _write_routes(cfg, probe)
         print(f"[{index + 1}/{len(questions)}] {qid} {record['elapsed_s']:6.1f}s", flush=True)
+        written += 1
+        if cfg.stop_after is not None and written >= cfg.stop_after:
+            print(
+                f"stop_after={cfg.stop_after}: pausing; rerun the same command with "
+                f"--stop-after removed to continue",
+                flush=True,
+            )
+            break
 
     records = read_records(path)
     _check_record_hashes(records, run_hash)

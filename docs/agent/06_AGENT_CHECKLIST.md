@@ -8,26 +8,31 @@
 
 Work in this order. Record commands and exact output in `experiments/next/WP-<id>.md`.
 
-- [x] **N1.0 — Free 18 GB test gate (Nov 2026).** 8–9B vLLM trio + Q4_K_M main templates PASS with two mocks. Qwen3.8-27B 145.8 s / 15,796 MiB; Gemma 4 26B 58.9 s / 3,384 MiB with `-cmoe`; Mistral 24B 74.6 s / 14,018 MiB; all schema valid. See `experiments/n1_smoke/`. Cost **$0**.
+- [x] **N1.0 — Free 18 GB test gate (Nov 2026).** 8–9B vLLM trio + Q4_K_M main templates PASS with two mocks. **19 Nov revalidation:** vLLM 0.34.0, exact 4-bit checkpoint configs pass `validate_stack.py`, B3/B8/injection/placebo/oracle pass with one real model + mocks, Qwen3.8-27B Q4_K_M B8 62.3 s / 15,786 MiB, 633 tests + P0 13/13. See `experiments/n1_smoke/`. Cost **$0**.
 - [ ] **N1a — 4-bit 80 GB smoke (Nov–Dec 2026).** On the 80 GB A100:
   ```bash
   cd trustcal
   PHASE=fourbit bash setup.sh
-  python scripts/verify_env.py --check-servers
   python scripts/check_stack.py --phase fourbit
+  python scripts/validate_stack.py --phase fourbit --offline
   HF_HUB_OFFLINE=1 python scripts/preflight.py --phase fourbit --offline
-  python scripts/smoke_test.py --phase fourbit --limit 5
+  python scripts/verify_env.py --check-servers
+  python scripts/run_matrix.py --config configs/experiments_fourbit.yaml --dry-run
+  python scripts/smoke_test.py --phase fourbit --limit 5 --arm B8
+  python scripts/smoke_test.py --phase fourbit --limit 5 --arm injection
+  python scripts/smoke_test.py --phase fourbit --limit 5 --arm B8-placebo
+  python scripts/smoke_test.py --phase fourbit --limit 5 --arm B8-oracle
   ```
-  **Pass:** three `server OK`; preflight OK; smoke PASS; record peak `nvidia-smi` and loaded weights. Cost **$1–2**. Run in the pilot session.
-- [ ] **N2 — WP-18 placebo/oracle and v1.3 sign-off (Nov–Dec 2026).** Implementation is landed; **freeze the Full definition and sign v1.3.** Default 32 runs with a gold-evidence oracle on SciClaimBench (1,280 GPU-h / $210); 36 runs with gold-answer trust is the alternate (1,440 GPU-h / $235). If the $400 path is chosen, add the Core → Full subset-reuse amendment before Core.
-- [ ] **N1b — FP8 96 GB smoke (Feb 2027).** Only after the 4-bit pilot/Core. A 5-question smoke is **$2–8**; the full precision replication is **$25–40**. Do not run either from the current $50 tranche.
+  **Pass:** three `server OK`; preflight OK; all four smoke runs PASS; record peak `nvidia-smi` and loaded weights. `B8-oracle` uses `gold_answer`; the gold-evidence oracle is SciClaimBench-only. Cost **$1–2**. Run the Core prefix in the same session.
+- [ ] **N2 — WP-18 placebo/oracle and v1.3 sign-off (Nov–Dec 2026).** Implementation is landed; **freeze the Full definition and sign v1.3.** Default 32 runs with a gold-evidence oracle on SciClaimBench (1,280 GPU-h / $210); 36 runs with gold-answer trust is the alternate. **Full is blocked until `sciclaim_180` has a loader entry and a frozen dataset.** Reuse requires a new **v1.5** aligning Full `gpqa_main`/`mmlu_pro` to 400; the current v1.3 draft says 300 and does not assume reuse.
+- [ ] **N1b — FP8 96 GB smoke (Feb 2027).** Only after the 4-bit Core prefix/Core. A 5-question smoke is **$2–8**; the full precision replication is **$25–40**. Do not run either from the current $50 tranche.
 - [ ] **N3 — Benchmark calibration (Nov 2026–Feb 2027).** 24-item calibration first; if clean, 180-item **v1.2 freeze** (Core floor); 300-item Full target only if the 180 set is clean; 600 stretch; 800 no-go.
 - [ ] **N4 — Verifier audit (Nov–Dec 2026).** 150–200 claim–passage pairs, 2 annotators. Target balanced accuracy ≥0.75, κ ≥0.60. Current lexical verifier: **0.58** on the synthetic audit. **Pending.**
-- [ ] **N5/G2 — Pilot (Dec 2026–Jan 2027).** Baseline CCR ≥0.30; trust AUROC ≥0.65; ≥65% correct-direction changes; injection κ ≥0.75; no schema-invalid records.
+- [ ] **N5/G2 — Pilot (Dec 2026–Jan 2027).** Baseline CCR ≥0.30; trust AUROC ≥0.65; ≥65% correct-direction changes; injection κ ≥0.75; no schema-invalid records. The **$15–20 / 112 GPU-h** line is a 100–150-question calibration, not the 25-item Month-1 criterion; replace it with the **Core-prefix gate** (first 25–50 Core B8/B8-no-trust questions, `--stop-after`) after a signed amendment.
 - [ ] **G3 — Core run (Jan–Feb 2027).** 4 conditions (B3, B4-matched, B8-no-trust, B8) × 3 datasets (`gpqa_main` 400, `mmlu_pro` 400, `hle` 200) × 2 seeds = 24 runs. 8,000 debates ≈ 1,067 GPU-h planned; 1,280 cap.
 - [ ] **G4/G5 — Full run (Feb–Mar 2027).** 6-arm target; default 32-row gold-evidence on SciClaimBench / 36-row gold-answer alternate; placebo ≠ B8; oracle separates; sign reversal at the predicted q/ρ boundary; external validity.
 
-**Current $50 tranche:** N1.0 ($0) → N1a ($1–2) → pilot ($15–20). Hold $20–30 for retries/bandwidth. Optional N1b 5-question smoke ($2–8) only after a stable pilot. Do not run a 96 GB pilot or precision replication from this tranche.
+**Current $50 tranche:** N1.0 ($0) → N1a ($1–2) → Core prefix (~$1–2, part of Core). Hold **$35–45** for retries/bandwidth. The $15–20 100–150-question pilot is replaced by the Core-prefix gate. Optional N1b 5-question smoke ($2–8) only after a stable Core prefix. Do not run a 96 GB pilot or precision replication from this tranche.
 - [ ] **Results freeze (Apr 2027).** CIs, negative results, pre-registered contrasts, manifest trace.
 - [ ] **Thesis (Jun 2027), defence (Jun/Jul 2027), paper (Aug–Dec 2027).** No paper deadline before the defence.
 

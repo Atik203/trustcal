@@ -143,3 +143,15 @@ def test_full_config_is_required_before_a_full_dry_run(tmp_path) -> None:
     missing = tmp_path / "experiments_full.yaml"
     with pytest.raises(ValueError, match="config not found"):
         run_matrix._load_matrix(missing, _args())
+
+
+def test_core_plan_passes_offline_validation() -> None:
+    matrix = run_matrix._load_matrix(CORE, _args())
+    plan = run_matrix._build_plan(matrix, Path("results") / "matrix")
+    assert run_matrix._validate_plan(plan) == []
+
+
+def test_full_plan_fails_offline_validation_until_sciclaim_exists() -> None:
+    plan = _plan()
+    errors = run_matrix._validate_plan(plan)
+    assert any("sciclaim_180" in message and "no loader entry" in message for message in errors)

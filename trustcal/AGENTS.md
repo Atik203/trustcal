@@ -6,7 +6,7 @@ Canonical agent instructions for this directory: the P0-released implementation 
 
 - **vLLM owns the GPU.** `scripts/serve.sh` is the only GPU-touching file; everything else is plain Python over the OpenAI-compatible APIs at `127.0.0.1:8000-8002`. Use `127.0.0.1`, never `localhost`: the Windows IPv6 fallback costs about 2s per request.
 - **`configs/models.yaml` is the only model switch** (Dev ↔ Final). Serve commands are generated from it by `scripts/gen_serve_cmds.py` — never hand-edit commands into `serve.sh`, and never rename a served model (`--served-model-name` mismatches caused request 404s in an earlier draft).
-- **Order discipline (blueprint §13 / roadmap):** 18 GB test gate → 4-bit smoke → pilot → Core matrix → 96 GB FP8 smoke/precision → Full matrix. Never run a matrix before the pilot. The Core matrix is four conditions × 3 datasets × 2 seeds = 24 rows; the six-arm Full target is a separate later design. The 96 GB smoke is not a gate for the 4-bit Full matrix.
+- **Order discipline (blueprint §13 / roadmap):** 18 GB test gate → 4-bit smoke → pilot → Core matrix → 96 GB FP8 smoke/precision → Full matrix. Never run a matrix before the pilot. The Core matrix is four conditions × 3 datasets × 2 seeds = 24 rows; the six-arm Full target is a separate later design. The 96 GB smoke is not a gate for the 4-bit Full matrix. On the 4-bit path the pilot can be the **Core prefix** (first 25–50 questions of the actual B8 and B8-no-trust rows, `--limit 400 --stop-after N`) instead of a separate 100–150-question run; that substitution needs a signed amendment, and the prefix is resumed as part of Core only if it passes.
 - **The Core matrix source is `configs/experiments_fourbit.yaml`**, not `configs/datasets.yaml`. `datasets.yaml` carries dataset revisions/provenance and loader defaults; its `seeds` and `sample_caps` are not the matrix values. `configs/experiments.yaml` is the released historical Core config. Do not add the six-arm target to it; WP-18 added a separate `configs/experiments_full.yaml`.
 - **`results/` is gitignored and load-bearing** (Gate 0 logs, trust trajectories, matrix summaries). Copy artifacts off the box before destroying an instance.
 - **Never commit secrets.** `.env` is gitignored. `HF_TOKEN` (gated GPQA/HLE downloads), `OPENAI_API_KEY` (B7), and the optional retrieval keys come from the environment or `.env`; never paste a real key into a doc or a commit.
@@ -31,7 +31,8 @@ Canonical agent instructions for this directory: the P0-released implementation 
 | `src/trustcal/preflight.py` | cost-safety checks (servers, cache, disk, context, keys) |
 | `scripts/gen_serve_cmds.py` | prints `vllm serve` commands from `models.yaml` |
 | `scripts/serve.sh` | launches the three servers; `DRY_RUN=1` prints commands |
-| `scripts/install_vllm.sh` | nightly vLLM (required: `gemma4_unified` is not in stable) |
+| `scripts/install_vllm.sh` | pinned vLLM 0.34.0 (Gemma 4 / Gemma 4 Unified / Qwen3.5 / Mistral3 are in stable); `VLLM_NIGHTLY=1` is the fallback |
+| `scripts/validate_stack.py` | config-only pre-download gate: architecture, quant method, serve flags, reasoning parser, context, chat template |
 | `scripts/repro_mad.py` | Gate 0; writes `results/gate0/transcript-*.json` + `summary-*.md` |
 | `scripts/run_experiment.py` | runs an arm (`B1`–`B10`, `pilot`, `injection`); resume + summary |
 | `scripts/run_matrix.py` | conditions × datasets × seeds matrix; `--config` selects Core or Full YAML |
@@ -60,7 +61,9 @@ The released Core matrix runs four conditions:
 
 The **six-arm target** adds `B8-placebo` (cross-agent round-pool verdict shuffle, trust-weighted) and `B8-oracle` (gold-evidence oracle on SciClaimBench, or gold-answer trust in the 36-row alternate). It is **not** in `experiments.yaml`. WP-18 implemented the `placebo_mode` / `oracle_mode` flags, the separate Full config, and the frozen definitions of the placebo shuffle unit/seed and the oracle semantics. `B7` is an optional 3-sample GPT-6 Luna external-answer ceiling, not `B8-oracle`. The B1-B10 appendix grid stays out of the pre-registered matrix.
 
-`python scripts/run_matrix.py --config configs/experiments_fourbit.yaml --dry-run` shows the 24 Core rows on the 4-bit stack. `python scripts/run_matrix.py --config configs/experiments_full.yaml --dry-run` shows the Full plan: 32 rows with the gold-evidence oracle on SciClaimBench, or 36 if `B8-oracle` uses gold-answer trust. `configs/experiments_precision.yaml` is the 3-row GPQA FP8 precision replication. The Core matrix's gate cap stays 1,280 GPU-h.
+`python scripts/run_matrix.py --config configs/experiments_fourbit.yaml --dry-run` shows the 24 Core rows on the 4-bit stack. `python scripts/run_matrix.py --config configs/experiments_full.yaml --dry-run` now runs offline plan validation first: the Full config names `sciclaim_180`, which has no loader entry in `eval/datasets.py` or `configs/datasets.yaml`, so it fails before a row is planned. Add the frozen v1.2 SciClaimBench dataset entry before any Full run. `configs/experiments_precision.yaml` is the 3-row GPQA FP8 precision replication. The Core matrix's gate cap stays 1,280 GPU-h.
+
+**Core → Full reuse is not executable yet.** A run row can be reused only when `dataset`, `limit`, `seed`, `phase`, every trust/retrieval flag, and the sample seed are identical (they are all in the manifest hash). Core uses `gpqa_main` 400 / `mmlu_pro` 400 / `hle` 200; Full uses `gpqa_main` 300 / `mmlu_pro` 300 / `sciclaim_180` 300. Nothing matches. A 300-item Full sample is not a subset of the 400-item Core sample: stratified allocations differ, question ids shift, and the manifest includes `limit`. Reuse requires a signed **v1.5** amendment setting Full `gpqa_main: 400`, `mmlu_pro: 400`, `sciclaim_180: 300`, plus the SciClaimBench loader and a new config hash. (v1.4 is already the frozen B7-provider erratum.) The current v1.3 draft says 300/dataset and does not assume reuse; do not budget the saving before v1.5.
 
 ## Dev stack (RTX A6000 48GB)
 
@@ -72,7 +75,10 @@ Quantized checkpoints pinned in `models.yaml` — the model names stay the roadm
 
 ```bash
 python scripts/check_stack.py --phase fourbit
+python scripts/validate_stack.py --phase fourbit --offline   # after setup.sh downloaded configs
 ```
+
+The Mistral checkpoint is named `awq-sym` but its config says `quant_method: compressed-tensors`; `models.yaml` sets that explicitly. Gemma 4 26B A4B is text+image, so its MM limit is `{"image": 0}` (no `audio` key); Mistral gets the same limit. `setup.sh` runs `validate_stack.py` before the weight download, so an architecture/flag mismatch stops the session before 53GB of ingress.
 
 ## Final stack (RTX PRO 6000 Blackwell 96GB)
 
@@ -97,7 +103,7 @@ No FP8 precision replication is trusted until that hardware smoke passes and its
 
 | Command | Does |
 | --- | --- |
-| `HF_TOKEN=hf_... [VENV=1] bash setup.sh` | install deps + nightly vLLM + checkpoints (~31GB), start servers, verify. `VENV=1` on any image that blocks system pip (PEP 668): Thunder Compute, Vast PyTorch images |
+| `HF_TOKEN=hf_... [VENV=1] bash setup.sh` | install deps + pinned vLLM 0.34.0 + validate checkpoints + download checkpoints (~31GB) + start servers + verify. `VENV=1` on any image that blocks system pip (PEP 668): Thunder Compute, Vast PyTorch images |
 | `python scripts/verify_env.py --check-servers` | gate: three `server OK` lines |
 | `python scripts/p0_gate.py` | 13-check P0 engineering gate; exits non-zero on any failure |
 | `python scripts/check_stack.py --phase fourbit` | offline 80 GB 4-bit matrix weight/utilization check |
@@ -126,6 +132,8 @@ No FP8 precision replication is trusted until that hardware smoke passes and its
 
 - `HF_HOME` defaults to `/workspace/.cache/huggingface` when writable, else `$HOME/.cache/huggingface` — both are on the persistent disk for the supported providers.
 - A dead server shows up as a `FAIL server :<port>` line; read `results/logs/vllm-<port>.log`. OOM → lower that agent's `gpu_memory_utilization` in `models.yaml` and re-run `serve.sh`.
+- Minimal images without `python3-dev`: vLLM 0.34.0's Triton JIT needs `Python.h`. `setup.sh` and `serve.sh` source `scripts/python_headers.sh`, which sets `CPATH` from the interpreter or a user-local `uv` Python. Never ignore its error; the server will fail after loading weights.
+- Retrieval reranking defaults to `lexical`. Do not set `RetrievalConfig.rerank="cross-encoder"` on the serving box without budgeting its VRAM; the runner shares the GPU with the three vLLM instances.
 - GPQA/HLE are gated Hugging Face repos: downloads 401 without `HF_TOKEN`. B7 needs `OPENAI_API_KEY`.
 - Vast images ship their own `AGENTS.md`/`CLAUDE.md` plus `vast-capabilities` (installed services, ports, persistence) — prefer those for machine facts.
 

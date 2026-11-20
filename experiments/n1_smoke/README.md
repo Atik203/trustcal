@@ -118,3 +118,80 @@ trustcal/results/n1_smoke/run_mistral_gguf/
 1. Freeze the test commands and hashes.
 2. Run the 4-bit 80 GB cloud smoke (N1a).
 3. Do not run the 96 GB FP8 smoke until after the 4-bit pilot/Core.
+
+## 19 November 2026 — pre-N1a revalidation
+
+This pass used a dedicated project venv (no `tool-observation` access) and the exact checkpoints pinned for the 80 GB matrix.
+
+### Environment
+
+| Item | Value |
+|---|---|
+| vLLM | **0.34.0** (stable; no nightly) |
+| torch | 2.14.0+cu130 |
+| transformers | 5.22.2 |
+| huggingface_hub | 2.4.0 |
+| `pip check` | no broken requirements |
+| Python | 3.12.16 (uv-managed venv; system Python lacks `python3-dev`) |
+
+### Exact stack validation (config/tokenizer only, no weights)
+
+`python scripts/validate_stack.py --phase fourbit --download-configs` passed every check for all three checkpoints:
+
+| Agent | Architecture | Quant | Flags | Context | Chat template |
+|---|---|---|---|---|---|
+| Qwen3.8-27B-AWQ-INT4 | `Qwen3_5ForConditionalGeneration` | compressed-tensors | `--language-model-only`, `qwen3` parser, thinking off | 262144 >= 8192 | OK |
+| Gemma-4-26B-A4B AWQ | `Gemma4ForConditionalGeneration` | compressed-tensors | `{"image": 0}` | 262144 >= 8192 | OK |
+| Mistral-24B compressed-tensors | `Mistral3ForConditionalGeneration` | compressed-tensors | `{"image": 0}` | 131072 >= 8192 | OK |
+
+The Mistral repo is named `awq-sym` but its config is `quant_method: compressed-tensors`; `models.yaml` now sets that explicitly. Gemma 26B A4B is text+image, so the `audio` limit was removed.
+
+### Dataset access
+
+`gpqa_main`, `mmlu_pro`, and `hle` loaded at their pinned revisions with the project token: GPQA 448 rows, MMLU-Pro 12,032 test + 70 validation, HLE 2,500. Normalized keys are `question`, `options`, `answer`, `stratum` (HLE also `answer_type`).
+
+### One real model + two mocks
+
+Qwen3.5-9B AWQ served at 4k, 0.85 utilization; mocks on 8001/8002:
+
+| Path | Time | GPU peak | Result |
+|---|---:|---:|---|
+| B3 | 20.6 s | 14,018 MiB | valid, correct |
+| B8 + retrieval | 105.7 s | — | trust trajectory 4 rows, 28 verdicts, evidence 3 rounds |
+| injection | 33.3 s | — | eligible + delivered, target switched C -> B |
+| B8-placebo | 62.0 s | — | permutation hash present, trust trajectory present |
+| B8-oracle (`gold_answer`) | 60.8 s | — | oracle rounds [2,3,4], trust trajectory present |
+
+### Qwen3.8-27B Q4_K_M B8
+
+llama.cpp b12521 CUDA 12.8, 4k, q8 KV, `-ngl 99`: **62.3 s**, **15,786 MiB**, final `B` (H2O), correct, weighted, 3 rounds, 21 verdicts, valid schema. This exercises the actual main-model template, claim tagging, revision prompt, retrieval, and trust aggregation.
+
+### Stop-after Core-prefix mechanics
+
+`--limit 2 --stop-after 1` wrote one record and paused; rerunning without `--stop-after` resumed under the same manifest and wrote the second. This is the cost gate that replaces the separate 100–150-question pilot.
+
+### Issues found and fixed in this pass
+
+1. **Triton JIT could not find `Python.h`.** vLLM loaded the model, then failed in `determine_available_memory` with a hidden `driver.c` compile error. `scripts/python_headers.sh` now sets `CPATH` from the interpreter or a uv-managed Python; `setup.sh` and `serve.sh` call it. Without this, a minimal cloud image fails after the weights are loaded.
+2. **The runner silently loaded a GPU cross-encoder.** `Retriever.retrieve()` called `rerank()` without a scorer; `rerank()` tried `sentence-transformers` first. On the 18 GB slice this caused CUDA OOM warnings and competed with llama.cpp. `RetrievalConfig.rerank` now defaults to `lexical` and passes an explicit scorer. The Qwen3.8 B8 run dropped from 85.8 s to 62.3 s and the OOM disappeared.
+3. **Smoke/standalone B8 variants shared a run directory.** B8, B8-placebo, and B8-oracle all use runner arm B8; the second invocation hit the manifest guard. `smoke_test.py` now uses a per-mode slug, and `run_experiment.py` derives a variant-specific out root.
+
+### Gates on the host
+
+- `pytest`: **633 passed**.
+- `p0_gate.py`: **13 passed, 0 failed**.
+- GPU after stopping servers: **1 MiB used**; no tmux sessions; project 58 GB.
+
+### What this pass proves
+
+- vLLM 0.34.0 loads the exact 4-bit architectures and accepts every serve flag in `models.yaml`.
+- The chat templates render, the parser extracts answers, and the trust/injection/placebo/oracle records validate on the runner.
+- Dataset access and pinned revisions work with the project token.
+- The Core-prefix gate can pause and resume the exact Core rows without a manifest change.
+
+### What it still does not prove
+
+- Three 24–27B models served concurrently on one 80 GB card.
+- Peak VRAM under the real 53.26 GB stack.
+- AWQ numerical behaviour versus the Q4_K_M test templates.
+- Any efficacy result. N1a on the A100 remains the hardware gate.
