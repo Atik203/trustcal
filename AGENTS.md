@@ -124,6 +124,42 @@ The 18 GB slice cannot hold the 53.26 GB 4-bit matrix stack, the 73.68 GB FP8 st
 
 With the current **$50** tranche, do not run a 96 GB pilot or precision replication. The allowed spend is the 80 GB 4-bit smoke (~$1–2), the 80 GB pilot (~$15–20), and optionally one 96 GB 5-question smoke (~$2–8) after the pilot is stable; keep $20–30 as a retry/bandwidth reserve.
 
+## Cloud GPU rental (Vast.ai and similar)
+
+Rent by **all-in cost and stability**, not the headline GPU rate. At rent time,
+check every field below and record the chosen offer in the run notes.
+
+- **Fit:** `gpu_ram` must hold weights plus KV cache. The 4-bit 24-27B trio is
+  sized for an 80 GB card at 0.90 utilization; the FP8 stack needs 96 GB. Read
+  `num_gpus`, `gpu_frac` and `gpu_total_ram` so a fractional or multi-GPU offer
+  is not mistaken for one full card.
+- **Rate:** `dph_total` is only the GPU. Add storage: at $1.00/GB/month a
+  200 GB disk costs ~$0.28/h (~$185 over 667 GPU-hours); at $0.20/GB/month it is
+  ~$0.06/h. Storage can exceed the GPU line on cheap hosts.
+- **Bandwidth:** `inet_down_cost` / `inet_up_cost` are per GB. A 53 GB 4-bit
+  download costs $0.14 at $0.0026/GB but $2.07 at $0.039/GB; FP8 adds 74 GB.
+- **Reliability:** prefer `reliability >= 0.98` and a host with no recent stops.
+  Single-GPU hosts are the most likely to preempt spot when an on-demand renter
+  appears; multi-GPU hosts are safer.
+- **Speed:** `inet_down` (Mbps) and `disk_bw` (MB/s). 1 Gbps rebuilds 53 GB in
+  ~7 min, 4 Gbps in ~2-3 min; disk below ~1 GB/s makes model loading slow.
+  Speed matters most on spot hosts, which may need rebuilding.
+- **Driver:** the pinned stack needs driver >= 580 / CUDA 13
+  (`cuda_max_good >= 13.0`); older Ampere hosts fail the cu130 wheels.
+- **Spot vs on-demand:** use on-demand for runs longer than about an hour.
+  80-96 GB spot prices move 50-100% within minutes and evict the instance; the
+  re-download and re-setup often cost more than the on-demand premium. Use spot
+  only for short, resumable runs, and mirror results locally every 10 minutes.
+  Exception: a resumable matrix prefix may stay on spot beyond an hour when the
+  rebuild is cheap and fast (<=15 min, <=$0.5: low storage and bandwidth cost,
+  >=1 Gbps) and reliability is >=0.98. Records checkpoint per question, so a
+  stop costs time, not data; a 1-hour host still yields ~9-10 debates.
+- **Default hardware:** the 4-bit Core runs on an 80 GB A100 on-demand; the
+  96 GB class is for FP8 and for short spot tests when it is materially cheaper.
+- **Compute the real number:** `all-in/h = dph_total + storage_cost * disk_GB /
+  720`; `run_cost = hours * all-in/h + download_GB * inet_down_cost`. Never
+  compare two hosts on `dph_total` alone.
+
 ## Cache discipline (why this file is structured this way)
 
 To maximize prompt-cache hits across agent tools and models (DeepSeek V4, MiniMax M3, Kimi K2.7, Claude Code), this file is the **single canonical instruction block**:

@@ -4,7 +4,7 @@ Phase-by-phase execution plan for **November 2026 – December 2027**. This file
 
 **Paper title:** *The Boundaries of Evidence-Grounded Trust in Multi-Agent Scientific Debate, with a Controlled Benchmark for Sycophantic Consensus.*
 
-**Current release (18 November 2026):**
+**Current status (20 November 2026):**
 
 | Item | Value |
 |---|---|
@@ -21,9 +21,11 @@ Phase-by-phase execution plan for **November 2026 – December 2027**. This file
 | Final stack (FP8) | Qwen3.8-27B-FP8 / Gemma-4-26B-A4B-FP8 / Mistral-24B-AWQ, **73.68 GB** pinned |
 | University GPU | `uiu-h200`, H200 MIG `1g.18gb`, 18 GB, driver `580.178.04`, CUDA `13.5` |
 | 18 GB cache | vLLM 0.33.0 and 8–9B AWQ checkpoints in the existing `tool-observation` project; shared read-only |
-| Cloud smoke | **NOT RUN** — 4-bit 80 GB and FP8 96 GB paths both unproven on hardware |
+| 4-bit smoke (N1a) | **PASS 20 Nov 2026** — three 24–27B 4-bit models on 96 GB spot hosts (vLLM 0.34.0); B8, injection, placebo 5/5; oracle 4/4 valid (5th lost to a spot eviction) |
+| Core prefix | **25+25 COMPLETE 20 Nov 2026** — `gpqa_main` seed 1, B8 vs B8-no-trust; feasibility/timing only, not efficacy |
+| FP8 smoke (N1b) | **IN PROGRESS** — 73.68 GB stack downloaded; serving fixes applied; no result yet |
 
-**P0 is engineering readiness, not efficacy evidence.** No accuracy, CMR, or sign-reversal claim exists yet. The first claim waits for the pilot and Core run.
+**P0 is engineering readiness, not efficacy evidence.** No accuracy, CMR, or sign-reversal claim exists yet. The 25+25 Core prefix (+0.08 at n=25) is a feasibility/timing gate, not an efficacy result.
 
 ---
 
@@ -179,6 +181,8 @@ python scripts/smoke_test.py --phase fourbit --limit 5 --arm B8-oracle
 
 **Acceptance:** three `server OK` lines; all four smoke invocations PASS; every model has a completed 5-question run; `nvidia-smi` peak and per-model weights recorded. `B8-oracle` here uses `gold_answer` because GPQA has no gold evidence; the `gold_evidence` oracle is SciClaimBench-only and stays covered by the mock/P0 test until that dataset is frozen.
 
+**Status (20 Nov 2026): PASS.** Three 24–27B 4-bit models on RTX PRO 6000 96 GB spot hosts, vLLM 0.34.0. B8 5/5 PASS (per-debate 414.9, 297.2, 272.4, 285.4, 228.0 s; accuracy 0.40); injection 5/5 PASS (129.2, 151.7, 105.3, 140.7, 159.6 s; one item showed a transient D→C→D change under injection, which motivated a fixed smoke check); B8-placebo 5/5 PASS (299.9, 255.4, 177.5, 265.8, 292.0 s); B8-oracle 4/4 valid records, all final answers correct (5th record lost to a spot eviction, not rerun). Local mirror: `trustcal/results/n1a/` (gitignored). Full per-arm record: `experiments/core_prefix/README.md`.
+
 **Cost:** 4–8 GPU-h, **$1–2** at $0.136/h. Do not add the separate $15–20 100–150-question pilot; use the Core-prefix gate (`§14.1`) after the smoke.
 
 ### N1b — FP8 final-stack smoke and precision (Feb 2027)
@@ -197,6 +201,8 @@ python scripts/smoke_test.py --phase final --limit 5
 Then run `configs/experiments_precision.yaml`.
 
 **Acceptance:** three FP8 servers OK; precision result recorded; no FP8 precision claim before this.
+
+**Status (20 Nov 2026): IN PROGRESS.** 96 GB host; 73.68 GB stack downloaded; serving fixes for KV-cache sizing applied. No FP8 result yet; do not cite one.
 
 **Cost:** 5-question smoke **$2–8** all-in; full precision replication **$25–40**. Do not run the precision replication with the current $50 tranche.
 
@@ -355,14 +361,18 @@ Then run `configs/experiments_precision.yaml`.
 | Priority | Item | Cost | Rule |
 |---|---|---:|---|
 | 1 | 18 GB test-only validation | **$0** | 8–9B AWQ one at a time; optional Q4_K_M main template |
-| 2 | 80 GB A100 4-bit smoke | **$1–2** | Must pass before Core |
-| 3 | Core-prefix gate: first 25–50 questions of the Core B8 and B8-no-trust rows | **~$1–2** | Part of Core; use `--stop-after` and resume the same rows only if it passes |
-| 4 | Optional 25-question injection mini-gate | **<$1** | Only if the Core prefix is inconclusive |
-| 5 | Optional 96 GB 5-question smoke | **$2–8** | Only after a stable Core prefix |
+| 2 | 80 GB A100 4-bit smoke | **$1–2** | **PASS 20 Nov 2026** — ran on 96 GB spot hosts (same 4-bit stack, vLLM 0.34.0); B8/injection/placebo 5/5, oracle 4/4 valid |
+| 3 | Core-prefix gate: first 25–50 questions of the Core B8 and B8-no-trust rows | **~$1–2** | **COMPLETE 20 Nov 2026 — 25+25** (`gpqa_main` seed 1, same 4-bit stack); B8 accuracy 0.64 (16/25), control 0.56 (14/25); feasibility/timing only |
+| 4 | Optional 25-question injection mini-gate | **<$1** | Not needed — prefix ran clean; run only if a later prefix is inconclusive |
+| 5 | Optional 96 GB 5-question smoke | **$2–8** | **IN PROGRESS 20 Nov 2026** — FP8 stack downloaded, serving fixes applied, no result yet |
 | — | Reserve for retries/bandwidth | **$35–45** | Do not spend on 96 GB pilot/precision |
 | — | **Total** | **$5–15** | Leaves a real buffer |
 
 **Pilot replacement.** The old **$15–20 / ~112 GPU-h pilot** was a 100–150-question calibration run, not the 25-item Month-1 criterion. It duplicated questions Core will run anyway. Replace it with the **Core-prefix gate**: run the first 25–50 questions of the actual Core `B8` and `B8-no-trust` rows with `--limit 400 --stop-after N`, compare paired winners, and resume the same rows only if trust changes the outcome in the correct direction. The prefix is part of Core, so the gate adds no separate GPU spend. The Month-1 25-item toy pilot remains a v1.0 requirement, but its questions file is not authored; if the team wants it, it costs <$1, not $15–20.
+
+**Core-prefix result (20 Nov 2026).** `gpqa_main` seed 1, 25 debates per arm on the same 4-bit stack: B8 (trust-weighted) 25/25 unique records, accuracy 0.64 (16/25, 95% CI 0.44–0.84), MPR 0.790, MPR-weighted 0.64, ARR 0.722 (n=18), CCR 0.0 (0 exposed cases — expected, no pressure arms), CCR-e 0.133 (2/15), trust AUROC 0.568 (n=11), Brier 0.278, mean 245.5 s/debate (median 257.2); B8-no-trust (majority) 25/25 unique, accuracy 0.56 (14/25, CI 0.36–0.76), MPR 0.75, ARR 0.714, mean 185.5 s/debate. No duplicates, no torn lines. The +0.08 prefix delta at n=25 is noise — record as feasibility/timing, NOT efficacy. Mean ~4.1 min (B8) / ~3.1 min (control) per debate puts the full 2-seed Core at ~470 GPU-hours, ~$400–460 on an $0.80–0.86/h A100 80 GB on-demand, inside the $600 hard stop. Local mirror: `trustcal/results/n1a/` (gitignored). Full record: `experiments/core_prefix/README.md`.
+
+**Next gates.** Parallel-code verification (order-preserving threaded calls; `TRUSTCAL_SERIAL=1` restores the serial loop), then Core tranche 1 on the next top-up. Funding arrives in ~$30 top-ups; the $600 hard stop stands. Host rental rules live in `AGENTS.md` ("Cloud GPU rental"); the host ledger is `docs/agent/08_COMPUTE_COST.md` Appendix B.
 
 **Do not run with $50:**
 

@@ -197,6 +197,28 @@ Do not run a 96 GB pilot ($37–45), the FP8 precision replication ($25–40), C
 
 ---
 
-## Appendix A — Historical price note
+## Appendix B - Host ledger (20 Nov 2026, 4-bit prefix + FP8 smoke)
+
+Known-good host (keep its disk while FP8/Core staging is open):
+
+- **Bulgaria, RTX PRO 6000 S 96 GB, 8-GPU host** - instance `61516430`,
+  `machine_id=148302`, `host_id=659828`, spot offer `59480143`
+  (bid $0.72, min $0.7067, all-in ~$0.764/h, 200 GB disk).
+  Flaps every ~20-60 min but restarts at the same bid with disk intact;
+  completed the 25+25 Core prefix across restarts. Holds the 53 GB 4-bit
+  stack plus (after the FP8 session) the ~74 GB FP8 stack.
+
+Do-not-rent (price-jumping NC host):
+
+- `host_id=637093` / `machine_id=151320` / offer `59309837` (and sibling
+  offer `59309838`, same machine; offer `59312128` is the same `host_id`
+  on `machine_id=150663`). Blacklisted after a mid-run price jump.
+- UK offer `61513193` (`host_id=67231`, `machine_id=56760`) was a 0.5-GPU
+  fractional slice, not a full 80 GB card; destroyed. The sibling UK
+  offer `59872000` (same `host_id`, `machine_id=56759`, `num_gpus=2`)
+  carries the same fractional-slice risk - verify `nvidia-smi` shows the
+  full card before any setup.
+
+## Appendix A - Historical price note
 
 > **Historical; current budget in `docs/agent/08_COMPUTE_COST.md` §3.** The 8 November 2026 A6000/Max-Q/S snapshot and its scenario arithmetic are retired. They are not the current plan; re-query Vast.ai before renting.

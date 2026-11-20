@@ -1,6 +1,6 @@
 # Team Update Checklist — FYDP
 
-**Date:** 9 November 2026
+**Date:** 20 November 2026 (N1a smoke + 25+25 Core-prefix update)
 **Purpose:** one page the whole team can read: where we are, what changed, what happens next, what it costs, and what not to do.
 
 **Full execution plan:** `roadmap.md`. **Current code status:** `trustcal/IMPLEMENTATION_STATUS.md`. **Stage names:** `docs/GLOSSARY.md`.
@@ -23,10 +23,11 @@
 | Main stack (4-bit) | Qwen3.8-27B-AWQ-INT4 / Gemma-4-26B-A4B-AWQ / Mistral-24B-AWQ, **~53.3 GB** pinned |
 | Final stack | Qwen3.8-27B-FP8 / Gemma-4-26B-A4B-FP8 / Mistral-24B-AWQ, **73.68 GB** pinned |
 | 18 GB test gate | **NOT RUN** — `uiu-h200` 18 GB; 8–9B AWQ cache + Q4_K_M test route |
-| 4-bit 80 GB smoke | **NOT RUN** — the next hardware gate |
-| FP8 96 GB smoke | **NOT RUN** — after the 4-bit pilot/Core; not a Full-matrix gate |
+| 4-bit 80 GB smoke | **PASS 20 Nov 2026** — three 24–27B 4-bit models on 96 GB spot hosts (vLLM 0.34.0); B8/injection/placebo 5/5, oracle 4/4 valid (5th lost to a spot eviction) |
+| Core-prefix gate | **25+25 COMPLETE 20 Nov 2026** — `gpqa_main` seed 1, B8 vs B8-no-trust; feasibility/timing only (+0.08 at n=25 is noise, not efficacy) |
+| FP8 96 GB smoke | **IN PROGRESS 20 Nov 2026** — 73.68 GB stack downloaded, serving fixes applied, no result yet; not a Full-matrix gate |
 
-**P0 is engineering readiness, not efficacy evidence.** No accuracy, CMR, or sign-reversal claim exists yet.
+**P0 is engineering readiness, not efficacy evidence.** No accuracy, CMR, or sign-reversal claim exists yet. The 25+25 prefix is feasibility/timing only.
 
 ---
 
@@ -71,7 +72,7 @@ The manuscript is now honest and internally consistent, but it is **not a result
 
 | When | Work | Gate / output |
 |---|---|---|
-| **Nov 2026** | Final-stack 96 GB smoke (NOT RUN); WP-18 placebo/oracle; 24-item calibration; verifier audit start | smoke PASS; 6-arm support; calibration report |
+| **Nov 2026** | N1a 4-bit smoke (PASS 20 Nov); 25+25 Core-prefix gate (COMPLETE 20 Nov, feasibility/timing); FP8 smoke (IN PROGRESS); WP-18 placebo/oracle; 24-item calibration; verifier audit start | smoke PASS; prefix timings; 6-arm support; calibration report |
 | **Dec 2026** | Pilot run 100–150 questions; injection κ | **G2** |
 | **Jan 2027** | Core run: 4 arms, GPQA 400 + MMLU-Pro 400 + HLE 200, 2 seeds; 1,280 GPU-h cap; SciClaimBench-180 freeze (v1.2) | **G3** |
 | **Feb 2027** | Full run: 6 arms; 300 benchmark; human eval start | **G4/G5** |
@@ -81,7 +82,7 @@ The manuscript is now honest and internally consistent, but it is **not a result
 | **Jun–Jul 2027** | Defence | defence |
 | **Aug–Dec 2027** | Paper | TACL / EMNLP 2028 / Q1 journal |
 
-**Order:** Final smoke → WP-18 → pilot → Core → Full. Do not run the matrix before the pilot.
+**Order:** N1a smoke → Core-prefix gate (COMPLETE 20 Nov) → parallel-code verification → Core tranche 1 on the next top-up → Full. The old $15–20 pilot is replaced by the prefix gate; do not run unmeasured Core tranches before the prefix timing is costed.
 
 ---
 

@@ -1,0 +1,72 @@
+% Supervisor progress report — Group 6, Team Phantom Devs.
+% Title below is the registered FYDP title, copied exactly from docs/title_rationale.md.
+% Compile: pdflatex main.tex (twice for references).
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=2cm]{geometry}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\setlist{topsep=2pt,itemsep=2pt}
+\hypersetup{colorlinks=true,linkcolor=blue,urlcolor=blue}
+\setlength{\parskip}{4pt}
+\setlength{\parindent}{0pt}
+\pagestyle{plain}
+
+\begin{document}
+
+\begin{center}
+{\large\bfseries Trust-Calibrated Multi-Agent Scientific Deliberation for Mitigating Sycophantic Consensus in LLM Reasoning\par}
+\vspace{4pt}
+{\normalsize Supervisor Progress Report --- Group 6 \textperiodcentered\ Team Phantom Devs --- 20 November 2026\par}
+\end{center}
+\vspace{2pt}
+\hrule
+\vspace{6pt}
+
+\section*{1. Objective}
+This project asks whether re-weighting each agent's influence during multi-agent LLM debate by an evidence-grounded trust score (how well each agent's claims check out against retrieved external evidence) reduces \emph{sycophantic consensus} --- the failure where a confidently wrong majority pressures a correct minority agent into agreeing with the wrong answer --- compared with the same debate decided by majority vote.
+
+\textit{For a reader new to the project:} three heterogeneous LLMs answer the same scientific multiple-choice question, read one another's reasoning over three rounds, and revise. The treatment arm (B8) aggregates the final answer with trust weights; the control arm (B8-no-trust) runs identical prompts, evidence, and partitioning but aggregates by majority. The confirmatory endpoints (accuracy and Correct-Minority Retention, CMR, on pressure-eligible items) are frozen in the pre-registration; nothing below claims them.
+
+\section*{2. What is proven to date}
+All items below are completed engineering and feasibility evidence. No efficacy claim is made.
+
+\textbf{P0 engineering gate: 13/13 passed; 639 local tests green.} The pipeline (inference, agents, injection harness, trust update, retrieval, evaluation, runner, preflight) passes its full gate battery and local test suite. This proves engineering readiness only, not that trust-weighting works.
+
+\textbf{18\,GB university-slice validation (free, test-only).} Single-model checks on the university H200 slice (one 8--9\,B AWQ model plus two mocks under vLLM; Qwen3.8-27B Q4\_K\_M template under llama.cpp) return schema-valid records. This validates prompts, parser, serving flags, and record schema before any paid cloud time. It does not test three-model concurrency or any efficacy endpoint.
+
+\textbf{N1a 4-bit cloud smoke (paid): passed.} On the 53\,GB 4-bit three-model stack: B8 5/5, injection 5/5, placebo 5/5, each with five completed debates, plus oracle 4/4 valid. This proves the full stack serves all three models together and that each harness path runs end to end.
+
+\textbf{25\,+\,25 Core prefix: complete (feasibility/timing only).} The first 25 questions of the actual Core B8 row and the first 25 of the Core B8-no-trust control row were run with prefix/resume, so this work is part of Core rather than throwaway:
+
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+Arm & Accuracy & CI (as reported) & Mean time \\
+\midrule
+B8 (trust-weighted) & 0.64 (16/25) & 0.44--0.84 & 245.5 s/debate \\
+Control (majority) & 0.56 (14/25) & 0.36--0.76 & 185.5 s/debate \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textit{Plain reading:} at $n=25$ per arm the confidence intervals overlap almost completely, the two-observation gap (16 vs.\ 14) is noise, and the confirmatory pressure-eligible/CCR endpoints are mostly n/a because no pressure arms were run in this prefix. This prefix therefore demonstrates feasibility (rows run, resume, and time out correctly) and gives timing data for budgeting --- it is \textbf{not} an efficacy result and is not reported as one.
+
+\section*{3. Speed programme (projection, not a result)}
+Each debate currently makes 9 serial LLM calls, which sets the $\sim$245\,s/debate cost above. The planned change is a thread fan-out of the independent calls with no change to prompts, models, decoding, or aggregation. Expected effect (projection): roughly $1.5\times$ faster, i.e.\ $\sim$245\,s $\rightarrow$ $\sim$150--160\,s per debate. No speedup is claimed as fact.
+
+\textit{Gate before any Core use:} output-equivalence tests, the full local suite, the P0 13/13 gate, and a cloud bit-identical check must all pass on the threaded build first; a failure stops the rollout and Core continues on the current serial build.
+
+\section*{4. Compute and budget}
+Hard stop: \textbf{\$600 total} (pre-registered; law-testing is outside it and needs separate approval). Spend proceeds in $\sim$\$30 top-ups. Full Core is projected at $\approx$~\$400--460 on an A100 on-demand card (projection from measured rates and the $\sim$245\,s/debate timing above; actual invoices replace the estimate). The FP8 96\,GB smoke is in progress; no FP8 result is stated in this report.
+
+Pre-registration status for context: v1.0 plus the frozen v1.1/v1.4 errata (v1.4: B7 provider moved to OpenAI) is operative. The v1.3 draft (placebo/oracle semantics, 32-row Full, 4-bit/80\,GB stack, FP8 replication, \$500--600 envelope) and the v1.5 reuse amendment (Core $\rightarrow$ Full subset reuse) are both drafted but \textbf{unsigned} and are not cited as approved.
+
+\section*{5. Next steps}
+\begin{enumerate}
+\item Parallel verification of the threaded build (equivalence, suite, P0, cloud check).
+\item Core tranche 1 on the verified build; then seed-1 completion, then the seed-2 replication.
+\item Write-up of the confirmatory accuracy/CMR contrasts with CIs once Core is complete.
+\end{enumerate}
+
+\end{document}
