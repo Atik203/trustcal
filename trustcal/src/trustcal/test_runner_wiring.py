@@ -249,7 +249,7 @@ def test_invalid_record_is_quarantined_not_appended(tmp_path) -> None:
     assert quarantine.is_file()
     entries = [json.loads(line) for line in quarantine.read_text(encoding="utf-8").splitlines()]
     assert entries[0]["question_id"] == "local-0000"
-    assert "empty string" in entries[0]["error"]
+    assert "empty gold" in entries[0]["error"]
 
 
 def test_bad_question_quarantines_and_run_continues(tmp_path) -> None:
@@ -327,3 +327,38 @@ def test_routes_sidecar_skips_arms_without_retrieval(tmp_path) -> None:
     run(cfg, clients=[FakeClient("beta") for _ in range(3)], questions=[MCQ])
     assert not (run_dir(cfg) / "routes.json").exists()
     _write_routes(cfg, None)  # must be a no-op, not an error
+
+
+def test_runtime_error_quarantines_and_continues(tmp_path) -> None:
+    class ExplodingClient:
+        def complete(self, system: str, user: str) -> str:
+            if "BAD" in user:
+                raise RuntimeError("server exploded")
+            return "Answer: 42"
+
+    cfg = RunConfig(arm="B1", dataset="local", limit=3, seed=1, out_root=tmp_path)
+    questions = [
+        {"question": "Q0?", "answer": "42"},
+        {"question": "BAD?", "answer": "42"},
+        {"question": "Q2?", "answer": "42"},
+    ]
+    summary = run(cfg, clients=[ExplodingClient()], questions=questions)
+    assert summary.n_debates == 2
+    entries = [
+        json.loads(line)
+        for line in (run_dir(cfg) / "quarantine.jsonl").read_text(encoding="utf-8").splitlines()
+    ]
+    assert [(entry["question_id"], entry["error_type"]) for entry in entries] == [
+        ("local-0001", "runtime")
+    ]
+
+
+def test_five_consecutive_failures_are_fatal(tmp_path) -> None:
+    class AlwaysExploding:
+        def complete(self, system: str, user: str) -> str:
+            raise RuntimeError("server down")
+
+    cfg = RunConfig(arm="B1", dataset="local", limit=6, seed=1, out_root=tmp_path)
+    questions = [{"question": f"Q{index}?", "answer": "42"} for index in range(6)]
+    with pytest.raises(RuntimeError, match="server down"):
+        run(cfg, clients=[AlwaysExploding()], questions=questions)

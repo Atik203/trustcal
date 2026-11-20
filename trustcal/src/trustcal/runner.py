@@ -30,7 +30,7 @@ from .config import PHASES, default_phase, load_models, rounds_for_phase
 from .eval import load_dataset, summarize
 from .eval.answers import score_answer
 from .eval.baselines import RUNNER_ARMS
-from .eval.datasets import sampling_seed, validate_questions, write_eligible_n
+from .eval.datasets import question_errors, sampling_seed, validate_questions, write_eligible_n
 from .eval.failures import failure_counts
 from .eval.metrics import MetricSummary
 from .eval.options import RenderedOptions, build_options
@@ -77,6 +77,7 @@ from .retrieval.verifier import build_verifier
 from .trust import TrustConfig, TrustState, aggregate
 
 ARMS = RUNNER_ARMS
+MAX_CONSECUTIVE_FAILURES = 5
 
 TRUSTCAL_ROOT = Path(__file__).resolve().parents[2]
 EXPERIMENTS_CONFIG = TRUSTCAL_ROOT / "configs" / "experiments.yaml"
@@ -1015,94 +1016,120 @@ def run(
         retriever = probe
 
     written = 0
+    consecutive_failures = 0
     for index, question in enumerate(questions):
         qid = f"{cfg.dataset}-{index:04d}"
         if qid in done:
+            continue
+        question_problems = question_errors(question, index)
+        if question_problems:
+            message = "; ".join(question_problems)
+            append_quarantine(out / QUARANTINE_NAME, qid, message, provenance_hash)
+            print(f"[{index + 1}/{len(questions)}] {qid} QUARANTINED (pre-run): {message}", flush=True)
+            consecutive_failures += 1
+            if consecutive_failures >= MAX_CONSECUTIVE_FAILURES:
+                raise RuntimeError(
+                    f"{consecutive_failures} consecutive invalid questions; "
+                    "the dataset or lock is probably wrong"
+                )
             continue
         t0 = time.perf_counter()
         polled = None
         delivered_before = probe.delivered if probe is not None else 0
 
-        if cfg.arm == "B1":
-            record = single_agent_record(
-                qid, question, clients[0], cfg.arm, cfg.seed, manifest_hash_value=run_hash
-            )
-        elif cfg.arm == "B2":
-            polled = run_single_rag(
-                question, clients[0], retriever, seed=cfg.seed, question_id=qid
-            )
-        elif cfg.arm == "B3":
-            polled = _make_runner(
-                cfg,
-                clients,
-                rounds,
-                injection_scope=_scope(cfg),
-                question=question,
-                qid=qid,
-            ).run(question["question"], question.get("options"))
-        elif cfg.arm == "B4":
-            polled = run_b4_rag_mad(
-                question, clients, rounds, retriever, seed=cfg.seed, question_id=qid
-            )
-        elif cfg.arm == "B5":
-            polled = run_self_consistency(
-                question, clients[0], samples=cfg.samples, seed=cfg.seed, question_id=qid
-            )
-        elif cfg.arm == "B6":
-            polled = run_moa(
-                question, clients, layers=cfg.layers, seed=cfg.seed, question_id=qid
-            )
-        elif cfg.arm == "B7":
-            if oracle is None:
-                from .eval.oracle import OpenAIOracle
+        try:
+            if cfg.arm == "B1":
+                record = single_agent_record(
+                    qid, question, clients[0], cfg.arm, cfg.seed, manifest_hash_value=run_hash
+                )
+            elif cfg.arm == "B2":
+                polled = run_single_rag(
+                    question, clients[0], retriever, seed=cfg.seed, question_id=qid
+                )
+            elif cfg.arm == "B3":
+                polled = _make_runner(
+                    cfg,
+                    clients,
+                    rounds,
+                    injection_scope=_scope(cfg),
+                    question=question,
+                    qid=qid,
+                ).run(question["question"], question.get("options"))
+            elif cfg.arm == "B4":
+                polled = run_b4_rag_mad(
+                    question, clients, rounds, retriever, seed=cfg.seed, question_id=qid
+                )
+            elif cfg.arm == "B5":
+                polled = run_self_consistency(
+                    question, clients[0], samples=cfg.samples, seed=cfg.seed, question_id=qid
+                )
+            elif cfg.arm == "B6":
+                polled = run_moa(
+                    question, clients, layers=cfg.layers, seed=cfg.seed, question_id=qid
+                )
+            elif cfg.arm == "B7":
+                if oracle is None:
+                    from .eval.oracle import OpenAIOracle
 
-                oracle = OpenAIOracle()
-            record = oracle_record(
-                qid, question, oracle, cfg.arm, cfg.seed, manifest_hash_value=run_hash
+                    oracle = OpenAIOracle()
+                record = oracle_record(
+                    qid, question, oracle, cfg.arm, cfg.seed, manifest_hash_value=run_hash
+                )
+            elif cfg.arm == "B8":
+                polled = _make_runner(
+                    cfg,
+                    clients,
+                    rounds,
+                    retriever=retriever,
+                    injection_scope=_scope(cfg),
+                    question=question,
+                    qid=qid,
+                ).run(question["question"], question.get("options"))
+            elif cfg.arm == "B9":
+                polled = run_imad(
+                    question, clients, rounds=rounds, seed=cfg.seed, question_id=qid
+                )
+            elif cfg.arm == "B10":
+                polled = run_consensagent(
+                    question,
+                    clients,
+                    rounds=rounds,
+                    rewriter=rewriter,
+                    seed=cfg.seed,
+                    question_id=qid,
+                )
+            elif cfg.arm == "pilot":
+                # Phase 1 criterion: debate positions unweighted, then compare the
+                # same positions under trust-weighted aggregation.
+                polled = _make_runner(
+                    cfg,
+                    clients,
+                    rounds,
+                    injection_scope=_scope(cfg),
+                    question=question,
+                    qid=qid,
+                ).run(question["question"], question.get("options"))
+            else:  # injection
+                polled = _make_runner(
+                    cfg,
+                    clients,
+                    rounds,
+                    injection_scope=cfg.injection_scope,
+                    question=question,
+                    qid=qid,
+                ).run(question["question"], question.get("options"))
+        except (KeyboardInterrupt, SystemExit):
+            raise
+        except Exception as exc:  # noqa: BLE001 - one bad item must not kill the row
+            message = f"{type(exc).__name__}: {exc}"
+            append_quarantine(
+                out / QUARANTINE_NAME, qid, message, provenance_hash, error_type="runtime"
             )
-        elif cfg.arm == "B8":
-            polled = _make_runner(
-                cfg,
-                clients,
-                rounds,
-                retriever=retriever,
-                injection_scope=_scope(cfg),
-                question=question,
-                qid=qid,
-            ).run(question["question"], question.get("options"))
-        elif cfg.arm == "B9":
-            polled = run_imad(
-                question, clients, rounds=rounds, seed=cfg.seed, question_id=qid
-            )
-        elif cfg.arm == "B10":
-            polled = run_consensagent(
-                question,
-                clients,
-                rounds=rounds,
-                rewriter=rewriter,
-                seed=cfg.seed,
-                question_id=qid,
-            )
-        elif cfg.arm == "pilot":
-            # Phase 1 criterion: debate positions unweighted, then compare the
-            # same positions under trust-weighted aggregation.
-            polled = _make_runner(
-                cfg,
-                clients,
-                rounds,
-                injection_scope=_scope(cfg),
-                question=question,
-                qid=qid,
-            ).run(question["question"], question.get("options"))
-        else:  # injection
-            polled = _make_runner(
-                cfg,
-                clients,
-                rounds,
-                injection_scope=cfg.injection_scope,
-                question=question,
-                qid=qid,
-            ).run(question["question"], question.get("options"))
+            print(f"[{index + 1}/{len(questions)}] {qid} QUARANTINED (runtime): {message}", flush=True)
+            consecutive_failures += 1
+            if consecutive_failures >= MAX_CONSECUTIVE_FAILURES:
+                raise
+            continue
 
         if polled is not None:
             evidence_introduced = (
@@ -1147,9 +1174,16 @@ def run(
             message = "; ".join(errors)
             append_quarantine(out / QUARANTINE_NAME, qid, message, provenance_hash)
             print(f"[{index + 1}/{len(questions)}] {qid} QUARANTINED: {message}", flush=True)
+            consecutive_failures += 1
+            if consecutive_failures >= MAX_CONSECUTIVE_FAILURES:
+                raise RuntimeError(
+                    f"{consecutive_failures} consecutive invalid records; "
+                    "the schema or verifier is probably wrong"
+                )
             continue
         _append_record(path, record)
         _write_routes(cfg, probe)
+        consecutive_failures = 0
         print(f"[{index + 1}/{len(questions)}] {qid} {record['elapsed_s']:6.1f}s", flush=True)
         written += 1
         if cfg.stop_after is not None and written >= cfg.stop_after:

@@ -347,10 +347,10 @@ def read_records_repaired(path: Path) -> tuple[list[dict], list[str]]:
     return records, duplicates
 
 
-def append_quarantine(path: Path, question_id: str, error: str, provenance_hash: str) -> None:
+def append_quarantine(path: Path, question_id: str, error: str, provenance_hash: str, error_type: str = "schema") -> None:
     entry = {
         "question_id": question_id,
-        "error_type": "schema",
+        "error_type": error_type,
         "error": error,
         "attempts": 1,
         "provenance_hash": provenance_hash,
