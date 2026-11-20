@@ -93,12 +93,13 @@ class Retriever:
     _route_cache: dict[str, sources.ClaimRoute] = field(default_factory=dict, repr=False)
     _failures: dict[str, int] = field(default_factory=dict, repr=False)
     _dead_sources: set[str] = field(default_factory=set, repr=False)
+    _source_locks: dict[str, threading.Lock] = field(default_factory=dict, repr=False)
     # Guards the shared caches/logs when the debate loop fans retrieval out
-    # over threads (DebateRunner parallel_calls). The slow HTTP fetch itself
-    # runs unlocked; only check-and-insert plus the failure counters hold the
-    # lock, and inserts are idempotent (same key always maps to the same
-    # bytes), so concurrent duplicates collapse to one entry and outputs stay
-    # identical to the serial loop. Verified by test_debate_parallel.py.
+    # over threads (DebateRunner parallel_calls). Each upstream source gets its
+    # own fetch lock: the APIs rate-limit per source, and a cross-source burst
+    # silently loses passages (gpqa-0002 fetched 3 of 9), but different sources
+    # do not compete for one quota. Serializing per source keeps the evidence
+    # intact while PubMed/arXiv/S2/OpenAlex still fetch in parallel.
     _lock: threading.Lock = field(default_factory=threading.Lock, repr=False, compare=False)
 
     def __post_init__(self) -> None:
@@ -132,6 +133,15 @@ class Retriever:
             return routed
         return _rotate(routed, agent_index)
 
+    def _source_lock(self, source: str) -> threading.Lock:
+        """Per-source fetch lock, created on first use under the global lock."""
+        with self._lock:
+            lock = self._source_locks.get(source)
+            if lock is None:
+                lock = threading.Lock()
+                self._source_locks[source] = lock
+            return lock
+
     def _search(self, source: str, query: str, top_k: int) -> list[sources.SearchResult]:
         if source in self._dead_sources:
             return []
@@ -139,28 +149,37 @@ class Retriever:
         hit = self._cache.get(key)
         if hit is not None:
             return hit
-        try:
-            results = list(self.search_fn(source, query, top_k=top_k))
-            failed: Exception | None = None
-        except Exception as exc:  # noqa: BLE001 - retrieval must not kill the run
-            failed = exc
-            results = []
-        with self._lock:
-            if failed is None:
-                self._failures.pop(source, None)
-            else:
-                self.errors.append(f"{source}: {failed}")
-                failures = self._failures.get(source, 0) + 1
-                self._failures[source] = failures
-                if failures >= self.config.max_source_failures:
-                    self._dead_sources.add(source)
-                    self.errors.append(
-                        f"{source}: skipped for the rest of the run after {failures} consecutive failures"
-                    )
-            # Idempotent insert (failure empties are cached too, as serial
-            # code did): a tied thread may have stored the same bytes first.
-            self._cache.setdefault(key, results)
-            return self._cache[key]
+        # One in-flight fetch per source: the APIs rate-limit per source, so a
+        # burst of same-source calls loses passages. Different sources run in
+        # parallel because their quotas are independent.
+        with self._source_lock(source):
+            hit = self._cache.get(key)
+            if hit is not None:
+                return hit
+            if source in self._dead_sources:
+                return []
+            try:
+                results = list(self.search_fn(source, query, top_k=top_k))
+                failed: Exception | None = None
+            except Exception as exc:  # noqa: BLE001 - retrieval must not kill the run
+                failed = exc
+                results = []
+            with self._lock:
+                if failed is None:
+                    self._failures.pop(source, None)
+                else:
+                    self.errors.append(f"{source}: {failed}")
+                    failures = self._failures.get(source, 0) + 1
+                    self._failures[source] = failures
+                    if failures >= self.config.max_source_failures:
+                        self._dead_sources.add(source)
+                        self.errors.append(
+                            f"{source}: skipped for the rest of the run after {failures} consecutive failures"
+                        )
+                # Idempotent insert (failure empties are cached too, as serial
+                # code did): a tied thread may have stored the same bytes first.
+                self._cache.setdefault(key, results)
+                return self._cache[key]
 
     def depth(self, round_number: int) -> int:
         """Progressive retrieval: half depth in rounds 1-2, full depth later."""

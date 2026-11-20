@@ -92,6 +92,8 @@ _DEFAULTS: dict[str, Any] = {
     "trust_status": None,
     "verdicts": [],
     "manifest_hash": None,
+    "condition_hash": None,
+    "provenance_hash": None,
 }
 
 _BARE_LETTER = re.compile(r"^\(?([A-Ja-j])\)?$")
@@ -109,7 +111,9 @@ _STR_KEYS = frozenset(
         "final_answer_source",
     }
 )
-_OPTIONAL_STR_KEYS = frozenset({"gold_letter_rendered", "manifest_hash"})
+_OPTIONAL_STR_KEYS = frozenset(
+    {"gold_letter_rendered", "manifest_hash", "condition_hash", "provenance_hash"}
+)
 _STRING_LIST_KEYS = frozenset({"options_raw", "options", "trust_status"})
 _BOOL_KEYS = frozenset({"final_answer_correct", "evidence_introduced"})
 _DICT_LIST_KEYS = frozenset({"rounds", "transcript", "verdicts"})

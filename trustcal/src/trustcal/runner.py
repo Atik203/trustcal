@@ -30,7 +30,7 @@ from .config import PHASES, default_phase, load_models, rounds_for_phase
 from .eval import load_dataset, summarize
 from .eval.answers import score_answer
 from .eval.baselines import RUNNER_ARMS
-from .eval.datasets import sampling_seed, write_eligible_n
+from .eval.datasets import question_errors, sampling_seed, validate_questions, write_eligible_n
 from .eval.failures import failure_counts
 from .eval.metrics import MetricSummary
 from .eval.options import RenderedOptions, build_options
@@ -38,6 +38,24 @@ from .eval.pilot import score_pilot
 from .eval.records import validate_record
 from .inference import VLLMClient, vllm_clients
 from .manifest import ManifestMismatch, build_manifest, check_resume, manifest_hash, write_manifest
+from .provenance import (
+    CONDITION_NAME,
+    HISTORY_NAME,
+    LOCK_NAME,
+    QUARANTINE_NAME,
+    ConditionMismatch,
+    ProvenanceMismatch,
+    SampleLockMismatch,
+    adopted_manifest_hashes,
+    append_quarantine,
+    build_condition,
+    build_provenance,
+    ensure_condition,
+    ensure_provenance,
+    ensure_sample_lock,
+    read_quarantine,
+    read_records_repaired,
+)
 from .orchestrator import (
     DEFAULT_PLACEBO_UNIT,
     GOLD_EVIDENCE_DATASETS,
@@ -59,6 +77,7 @@ from .retrieval.verifier import build_verifier
 from .trust import TrustConfig, TrustState, aggregate
 
 ARMS = RUNNER_ARMS
+MAX_CONSECUTIVE_FAILURES = 5
 
 TRUSTCAL_ROOT = Path(__file__).resolve().parents[2]
 EXPERIMENTS_CONFIG = TRUSTCAL_ROOT / "configs" / "experiments.yaml"
@@ -72,6 +91,8 @@ class RunConfig:
     dataset: str = "gpqa"
     limit: int = 10
     stop_after: int | None = None  # session budget only; excluded from the manifest
+    accept_provenance_change: str | None = None  # consent for a code change under a live row
+    operator: str | None = None  # recorded with a provenance change
     seed: int = 1
     rounds: int = 3
     temperature: float = 0.7
@@ -776,10 +797,14 @@ def _write_summary(
     records: list[dict],
     run_hash: str,
     manifest_path: Path,
+    condition_hash: str | None = None,
+    provenance_hash: str | None = None,
+    quarantine: int = 0,
 ) -> Path:
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     out = run_dir(cfg)
     out.mkdir(parents=True, exist_ok=True)
+    provenance = sorted({r["provenance_hash"] for r in records if r.get("provenance_hash")})
     payload = {
         "arm": cfg.arm,
         "dataset": cfg.dataset,
@@ -788,6 +813,10 @@ def _write_summary(
         "stamp": stamp,
         "manifest_hash": run_hash,
         "manifest": str(manifest_path),
+        "condition_hash": condition_hash,
+        "provenance_hash": provenance_hash,
+        "provenance_strata": provenance,
+        "quarantine": quarantine,
         **summary.as_dict(),
         "failures": failure_counts(records),
     }
@@ -861,10 +890,25 @@ def load_questions(cfg: RunConfig) -> list[dict]:
             available=len(data),
             extra={"source": "questions_file"},
         )
+        problems = validate_questions(selected)
+        if problems:
+            print(
+                f"WARNING: {len(problems)} invalid question(s) will be quarantined: "
+                + "; ".join(problems[:3]),
+                flush=True,
+            )
         return selected
-    return load_dataset(
+    questions = load_dataset(
         cfg.dataset, sample_cap=cfg.limit, eligible_path=eligible_path
     )[: cfg.limit]
+    problems = validate_questions(questions)
+    if problems:
+        print(
+            f"WARNING: {len(problems)} invalid question(s) will be quarantined: "
+            + "; ".join(problems[:3]),
+            flush=True,
+        )
+    return questions
 
 
 def run(
@@ -889,8 +933,12 @@ def run(
     if clients is not None and len(clients) != cfg.agents:
         clients = [clients[i % len(clients)] for i in range(cfg.agents)]
 
+    out = run_dir(cfg)
+    path = records_path(cfg)
+    out.mkdir(parents=True, exist_ok=True)
+
     if questions is None:
-        questions = load_questions(cfg)
+        loader = lambda: load_questions(cfg)  # noqa: E731 - tiny closure
     else:
         write_eligible_n(
             questions,
@@ -900,9 +948,42 @@ def run(
             available=len(questions),
             extra={"source": "in_memory"},
         )
+        loader = lambda: list(questions)  # noqa: E731
 
-    out = run_dir(cfg)
-    path = records_path(cfg)
+    # Freeze the exact sampled list on first use; resumes never re-sample.
+    questions, lock = ensure_sample_lock(
+        out / LOCK_NAME, cfg.dataset, cfg.limit, sampling_seed(), loader
+    )
+
+    condition = build_condition(_run_config_dict(cfg, rounds), lock)
+    ensure_condition(out / CONDITION_NAME, condition)
+    condition_hash = condition["condition_hash"]
+
+    existing, _duplicates = read_records_repaired(path)
+    adopted = adopted_manifest_hashes(out / "adoption.json")
+    for record in existing:
+        stored = record.get("condition_hash")
+        if stored and stored != condition_hash:
+            raise ConditionMismatch(
+                f"{record.get('question_id')}: record condition {stored} != current {condition_hash}"
+            )
+        if not stored and record.get("manifest_hash") not in adopted:
+            raise ConditionMismatch(
+                f"{record.get('question_id')}: legacy record without an adoption record; "
+                "adopt the parent manifest before resuming"
+            )
+
+    provenance = build_provenance()
+    ensure_provenance(
+        out / HISTORY_NAME,
+        provenance,
+        cfg.accept_provenance_change,
+        cfg.operator,
+        len(existing),
+        condition_hash,
+    )
+    provenance_hash = provenance["provenance_hash"]
+
     config_paths = [EXPERIMENTS_CONFIG]
     if cfg.questions_file:
         config_paths.append(cfg.questions_file)
@@ -916,12 +997,10 @@ def run(
         run_config=_run_config_dict(cfg, rounds),
     )
     manifest_path = out / "run_manifest.json"
-    check_resume(manifest_path, manifest)
-    write_manifest(manifest_path, manifest)
+    if not manifest_path.is_file():
+        write_manifest(manifest_path, manifest)
     run_hash = manifest_hash(manifest)
 
-    existing = read_records(path)
-    _check_record_hashes(existing, run_hash)
     done = {r["question_id"] for r in existing}
 
     probe: _RetrieverProbe | None = None
@@ -937,94 +1016,120 @@ def run(
         retriever = probe
 
     written = 0
+    consecutive_failures = 0
     for index, question in enumerate(questions):
         qid = f"{cfg.dataset}-{index:04d}"
         if qid in done:
+            continue
+        question_problems = question_errors(question, index)
+        if question_problems:
+            message = "; ".join(question_problems)
+            append_quarantine(out / QUARANTINE_NAME, qid, message, provenance_hash)
+            print(f"[{index + 1}/{len(questions)}] {qid} QUARANTINED (pre-run): {message}", flush=True)
+            consecutive_failures += 1
+            if consecutive_failures >= MAX_CONSECUTIVE_FAILURES:
+                raise RuntimeError(
+                    f"{consecutive_failures} consecutive invalid questions; "
+                    "the dataset or lock is probably wrong"
+                )
             continue
         t0 = time.perf_counter()
         polled = None
         delivered_before = probe.delivered if probe is not None else 0
 
-        if cfg.arm == "B1":
-            record = single_agent_record(
-                qid, question, clients[0], cfg.arm, cfg.seed, manifest_hash_value=run_hash
-            )
-        elif cfg.arm == "B2":
-            polled = run_single_rag(
-                question, clients[0], retriever, seed=cfg.seed, question_id=qid
-            )
-        elif cfg.arm == "B3":
-            polled = _make_runner(
-                cfg,
-                clients,
-                rounds,
-                injection_scope=_scope(cfg),
-                question=question,
-                qid=qid,
-            ).run(question["question"], question.get("options"))
-        elif cfg.arm == "B4":
-            polled = run_b4_rag_mad(
-                question, clients, rounds, retriever, seed=cfg.seed, question_id=qid
-            )
-        elif cfg.arm == "B5":
-            polled = run_self_consistency(
-                question, clients[0], samples=cfg.samples, seed=cfg.seed, question_id=qid
-            )
-        elif cfg.arm == "B6":
-            polled = run_moa(
-                question, clients, layers=cfg.layers, seed=cfg.seed, question_id=qid
-            )
-        elif cfg.arm == "B7":
-            if oracle is None:
-                from .eval.oracle import OpenAIOracle
+        try:
+            if cfg.arm == "B1":
+                record = single_agent_record(
+                    qid, question, clients[0], cfg.arm, cfg.seed, manifest_hash_value=run_hash
+                )
+            elif cfg.arm == "B2":
+                polled = run_single_rag(
+                    question, clients[0], retriever, seed=cfg.seed, question_id=qid
+                )
+            elif cfg.arm == "B3":
+                polled = _make_runner(
+                    cfg,
+                    clients,
+                    rounds,
+                    injection_scope=_scope(cfg),
+                    question=question,
+                    qid=qid,
+                ).run(question["question"], question.get("options"))
+            elif cfg.arm == "B4":
+                polled = run_b4_rag_mad(
+                    question, clients, rounds, retriever, seed=cfg.seed, question_id=qid
+                )
+            elif cfg.arm == "B5":
+                polled = run_self_consistency(
+                    question, clients[0], samples=cfg.samples, seed=cfg.seed, question_id=qid
+                )
+            elif cfg.arm == "B6":
+                polled = run_moa(
+                    question, clients, layers=cfg.layers, seed=cfg.seed, question_id=qid
+                )
+            elif cfg.arm == "B7":
+                if oracle is None:
+                    from .eval.oracle import OpenAIOracle
 
-                oracle = OpenAIOracle()
-            record = oracle_record(
-                qid, question, oracle, cfg.arm, cfg.seed, manifest_hash_value=run_hash
+                    oracle = OpenAIOracle()
+                record = oracle_record(
+                    qid, question, oracle, cfg.arm, cfg.seed, manifest_hash_value=run_hash
+                )
+            elif cfg.arm == "B8":
+                polled = _make_runner(
+                    cfg,
+                    clients,
+                    rounds,
+                    retriever=retriever,
+                    injection_scope=_scope(cfg),
+                    question=question,
+                    qid=qid,
+                ).run(question["question"], question.get("options"))
+            elif cfg.arm == "B9":
+                polled = run_imad(
+                    question, clients, rounds=rounds, seed=cfg.seed, question_id=qid
+                )
+            elif cfg.arm == "B10":
+                polled = run_consensagent(
+                    question,
+                    clients,
+                    rounds=rounds,
+                    rewriter=rewriter,
+                    seed=cfg.seed,
+                    question_id=qid,
+                )
+            elif cfg.arm == "pilot":
+                # Phase 1 criterion: debate positions unweighted, then compare the
+                # same positions under trust-weighted aggregation.
+                polled = _make_runner(
+                    cfg,
+                    clients,
+                    rounds,
+                    injection_scope=_scope(cfg),
+                    question=question,
+                    qid=qid,
+                ).run(question["question"], question.get("options"))
+            else:  # injection
+                polled = _make_runner(
+                    cfg,
+                    clients,
+                    rounds,
+                    injection_scope=cfg.injection_scope,
+                    question=question,
+                    qid=qid,
+                ).run(question["question"], question.get("options"))
+        except (KeyboardInterrupt, SystemExit):
+            raise
+        except Exception as exc:  # noqa: BLE001 - one bad item must not kill the row
+            message = f"{type(exc).__name__}: {exc}"
+            append_quarantine(
+                out / QUARANTINE_NAME, qid, message, provenance_hash, error_type="runtime"
             )
-        elif cfg.arm == "B8":
-            polled = _make_runner(
-                cfg,
-                clients,
-                rounds,
-                retriever=retriever,
-                injection_scope=_scope(cfg),
-                question=question,
-                qid=qid,
-            ).run(question["question"], question.get("options"))
-        elif cfg.arm == "B9":
-            polled = run_imad(
-                question, clients, rounds=rounds, seed=cfg.seed, question_id=qid
-            )
-        elif cfg.arm == "B10":
-            polled = run_consensagent(
-                question,
-                clients,
-                rounds=rounds,
-                rewriter=rewriter,
-                seed=cfg.seed,
-                question_id=qid,
-            )
-        elif cfg.arm == "pilot":
-            # Phase 1 criterion: debate positions unweighted, then compare the
-            # same positions under trust-weighted aggregation.
-            polled = _make_runner(
-                cfg,
-                clients,
-                rounds,
-                injection_scope=_scope(cfg),
-                question=question,
-                qid=qid,
-            ).run(question["question"], question.get("options"))
-        else:  # injection
-            polled = _make_runner(
-                cfg,
-                clients,
-                rounds,
-                injection_scope=cfg.injection_scope,
-                question=question,
-                qid=qid,
-            ).run(question["question"], question.get("options"))
+            print(f"[{index + 1}/{len(questions)}] {qid} QUARANTINED (runtime): {message}", flush=True)
+            consecutive_failures += 1
+            if consecutive_failures >= MAX_CONSECUTIVE_FAILURES:
+                raise
+            continue
 
         if polled is not None:
             evidence_introduced = (
@@ -1062,11 +1167,23 @@ def run(
         record.setdefault("placebo_mode", cfg.placebo_mode)
         record.setdefault("placebo_unit", cfg.placebo_unit)
         record.setdefault("oracle_mode", cfg.oracle_mode)
+        record["condition_hash"] = condition_hash
+        record["provenance_hash"] = provenance_hash
         errors = validate_record(record)
         if errors:
-            raise ValueError(f"{qid}: invalid schema-v2 record: {'; '.join(errors)}")
+            message = "; ".join(errors)
+            append_quarantine(out / QUARANTINE_NAME, qid, message, provenance_hash)
+            print(f"[{index + 1}/{len(questions)}] {qid} QUARANTINED: {message}", flush=True)
+            consecutive_failures += 1
+            if consecutive_failures >= MAX_CONSECUTIVE_FAILURES:
+                raise RuntimeError(
+                    f"{consecutive_failures} consecutive invalid records; "
+                    "the schema or verifier is probably wrong"
+                )
+            continue
         _append_record(path, record)
         _write_routes(cfg, probe)
+        consecutive_failures = 0
         print(f"[{index + 1}/{len(questions)}] {qid} {record['elapsed_s']:6.1f}s", flush=True)
         written += 1
         if cfg.stop_after is not None and written >= cfg.stop_after:
@@ -1077,9 +1194,20 @@ def run(
             )
             break
 
-    records = read_records(path)
-    _check_record_hashes(records, run_hash)
+    records, _duplicates = read_records_repaired(path)
     summary = summarize(records)
-    summary_path = _write_summary(cfg, summary, records, run_hash, manifest_path)
+    quarantine = read_quarantine(out / QUARANTINE_NAME)
+    resolved = {record["question_id"] for record in records}
+    unresolved = [entry for entry in quarantine if entry["question_id"] not in resolved]
+    summary_path = _write_summary(
+        cfg,
+        summary,
+        records,
+        run_hash,
+        manifest_path,
+        condition_hash=condition_hash,
+        provenance_hash=provenance_hash,
+        quarantine=len(unresolved),
+    )
     print(f"summary: {summary_path}  {summary.as_dict()}")
     return summary

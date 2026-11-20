@@ -176,16 +176,16 @@ def test_resume_refuses_a_changed_alpha(tmp_path) -> None:
         run(changed, clients=[FakeClient("42")], questions=[FREE_TEXT])
 
 
-def test_resume_refuses_records_from_another_manifest(tmp_path) -> None:
+def test_resume_refuses_records_from_another_condition(tmp_path) -> None:
     cfg = _cfg(tmp_path)
     run(cfg, clients=[FakeClient("42")], questions=[FREE_TEXT])
 
     path = records_path(cfg)
     record = json.loads(path.read_text(encoding="utf-8").splitlines()[0])
-    record["manifest_hash"] = "0" * 64
+    record["condition_hash"] = "0" * 64
     path.write_text(json.dumps(record) + "\n", encoding="utf-8")
 
-    with pytest.raises(ManifestMismatch, match="different manifest"):
+    with pytest.raises(ManifestMismatch, match="condition"):
         run(cfg, clients=[FakeClient("42")], questions=[FREE_TEXT])
 
 
@@ -240,12 +240,62 @@ def test_summary_has_accuracy_and_manifest(tmp_path) -> None:
     assert (run_dir(cfg) / "summary.json").is_file()
 
 
-def test_invalid_record_is_never_appended(tmp_path) -> None:
+def test_invalid_record_is_quarantined_not_appended(tmp_path) -> None:
     cfg = _cfg(tmp_path)
     question = {"question": "Broken item?", "answer": ""}
-    with pytest.raises(ValueError, match="invalid schema-v2 record"):
-        run(cfg, clients=[FakeClient("42")], questions=[question])
+    run(cfg, clients=[FakeClient("42")], questions=[question])
     assert not records_path(cfg).exists()
+    quarantine = run_dir(cfg) / "quarantine.jsonl"
+    assert quarantine.is_file()
+    entries = [json.loads(line) for line in quarantine.read_text(encoding="utf-8").splitlines()]
+    assert entries[0]["question_id"] == "local-0000"
+    assert "empty gold" in entries[0]["error"]
+
+
+def test_bad_question_quarantines_and_run_continues(tmp_path) -> None:
+    cfg = RunConfig(arm="B1", dataset="local", limit=3, seed=1, out_root=tmp_path)
+    questions = [
+        {"question": "Q0?", "answer": "42"},
+        {"question": "Bad?", "answer": ""},
+        {"question": "Q2?", "answer": "42"},
+    ]
+    summary = run(cfg, clients=[FakeClient("42")], questions=questions)
+    assert summary.n_debates == 2
+    entries = [
+        json.loads(line)
+        for line in (run_dir(cfg) / "quarantine.jsonl").read_text(encoding="utf-8").splitlines()
+    ]
+    assert [entry["question_id"] for entry in entries] == ["local-0001"]
+
+
+def test_resume_repairs_torn_line_and_requires_provenance_consent(tmp_path, monkeypatch) -> None:
+    import trustcal.runner as runner_module
+
+    cfg = RunConfig(arm="B1", dataset="local", limit=3, seed=1, out_root=tmp_path)
+    questions = [
+        {"question": "Q0?", "answer": "42"},
+        {"question": "Q1?", "answer": "42"},
+        {"question": "Q2?", "answer": "42"},
+    ]
+    run(cfg, clients=[FakeClient("42")], questions=questions)
+    path = records_path(cfg)
+    lines = path.read_text(encoding="utf-8").splitlines()
+    assert len(lines) == 3
+    path.write_text("\n".join(lines[:2]) + "\n" + lines[2][:20], encoding="utf-8")
+
+    monkeypatch.setattr(
+        runner_module,
+        "build_provenance",
+        lambda: {"provenance_hash": "changed", "provenance": {"code_commit": "changed"}},
+    )
+    with pytest.raises(ManifestMismatch, match="accept-provenance-change"):
+        run(cfg, clients=[FakeClient("42")], questions=questions)
+
+    cfg.accept_provenance_change = "test: resilience layer"
+    cfg.operator = "tester"
+    summary = run(cfg, clients=[FakeClient("42")], questions=questions)
+    assert summary.n_debates == 3
+    assert len(read_records(path)) == 3
 
 
 def test_injection_record_defaults_delivered_and_source(tmp_path) -> None:
@@ -277,3 +327,38 @@ def test_routes_sidecar_skips_arms_without_retrieval(tmp_path) -> None:
     run(cfg, clients=[FakeClient("beta") for _ in range(3)], questions=[MCQ])
     assert not (run_dir(cfg) / "routes.json").exists()
     _write_routes(cfg, None)  # must be a no-op, not an error
+
+
+def test_runtime_error_quarantines_and_continues(tmp_path) -> None:
+    class ExplodingClient:
+        def complete(self, system: str, user: str) -> str:
+            if "BAD" in user:
+                raise RuntimeError("server exploded")
+            return "Answer: 42"
+
+    cfg = RunConfig(arm="B1", dataset="local", limit=3, seed=1, out_root=tmp_path)
+    questions = [
+        {"question": "Q0?", "answer": "42"},
+        {"question": "BAD?", "answer": "42"},
+        {"question": "Q2?", "answer": "42"},
+    ]
+    summary = run(cfg, clients=[ExplodingClient()], questions=questions)
+    assert summary.n_debates == 2
+    entries = [
+        json.loads(line)
+        for line in (run_dir(cfg) / "quarantine.jsonl").read_text(encoding="utf-8").splitlines()
+    ]
+    assert [(entry["question_id"], entry["error_type"]) for entry in entries] == [
+        ("local-0001", "runtime")
+    ]
+
+
+def test_five_consecutive_failures_are_fatal(tmp_path) -> None:
+    class AlwaysExploding:
+        def complete(self, system: str, user: str) -> str:
+            raise RuntimeError("server down")
+
+    cfg = RunConfig(arm="B1", dataset="local", limit=6, seed=1, out_root=tmp_path)
+    questions = [{"question": f"Q{index}?", "answer": "42"} for index in range(6)]
+    with pytest.raises(RuntimeError, match="server down"):
+        run(cfg, clients=[AlwaysExploding()], questions=questions)

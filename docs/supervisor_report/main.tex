@@ -18,7 +18,7 @@
 \begin{center}
 {\large\bfseries The Boundaries of Evidence-Grounded Trust in Multi-Agent Scientific Debate, with a Controlled Benchmark for Sycophantic Consensus\par}
 \vspace{4pt}
-{\normalsize Supervisor Progress Report --- Group 6 \textperiodcentered\ Team Phantom Devs --- 20 November 2026\par}
+{\normalsize Supervisor Progress Report --- Group 6 \textperiodcentered\ Team Phantom Devs --- 21 November 2026\par}
 \end{center}
 \vspace{2pt}
 \hrule
@@ -32,7 +32,7 @@ Three heterogeneous LLMs answer the same scientific multiple-choice question, re
 
 \section*{2. Results}
 
-\textbf{Engineering gates (readiness, not findings).} P0 gate 13/13 passed; 639 local tests green. University 18\,GB slice checks (one 8--9\,B model plus two mocks; Q4\_K\_M main-model templates) return schema-valid records. These prove the pipeline is built correctly; they say nothing about whether trust-weighting works.
+\textbf{Engineering gates (readiness, not findings).} P0 gate 13/13 passed; 661 local tests green. University 18\,GB slice checks (one 8--9\,B model plus two mocks; Q4\_K\_M main-model templates) return schema-valid records. These prove the pipeline is built correctly; they say nothing about whether trust-weighting works.
 
 \textbf{N1a 4-bit cloud smoke: passed.} The full 53\,GB three-model 4-bit stack serves together on one 96\,GB card; every harness path runs end to end:
 
@@ -53,30 +53,28 @@ B8-oracle & 4/4 valid, 3 rounds & 1.00 (4/4) & --- & $\sim$280 s/debate \\
 
 Two findings came out of the smoke itself. First, one injection item showed a \emph{transient} effect the check initially missed: the targeted agent moved D\,$\to$\,C under the injected consensus in round 2, then reverted to D by round 3. The smoke check compared only round 1 with round 3, so it reported a failure on a real delivered effect; the check now detects any post-injection change, with a regression test, and injection passes 5/5. Second, the oracle arm's fifth record was lost to a spot eviction, not to the pipeline; the 4 completed records are all valid and all final answers correct.
 
-\textbf{Core prefix 25\,+\,25: complete.} The first 25 questions of the actual Core B8 row and the first 25 of the Core control row, run with per-question checkpointing so the work counts toward Core rather than being thrown away (25 unique records per arm, no duplicates, no torn writes, across repeated host stops):
+\textbf{Resilient Core row (\texttt{gpqa\_main}, seed 1): 51/52 of 400, in progress.} The actual Core B8 and B8-no-trust rows now run concurrently on a locked 400-question sample, with per-question checkpoints. Two arms complete a question pair in $\sim$150\,s versus $\sim$365\,s back to back, a $2.4\times$ wall-clock gain; the per-debate gain from parallel agent calls alone is $1.53\times$ (195.0\,s serial vs.\ 127.7\,s parallel on five paired questions). The 27 records written before the resilience layer were adopted into the same locked sample rather than re-run; question 27 is quarantined because its options are literal letters, and the row resumes at question 31.
 
 \begin{center}
 {\small
 \begin{tabular}{lcc}
 \toprule
- & B8 (trust-weighted) & Control (majority) \\
+ & B8 (trust-weighted, $n=51$) & Control (majority, $n=52$) \\
 \midrule
-Accuracy & 0.64 (16/25) & 0.56 (14/25) \\
-95\% CI (question-clustered bootstrap) & 0.44--0.84 & 0.36--0.76 \\
-MPR / trust-weighted MPR & 0.79 / 0.64 & 0.75 / 0.56 \\
-ARR (adaptation when majority correct) & 0.72 (n=18) & 0.71 (n=14) \\
-CCR-e (collapse rate on exposed items) & 0.13 (n=15) & 0.17 (n=12) \\
-Trust AUROC (n) & 0.57 (n=11) & n/a (no trust vector) \\
-Trust Brier (n) & 0.28 (n=19) & n/a (no trust vector) \\
-Records with trust trajectory & 19/25 & 0/25 (by design) \\
-Records with retrieved evidence & 25/25 & 24/25 \\
-Mean / median time & 245.5 / 257.2 s & 185.5 / 167.8 s \\
+Accuracy & 0.65 (33/51) & 0.58 (30/52) \\
+95\% CI (question-clustered bootstrap) & 0.53--0.78 & 0.44--0.71 \\
+MPR / trust-weighted MPR & 0.78 / 0.65 & 0.68 / 0.58 \\
+ARR (adaptation when majority correct) & 0.60 (n=35) & 0.73 (n=26) \\
+CCR-e (collapse rate on exposed items) & 0.03 (n=33) & 0.13 (n=30) \\
+Trust AUROC / Brier (n) & 0.58 (23) / 0.27 (34) & n/a (no trust vector) \\
+Records with retrieved evidence & 46/51 & 47/52 \\
+Mean / median time & 149.6 / 137.0 s & 138.8 / 133.5 s \\
 \bottomrule
 \end{tabular}
 }
 \end{center}
 
-\textit{Plain reading:} at $n=25$ per arm the confidence intervals overlap almost completely and the two-observation gap (16 vs.\ 14) is noise; CCR/CMR endpoints are mostly not applicable with no pressure arms in the prefix. The trust machinery is observably present in B8 (19 trajectories, AUROC/Brier computable) and absent in the control (majority finals 25/25), exactly as designed. This prefix demonstrates feasibility (rows run, resume, and time correctly) and gives timing data --- it is \textbf{not} an efficacy result and is not reported as one.
+\textit{Plain reading:} the intervals overlap heavily, the $+0.07$ accuracy gap is two questions, and the pressure endpoints remain sparse --- this is an in-progress checkpoint, \textbf{not} an efficacy result. It shows the row runs, resumes, quarantines a malformed item, and times at $\sim$150\,s per pair. The earlier 25\,+\,25 prefix was produced on pre-fix code and is a separate feasibility sample; it is not pooled with this row.
 
 \textbf{FP8 precision smoke: passed.} The 73.68\,GB FP8 stack serves all three models together (5/5 valid records, 3 rounds). Serving needed one config fix first: FP8 weights are roughly twice the 4-bit size, so the 8192-token context left no room for KV cache; context is 4096 with max 16 concurrent sequences per server (worst-case prompt 2438 tokens $<$ 3072 available, verified by preflight). Same 5 questions as the 4-bit smoke, so the pace is directly comparable:
 
