@@ -3,7 +3,7 @@
 % reason for the change are noted under the heading, per docs/title_rationale.md.
 % Compile: pdflatex main.tex (twice for references).
 \documentclass[11pt,a4paper]{article}
-\usepackage[margin=2cm]{geometry}
+\usepackage[margin=1.8cm]{geometry}
 \usepackage{booktabs}
 \usepackage{hyperref}
 \usepackage{enumitem}
@@ -24,7 +24,7 @@
 \hrule
 \vspace{6pt}
 
-\textit{On the title.} The registered FYDP title is ``Trust-Calibrated Multi-Agent Scientific Deliberation for Mitigating Sycophantic Consensus in LLM Reasoning'' and stays on the FYDP cover until a change is approved. The paper title above is used here because the registered title promises a mitigation (``for Mitigating'') the experiments have not yet measured. The paper's defensible contribution is narrower: it formalises \emph{when} evidence-grounded trust helps and when it amplifies a wrong majority, builds a controlled benchmark for the failure, and tests the sign reversal. The paper title states that contribution without claiming an unmeasured efficacy result.
+\textit{On the title.} The registered FYDP title is ``Trust-Calibrated Multi-Agent Scientific Deliberation for Mitigating Sycophantic Consensus in LLM Reasoning'' and stays on the FYDP cover until a change is approved. The paper title above is used here because the registered title promises a mitigation (``for Mitigating'') the experiments have not yet measured. The paper's defensible contribution is narrower: it formalises \emph{when} evidence-grounded trust helps and when it amplifies a wrong majority, builds a controlled benchmark for the failure, and tests the sign reversal.
 
 \section*{1. Project update}
 
@@ -34,39 +34,54 @@ Three heterogeneous LLMs answer the same scientific multiple-choice question, re
 
 \textbf{Engineering gates (readiness, not findings).} P0 gate 13/13 passed; 639 local tests green. University 18\,GB slice checks (one 8--9\,B model plus two mocks; Q4\_K\_M main-model templates) return schema-valid records. These prove the pipeline is built correctly; they say nothing about whether trust-weighting works.
 
-\textbf{N1a 4-bit cloud smoke: passed.} The full 53\,GB three-model 4-bit stack serves together; every harness path runs end to end (5 debates each):
+\textbf{N1a 4-bit cloud smoke: passed.} The full 53\,GB three-model 4-bit stack serves together on one 96\,GB card; every harness path runs end to end:
 
 \begin{center}
+{\small
+\begin{tabular}{lcccc}
+\toprule
+Arm & Records & Accuracy & MPR & Mean time \\
+\midrule
+B8 & 5/5 valid, 3 rounds & 0.40 (2/5) & 0.50 & 299.6 s/debate \\
+Injection & 5/5 valid, 3 rounds & 0.80 (4/5) & 0.75 & 137.3 s/debate \\
+B8-placebo & 5/5 valid, 3 rounds & 0.60 (3/5) & 0.75 & 258.1 s/debate \\
+B8-oracle & 4/4 valid, 3 rounds & 1.00 (4/4) & --- & $\sim$280 s/debate \\
+\bottomrule
+\end{tabular}
+}
+\end{center}
+
+Two findings came out of the smoke itself. First, one injection item showed a \emph{transient} effect the check initially missed: the targeted agent moved D\,$\to$\,C under the injected consensus in round 2, then reverted to D by round 3. The smoke check compared only round 1 with round 3, so it reported a failure on a real delivered effect; the check now detects any post-injection change, with a regression test, and injection passes 5/5. Second, the oracle arm's fifth record was lost to a spot eviction, not to the pipeline; the 4 completed records are all valid and all final answers correct.
+
+\textbf{Core prefix 25\,+\,25: complete.} The first 25 questions of the actual Core B8 row and the first 25 of the Core control row, run with per-question checkpointing so the work counts toward Core rather than being thrown away (25 unique records per arm, no duplicates, no torn writes, across repeated host stops):
+
+\begin{center}
+{\small
 \begin{tabular}{lcc}
 \toprule
-Arm & Records & Mean time \\
+ & B8 (trust-weighted) & Control (majority) \\
 \midrule
-B8 & 5/5 valid & 299.6 s/debate \\
-Injection & 5/5 valid & 137.3 s/debate \\
-B8-placebo & 5/5 valid & 258.1 s/debate \\
-B8-oracle & 4/4 valid & $\sim$280 s/debate \\
+Accuracy & 0.64 (16/25) & 0.56 (14/25) \\
+95\% CI (question-clustered bootstrap) & 0.44--0.84 & 0.36--0.76 \\
+MPR / trust-weighted MPR & 0.79 / 0.64 & 0.75 / 0.56 \\
+ARR (adaptation when majority correct) & 0.72 (n=18) & 0.71 (n=14) \\
+CCR-e (collapse rate on exposed items) & 0.13 (n=15) & 0.17 (n=12) \\
+Trust AUROC (n) & 0.57 (n=11) & n/a (no trust vector) \\
+Trust Brier (n) & 0.28 (n=19) & n/a (no trust vector) \\
+Records with trust trajectory & 19/25 & 0/25 (by design) \\
+Records with retrieved evidence & 25/25 & 24/25 \\
+Mean / median time & 245.5 / 257.2 s & 185.5 / 167.8 s \\
 \bottomrule
 \end{tabular}
+}
 \end{center}
 
-\textbf{Core prefix 25\,+\,25: complete.} The first 25 questions of the actual Core B8 row and the first 25 of the Core control row, run with checkpointing so the work counts toward Core rather than being thrown away:
+\textit{Plain reading:} at $n=25$ per arm the confidence intervals overlap almost completely and the two-observation gap (16 vs.\ 14) is noise; CCR/CMR endpoints are mostly not applicable with no pressure arms in the prefix. The trust machinery is observably present in B8 (19 trajectories, AUROC/Brier computable) and absent in the control (majority finals 25/25), exactly as designed. This prefix demonstrates feasibility (rows run, resume, and time correctly) and gives timing data --- it is \textbf{not} an efficacy result and is not reported as one.
+
+\textbf{FP8 precision smoke: passed.} The 73.68\,GB FP8 stack serves all three models together (5/5 valid records, 3 rounds). Serving needed one config fix first: FP8 weights are roughly twice the 4-bit size, so the 8192-token context left no room for KV cache; context is 4096 with max 16 concurrent sequences per server (worst-case prompt 2438 tokens $<$ 3072 available, verified by preflight). Same 5 questions as the 4-bit smoke, so the pace is directly comparable:
 
 \begin{center}
-\begin{tabular}{lccc}
-\toprule
-Arm & Accuracy & 95\% CI & Mean time \\
-\midrule
-B8 (trust-weighted) & 0.64 (16/25) & 0.44--0.84 & 245.5 s/debate \\
-Control (majority) & 0.56 (14/25) & 0.36--0.76 & 185.5 s/debate \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-CIs are question-clustered percentile bootstrap. The intervals overlap almost completely and the two-observation gap (16 vs.\ 14) is noise; pressure-eligible endpoints are mostly not applicable with no pressure arms in the prefix. This is a feasibility and timing sample, not an efficacy result.
-
-\textbf{FP8 precision smoke: passed.} The 73.68\,GB FP8 stack serves all three models together (5/5 valid records, 3 rounds). Same 5 questions as the 4-bit smoke, so the pace is directly comparable:
-
-\begin{center}
+{\small
 \begin{tabular}{lccccc}
 \toprule
  & Q0 & Q1 & Q2 & Q3 & Q4 \\
@@ -75,8 +90,9 @@ CIs are question-clustered percentile bootstrap. The intervals overlap almost co
 FP8 (s) & 420.1 & 239.7 & 185.5 & 277.9 & 288.6 \\
 \bottomrule
 \end{tabular}
+}
 \end{center}
 
-Mean 299.6\,s (4-bit) vs.\ 282.4\,s (FP8): effectively the same pace --- FP8 is a fidelity check, not a speed-up. Accuracy 2/5 vs.\ 4/5 at $n=5$ is noise in both directions and is not reported as a finding.
+Mean 299.6\,s (4-bit) vs.\ 282.4\,s (FP8): effectively the same pace --- FP8 is a fidelity check, not a speed-up (FP8 endpoints: MPR 0.75, ARR 0.60, CCR-e 0.0). Accuracy 2/5 vs.\ 4/5 at $n=5$ is noise in both directions and is not reported as a finding.
 
 \end{document}
