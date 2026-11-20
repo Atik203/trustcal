@@ -65,6 +65,21 @@ def test_gpqa_columns() -> None:
     assert len(out["options"]) == 4
 
 
+def test_gpqa_letter_answer_uses_correct_text() -> None:
+    """A bare letter in ``answer`` must not shadow the ``Correct Answer`` text."""
+    row = {
+        "Question": "Q?",
+        "answer": "c",
+        "Correct Answer": "right",
+        "Incorrect Answer 1": "wrong1",
+        "Incorrect Answer 2": "wrong2",
+        "Incorrect Answer 3": "wrong3",
+    }
+    out = _row_to_question(row, "gpqa")
+    assert out["answer"] == "right"
+    assert out["options"] == ["right", "wrong1", "wrong2", "wrong3"]
+
+
 def test_gold_answer_is_an_answer_column() -> None:
     row = {"problem": "P?", "gold_answer": "42", "solution": "long proof"}
     out = _row_to_question(row, "brokermath")

@@ -178,12 +178,20 @@ def _row_to_question(row: dict, name: str) -> dict:
     answer = _first(row, _ANSWER_KEYS)
     options = _options(_first(row, _OPTION_KEYS))
     if name.startswith("gpqa") and row.get("Incorrect Answer 1") is not None:
+        correct_text = str(row.get("Correct Answer", "")).strip()
         options = [
-            str(row.get("Correct Answer", "")),
+            correct_text,
             str(row.get("Incorrect Answer 1", "")),
             str(row.get("Incorrect Answer 2", "")),
             str(row.get("Incorrect Answer 3", "")),
         ]
+        # Some GPQA rows ship a bare letter in ``answer`` (e.g. "c") next to
+        # the real text in ``Correct Answer``. The text column is authoritative:
+        # the letter refers to the dataset's own order, which this block
+        # reorders by putting the correct answer first. Keeping the letter
+        # produced a schema-v2 record with ``gold='c'`` and no matching option.
+        if correct_text:
+            answer = correct_text
 
     if question is None:
         raise ValueError(f"{name}: row has no question field (keys: {sorted(row)})")
