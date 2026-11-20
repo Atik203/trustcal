@@ -1,28 +1,30 @@
 \section*{3. Core milestone results (\texttt{gpqa\_main}, seed 1)}\label{sec:core}
 
-At this checkpoint the row holds \textbf{122 debates} (60 B8, 62 control), 1098 agent-round responses, 4,293 claim-level verdicts, and 795 retrieved passages. The row has consumed approximately 2.5 GPU-hours; the mean question pair takes 152\,s (median 137\,s for B8). Both arms run concurrently, so a pair finishes in the slower arm's time rather than their sum.
+At this checkpoint the row holds \textbf{122 debates} (60 B8, 62 control), 1098 agent-round responses, 4,293 claim-level verdicts, and 795 retrieved passages. The row has consumed approximately 2.5 GPU-hours; the mean question pair takes 152\,s (median 137\,s for B8). Both arms run concurrently, so a pair finishes in the slower arm's time rather than their sum. Milestones completed: 60; next milestone: 100. Question 27 is quarantined (options are literal letters) and is excluded from the denominators; the row resumes at the first question id without a record.
 
-Milestones completed so far: 60; next milestone: 100. Question 27 is quarantined (options are literal letters) and is excluded from the denominators; the row resumes at the first question id without a record.
-
-{\large\setlength{\tabcolsep}{4pt}
-\begin{tabular}{lccccccccc}
+{\Large\setlength{\tabcolsep}{6pt}
+\begin{tabular}{lcccccc}
 \toprule
-Questions & B8 acc (95\% CI) & Control acc (95\% CI) & B8 MPR & Control MPR & B8 ARR (n) & Control ARR (n) & B8 CCR-e (n) & Control CCR-e (n) & Pair mean \\
+Questions & B8 acc (95\% CI) & Control acc (95\% CI) & B8 MPR & Control MPR & B8 ARR (n) & Control ARR (n) \\
 \midrule
-current (60) & 0.67 (0.55--0.78) & 0.62 (0.48--0.75) & 0.79 & 0.71 & 0.57 (40) & 0.72 (32) & 0.07 (42) & 0.15 (39) & 152 \\
+current (60) & 0.67 (0.55--0.78) & 0.62 (0.48--0.75) & 0.79 & 0.71 & 0.57 (40) & 0.72 (32) \\
 \bottomrule
 \end{tabular}
 }
 
-{\small\textit{Abbreviations:} MPR = minority-position retention; ARR = adaptation rate when the majority is correct; CCR-e = collapse rate on evidence-exposed items; AUROC = area under the ROC curve; Brier = Brier score (lower is better); n = applicable debates.}
+{\Large\setlength{\tabcolsep}{6pt}
+\begin{tabular}{lccccc}
+\toprule
+Questions & B8 CCR-e (n) & Control CCR-e (n) & B8 AUROC (n) & B8 Brier (n) & Pair mean (s) \\
+\midrule
+current (60) & 0.07 (42) & 0.15 (39) & 0.56 (28) & 0.27 (41) & 152 \\
+\bottomrule
+\end{tabular}
+}
 
+{\normalsize\textit{Abbreviations:} MPR = minority-position retention; ARR = adaptation rate when the majority is correct; CCR-e = collapse rate on evidence-exposed items; AUROC = area under the ROC curve; Brier = Brier score (lower is better); n = applicable debates.}
+
+\clearpage
 \begin{center}
-\begin{tikzpicture}
-\begin{axis}[width=0.88\textwidth, height=0.38\textheight, xlabel={questions completed (pairs)}, ylabel={accuracy}, ymin=0, ymax=1, xtick={100,150,200,250,300,350,400}, grid=major, legend style={font=\large, at={(0.02,0.98)}, anchor=north west}, tick label style={font=\large}, label style={font=\large}, title style={font=\Large}]
-\addplot+[only marks, mark=*, line width=1.2pt, error bars/.cd, y dir=both, y explicit] coordinates {(60,0.667) += (0,0.117) -= (0,0.117)};
-\addlegendentry{B8 (trust)}
-\addplot+[only marks, mark=square*, line width=1.2pt, error bars/.cd, y dir=both, y explicit] coordinates {(60,0.617) += (0,0.133) -= (0,0.133)};
-\addlegendentry{Control (majority)}
-\end{axis}
-\end{tikzpicture}
+\includegraphics[width=24cm,height=15cm,keepaspectratio]{core_figures.png}
 \end{center}
