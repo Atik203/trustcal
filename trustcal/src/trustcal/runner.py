@@ -30,7 +30,7 @@ from .config import PHASES, default_phase, load_models, rounds_for_phase
 from .eval import load_dataset, summarize
 from .eval.answers import score_answer
 from .eval.baselines import RUNNER_ARMS
-from .eval.datasets import sampling_seed, write_eligible_n
+from .eval.datasets import sampling_seed, validate_questions, write_eligible_n
 from .eval.failures import failure_counts
 from .eval.metrics import MetricSummary
 from .eval.options import RenderedOptions, build_options
@@ -861,10 +861,23 @@ def load_questions(cfg: RunConfig) -> list[dict]:
             available=len(data),
             extra={"source": "questions_file"},
         )
+        problems = validate_questions(selected)
+        if problems:
+            raise ValueError(
+                f"{cfg.questions_file}: {len(problems)} invalid question(s) before any model call: "
+                + "; ".join(problems[:3])
+            )
         return selected
-    return load_dataset(
+    questions = load_dataset(
         cfg.dataset, sample_cap=cfg.limit, eligible_path=eligible_path
     )[: cfg.limit]
+    problems = validate_questions(questions)
+    if problems:
+        raise ValueError(
+            f"{cfg.dataset}: {len(problems)} invalid question(s) before any model call: "
+            + "; ".join(problems[:3])
+        )
+    return questions
 
 
 def run(
