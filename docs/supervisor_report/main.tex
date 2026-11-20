@@ -21,9 +21,9 @@
 \begin{document}
 
 \begin{center}
-{\large\bfseries The Boundaries of Evidence-Grounded Trust in Multi-Agent Scientific Debate, with a Controlled Benchmark for Sycophantic Consensus\par}
+{\Large\bfseries The Boundaries of Evidence-Grounded Trust in Multi-Agent Scientific Debate, with a Controlled Benchmark for Sycophantic Consensus\par}
 \vspace{4pt}
-{\large 21 November 2026\par}
+{\normalsize 21 November 2026\par}
 \end{center}
 \vspace{2pt}
 \hrule
@@ -42,7 +42,7 @@ Three heterogeneous LLMs answer the same scientific multiple-choice question, re
 \textbf{N1a 4-bit cloud smoke: passed.} The full 53\,GB three-model 4-bit stack serves together on one 96\,GB card; every harness path runs end to end:
 
 \begin{center}
-{\large
+{\normalsize
 \begin{tabular}{lcccc}
 \toprule
 Arm & Records & Accuracy & MPR & Mean time \\
@@ -63,7 +63,7 @@ Two findings came out of the smoke itself. First, one injection item showed a \e
 \textbf{FP8 precision smoke: passed.} The 73.68\,GB FP8 stack serves all three models together (5/5 valid records, 3 rounds). Serving needed one config fix first: FP8 weights are roughly twice the 4-bit size, so the 8192-token context left no room for KV cache; context is 4096 with max 16 concurrent sequences per server (worst-case prompt 2438 tokens $<$ 3072 available, verified by preflight). Same 5 questions as the 4-bit smoke, so the pace is directly comparable:
 
 \begin{center}
-{\large
+{\normalsize
 \begin{tabular}{lccccc}
 \toprule
  & Q0 & Q1 & Q2 & Q3 & Q4 \\
