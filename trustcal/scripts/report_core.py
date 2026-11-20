@@ -74,6 +74,18 @@ def pair(value, n) -> str:
     return f"{value:.2f}" + (f" ({n})" if n is not None else "")
 
 
+def cumulative_accuracy(rows: list[dict]) -> tuple[list[int], list[float]]:
+    correct = 0
+    xs: list[int] = []
+    ys: list[float] = []
+    for index, row in enumerate(rows, start=1):
+        if row.get("final_answer_correct"):
+            correct += 1
+        xs.append(index)
+        ys.append(correct / index)
+    return xs, ys
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--b8", required=True)
@@ -209,9 +221,13 @@ def main() -> int:
         )
         ns = [point["n"] for point in points]
         b8_color, ctl_color = "#1f4e79", "#c55a11"
-        fig, axes = plt.subplots(2, 2, figsize=(16, 9.6))
+        fig, axes = plt.subplots(2, 2, figsize=(16, 10.5))
 
         ax = axes[0][0]
+        xs8, ys8 = cumulative_accuracy(b8)
+        xsc, ysc = cumulative_accuracy(ctl)
+        ax.plot(xs8, ys8, color=b8_color, linewidth=1.6, alpha=0.55)
+        ax.plot(xsc, ysc, color=ctl_color, linewidth=1.6, alpha=0.55, linestyle="--")
         ax.errorbar(
             ns,
             [p["acc"] for p in points],
@@ -219,11 +235,13 @@ def main() -> int:
                 [p["acc"] - p["low"] for p in points],
                 [p["high"] - p["acc"] for p in points],
             ],
-            fmt="o-",
+            fmt="o",
             color=b8_color,
-            capsize=6,
-            linewidth=2.4,
-            markersize=9,
+            capsize=7,
+            linewidth=2.2,
+            markersize=12,
+            markeredgecolor="white",
+            markeredgewidth=1.2,
             label="B8 (trust)",
         )
         ax.errorbar(
@@ -233,13 +251,23 @@ def main() -> int:
                 [p["cacc"] - p["clow"] for p in points],
                 [p["chigh"] - p["cacc"] for p in points],
             ],
-            fmt="s--",
+            fmt="s",
             color=ctl_color,
-            capsize=6,
-            linewidth=2.4,
-            markersize=9,
+            capsize=7,
+            linewidth=2.2,
+            markersize=12,
+            markeredgecolor="white",
+            markeredgewidth=1.2,
             label="Control (majority)",
         )
+        if points:
+            ax.annotate(
+                f"n={points[-1]['n']}",
+                (points[-1]["n"], points[-1]["acc"]),
+                textcoords="offset points",
+                xytext=(8, 10),
+                fontsize=16,
+            )
         ax.set_title("Accuracy (95% CI)")
         ax.set_ylabel("accuracy")
         ax.set_ylim(0, 1)
@@ -247,16 +275,16 @@ def main() -> int:
         ax.grid(alpha=0.3)
 
         ax = axes[0][1]
-        ax.plot(ns, [p["mpr"] for p in points], "o-", color=b8_color, linewidth=2.4, markersize=9)
-        ax.plot(ns, [p["cmpr"] for p in points], "s--", color=ctl_color, linewidth=2.4, markersize=9)
+        ax.plot(ns, [p["mpr"] for p in points], "o-", color=b8_color, linewidth=2.4, markersize=12)
+        ax.plot(ns, [p["cmpr"] for p in points], "s--", color=ctl_color, linewidth=2.4, markersize=12)
         ax.set_title("Minority-position retention (MPR)")
         ax.set_ylabel("MPR")
         ax.set_ylim(0, 1)
         ax.grid(alpha=0.3)
 
         ax = axes[1][0]
-        ax.plot(ns, [p["ccr"] for p in points], "o-", color=b8_color, linewidth=2.4, markersize=9)
-        ax.plot(ns, [p["cccr"] for p in points], "s--", color=ctl_color, linewidth=2.4, markersize=9)
+        ax.plot(ns, [p["ccr"] for p in points], "o-", color=b8_color, linewidth=2.4, markersize=12)
+        ax.plot(ns, [p["cccr"] for p in points], "s--", color=ctl_color, linewidth=2.4, markersize=12)
         ax.set_title("Collapse on exposed items (CCR-e)")
         ax.set_ylabel("CCR-e")
         ax.set_xlabel("questions completed (pairs)")
@@ -264,7 +292,7 @@ def main() -> int:
         ax.grid(alpha=0.3)
 
         ax = axes[1][1]
-        ax.plot(ns, [p["pair"] for p in points], "o-", color="#2e7d32", linewidth=2.4, markersize=9)
+        ax.plot(ns, [p["pair"] for p in points], "o-", color="#2e7d32", linewidth=2.4, markersize=12)
         ax.set_title("Question pair time")
         ax.set_ylabel("seconds")
         ax.set_xlabel("questions completed (pairs)")
@@ -273,8 +301,12 @@ def main() -> int:
 
         for row in axes:
             for panel in row:
-                panel.set_xlim(0, 420)
-                panel.set_xticks(range(0, 401, 50))
+                if current >= 100:
+                    panel.set_xlim(0, 420)
+                    panel.set_xticks(range(0, 401, 50))
+                else:
+                    panel.set_xlim(0, max(60, current + 30))
+                    panel.set_xticks(range(0, max(60, current + 30) + 1, 20))
 
         fig.tight_layout()
         fig.savefig(fig_path, dpi=600, bbox_inches="tight")
