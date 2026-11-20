@@ -179,7 +179,7 @@ def main() -> int:
     )
 
     table = (
-        "{\\large\\setlength{\\tabcolsep}{10pt}\\renewcommand{\\arraystretch}{1.25}\n"
+        "{\\normalsize\\setlength{\\tabcolsep}{10pt}\\renewcommand{\\arraystretch}{1.25}\n"
         "\\begin{tabular}{lcc}\n"
         "\\toprule\n"
         f"Metric & B8 (trust, n={current}) & Control (majority, n={current}) \\\\\n"
