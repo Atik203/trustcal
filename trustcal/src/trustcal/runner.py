@@ -18,6 +18,7 @@ appended.
 from __future__ import annotations
 
 import json
+import os
 import time
 from collections import Counter
 from dataclasses import dataclass, field
@@ -741,6 +742,10 @@ def _make_runner(
         clients=clients,
         rounds=rounds,
         retriever=retriever,
+        # Throughput-only switch (verified bit-identical in
+        # test_debate_parallel.py): env, never a RunConfig field, so the
+        # manifest hash is unaffected. TRUSTCAL_SERIAL=1 restores serial.
+        parallel_calls=os.environ.get("TRUSTCAL_SERIAL") != "1",
         injection_scope=injection_scope,
         injection_arm=cfg.injection_arm,
         injection_source=cfg.injection_source,

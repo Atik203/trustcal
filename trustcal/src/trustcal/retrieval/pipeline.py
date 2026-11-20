@@ -19,6 +19,7 @@ and the target volume are identical in both conditions.
 
 from __future__ import annotations
 
+import threading
 from dataclasses import dataclass, field
 from typing import Callable, Iterable
 
@@ -92,6 +93,13 @@ class Retriever:
     _route_cache: dict[str, sources.ClaimRoute] = field(default_factory=dict, repr=False)
     _failures: dict[str, int] = field(default_factory=dict, repr=False)
     _dead_sources: set[str] = field(default_factory=set, repr=False)
+    # Guards the shared caches/logs when the debate loop fans retrieval out
+    # over threads (DebateRunner parallel_calls). The slow HTTP fetch itself
+    # runs unlocked; only check-and-insert plus the failure counters hold the
+    # lock, and inserts are idempotent (same key always maps to the same
+    # bytes), so concurrent duplicates collapse to one entry and outputs stay
+    # identical to the serial loop. Verified by test_debate_parallel.py.
+    _lock: threading.Lock = field(default_factory=threading.Lock, repr=False, compare=False)
 
     def __post_init__(self) -> None:
         if self.search_fn is None:
@@ -100,11 +108,15 @@ class Retriever:
     def route(self, claim: str, domain: str | None = None) -> sources.ClaimRoute:
         """Routing decision for a claim, cached and logged once per distinct call."""
         key = f"{domain}:{claim}" if domain else claim
-        if key not in self._route_cache:
-            route = sources.route_claim(claim, domain)
-            self._route_cache[key] = route
-            self.routes.append(route.as_dict())
-        return self._route_cache[key]
+        hit = self._route_cache.get(key)
+        if hit is None:
+            with self._lock:
+                hit = self._route_cache.get(key)
+                if hit is None:
+                    hit = sources.route_claim(claim, domain)
+                    self._route_cache[key] = hit
+                    self.routes.append(hit.as_dict())
+        return hit
 
     def source_names(self, agent_index: int, claim: str | None = None) -> tuple[str, ...]:
         """Candidate sources in query order for this claim/agent.
@@ -124,24 +136,31 @@ class Retriever:
         if source in self._dead_sources:
             return []
         key = (source, query, top_k)
-        if key in self._cache:
-            return self._cache[key]
+        hit = self._cache.get(key)
+        if hit is not None:
+            return hit
         try:
             results = list(self.search_fn(source, query, top_k=top_k))
+            failed: Exception | None = None
         except Exception as exc:  # noqa: BLE001 - retrieval must not kill the run
-            self.errors.append(f"{source}: {exc}")
-            failures = self._failures.get(source, 0) + 1
-            self._failures[source] = failures
-            if failures >= self.config.max_source_failures:
-                self._dead_sources.add(source)
-                self.errors.append(
-                    f"{source}: skipped for the rest of the run after {failures} consecutive failures"
-                )
+            failed = exc
             results = []
-        else:
-            self._failures.pop(source, None)
-        self._cache[key] = results
-        return results
+        with self._lock:
+            if failed is None:
+                self._failures.pop(source, None)
+            else:
+                self.errors.append(f"{source}: {failed}")
+                failures = self._failures.get(source, 0) + 1
+                self._failures[source] = failures
+                if failures >= self.config.max_source_failures:
+                    self._dead_sources.add(source)
+                    self.errors.append(
+                        f"{source}: skipped for the rest of the run after {failures} consecutive failures"
+                    )
+            # Idempotent insert (failure empties are cached too, as serial
+            # code did): a tied thread may have stored the same bytes first.
+            self._cache.setdefault(key, results)
+            return self._cache[key]
 
     def depth(self, round_number: int) -> int:
         """Progressive retrieval: half depth in rounds 1-2, full depth later."""
