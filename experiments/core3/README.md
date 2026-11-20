@@ -63,6 +63,7 @@ still has no record.
 
 ## Timing and cost
 
-Measured on the 30 records: ~145 s per pair, ~$1.59/h → ~370 remaining pairs
-≈ 15 h ≈ **$23–25**. The row is resumed from question 28; the 27 adopted records
-and the three smoke records are never re-run.
+Measured on the 30 records: ~145 s per pair, ~$1.59/h → ~369 remaining pairs
+(q31–q399; q27 stays quarantined) ≈ 15 h ≈ **$23–25**. The row resumes at the
+first question id without a record; the 27 adopted records and the three smoke
+records are never re-run.
