@@ -3,7 +3,7 @@
 % reason for the change are noted under the heading, per docs/title_rationale.md.
 % Compile: pdflatex main.tex (twice for references).
 \documentclass[11pt,a4paper]{article}
-\usepackage[margin=1.8cm]{geometry}
+\usepackage[margin=1.2cm]{geometry}
 \usepackage{booktabs}
 \usepackage{graphicx}
 \usepackage{hyperref}
@@ -77,10 +77,10 @@ FP8 (s) & 420.1 & 239.7 & 185.5 & 277.9 & 288.6 \\
 
 Mean 299.6\,s (4-bit) vs.\ 282.4\,s (FP8): effectively the same pace --- FP8 is a fidelity check, not a speed-up (FP8 endpoints: MPR 0.75, ARR 0.60, CCR-e 0.0). Accuracy 2/5 vs.\ 4/5 at $n=5$ is noise in both directions and is not reported as a finding.
 
-\begin{landscape}
+\clearpage
 \begin{center}
-\includegraphics[width=24cm,height=16cm,keepaspectratio]{core_figures.png}
+\includegraphics[width=\textwidth,height=0.55\textheight,keepaspectratio]{core_figures.png}
 \end{center}
-\end{landscape}
+\input{core_limits}
 
 \end{document}
