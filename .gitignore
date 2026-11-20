@@ -52,3 +52,6 @@ __pycache__/
 # text should not be redistributed).
 /experiments/calibration/private/
 /experiments/verifier_audit/private/
+
+docs/supervisor_report/main.aux
+docs/supervisor_report/main.out
