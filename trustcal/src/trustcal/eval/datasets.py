@@ -154,6 +154,7 @@ def _stratum(row: dict) -> str | None:
 
 
 _CATEGORY_WS = re.compile(r"\s+")
+_BARE_LETTER = re.compile(r"^[A-Ja-j]$")
 
 
 def normalize_category(value: Any) -> str:
@@ -618,7 +619,9 @@ def question_errors(question: dict, index: int | None = None) -> list[str]:
             errors.append(f"{label}: empty option text")
         if len(set(texts)) != len(texts):
             errors.append(f"{label}: duplicate option text")
-        if gold and gold not in texts:
+        if gold and _BARE_LETTER.match(gold):
+            errors.append(f"{label}: gold {gold!r} is a bare letter; store the option text")
+        elif gold and gold not in texts:
             errors.append(f"{label}: gold {gold!r} is not among the options")
     return errors
 

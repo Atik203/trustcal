@@ -176,16 +176,16 @@ def test_resume_refuses_a_changed_alpha(tmp_path) -> None:
         run(changed, clients=[FakeClient("42")], questions=[FREE_TEXT])
 
 
-def test_resume_refuses_records_from_another_manifest(tmp_path) -> None:
+def test_resume_refuses_records_from_another_condition(tmp_path) -> None:
     cfg = _cfg(tmp_path)
     run(cfg, clients=[FakeClient("42")], questions=[FREE_TEXT])
 
     path = records_path(cfg)
     record = json.loads(path.read_text(encoding="utf-8").splitlines()[0])
-    record["manifest_hash"] = "0" * 64
+    record["condition_hash"] = "0" * 64
     path.write_text(json.dumps(record) + "\n", encoding="utf-8")
 
-    with pytest.raises(ManifestMismatch, match="different manifest"):
+    with pytest.raises(ManifestMismatch, match="condition"):
         run(cfg, clients=[FakeClient("42")], questions=[FREE_TEXT])
 
 
@@ -240,12 +240,16 @@ def test_summary_has_accuracy_and_manifest(tmp_path) -> None:
     assert (run_dir(cfg) / "summary.json").is_file()
 
 
-def test_invalid_record_is_never_appended(tmp_path) -> None:
+def test_invalid_record_is_quarantined_not_appended(tmp_path) -> None:
     cfg = _cfg(tmp_path)
     question = {"question": "Broken item?", "answer": ""}
-    with pytest.raises(ValueError, match="invalid schema-v2 record"):
-        run(cfg, clients=[FakeClient("42")], questions=[question])
+    run(cfg, clients=[FakeClient("42")], questions=[question])
     assert not records_path(cfg).exists()
+    quarantine = run_dir(cfg) / "quarantine.jsonl"
+    assert quarantine.is_file()
+    entries = [json.loads(line) for line in quarantine.read_text(encoding="utf-8").splitlines()]
+    assert entries[0]["question_id"] == "local-0000"
+    assert "empty string" in entries[0]["error"]
 
 
 def test_injection_record_defaults_delivered_and_source(tmp_path) -> None:

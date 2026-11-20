@@ -90,6 +90,16 @@ def main() -> None:
         default="minority",
         help="who receives the injected consensus (default: minority)",
     )
+    parser.add_argument(
+        "--accept-provenance-change",
+        default=None,
+        help="consent to a code change under a live row; records the reason in manifest_history.jsonl",
+    )
+    parser.add_argument(
+        "--operator",
+        default=None,
+        help="name recorded with a provenance change (default: $USER)",
+    )
     args = parser.parse_args()
 
     stack = " / ".join(a.model for a in agents_for_phase(load_models(args.config), args.phase))
@@ -120,6 +130,8 @@ def main() -> None:
         placebo_mode=args.placebo_mode,
         placebo_unit=args.placebo_unit,
         oracle_mode=args.oracle_mode,
+        accept_provenance_change=args.accept_provenance_change,
+        operator=args.operator,
     )
     summary = run(cfg)
     print(summary.as_dict())

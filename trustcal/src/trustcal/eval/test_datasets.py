@@ -84,9 +84,14 @@ def test_gpqa_letter_answer_uses_correct_text() -> None:
 
 
 def test_question_errors_flags_gold_outside_options() -> None:
-    question = {"question": "Q?", "answer": "c", "options": ["right", "a", "b", "d"]}
+    question = {"question": "Q?", "answer": "wrong", "options": ["right", "a", "b", "d"]}
     errors = question_errors(question, 3)
     assert any("question[3]" in error and "not among the options" in error for error in errors)
+
+
+def test_question_errors_flags_bare_letter_gold() -> None:
+    question = {"question": "Q?", "answer": "c", "options": ["c", "a", "b", "d"]}
+    assert any("bare letter" in error for error in question_errors(question))
 
 
 def test_validate_questions_accepts_clean_sample() -> None:
