@@ -115,3 +115,32 @@ def test_retriever_lock_present() -> None:
     import threading
 
     assert isinstance(Retriever()._lock, type(threading.Lock()))
+
+
+def test_per_source_locks_do_not_serialize_across_sources() -> None:
+    """Independent sources must overlap; one global fetch lock would deadlock."""
+    import threading
+
+    barrier = threading.Barrier(2, timeout=5.0)
+    entered: list[str] = []
+
+    def search(source: str, query: str, top_k: int = 5) -> list[SearchResult]:
+        if source in ("pubmed", "arxiv"):
+            entered.append(source)
+            barrier.wait()  # both threads must be inside the fetch
+        return [_result(source, query)]
+
+    retriever = Retriever(config=RetrievalConfig(top_k=1, prompt_passages=1), search_fn=search)
+    threads = [
+        threading.Thread(target=retriever._search, args=(source, "q", 1))
+        for source in ("pubmed", "arxiv")
+    ]
+    for thread in threads:
+        thread.start()
+    for thread in threads:
+        thread.join(timeout=10)
+
+    assert sorted(entered) == ["arxiv", "pubmed"]
+    assert all(not thread.is_alive() for thread in threads)
+    assert retriever.errors == []
+
