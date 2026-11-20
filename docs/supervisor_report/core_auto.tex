@@ -2,7 +2,7 @@
 
 At this checkpoint the row holds \textbf{168 debates} (83 B8, 85 control), 1512 agent-round responses, 5,819 claim-level verdicts, and 1,122 retrieved passages. The row has consumed approximately 3.5 GPU-hours; the mean question pair takes 153\,s (median 137\,s for B8). Both arms run concurrently, so a pair finishes in the slower arm's time rather than their sum. This pair is \textbf{2 of the 24 Core rows} and, at completion, contributes \textbf{800 of the 8,000 Core debates (10\%)}, 2,400 of 24,000 agent trajectories, and 7,200 of 72,000 agent-rounds. Progress against that target: 166/8,000 debates (2.1\%). Milestones completed: 83; next milestone: 100. Question 27 is quarantined (options are literal letters) and is excluded from the denominators; the row resumes at the first question id without a record.
 
-{\Large\setlength{\tabcolsep}{10pt}\renewcommand{\arraystretch}{1.25}
+{\large\setlength{\tabcolsep}{10pt}\renewcommand{\arraystretch}{1.25}
 \begin{tabular}{lcc}
 \toprule
 Metric & B8 (trust, n=83) & Control (majority, n=83) \\
