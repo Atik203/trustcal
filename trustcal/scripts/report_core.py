@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import statistics
 import sys
 from pathlib import Path
@@ -86,6 +87,40 @@ def cumulative_accuracy(rows: list[dict]) -> tuple[list[int], list[float]]:
     return xs, ys
 
 
+def paired_stats(b8: list[dict], ctl: list[dict]) -> dict:
+    """Discordant-pair counts and an exact two-sided McNemar p-value."""
+    ctl_by_qid = {row["question_id"]: row for row in ctl}
+    both = only_b8 = only_ctl = neither = 0
+    for row in b8:
+        other = ctl_by_qid.get(row["question_id"])
+        if other is None:
+            continue
+        a = bool(row.get("final_answer_correct"))
+        b = bool(other.get("final_answer_correct"))
+        if a and b:
+            both += 1
+        elif a:
+            only_b8 += 1
+        elif b:
+            only_ctl += 1
+        else:
+            neither += 1
+    discordant = only_b8 + only_ctl
+    if discordant == 0:
+        p_value = 1.0
+    else:
+        tail = min(only_b8, only_ctl)
+        p_value = min(1.0, 2.0 * sum(math.comb(discordant, k) for k in range(tail + 1)) / 2**discordant)
+    return {
+        "n": both + only_b8 + only_ctl + neither,
+        "both": both,
+        "only_b8": only_b8,
+        "only_ctl": only_ctl,
+        "neither": neither,
+        "p": p_value,
+    }
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--b8", required=True)
@@ -97,6 +132,7 @@ def main() -> int:
     b8 = load(Path(args.b8))
     ctl = load(Path(args.ctl))
     current = min(len(b8), len(ctl))
+    paired = paired_stats(b8[:current], ctl[:current])
 
     targets: list[tuple[str, int]] = []
     for milestone in MILESTONES:
@@ -171,6 +207,9 @@ def main() -> int:
         "\\textbf{800 of the 8,000 Core debates (10\\%)}, 2,400 of 24,000 agent trajectories, and "
         "7,200 of 72,000 agent-rounds. "
         f"Progress against that target: {2 * current}/8,000 debates ({200.0 * current / 8000:.1f}\\%). "
+        f"On the {paired['n']} paired questions, both arms are correct on {paired['both']}, "
+        f"B8 alone on {paired['only_b8']}, control alone on {paired['only_ctl']}, and neither on "
+        f"{paired['neither']} (exact McNemar p = {paired['p']:.3f}). "
         f"Milestones completed: "
         + (", ".join(str(point["n"]) for point in points) if points else "none")
         + f"; next milestone: {next((m for m in MILESTONES if m > current), 400)}. "
@@ -225,7 +264,7 @@ def main() -> int:
         )
         ns = [point["n"] for point in points]
         b8_color, ctl_color = "#1f4e79", "#c55a11"
-        fig, axes = plt.subplots(2, 2, figsize=(16, 10.5))
+        fig, axes = plt.subplots(2, 2, figsize=(12, 9.2))
 
         ax = axes[0][0]
         xs8, ys8 = cumulative_accuracy(b8)
@@ -316,6 +355,19 @@ def main() -> int:
         fig.savefig(fig_path, dpi=600, bbox_inches="tight")
         plt.close(fig)
         figures = ""
+
+    limits = (
+        "\\vspace{1em}\n"
+        "\\textbf{Reading the figure.} Thin lines are cumulative accuracy after each question; "
+        "markers are milestone snapshots with 95\\% CIs. MPR, CCR-e and pair time are milestone-only "
+        "because they are defined per snapshot, not per question.\n\n"
+        "\\textbf{What this does not show.} One dataset, one seed, "
+        f"{current} questions; the pressure arms are not in this row, so the CMR and CCR-e "
+        f"denominators are sparse; the accuracy difference is not significant at this $n$ "
+        f"(exact McNemar $p={paired['p']:.3f}$); these are feasibility and timing results, "
+        "not an efficacy claim.\n"
+    )
+    Path(args.out).with_name("core_limits.tex").write_text(limits, encoding="utf-8")
 
     Path(args.out).write_text(prose + table + abbrev + figures, encoding="utf-8")
     print(f"wrote {args.out}: {len(points)} point(s), current n={current}")
