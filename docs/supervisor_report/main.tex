@@ -24,8 +24,6 @@
 \hrule
 \vspace{6pt}
 
-\textit{On the title.} The registered FYDP title is ``Trust-Calibrated Multi-Agent Scientific Deliberation for Mitigating Sycophantic Consensus in LLM Reasoning'' and stays on the FYDP cover until a change is approved. The paper title above is used here because the registered title promises a mitigation (``for Mitigating'') the experiments have not yet measured. The paper's defensible contribution is narrower: it formalises \emph{when} evidence-grounded trust helps and when it amplifies a wrong majority, builds a controlled benchmark for the failure, and tests the sign reversal.
-
 \section*{1. Project update}
 
 Three heterogeneous LLMs answer the same scientific multiple-choice question, read one another's reasoning over three rounds, and revise. The treatment arm (B8) aggregates the final answer with trust weights computed from how well each agent's claims check out against retrieved external evidence (PubMed, arXiv, Semantic Scholar); the control arm (B8-no-trust) runs identical prompts, evidence, and source partitioning but aggregates by majority vote. The failure under study is \emph{sycophantic consensus}: a confidently wrong majority pressures a correct minority agent into agreeing, after which the vote records the wrong answer as consensus. The confirmatory endpoints (accuracy and Correct-Minority Retention on pressure-eligible items) are frozen in the pre-registration; no result below claims them.
@@ -77,6 +75,8 @@ Mean / median time & 149.6 / 137.0 s & 138.8 / 133.5 s \\
 \end{center}
 
 \textit{Plain reading:} the intervals overlap heavily, the $+0.07$ accuracy gap is two questions, and the pressure endpoints remain sparse --- this is an in-progress checkpoint, \textbf{not} an efficacy result. It shows the row runs, resumes, quarantines a malformed item, and times at $\sim$150\,s per pair. The earlier 25\,+\,25 prefix was produced on pre-fix code and is a separate feasibility sample; it is not pooled with this row.
+
+\textbf{Metrics and reproducibility.} MPR is the share of debates in which a correct minority position survives; ARR is the rate at which the panel adopts a correct majority position when one exists; CCR-e is the collapse rate on items where a correct agent was exposed to readable contrary evidence (the sycophancy endpoint). Intervals are question-clustered percentile bootstrap (1{,}000 resamples). The 400-question sample is frozen in \texttt{sample.lock.json} (hash \texttt{39c6b0ba}); the condition hash (models, prompt, seed, decoding, retrieval/trust parameters) must match on every resume, while code provenance is recorded per session in \texttt{manifest\_history.jsonl}. A malformed question is quarantined rather than aborting the row.
 
 \textbf{FP8 precision smoke: passed.} The 73.68\,GB FP8 stack serves all three models together (5/5 valid records, 3 rounds). Serving needed one config fix first: FP8 weights are roughly twice the 4-bit size, so the 8192-token context left no room for KV cache; context is 4096 with max 16 concurrent sequences per server (worst-case prompt 2438 tokens $<$ 3072 available, verified by preflight). Same 5 questions as the 4-bit smoke, so the pace is directly comparable:
 
