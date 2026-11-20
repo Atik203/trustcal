@@ -7,6 +7,9 @@
 \usepackage{booktabs}
 \usepackage{hyperref}
 \usepackage{enumitem}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{pdflscape}
 \setlist{topsep=2pt,itemsep=2pt}
 \hypersetup{colorlinks=true,linkcolor=blue,urlcolor=blue}
 \setlength{\parskip}{4pt}
@@ -23,8 +26,6 @@
 \vspace{2pt}
 \hrule
 \vspace{6pt}
-
-\textit{On the title.} The registered FYDP title is ``Trust-Calibrated Multi-Agent Scientific Deliberation for Mitigating Sycophantic Consensus in LLM Reasoning'' and stays on the FYDP cover until a change is approved. The paper title above is used here because the registered title promises a mitigation (``for Mitigating'') the experiments have not yet measured. The paper's defensible contribution is narrower: it formalises \emph{when} evidence-grounded trust helps and when it amplifies a wrong majority, builds a controlled benchmark for the failure, and tests the sign reversal.
 
 \section*{1. Project update}
 
@@ -55,28 +56,9 @@ B8-oracle & 4/4 valid, 3 rounds & 1.00 (4/4) & --- & $\sim$280 s/debate \\
 
 Two findings came out of the smoke itself. First, one injection item showed a \emph{transient} effect the check initially missed: the targeted agent moved D\,$\to$\,C under the injected consensus in round 2, then reverted to D by round 3. The smoke check compared only round 1 with round 3, so it reported a failure on a real delivered effect; the check now detects any post-injection change, with a regression test, and injection passes 5/5. Second, the oracle arm's fifth record was lost to a spot eviction, not to the pipeline; the 4 completed records are all valid and all final answers correct.
 
-\textbf{Resilient Core row (\texttt{gpqa\_main}, seed 1): 51/52 of 400, in progress.} The actual Core B8 and B8-no-trust rows now run concurrently on a locked 400-question sample, with per-question checkpoints. At this checkpoint the row holds \textbf{103 debates} (51 B8, 52 control) --- 153 agent trajectories per arm (3 agents $\times$ 51 questions), 927 agent-round responses (3 rounds each), 3,490 claim-level verdicts, and 663 retrieved passages (396 B8 / 267 control); every debate completed all three rounds, and the 103 debates consumed $\sim$2.1 GPU-h. Two arms complete a question pair in $\sim$150\,s versus $\sim$365\,s back to back, a $2.4\times$ wall-clock gain; the per-debate gain from parallel agent calls alone is $1.53\times$ (195.0\,s serial vs.\ 127.7\,s parallel on five paired questions). The 27 records written before the resilience layer were adopted into the same locked sample rather than re-run; question 27 is quarantined because its options are literal letters, and the row resumes at question 31.
-
-\begin{center}
-{\small
-\begin{tabular}{lcc}
-\toprule
- & B8 (trust-weighted, $n=51$) & Control (majority, $n=52$) \\
-\midrule
-Accuracy & 0.65 (33/51) & 0.58 (30/52) \\
-95\% CI (question-clustered bootstrap) & 0.53--0.78 & 0.44--0.71 \\
-MPR / trust-weighted MPR & 0.78 / 0.65 & 0.68 / 0.58 \\
-ARR (adaptation when majority correct) & 0.60 (n=35) & 0.73 (n=26) \\
-CCR-e (collapse rate on exposed items) & 0.03 (n=33) & 0.13 (n=30) \\
-Trust AUROC / Brier (n) & 0.58 (23) / 0.27 (34) & n/a (no trust vector) \\
-Records with retrieved evidence & 46/51 & 47/52 \\
-Mean / median time & 149.6 / 137.0 s & 138.8 / 133.5 s \\
-\bottomrule
-\end{tabular}
-}
-\end{center}
-
-\textit{Plain reading:} the intervals overlap heavily, the $+0.07$ accuracy gap is two questions, and the pressure endpoints remain sparse --- this is an in-progress checkpoint, \textbf{not} an efficacy result. It shows the row runs, resumes, quarantines a malformed item, and times at $\sim$150\,s per pair. The earlier 25\,+\,25 prefix was produced on pre-fix code and is a separate feasibility sample; it is not pooled with this row.
+\begin{landscape}
+\input{core_auto}
+\end{landscape}
 
 \textbf{FP8 precision smoke: passed.} The 73.68\,GB FP8 stack serves all three models together (5/5 valid records, 3 rounds). Serving needed one config fix first: FP8 weights are roughly twice the 4-bit size, so the 8192-token context left no room for KV cache; context is 4096 with max 16 concurrent sequences per server (worst-case prompt 2438 tokens $<$ 3072 available, verified by preflight). Same 5 questions as the 4-bit smoke, so the pace is directly comparable:
 
