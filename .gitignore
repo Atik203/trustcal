@@ -13,7 +13,6 @@ dist-ssr
 *.local
 
 # Editor directories and files
-.vscode/
 .idea
 .DS_Store
 *.suo
@@ -34,8 +33,6 @@ dist-ssr
 config.bat
 
 # Secrets
-.env
-.env.*
 !.env.example
 
 
@@ -55,3 +52,5 @@ __pycache__/
 
 docs/supervisor_report/main.aux
 docs/supervisor_report/main.out
+
+docs/superpowers/
