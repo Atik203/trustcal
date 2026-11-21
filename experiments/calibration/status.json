@@ -1,5 +1,5 @@
 {
-  "snapshot": "2026-11-19",
+  "snapshot": "2026-11-21",
   "gate": "SciClaimBench 24-item calibration",
   "target_items": 24,
   "strata": {
@@ -14,7 +14,7 @@
   "human_label_rows": 0,
   "real_items": 24,
   "placeholders": 0,
-  "note": "24 candidate items drafted and schema-validated (8/8/8, 216 claims, 234 passages); blind sheets generated. No human verification, labels, adjudication, or defect review yet.",
+  "note": "24 candidate items drafted and schema-validated (8/8/8, 216 claims, 234 passages); blind sheets generated and mechanically hardened 21 Nov 2026 (validator PASS on all artifacts, sheets cover 216/216 claims 1:1, no gated text, stratum files resynced byte-identical to the canonical batch). No human verification, labels, adjudication, or defect review yet.",
   "target_kappa": 0.75,
   "max_defect_rate": 0.15,
   "max_unresolved_rate": 0.05,

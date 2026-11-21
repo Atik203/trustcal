@@ -3,9 +3,9 @@
 **Member guide:** [`docs/MEMBER_GUIDE.md`](../../docs/MEMBER_GUIDE.md) — roles, worked examples, and the 4/6-week plan.
 
 **Gate:** Phase N3 (roadmap §4). **Owner:** P3 + annotators.
-**Status (9 Nov 2026): BLOCKED on item authoring and human annotation.**
-**0 of 24 items are authored; 0 claims and 0 human labels exist.** The files here
-are a schema-compatible seed batch, an annotation workbook, and a validator, not
+**Status (21 Nov 2026): BLOCKED on human verification and annotation.**
+**24 of 24 items are drafted but unverified (216 claims, 234 passages; 0 human labels exist).** The files here
+are a schema-validated draft batch, an annotation workbook, and a validator, not
 a finished calibration set. Do not report κ, a defect rate, or a calibration
 result until the sheets contain real human labels.
 
