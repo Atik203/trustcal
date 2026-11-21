@@ -10,7 +10,21 @@
 
 **Status:** onboarding and task division. This guide does not replace the pre-registration, the SciClaimBench protocol, or the verifier-audit protocol.
 
-**No prior annotation experience is needed.** Every label is defined below and in the two codebooks. The first two days are for reading and a short practice batch. Start with Section 3.
+**No prior annotation experience is needed.** Every label is defined below and in the two codebooks. The first two days are for reading and a short practice batch. Start with Section 3 — or with the role task packs in Section 0 if you already know your role.
+
+> **Note on Member 1.** Member 1 (Atik) runs the experiments, the Python pipeline, the GPU runs, the item drafting with AI agents, the analysis, and the manuscript integration. His work is not assigned in this guide. The tasks below are only the **human-judgment work that cannot be delegated to an agent** without changing the study. If a task can be automated, Member 1 or an agent does it; it is not listed here.
+
+## 0. Task packs and current work
+
+Role task packs with exact commands, paths, budgets, and done-criteria live in [`docs/member/tasks/`](member/tasks/):
+
+- [`00_OVERVIEW.md`](member/tasks/00_OVERVIEW.md) — pipeline map 24→180→300, gates, file map, glossary. Read first.
+- [`01_RATER.md`](member/tasks/01_RATER.md) — label blind sheets (Members 4, 5; verifier audit: Members 2, 4).
+- [`02_ADJUDICATOR.md`](member/tasks/02_ADJUDICATOR.md) — resolve disagreements, defect review (Member 6; Member 3 for defects).
+- [`03_AUTHOR.md`](member/tasks/03_AUTHOR.md) — draft/verify items (Members 2, 3 verify; Member 1 drafts).
+- [`04_AGENT_PILOT.md`](member/tasks/04_AGENT_PILOT.md) — copy-paste agent prompts; agents draft, humans decide every gold verdict.
+
+**Current work (Nov 2026): verify the 24-item calibration first** — drafts at `experiments/calibration/private/items/cal-001..024.json`, blind sheets at `experiments/calibration/private/calibration/sheets/`, validator `experiments/calibration/validate_items.py`, score command in `experiments/calibration/status.json` under `next_command`. The 180-item freeze and 300-item target start only after the κ ≥ 0.75 / defect ≤ 15% / H ≤ 2.0 h gate passes. The 4/6-week plan in Section 10 is unchanged.
 
 > **Note on Member 1.** Member 1 (Atik) runs the experiments, the Python pipeline, the GPU runs, the item drafting with AI agents, the analysis, and the manuscript integration. His work is not assigned in this guide. The tasks below are only the **human-judgment work that cannot be delegated to an agent** without changing the study. If a task can be automated, Member 1 or an agent does it; it is not listed here.
 

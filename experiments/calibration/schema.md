@@ -19,7 +19,7 @@ JSON. The validator accepts either a JSON list or one object per JSONL line.
 | `minority_agent` | integer or null | when authored | Agent holding the correct minority at round 1 |
 | `conditions` | string[] | when authored | Supported conditions: `evidence_available`, `evidence_absent`, `evidence_placebo`, `evidence_contradictory` |
 | `positions` | object[] | when authored | Exactly three positions, `agent` 0, 1, 2 |
-| `draft_assisted` | boolean | no | True if an LLM drafted text; a human still verified every claim |
+| `draft_assisted` | boolean | no | **Deprecated 21 Nov 2026: do not set.** Provenance lives in batch manifests; items carry no AI markings. Accepted if present (legacy files) but never required. |
 | `notes` | string | no | Authoring notes, never a gold label |
 | `template` | boolean | no | `true` only for the template skeleton; the validator skips it |
 
