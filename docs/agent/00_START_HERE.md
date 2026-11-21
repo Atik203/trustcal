@@ -120,8 +120,8 @@ E:\FYDP\
 │   ├── blueprint.md          # historical design doc (not evidence)
 │   ├── agent\                # these docs
 │   └── FYDP1_defence_Q&A.md  # check status notes before the defence
-├── FYDP_Summer\              # 70-page report (compiled; engineering report)
-├── Papev_Summer26_6\         # 19-page journal manuscript (compiled; engineering report)
+├── FYDP_Report\              # 70-page report (compiled; engineering report)
+├── Journal_Paper\         # 19-page journal manuscript (compiled; engineering report)
 ├── literature_review\        # paper reviews + index
 ├── UPDATE-CHECKLIST.md       # team-facing one-pager
 ├── PRE_REGISTRATION.md       # v1.0 + v1.1 erratum (released hash bc9c7b...)

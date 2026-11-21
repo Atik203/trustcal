@@ -2,7 +2,7 @@
 
 **Status date:** 9 November 2026. **P0 engineering is released; there are no efficacy results.**
 
-**Readiness:** `FYDP_Summer/out/fydp.pdf` — **70 pages**, 80 cited works, 0 errors/undefined refs. `Papev_Summer26_6/out/cas-sc-template.pdf` — **19 pages**, 71 cited works, 0 errors/undefined refs. Implementation and conclusion are **written** for the full-project engineering release. Neither manuscript reports an efficacy result.
+**Readiness:** `FYDP_Report/out/fydp.pdf` — **75 pages**, 80+ cited works, 0 errors/undefined refs. `Journal_Paper/out/cas-sc-template.pdf` — **19 pages**, 71 cited works, 0 errors/undefined refs. Implementation and conclusion are **written** for the full-project engineering release. Neither manuscript reports an efficacy result.
 
 **Title (fixed, no colon):** *The Boundaries of Evidence-Grounded Trust in Multi-Agent Scientific Debate, with a Controlled Benchmark for Sycophantic Consensus.*
 
@@ -27,8 +27,8 @@ Do not mix them. The current 70-page artifact is the report; the 19-page artifac
 
 | Item | State (18 Nov 2026) | Implication |
 |---|---|---|
-| Report | 70 pp; 80 cited works; 0 errors/undefined refs | Compiles; engineering report |
-| Journal | 19 pp; 71 cited works; 0 errors/undefined refs | Compiles; engineering report |
+| Report | 75 pp; 80 cited works; 0 errors/undefined refs | Compiles; engineering report |
+| Journal | 21 pp; 71 cited works; 0 errors/undefined refs | Compiles; engineering report |
 | P0 gate | 13/13 | Engineering readiness only |
 | Tests | 615 passed (514 at P0 release) | Code path is tested |
 | Efficacy results | **None** | No accuracy/CMR/CCR claim may be written |
@@ -42,7 +42,7 @@ Do not mix them. The current 70-page artifact is the report; the 19-page artifac
 
 ## 3. Claim audit (historical; resolved 9 November 2026)
 
-> **Banner:** this table is the 8 November 2026 audit that drove the rewrite. It is **resolved**. The applied changes are recorded in `Papev_Summer26_6/CLAIMS_AUDIT.md` and `FYDP_Summer/CLAIMS_AUDIT.md`; do not re-open these items as current defects.
+> **Banner:** this table is the 8 November 2026 audit that drove the rewrite. It is **resolved**. The applied changes are recorded in `Journal_Paper/CLAIMS_AUDIT.md` and `FYDP_Report/CLAIMS_AUDIT.md`; do not re-open these items as current defects.
 
 | # | Historical claim | Problem | Rewrite |
 |---:|---|---|---|
@@ -218,3 +218,5 @@ The score projections from the 8 Nov 2026 audit are historical working estimates
 - *Evidence as Influence: The Verification Ceiling of Trust-Calibrated Multi-Agent Debate*
 - *When Does Evidence Rescue a Correct Minority? A Causal Study of Multi-Agent Deliberation*
 - *TrustCal: A Reproducible Framework and Benchmark for Evidence-Grounded Multi-Agent Scientific Deliberation*
+
+

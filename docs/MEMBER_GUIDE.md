@@ -78,7 +78,7 @@ These are planning estimates, not ledger numbers. Member 1's item drafting and e
 | Order | File | Why |
 | ---: | --- | --- |
 | 1 | [`README.md`](../README.md) | Project status, claim boundary, repository map |
-| 2 | [`FYDP_Summer/fydp.pdf`](../FYDP_Summer/fydp.pdf) | The full report; read the abstract, Chapter 3, and Chapter 4 |
+| 2 | [`FYDP_Report/fydp.pdf`](../FYDP_Report/fydp.pdf) | The full report; read the abstract, Chapter 3, and Chapter 4 |
 | 3 | [`PRE_REGISTRATION.md`](../PRE_REGISTRATION.md) | Endpoints, hypotheses, exclusions, stopping rules |
 | 4 | [`experiments/calibration/README.md`](../experiments/calibration/README.md) | SciClaimBench protocol, κ/defect/effort gates, 24 → 180 → 300 ladder |
 | 5 | [`experiments/calibration/schema.md`](../experiments/calibration/schema.md) | Item, position, claim, evidence, and verdict fields |
@@ -96,8 +96,8 @@ Use these links directly. Do not search the repository for the files.
 | --- | --- |
 | Repository | <https://github.com/Atik203/trustcal> |
 | Project README | <https://github.com/Atik203/trustcal/blob/main/README.md> |
-| Full report PDF | <https://github.com/Atik203/trustcal/blob/main/FYDP_Summer/fydp.pdf> |
-| Journal PDF | <https://github.com/Atik203/trustcal/blob/main/Papev_Summer26_6/cas-sc-template.pdf> |
+| Full report PDF | <https://github.com/Atik203/trustcal/blob/main/FYDP_Report/fydp.pdf> |
+| Journal PDF | <https://github.com/Atik203/trustcal/blob/main/Journal_Paper/cas-sc-template.pdf> |
 | Pre-registration | <https://github.com/Atik203/trustcal/blob/main/PRE_REGISTRATION.md> |
 | Roadmap and gates | <https://github.com/Atik203/trustcal/blob/main/roadmap.md> |
 | SciClaimBench protocol | <https://github.com/Atik203/trustcal/blob/main/experiments/calibration/README.md> |
@@ -109,7 +109,7 @@ Use these links directly. Do not search the repository for the files.
 | Verifier audit master template | <https://github.com/Atik203/trustcal/blob/main/experiments/verifier_audit/audit_sheet.template.csv> |
 | Member templates | <https://github.com/Atik203/trustcal/tree/main/docs/member/templates> |
 | Glossary | <https://github.com/Atik203/trustcal/blob/main/docs/GLOSSARY.md> |
-| Claims audit (report) | <https://github.com/Atik203/trustcal/blob/main/FYDP_Summer/CLAIMS_AUDIT.md> |
+| Claims audit (report) | <https://github.com/Atik203/trustcal/blob/main/FYDP_Report/CLAIMS_AUDIT.md> |
 | Defence Q&A | <https://github.com/Atik203/trustcal/blob/main/docs/FYDP1_defence_Q&A.md> |
 | Compute and cost model | <https://github.com/Atik203/trustcal/blob/main/docs/agent/08_COMPUTE_COST.md> |
 | Private annotation folder | Member 1 posts the link in the team channel before Day 1. It is not in this public repository. |
@@ -655,8 +655,8 @@ A failed κ or balanced-accuracy gate is a **finding**, not a failure of the tea
 | --- | --- |
 | Repository | <https://github.com/Atik203/trustcal> |
 | README | <https://github.com/Atik203/trustcal/blob/main/README.md> |
-| Report PDF | <https://github.com/Atik203/trustcal/blob/main/FYDP_Summer/fydp.pdf> |
-| Journal PDF | <https://github.com/Atik203/trustcal/blob/main/Papev_Summer26_6/cas-sc-template.pdf> |
+| Report PDF | <https://github.com/Atik203/trustcal/blob/main/FYDP_Report/fydp.pdf> |
+| Journal PDF | <https://github.com/Atik203/trustcal/blob/main/Journal_Paper/cas-sc-template.pdf> |
 | Pre-registration | <https://github.com/Atik203/trustcal/blob/main/PRE_REGISTRATION.md> |
 | Roadmap | <https://github.com/Atik203/trustcal/blob/main/roadmap.md> |
 | SciClaimBench protocol | <https://github.com/Atik203/trustcal/blob/main/experiments/calibration/README.md> |
@@ -668,6 +668,6 @@ A failed κ or balanced-accuracy gate is a **finding**, not a failure of the tea
 | Verifier master template | <https://github.com/Atik203/trustcal/blob/main/experiments/verifier_audit/audit_sheet.template.csv> |
 | Member templates | <https://github.com/Atik203/trustcal/tree/main/docs/member/templates> |
 | Glossary | <https://github.com/Atik203/trustcal/blob/main/docs/GLOSSARY.md> |
-| Report claims audit | <https://github.com/Atik203/trustcal/blob/main/FYDP_Summer/CLAIMS_AUDIT.md> |
+| Report claims audit | <https://github.com/Atik203/trustcal/blob/main/FYDP_Report/CLAIMS_AUDIT.md> |
 | Defence Q&A | <https://github.com/Atik203/trustcal/blob/main/docs/FYDP1_defence_Q&A.md> |
 | Compute and cost model | <https://github.com/Atik203/trustcal/blob/main/docs/agent/08_COMPUTE_COST.md> |

@@ -37,7 +37,7 @@ Legend: ✅ real / tested / released; 🟡 implemented but partially wired, unva
 | Statistics | ✅ | `eval/stats.py` | Bootstrap/d/McNemar/Holm implemented; analysis waits for data |
 | Docs | ✅ | `docs/agent/` | This set refreshed 9 Nov 2026; `02`, `04`, `06`, `09` are explicitly historical |
 | Pre-registration | ✅ v1.0 + v1.1 erratum | `PRE_REGISTRATION.md` | Frozen. The v1.1 erratum records the released prompt hash `bc9c7b...`; `6cc9b0...` is pre-WP-13, not current |
-| Manuscripts | ✅ engineering | `FYDP_Summer/out/fydp.pdf`; `Papev_Summer26_6/out/cas-sc-template.pdf` | 70 pp and 19 pp; 80 and 71 cited works; 0 errors/undefined refs; implementation and conclusion written; **no efficacy results** |
+| Manuscripts | ✅ engineering | `FYDP_Report/out/fydp.pdf`; `Journal_Paper/out/cas-sc-template.pdf` | 75 pp and 21 pp; 80 and 71 cited works; 0 errors/undefined refs; implementation and conclusion written; **no efficacy results** |
 
 ---
 
@@ -117,9 +117,9 @@ The detailed pre-P0 findings (injection without retrieval, CCR=0 in B8, `evidenc
 
 ## 5. Manuscript status
 
-- **Report:** `FYDP_Summer/out/fydp.pdf` - 70 pages, 80 cited works, explicit pdfLaTeX, 0 errors/undefined refs. The implementation and conclusion are written. It is an **engineering report for the full project**, not an efficacy paper.
-- **Journal:** `Papev_Summer26_6/out/cas-sc-template.pdf` - 19 pages, 71 cited works, explicit pdfLaTeX, 0 errors/undefined refs. Same caveat.
-- **Claim audits:** `Papev_Summer26_6/CLAIMS_AUDIT.md` and `FYDP_Summer/CLAIMS_AUDIT.md` are the authoritative record of the 9 Nov 2026 claim changes. `04_LITERATURE_AND_GAPS.md §7` is the historical source.
+- **Report:** `FYDP_Report/out/fydp.pdf` - 75 pages, 80+ cited works, explicit pdfLaTeX, 0 errors/undefined refs. The implementation and conclusion are written. It is an **engineering report for the full project**, not an efficacy paper.
+- **Journal:** `Journal_Paper/out/cas-sc-template.pdf` - 21 pages, 71 cited works, explicit pdfLaTeX, 0 errors/undefined refs. Same caveat.
+- **Claim audits:** `Journal_Paper/CLAIMS_AUDIT.md` and `FYDP_Report/CLAIMS_AUDIT.md` are the authoritative record of the 9 Nov 2026 claim changes. `04_LITERATURE_AND_GAPS.md §7` is the historical source.
 - **No results claim:** do not write accuracy, CCR, CMR, trust AUROC, or sign-reversal claims until the pilot/Core data exist. The abstract must not claim an effect.
 
 ---
@@ -131,8 +131,8 @@ The detailed pre-P0 findings (injection without retrieval, CCR=0 in B8, `evidenc
 | `docs/FYDP1_defence_Q&A.md` | Status notes may be stale | Check against this file before the defence; do not assume it reflects P0 |
 | `roadmap.md` | Current | Order-of-work source of truth |
 | `docs/blueprint.md` | Historical design | Do not treat as evidence; its frozen invariants predate P0-5 |
-| `Papev_Summer26_6/cas-sc-template.tex` | Engineering report | Update only after real results; no efficacy claims yet |
-| `FYDP_Summer/4.implementation.tex`, `6.conclusion.tex` | Written for P0 | No longer empty placeholders; still no efficacy results |
+| `Journal_Paper/cas-sc-template.tex` | Engineering report | Update only after real results; no efficacy claims yet |
+| `FYDP_Report/4.implementation.tex`, `6.conclusion.tex` | Written for P0 | No longer empty placeholders; still no efficacy results |
 | `literature_review/index.md` | Working index | Check for unread papers before related-work work |
 
 ---
@@ -180,3 +180,4 @@ The detailed pre-P0 findings (injection without retrieval, CCR=0 in B8, `evidenc
 - [x] N1b 96 GB FP8 smoke. **PASS 20 Nov 2026** (B8 5/5 valid; serving only, no precision claim).
 - [ ] Pilot passes G2. **Pending Dec 2026–Jan 2027.**
 - [x] Docs updated; `main` = `dev` with the full pipeline.
+

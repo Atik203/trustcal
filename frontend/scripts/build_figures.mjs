@@ -6,8 +6,8 @@
  *   width="6000" height="3375" viewBox="0 0 1600 900"
  *   6000 px / 10 in = 600 DPI at 10 in wide; 6.5 in gives 923 DPI.
  *
- * Journal set: docs/figures/, frontend/public/figures/, Papev_Summer26_6/.
- * Report set: FYDP_Summer/ uses report-context and report-dataflow for
+ * Journal set: docs/figures/, frontend/public/figures/, Journal_Paper/.
+ * Report set: FYDP_Report/ uses report-context and report-dataflow for
  * fig-context.png and fig-dataflow.png; the other four report figures come
  * from the journal set. The report-only PNGs are not written anywhere else.
  * The PNG IHDR is verified before any file is written.
@@ -26,9 +26,9 @@ const srcDir = join(repoRoot, 'docs', 'figures-src');
 const outDir = join(repoRoot, 'docs', 'figures');
 const journalCopies = [
   join(frontendDir, 'public', 'figures'),
-  join(repoRoot, 'Papev_Summer26_6'),
+  join(repoRoot, 'Journal_Paper'),
 ];
-const reportDir = join(repoRoot, 'FYDP_Summer');
+const reportDir = join(repoRoot, 'FYDP_Report');
 
 const JOURNAL_NAMES = [
   'fig-pipeline',
@@ -215,8 +215,8 @@ function printTable(header, rows) {
 }
 
 console.log('Figure build — canonical SVG -> PNG');
-console.log('journal set: docs/figures + public/figures + Papev_Summer26_6 + FYDP_Summer (4 files)');
-console.log('report overrides: report-context/report-dataflow -> FYDP_Summer only');
+console.log('journal set: docs/figures + public/figures + Journal_Paper + FYDP_Report (4 files)');
+console.log('report overrides: report-context/report-dataflow -> FYDP_Report only');
 console.log('');
 
 console.log('Journal set');
@@ -238,7 +238,7 @@ printTable(
 );
 
 console.log('');
-console.log('Report-only overrides (not written to docs/figures, public/figures, or Papev_Summer26_6)');
+console.log('Report-only overrides (not written to docs/figures, public/figures, or Journal_Paper)');
 printTable(
   ['source', 'pixels', 'report width', 'report DPI', 'output'],
   REPORT_ONLY.map(({ source, target }) => {
@@ -249,7 +249,7 @@ printTable(
       `${actual.width}x${actual.height}`,
       `${rw.toFixed(2)} in`,
       String(dpi(rw)),
-      `FYDP_Summer/${target}.png`,
+      `FYDP_Report/${target}.png`,
     ];
   }),
 );

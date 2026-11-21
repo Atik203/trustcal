@@ -146,7 +146,7 @@ Every "why did you choose X" question, in one table.
 | Decision | Choice | Reason | Where |
 | --- | --- | --- | --- |
 | Number of agents | 3, different families (Qwen, Gemma, Mistral) | Smallest group where a majority can form; different families reduce correlated errors | `configs/models.yaml:20-48`; blueprint §5 |
-| No fine-tuning | Inference-only | The mechanism must be model-agnostic; fine-tuning hides whether trust itself changes behavior | `Papev_Summer26_6/cas-sc-template.tex:194` |
+| No fine-tuning | Inference-only | The mechanism must be model-agnostic; fine-tuning hides whether trust itself changes behavior | `Journal_Paper/cas-sc-template.tex:194` |
 | Rounds | K = 3 | Enough for trust to update twice; bounded cost | `configs/models.yaml:16` |
 | Trust update | Logit accumulation + α·V/n − β·H/n | Transparent, bounded, unit-testable; support and contradiction normalized by claims checked | `trust/update.py` |
 | α / β | 0.5 / 0.3 defaults | Conservative start; the Phase-3b grid search tunes them | `trust/update.py`; sweep blueprint `:476` |
@@ -164,7 +164,7 @@ Every "why did you choose X" question, in one table.
 | Seeds | 2 for the main matrix; the pilot is a single frozen set | Replication without doubling the Core-run budget; the unit of analysis is the question | `PRE_REGISTRATION.md` |
 | Metrics | Final accuracy + CMR primary; ARR, trust AUROC/Brier; ECR deprecated | Correction, minority survival, ranking, no regression | `eval/endpoints.py` |
 | κ gate | ≥ 0.75 | Human annotation quality before any measurement counts | `trustcal/INJECTION_PROTOCOL.md:59-64` |
-| CCR threshold | baseline CCR ≥ 0.30 | Gate 1: the injection must induce real collapse before trust is tested | `FYDP_Summer/3.design.tex:121` |
+| CCR threshold | baseline CCR ≥ 0.30 | Gate 1: the injection must induce real collapse before trust is tested | `FYDP_Report/3.design.tex:121` |
 | Ceiling baselines | B7, OpenAI GPT-6 Luna (`gpt-6-luna`), 3 samples/question (mean+CI and 3-sample majority), ~$3–9/1,000; B8-oracle pending WP-18 | B7 is an optional, appendix-only external-answer ceiling, not the mechanism or B8-oracle; B8-oracle is the trust upper bound | blueprint `:322,339`; WP-18 |
 | No fine-tuning | served models only | Reproducible on open models at fixed compute | blueprint `:319-321` |
 
@@ -503,7 +503,7 @@ Source: `trustcal/INJECTION_PROTOCOL.md`; paper `Papev:316-326`.
 **Validation gates:**
 
 - κ ≥ 0.75 on 40 annotated items before measuring (step 1 gate).
-- Baseline CCR ≥ 0.30 on the pilot (100–150 questions) — if the injection cannot induce collapse, the premise is not testable and the protocol is strengthened (Gate 1; `FYDP_Summer/3.design.tex:121`).
+- Baseline CCR ≥ 0.30 on the pilot (100–150 questions) — if the injection cannot induce collapse, the premise is not testable and the protocol is strengthened (Gate 1; `FYDP_Report/3.design.tex:121`).
 
 **Upper-bound framing (must say this):** the injection is an explicit worst-case stress test, not realistic subtle sycophancy — limitation L1 (blueprint `:706`).
 
@@ -833,7 +833,7 @@ Config: `trustcal/configs/datasets.yaml`; blueprint table `docs/blueprint.md` §
 
 ## 15. Compute, Cost & Feasibility
 
-- Current Core matrix: 1,280 GPU-h conservative cap, planned ~1,067 GPU-h (`PRE_REGISTRATION.md` §5). The earlier report figure was ≈300 GPU-h (`FYDP_Summer/3.design.tex:168`; `5.sic.tex:305`).
+- Current Core matrix: 1,280 GPU-h conservative cap, planned ~1,067 GPU-h (`PRE_REGISTRATION.md` §5). The earlier report figure was ≈300 GPU-h (`FYDP_Report/3.design.tex:168`; `5.sic.tex:305`).
 - Stage costs: 18 GB test gate $0; 4-bit 80 GB smoke $1–2; pilot $15–20; Core $175–210; Full $210 (32-row gold-evidence default) or $235 (36-row gold-answer alternate); 96 GB 5-question FP8 smoke $2–8; FP8 precision replication $25–40; storage/bandwidth $40–80; total $500–600.
 - **Hard stop: $600.** The main matrix runs on one **80 GB A100 PCIe** at **$0.136/GPU-h** with the **4-bit 24–27B final families**. The 96 GB FP8 stack at **$0.336/GPU-h** is only a 5-question smoke (**$2–8**) plus the GPQA precision replication (B3/B8-no-trust/B8, 150–200 questions, 1 seed; 60–100 GPU-h; **$25–40**), after the 4-bit pilot/Core. If the A100 spot is unavailable and the main runs use 96 GB, the plan is **$1,050–1,150** and needs **re-approval**; it is not the default. Law-testing is outside this envelope.
 - **$50 tranche:** 18 GB tests ($0) + 4-bit smoke ($1–2) + pilot ($15–20), with $20–30 held for retries/bandwidth. Do not run a 96 GB pilot ($37–45) or precision replication ($25–40) from it.
@@ -888,7 +888,7 @@ Config: `trustcal/configs/datasets.yaml`; blueprint table `docs/blueprint.md` §
 | The effect has not been measured yet | "The Core run is the next gate. No efficacy claim is made before it; the P0 gate is engineering readiness, not evidence." |
 | Placebo/oracle arms are not implemented yet | "WP-18 adds B8-placebo and B8-oracle before the main run; the pre-registration lists the six-arm target and the four-arm executable subset. The Full default is 32 rows with a gold-evidence oracle on SciClaimBench; the gold-answer alternate is 36 rows." |
 | `--rounds` ignored with real clients | "Rounds come from the config file; the flag is legacy for mocks. It is queued for cleanup." (`runner.py:161-166`) |
-| Empty constraints subsections in report | "The standards/constraints chapter is being completed for the thesis; the mapping exists in Ch5." (`FYDP_Summer/5.sic.tex:53-73`) |
+| Empty constraints subsections in report | "The standards/constraints chapter is being completed for the thesis; the mapping exists in Ch5." (`FYDP_Report/5.sic.tex:53-73`) |
 | Registry vs matrix | "B1–B10 are the registry; the Core matrix is exactly B3, B4-matched, B8-no-trust and B8. The Full target adds placebo and oracle." |
 | Costs are split by stage | "FP8 smoke/precision replication, pilot, Core and Full are separate rows; the total plan is $500–600 with a $600 hard stop. Full default is 32 rows with a gold-evidence oracle; 36 rows is the gold-answer alternate. Law-testing is outside the envelope." |
 | α/β grid not yet run | "Defaults 0.5/0.3; a Phase-3b sweep is scheduled, with a planned sensitivity check." (`blueprint.md` §9) |
@@ -931,7 +931,7 @@ The uncomfortable questions, with answers that hold up.
 
 **What we do NOT claim:** not "first to mitigate sycophancy"; not a solved calibration problem; not better than frontier models — we change how a debate aggregates evidence at equal model scale.
 
-**Report refs:** gap analysis `FYDP_Summer/2.back.tex:88`; related work comparisons in `literature_review/index.md`.
+**Report refs:** gap analysis `FYDP_Report/2.back.tex:88`; related work comparisons in `literature_review/index.md`.
 
 ### 17.1 Positioning Q&A
 
@@ -956,7 +956,7 @@ The uncomfortable questions, with answers that hold up.
 
 ## 18. Where Is It in the Report?
 
-| Topic | FYDP_Summer | Journal (Papev) | Blueprint |
+| Topic | FYDP_Report | Journal | Blueprint |
 | --- | --- | --- | --- |
 | Architecture / context / DFD | `3.design.tex:5-48` | — | §5:214 |
 | Phases + gates (first plan) | `3.design.tex:80-134` | — | §12:460, §13:486 |

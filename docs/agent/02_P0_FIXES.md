@@ -353,7 +353,7 @@
 **Evidence:**
 - `git log --oneline` (the old long-lived feature branch was ahead).
 - `docs/FYDP1_defence_Q&A.md:69`.
-- `Papev_Summer26_6/cas-sc-template.tex:121`.
+- `Journal_Paper/cas-sc-template.tex:121`.
 
 **Change:**
 1. Merge the old long-lived feature branch into `main` (or change the default branch).

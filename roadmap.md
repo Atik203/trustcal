@@ -11,12 +11,12 @@ Phase-by-phase execution plan for **November 2026 – December 2027**. This file
 | Item | Value |
 |---|---|
 | Branches | `main` = release/deployed frontend; `dev` = development |
-| Release tip | `v0.2.1` on both `main` and `dev`; `p0-release` tag = `7f2c11f` |
+| Release tip | past PR #23 on both `main` and `dev` (core3 complete); `p0-release` tag = `7f2c11f` |
 | Tags | `p0-gate` = `055a244`; `p0-release` = `7f2c11f` |
 | P0 gate | **13/13 passed, 0 failed, 0 pending** |
-| Tests | **615 passed** (514 at the P0 release) |
-| Report | `FYDP_Summer/out/fydp.pdf` — 70 pages, 80 cited works, explicit pdfLaTeX, 0 errors/undefined refs |
-| Journal | `Papev_Summer26_6/out/cas-sc-template.pdf` — 19 pages, 71 cited works, explicit pdfLaTeX, 0 errors/undefined refs |
+| Tests | **661 passed** (514 at the P0 release) |
+| Report | `FYDP_Report/fydp.pdf` – 75 pages, 80+ cited works, explicit pdfLaTeX, 0 errors/undefined refs |
+| Journal | `Journal_Paper/cas-sc-template.pdf` – 21 pages, 71 cited works, explicit pdfLaTeX, 0 errors/undefined refs |
 | Figures | six journal figures + two report-only figures at 6000 × 3375 (600+ DPI) |
 | Frontend | `npm run build` passes and prerenders all routes; `npm run lint` exits 0 (warnings only) |
 | Main stack (4-bit) | Qwen3.8-27B-AWQ-INT4 / Gemma-4-26B-A4B-AWQ / Mistral-24B-AWQ, **53.26 GB** pinned |
@@ -485,8 +485,8 @@ next/*  short-lived slice branches; deleted after merge
 | `docs/agent/08_COMPUTE_COST.md` | Cost model, dev-slice offset, and $50 tranche |
 | `experiments/p0/WAVE2.md` | P0 landing record |
 | `trustcal/IMPLEMENTATION_STATUS.md` | What is wired vs approximate |
-| `Papev_Summer26_6/CLAIMS_AUDIT.md` | Journal claim changes |
-| `FYDP_Summer/CLAIMS_AUDIT.md` | Report claim changes |
+| `Journal_Paper/CLAIMS_AUDIT.md` | Journal claim changes |
+| `FYDP_Report/CLAIMS_AUDIT.md` | Report claim changes |
 
 ---
 
