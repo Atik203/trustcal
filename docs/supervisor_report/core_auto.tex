@@ -1,20 +1,20 @@
 \section*{3. Core milestone results (\texttt{gpqa\_main}, seed 1)}\label{sec:core}
 
-At this checkpoint the row holds \textbf{688 debates} (348 B8, 340 control), 6192 agent-round responses, 13,380 claim-level verdicts, and 2,625 retrieved passages. The row has consumed approximately 13.2 GPU-hours; the mean question pair takes 140\,s (median 126\,s for B8). Both arms run concurrently, so a pair finishes in the slower arm's time rather than their sum. This pair is \textbf{2 of the 24 Core rows} and, at completion, contributes \textbf{800 of the 8,000 Core debates (10\%)}, 2,400 of 24,000 agent trajectories, and 7,200 of 72,000 agent-rounds. Progress against that target: 680/8,000 debates (8.5\%). On the 340 paired questions, both arms are correct on 178, B8 alone on 34, control alone on 24, and neither on 104 (exact McNemar p = 0.237). Milestones completed: 100, 150, 200, 250, 300; next milestone: 350. Question 27 is quarantined (options are literal letters) and is excluded from the denominators; the row resumes at the first question id without a record.
+At this checkpoint the row holds \textbf{798 debates} (399 B8, 399 control), 7182 agent-round responses, 14,201 claim-level verdicts, and 2,787 retrieved passages. The row has consumed approximately 15.3 GPU-hours; the mean question pair takes 138\,s (median 125\,s for B8). Both arms run concurrently, so a pair finishes in the slower arm's time rather than their sum. This pair is \textbf{2 of the 24 Core rows} and, at completion, contributes \textbf{800 of the 8,000 Core debates (10\%)}, 2,400 of 24,000 agent trajectories, and 7,200 of 72,000 agent-rounds. Progress against that target: 798/8,000 debates (10.0\%). On the 399 paired questions, both arms are correct on 208, B8 alone on 41, control alone on 26, and neither on 124 (exact McNemar p = 0.086). Milestones completed: 100, 150, 200, 250, 300, 350, 400 (final). Question 27 is quarantined (options are literal letters) and is excluded from the denominators; with 399 of 399 eligible questions complete, the row is finished.
 
 {\normalsize\setlength{\tabcolsep}{10pt}\renewcommand{\arraystretch}{1.25}
 \begin{tabular}{lcc}
 \toprule
-Metric & B8 (trust, n=340) & Control (majority, n=340) \\
+Metric & B8 (trust, n=399) & Control (majority, n=399) \\
 \midrule
-Accuracy (95\% CI) & 0.62 (0.57--0.67) & 0.59 (0.54--0.64) \\
-MPR & 0.78 & 0.74 \\
-ARR (n) & 0.64 (235) & 0.69 (216) \\
-CCR-e (n) & 0.11 (118) & 0.16 (145) \\
-Trust AUROC (n) & 0.52 (66) & n/a \\
-Trust Brier (n) & 0.29 (116) & n/a \\
-Evidence coverage & 164/340 & 215/340 \\
-Median time & 126\,s & 130\,s \\
+Accuracy (95\% CI) & 0.62 (0.58--0.67) & 0.59 (0.54--0.63) \\
+MPR & 0.78 & 0.75 \\
+ARR (n) & 0.66 (277) & 0.70 (252) \\
+CCR-e (n) & 0.10 (128) & 0.15 (153) \\
+Trust AUROC (n) & 0.52 (69) & n/a \\
+Trust Brier (n) & 0.29 (127) & n/a \\
+Evidence coverage & 178/399 & 230/399 \\
+Median time & 125\,s & 127\,s \\
 \bottomrule
 \end{tabular}
 }
