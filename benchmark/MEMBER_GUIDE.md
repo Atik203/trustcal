@@ -4,7 +4,7 @@
 
 **Repository:** <https://github.com/Atik203/trustcal>
 
-**Guide for:** Members 2–6 (the five team members)
+**Guide for:** Prottoy, Salman, Yousuf, Rakib, Limu (Atik pilots agents + scores last — not assigned annotation work).
 
 **Sprint length:** **6 weeks recommended** (5 active weeks + 1 buffer). A 4-week compressed plan is possible only under the conditions in Section 10.
 
@@ -16,13 +16,13 @@
 
 ## 0. Task packs and current work
 
-Role task packs with exact commands, paths, budgets, and done-criteria live in [`benchmark/tasks/`](../benchmark/tasks/00_OVERVIEW.md):
+Role task packs with exact commands, paths, budgets, and done-criteria live in [`benchmark/tasks/`](./tasks/00_OVERVIEW.md):
 
-- [`00_OVERVIEW.md`](../benchmark/tasks/00_OVERVIEW.md) — pipeline map 24→180→300, gates, file map, glossary. Read first.
-- [`01_RATER.md`](../benchmark/tasks/01_RATER.md) - label blind sheets (Prottoy = rater 1, Salman = rater 2).
-- [`02_ADJUDICATOR.md`](../benchmark/tasks/02_ADJUDICATOR.md) - resolve disagreements, defect review (Rakib + Limu, paired).
-- [`03_AUTHOR.md`](../benchmark/tasks/03_AUTHOR.md) - verify the 24 drafts (Yousuf).
-- [`04_AGENT_PILOT.md`](../benchmark/tasks/04_AGENT_PILOT.md) - copy-paste agent prompts; agents draft, humans decide every gold verdict (Atik, LAST).
+- [`00_OVERVIEW.md`](./tasks/00_OVERVIEW.md) — pipeline map 24→180→300, gates, file map, glossary. Read first.
+- [`01_RATER.md`](./tasks/01_RATER.md) - label blind sheets (Prottoy = rater 1, Salman = rater 2).
+- [`02_ADJUDICATOR.md`](./tasks/02_ADJUDICATOR.md) - resolve disagreements, defect review (Rakib + Limu, paired).
+- [`03_AUTHOR.md`](./tasks/03_AUTHOR.md) - verify the 24 drafts (Yousuf).
+- [`04_AGENT_PILOT.md`](./tasks/04_AGENT_PILOT.md) - copy-paste agent prompts; agents draft, humans decide every gold verdict (Atik, LAST).
 
 **Current work (Nov 2026): verify the 24-item calibration first** — drafts at `benchmark/private/items/cal-001..024.json`, blind sheets at `benchmark/private/calibration/sheets/`, validator `benchmark/validate_items.py`, score command in `benchmark/status.json` under `next_command`. The 180-item freeze and 300-item target start only after the κ ≥ 0.75 / defect ≤ 15% / H ≤ 2.0 h gate passes. The 4/6-week plan in Section 10 is unchanged.
 
@@ -96,10 +96,10 @@ These are planning estimates, not ledger numbers. Atik's agent piloting and expe
 | 1 | [`README.md`](../README.md) | Project status, claim boundary, repository map |
 | 2 | [`FYDP_Report/fydp.pdf`](../FYDP_Report/fydp.pdf) | The full report; read the abstract, Chapter 3, and Chapter 4 |
 | 3 | [`PRE_REGISTRATION.md`](../PRE_REGISTRATION.md) | Endpoints, hypotheses, exclusions, stopping rules |
-| 4 | [`benchmark/README.md`](../benchmark/README.md) | SciClaimBench protocol, κ/defect/effort gates, 24 → 180 → 300 ladder |
-| 5 | [`benchmark/schema.md`](../benchmark/schema.md) | Item, position, claim, evidence, and verdict fields |
+| 4 | [`benchmark/README.md`](./README.md) | SciClaimBench protocol, κ/defect/effort gates, 24 → 180 → 300 ladder |
+| 5 | [`benchmark/schema.md`](./schema.md) | Item, position, claim, evidence, and verdict fields |
 | 6 | [`experiments/verifier_audit/README.md`](../experiments/verifier_audit/README.md) | 180-pair audit, blind sheets, κ and balanced accuracy |
-| 7 | [`docs/GLOSSARY.md`](GLOSSARY.md) | Terms and metric names |
+| 7 | [`docs/GLOSSARY.md`](../docs/GLOSSARY.md) | Terms and metric names |
 | 8 | This guide | Your role, examples, deadlines, and submission rules |
 
 You do **not** need to read the full literature review, the entire 75-page report, or the Python code. If you already know your role from `benchmark/README.md`, read your ONE role pack first and use the eight documents above as reference only. If a term is missing, check the glossary before asking.
@@ -162,7 +162,7 @@ Do not start a real batch until the practice rows are discussed. The first batch
 
 **Role:** paired adjudicators for both audits — you settle every disagreement and run defect review. Hardest judgment call on the team.
 
-**Pack:** [`02_ADJUDICATOR.md`](../benchmark/tasks/02_ADJUDICATOR.md) — exact columns, defect taxonomy, done-criteria. This section is only a pointer.
+**Pack:** [`02_ADJUDICATOR.md`](./tasks/02_ADJUDICATOR.md) — exact columns, defect taxonomy, done-criteria. This section is only a pointer.
 
 **Only you two do:**
 
@@ -185,7 +185,7 @@ Do not start a real batch until the practice rows are discussed. The first batch
 
 **Role:** the only person who checks the 24 calibration drafts against the codebook — verification confers gold.
 
-**Pack:** [`03_AUTHOR.md`](../benchmark/tasks/03_AUTHOR.md); one [`item_verification_checklist.md`](../benchmark/templates/item_verification_checklist.md) per item.
+**Pack:** [`03_AUTHOR.md`](./tasks/03_AUTHOR.md); one [`item_verification_checklist.md`](./templates/item_verification_checklist.md) per item.
 
 **Only you do:**
 
@@ -206,7 +206,7 @@ Do not start a real batch until the practice rows are discussed. The first batch
 
 **Role:** independent rater 1 for both audits — your sheet plus Salman's is the κ gate.
 
-**Pack:** [`01_RATER.md`](../benchmark/tasks/01_RATER.md); sign [`annotation_submission_checklist.md`](../benchmark/templates/annotation_submission_checklist.md) for each sheet.
+**Pack:** [`01_RATER.md`](./tasks/01_RATER.md); sign [`annotation_submission_checklist.md`](./templates/annotation_submission_checklist.md) for each sheet.
 
 **Only you do:**
 
@@ -227,7 +227,7 @@ Do not start a real batch until the practice rows are discussed. The first batch
 
 **Role:** independent rater 2 for both audits — same sheets as Prottoy, labelled independently. Never peek at his.
 
-**Pack:** [`01_RATER.md`](../benchmark/tasks/01_RATER.md); sign [`annotation_submission_checklist.md`](../benchmark/templates/annotation_submission_checklist.md) for each sheet.
+**Pack:** [`01_RATER.md`](./tasks/01_RATER.md); sign [`annotation_submission_checklist.md`](./templates/annotation_submission_checklist.md) for each sheet.
 
 **Only you do:**
 
@@ -248,7 +248,7 @@ Do not start a real batch until the practice rows are discussed. The first batch
 
 **Role:** runs the experiments, the Python pipeline, the GPU runs, the analysis, and the manuscript integration — and pilots annotation agents only after all human sheets are in.
 
-**Pack:** [`04_AGENT_PILOT.md`](../benchmark/tasks/04_AGENT_PILOT.md) — copy-paste prompts for mechanical work only.
+**Pack:** [`04_AGENT_PILOT.md`](./tasks/04_AGENT_PILOT.md) — copy-paste prompts for mechanical work only.
 
 **Only he does, after every human sheet is submitted:**
 
@@ -406,9 +406,9 @@ A failed κ or balanced-accuracy gate is a **finding**, not a failure of the tea
 
 > We are finishing the human-labeling part of the TrustCal FYDP. Atik handles the experiments, code, item drafting, analysis, and paper integration with agents. Your work is only the human-judgment part: verifying the 24 SciClaimBench calibration items, labeling claims against evidence, auditing the verifier, and adjudicating disagreements.
 >
-> Please read `docs/MEMBER_GUIDE.md` and the eight documents in Section 3 before our first meeting. You do not need to know the domain in advance. We will do a short practice batch together. The recommended sprint is six weeks, with a four-week compressed option if the draft items are ready by Day 5.
+> Please read this guide and the eight documents in Section 3 before our first meeting. You do not need to know the domain in advance. We will do a short practice batch together. The recommended sprint is six weeks, with a four-week compressed option if the draft items are ready by Day 5.
 >
-> Guide: https://github.com/Atik203/trustcal/blob/main/docs/MEMBER_GUIDE.md
+> Guide: https://github.com/Atik203/trustcal/blob/main/benchmark/MEMBER_GUIDE.md
 > Templates: https://github.com/Atik203/trustcal/tree/main/benchmark/templates
 >
 > Rakib + Limu: adjudicators — settle every disagreement, defect review, licence sign-off (both audits).

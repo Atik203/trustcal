@@ -16,7 +16,7 @@ This is a **human rater calibration session**, not model training. Atik or an ag
 - [ ] `benchmark/schema.md`
 - [ ] `experiments/verifier_audit/README.md`
 - [ ] `docs/GLOSSARY.md`
-- [ ] `docs/MEMBER_GUIDE.md`
+- [ ] `../MEMBER_GUIDE.md`
 
 ## Practice rows
 
