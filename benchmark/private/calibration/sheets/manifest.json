@@ -4,11 +4,6 @@
   "n_claims": 216,
   "n_evidence_passages": 234,
   "items_sha256": "a48b8e65b063d6b5465d90c9730f110a88c8245bc749e301c4872feb96d4cab1",
-  "verdicts": {
-    "support": 109,
-    "contradict": 71,
-    "neutral": 36
-  },
   "files": {
     "rater1": "rater1.csv",
     "rater2": "rater2.csv",
