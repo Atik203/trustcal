@@ -10,8 +10,8 @@ Provenance convention (see FULLBENCH_PLAN.md): item records carry NO
 generator markings. Provenance lives ONLY in the batch MANIFEST.json files.
 Nothing is gold until member verification + adjudication pass the gate.
 
-    python experiments/calibration/draft_items.py            # validate + write
-    python experiments/calibration/draft_items.py --dry-run  # validate only
+    python benchmark/draft_items.py            # validate + write
+    python benchmark/draft_items.py --dry-run  # validate only
 
 The script validates the full in-memory batches with the repo validator
 (``validate_items.validate_batch`` plus the --expect/balance rules) and
@@ -26,7 +26,7 @@ import json
 import sys
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
+REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "experiments" / "calibration"))
 import validate_items as V  # noqa: E402
 
@@ -35,7 +35,7 @@ FREEZE_DIR = REPO_ROOT / "experiments" / "calibration" / "private" / "freeze180"
 FULL_DIR = REPO_ROOT / "experiments" / "calibration" / "private" / "full300"
 
 MODEL = "Muse Spark 1.3 Contributor (opencode-go)"
-GENERATOR = "experiments/calibration/draft_items.py"
+GENERATOR = "benchmark/draft_items.py"
 DATE = "2026-11-21"
 RETRIEVED = "2026-11-21"
 CONDITIONS = [
@@ -1807,7 +1807,7 @@ def main(argv=None):
             "this manifest. Nothing here is gold until member verification "
             "and adjudication pass the gate."
         ),
-        "validator": "python experiments/calibration/validate_items.py check --items experiments/calibration/private/freeze180/items.jsonl --expect 180",
+        "validator": "python benchmark/validate_items.py check --items benchmark/private/freeze180/items.jsonl --expect 180",
         "validation": "PASS: schema-valid, 60/60/60, claims 3 per position",
     }
     full_manifest = {
@@ -1838,7 +1838,7 @@ def main(argv=None):
             "this manifest. Nothing here is gold until member verification "
             "and adjudication pass the gate."
         ),
-        "validator": "python experiments/calibration/validate_items.py check --items experiments/calibration/private/full300/items.jsonl --expect 300",
+        "validator": "python benchmark/validate_items.py check --items benchmark/private/full300/items.jsonl --expect 300",
         "validation": "PASS: schema-valid, 100/100/100, claims 3 per position",
     }
 

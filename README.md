@@ -175,4 +175,4 @@ See [`SECURITY.md`](SECURITY.md). Never commit `.env`, `HF_TOKEN`, `OPENAI_API_K
 
 Supervisor: **Mohammad Nurul Huda, Ph.D.**, Professor, Department of Computer Science and Engineering, United International University.
 
-Member onboarding, annotation assignments, worked examples, and the 4/6-week plan: [`docs/MEMBER_GUIDE.md`](docs/MEMBER_GUIDE.md). Submission templates: [`docs/member/templates/`](docs/member/templates/).
+Member onboarding, annotation assignments, worked examples, and the 4/6-week plan: [`docs/MEMBER_GUIDE.md`](docs/MEMBER_GUIDE.md). Submission templates: [`benchmark/templates/`](benchmark/templates/).

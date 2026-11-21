@@ -28,16 +28,16 @@ Gates (roadmap §§4–5, calibration README §§1,6–7):
 
 | What | Path | Commit? |
 | --- | --- | --- |
-| Protocol | `experiments/calibration/README.md` | yes |
-| Schema | `experiments/calibration/schema.md` | yes |
-| Skeleton | `experiments/calibration/item.template.json` | yes |
-| Validator | `experiments/calibration/validate_items.py` | yes |
-| Sheet templates (header-only) | `experiments/calibration/annotation/{rater1,rater2,adjudication,effort}.template.csv` | yes |
-| Gate status + score command | `experiments/calibration/status.json` (`next_command`) | yes |
-| **24 drafts (working)** | `experiments/calibration/private/items/cal-001.json` … `cal-024.json` | **no** |
-| **Blind sheets (working)** | `experiments/calibration/private/calibration/sheets/{rater1,rater2,adjudication,effort}.csv` | **no** |
-| Member packs (you are here) | `docs/member/tasks/00_OVERVIEW.md` … `04_AGENT_PILOT.md` | yes |
-| Member templates | `docs/member/templates/` | yes |
+| Protocol | `benchmark/README.md` | yes |
+| Schema | `benchmark/schema.md` | yes |
+| Skeleton | `benchmark/item.template.json` | yes |
+| Validator | `benchmark/validate_items.py` | yes |
+| Sheet templates (header-only) | `benchmark/annotation/{rater1,rater2,adjudication,effort}.template.csv` | yes |
+| Gate status + score command | `benchmark/status.json` (`next_command`) | yes |
+| **24 drafts (working)** | `benchmark/private/items/cal-001.json` … `cal-024.json` | **no** |
+| **Blind sheets (working)** | `benchmark/private/calibration/sheets/{rater1,rater2,adjudication,effort}.csv` | **no** |
+| Member packs (you are here) | `benchmark/tasks/00_OVERVIEW.md` … `04_AGENT_PILOT.md` | yes |
+| Member templates | `benchmark/templates/` | yes |
 | Verifier audit protocol | `experiments/verifier_audit/README.md` | yes |
 
 Rule: filled items, evidence text, labels, and adjudication live under `private/` only. Never commit, email, or paste them into a public issue or an external AI tool.
@@ -47,11 +47,11 @@ Provenance: items have no AI markings by design; batch manifests hold generation
 ## 3. Score command (copy from `status.json` → `next_command`)
 
 ```bash
-python experiments/calibration/validate_items.py score \
-  --rater1 experiments/calibration/private/calibration/sheets/rater1.csv \
-  --rater2 experiments/calibration/private/calibration/sheets/rater2.csv \
-  --adjudication experiments/calibration/private/calibration/sheets/adjudication.csv \
-  --effort experiments/calibration/private/calibration/sheets/effort.csv \
+python benchmark/validate_items.py score \
+  --rater1 benchmark/private/calibration/sheets/rater1.csv \
+  --rater2 benchmark/private/calibration/sheets/rater2.csv \
+  --adjudication benchmark/private/calibration/sheets/adjudication.csv \
+  --effort benchmark/private/calibration/sheets/effort.csv \
   --min-kappa 0.75 --max-defect 0.15 --max-hours 2.0 --max-unresolved 0.05
 ```
 

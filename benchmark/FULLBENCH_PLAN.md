@@ -24,27 +24,27 @@ Run from the repository root:
 
 ```bash
 # S0 — 24-item calibration gate
-python experiments/calibration/validate_items.py score \
-  --rater1 experiments/calibration/private/calibration/sheets/rater1.csv \
-  --rater2 experiments/calibration/private/calibration/sheets/rater2.csv \
-  --adjudication experiments/calibration/private/calibration/sheets/adjudication.csv \
-  --effort experiments/calibration/private/calibration/sheets/effort.csv \
+python benchmark/validate_items.py score \
+  --rater1 benchmark/private/calibration/sheets/rater1.csv \
+  --rater2 benchmark/private/calibration/sheets/rater2.csv \
+  --adjudication benchmark/private/calibration/sheets/adjudication.csv \
+  --effort benchmark/private/calibration/sheets/effort.csv \
   --min-kappa 0.75 --max-defect 0.15 --max-hours 2.0 --max-unresolved 0.05
 
 # S2 — 180-item freeze gate
-python experiments/calibration/validate_items.py score \
-  --rater1 experiments/calibration/private/freeze180/sheets/rater1.csv \
-  --rater2 experiments/calibration/private/freeze180/sheets/rater2.csv \
-  --adjudication experiments/calibration/private/freeze180/sheets/adjudication.csv \
-  --effort experiments/calibration/private/freeze180/sheets/effort.csv \
+python benchmark/validate_items.py score \
+  --rater1 benchmark/private/freeze180/sheets/rater1.csv \
+  --rater2 benchmark/private/freeze180/sheets/rater2.csv \
+  --adjudication benchmark/private/freeze180/sheets/adjudication.csv \
+  --effort benchmark/private/freeze180/sheets/effort.csv \
   --min-kappa 0.75 --max-defect 0.15 --max-hours 2.0 --max-unresolved 0.05
 
 # S3 — 300-item full-target gate (same thresholds, full300 sheets)
-python experiments/calibration/validate_items.py score \
-  --rater1 experiments/calibration/private/full300/sheets/rater1.csv \
-  --rater2 experiments/calibration/private/full300/sheets/rater2.csv \
-  --adjudication experiments/calibration/private/full300/sheets/adjudication.csv \
-  --effort experiments/calibration/private/full300/sheets/effort.csv \
+python benchmark/validate_items.py score \
+  --rater1 benchmark/private/full300/sheets/rater1.csv \
+  --rater2 benchmark/private/full300/sheets/rater2.csv \
+  --adjudication benchmark/private/full300/sheets/adjudication.csv \
+  --effort benchmark/private/full300/sheets/effort.csv \
   --min-kappa 0.75 --max-defect 0.15 --max-hours 2.0 --max-unresolved 0.05
 ```
 
@@ -53,10 +53,10 @@ fails, `1` on incomplete input. Empty sheets exit `1` (blocked) — an empty
 sheet is never a pass. Structural pre-checks:
 
 ```bash
-python experiments/calibration/validate_items.py check \
-  --items experiments/calibration/private/freeze180/items.jsonl --expect 180
-python experiments/calibration/validate_items.py check \
-  --items experiments/calibration/private/full300/items.jsonl --expect 300
+python benchmark/validate_items.py check \
+  --items benchmark/private/freeze180/items.jsonl --expect 180
+python benchmark/validate_items.py check \
+  --items benchmark/private/full300/items.jsonl --expect 300
 ```
 
 ## 3. Member-hour budgets
@@ -78,7 +78,7 @@ envelope, not the gate: the gate is the 2.0 h/item ceiling above. If measured
 ## 4. File map
 
 ```text
-experiments/calibration/
+benchmark/
   draft_items.py            generator (this production system; committed)
   FULLBENCH_PLAN.md         this file (committed)
   validate_items.py         validator / sheet builder / gate scorer (committed)

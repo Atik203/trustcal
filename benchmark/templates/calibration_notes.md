@@ -12,8 +12,8 @@ This is a **human rater calibration session**, not model training. Member 1 or a
 - [ ] `README.md`
 - [ ] `FYDP_Summer/fydp.pdf` (abstract, Chapters 3–4)
 - [ ] `PRE_REGISTRATION.md`
-- [ ] `experiments/calibration/README.md`
-- [ ] `experiments/calibration/schema.md`
+- [ ] `benchmark/README.md`
+- [ ] `benchmark/schema.md`
 - [ ] `experiments/verifier_audit/README.md`
 - [ ] `docs/GLOSSARY.md`
 - [ ] `docs/MEMBER_GUIDE.md`
