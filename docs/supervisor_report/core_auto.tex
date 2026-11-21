@@ -1,20 +1,20 @@
 \section*{3. Core milestone results (\texttt{gpqa\_main}, seed 1)}\label{sec:core}
 
-At this checkpoint the row holds \textbf{518 debates} (263 B8, 255 control), 4662 agent-round responses, 12,243 claim-level verdicts, and 2,391 retrieved passages. The row has consumed approximately 10.3 GPU-hours; the mean question pair takes 145\,s (median 129\,s for B8). Both arms run concurrently, so a pair finishes in the slower arm's time rather than their sum. This pair is \textbf{2 of the 24 Core rows} and, at completion, contributes \textbf{800 of the 8,000 Core debates (10\%)}, 2,400 of 24,000 agent trajectories, and 7,200 of 72,000 agent-rounds. Progress against that target: 510/8,000 debates (6.4\%). On the 255 paired questions, both arms are correct on 132, B8 alone on 27, control alone on 18, and neither on 78 (exact McNemar p = 0.233). Milestones completed: 100, 150, 200, 250; next milestone: 300. Question 27 is quarantined (options are literal letters) and is excluded from the denominators; the row resumes at the first question id without a record.
+At this checkpoint the row holds \textbf{612 debates} (310 B8, 302 control), 5508 agent-round responses, 12,945 claim-level verdicts, and 2,532 retrieved passages. The row has consumed approximately 11.9 GPU-hours; the mean question pair takes 142\,s (median 126\,s for B8). Both arms run concurrently, so a pair finishes in the slower arm's time rather than their sum. This pair is \textbf{2 of the 24 Core rows} and, at completion, contributes \textbf{800 of the 8,000 Core debates (10\%)}, 2,400 of 24,000 agent trajectories, and 7,200 of 72,000 agent-rounds. Progress against that target: 604/8,000 debates (7.5\%). On the 302 paired questions, both arms are correct on 159, B8 alone on 32, control alone on 20, and neither on 91 (exact McNemar p = 0.126). Milestones completed: 100, 150, 200, 250, 300; next milestone: 350. Question 27 is quarantined (options are literal letters) and is excluded from the denominators; the row resumes at the first question id without a record.
 
 {\normalsize\setlength{\tabcolsep}{10pt}\renewcommand{\arraystretch}{1.25}
 \begin{tabular}{lcc}
 \toprule
-Metric & B8 (trust, n=255) & Control (majority, n=255) \\
+Metric & B8 (trust, n=302) & Control (majority, n=302) \\
 \midrule
-Accuracy (95\% CI) & 0.62 (0.56--0.68) & 0.59 (0.53--0.65) \\
-MPR & 0.77 & 0.74 \\
-ARR (n) & 0.64 (170) & 0.69 (157) \\
-CCR-e (n) & 0.12 (109) & 0.17 (137) \\
-Trust AUROC (n) & 0.51 (56) & n/a \\
-Trust Brier (n) & 0.28 (104) & n/a \\
-Evidence coverage & 146/255 & 200/255 \\
-Median time & 129\,s & 134\,s \\
+Accuracy (95\% CI) & 0.63 (0.58--0.69) & 0.59 (0.54--0.65) \\
+MPR & 0.78 & 0.75 \\
+ARR (n) & 0.63 (208) & 0.70 (187) \\
+CCR-e (n) & 0.11 (117) & 0.16 (143) \\
+Trust AUROC (n) & 0.51 (62) & n/a \\
+Trust Brier (n) & 0.28 (111) & n/a \\
+Evidence coverage & 157/302 & 209/302 \\
+Median time & 127\,s & 131\,s \\
 \bottomrule
 \end{tabular}
 }
