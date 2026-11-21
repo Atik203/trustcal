@@ -1,0 +1,248 @@
+{
+  "schema_version": "sciclaim-item-v0.1",
+  "item_id": "cal-011",
+  "stratum": "physics_chemistry",
+  "status": "drafted",
+  "question": "Which statement about the relationship between the electric field and the electric potential is correct?",
+  "options": [
+    "The electric field points in the direction of decreasing electric potential.",
+    "The electric field points in the direction of increasing electric potential.",
+    "Electric field lines are parallel to equipotential lines.",
+    "The magnitude of the electric field equals the rate of increase of potential with distance."
+  ],
+  "gold_answer": "The electric field points in the direction of decreasing electric potential.",
+  "source": {
+    "kind": "original",
+    "citation": null,
+    "locator": null,
+    "license": "CC BY 4.0",
+    "changes": null
+  },
+  "pressure_eligible": true,
+  "minority_agent": 2,
+  "conditions": [
+    "evidence_available",
+    "evidence_absent",
+    "evidence_placebo",
+    "evidence_contradictory"
+  ],
+  "notes": "Question and claims are original wording; evidence passages are verbatim excerpts from OpenStax University Physics Volume 2, sections 7.4 and 7.5 (CC BY 4.0), checked on 2026-11-19.",
+  "positions": [
+    {
+      "agent": 0,
+      "answer": "The electric field points in the direction of increasing electric potential.",
+      "claims": [
+        {
+          "claim_id": "cal-011-a0-c1",
+          "text": "The electric field points in the direction of increasing electric potential.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "cal-011-a0-c1-e1",
+              "text": "The minus sign tells us that E points in the direction of decreasing potential. The electric field is said to be the gradient (as in grade or slope) of the electric potential.",
+              "source": "OpenStax University Physics Volume 2",
+              "locator": "https://openstax.org/books/university-physics-volume-2/pages/7-4-determining-field-from-potential",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": "Section 7.4, subsection 'Relationship between Voltage and Uniform Electric Field'; italics on the field symbol flattened to plain text."
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.97,
+          "verdict_rationale": "The passage states that the minus sign makes the field point in the direction of decreasing potential, which is the opposite of the direction asserted in the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "cal-011-a0-c2",
+          "text": "The magnitude of the electric field equals the rate of decrease of electric potential with distance.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "cal-011-a0-c2-e1",
+              "text": "In general, regardless of whether the electric field is uniform, it points in the direction of decreasing potential, because the force on a positive charge is in the direction of the electric field and also in the direction of lower potential V. Furthermore, the magnitude of the electric field equals the rate of decrease of V with distance.",
+              "source": "OpenStax University Physics Volume 2",
+              "locator": "https://openstax.org/books/university-physics-volume-2/pages/7-4-determining-field-from-potential",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": "Section 7.4, subsection 'Relationship between Voltage and Uniform Electric Field'; field-symbol glyph rendered as 'the electric field'."
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.93,
+          "verdict_rationale": "The passage explicitly states that the magnitude of the field equals the rate of decrease of potential with distance, which is the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "cal-011-a0-c3",
+          "text": "Electric field lines radiate outward from a positive point charge and terminate on negative charges.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "cal-011-a0-c3-e1",
+              "text": "Consider Figure 7.30, which shows an isolated positive point charge and its electric field lines, which radiate out from a positive charge and terminate on negative charges.",
+              "source": "OpenStax University Physics Volume 2",
+              "locator": "https://openstax.org/books/university-physics-volume-2/pages/7-5-equipotential-surfaces-and-conductors",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": "Section 7.5, opening paragraph; verbatim."
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.95,
+          "verdict_rationale": "The passage states directly that the field lines of an isolated positive point charge radiate out from the charge and terminate on negative charges.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    },
+    {
+      "agent": 1,
+      "answer": "Electric field lines are parallel to equipotential lines.",
+      "claims": [
+        {
+          "claim_id": "cal-011-a1-c1",
+          "text": "Electric field lines are parallel to equipotential lines.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "cal-011-a1-c1-e1",
+              "text": "It is important to note that equipotential lines are always perpendicular to electric field lines. No work is required to move a charge along an equipotential, since \u0394V=0.",
+              "source": "OpenStax University Physics Volume 2",
+              "locator": "https://openstax.org/books/university-physics-volume-2/pages/7-5-equipotential-surfaces-and-conductors",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": "Section 7.5, opening paragraph; italics flattened to plain text."
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.97,
+          "verdict_rationale": "The passage states that equipotential lines are always perpendicular to electric field lines, which refutes the claimed parallel relation.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "cal-011-a1-c2",
+          "text": "A conductor is an equipotential surface in static situations.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "cal-011-a1-c2-e1",
+              "text": "One of the rules for static electric fields and conductors is that the electric field must be perpendicular to the surface of any conductor. This implies that a conductor is an equipotential surface in static situations.",
+              "source": "OpenStax University Physics Volume 2",
+              "locator": "https://openstax.org/books/university-physics-volume-2/pages/7-5-equipotential-surfaces-and-conductors",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": "Section 7.5, opening paragraph; verbatim with italics flattened."
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.96,
+          "verdict_rationale": "The passage states in so many words that a conductor is an equipotential surface in static situations.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "cal-011-a1-c3",
+          "text": "The electric field at a point equals the vector sum of the fields produced by all nearby charges.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "cal-011-a1-c3-e1",
+              "text": "In general, regardless of whether the electric field is uniform, it points in the direction of decreasing potential, because the force on a positive charge is in the direction of the electric field and also in the direction of lower potential V. Furthermore, the magnitude of the electric field equals the rate of decrease of V with distance.",
+              "source": "OpenStax University Physics Volume 2",
+              "locator": "https://openstax.org/books/university-physics-volume-2/pages/7-4-determining-field-from-potential",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": "Section 7.4, subsection 'Relationship between Voltage and Uniform Electric Field'."
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.82,
+          "verdict_rationale": "The cited passage relates the field's direction and magnitude to the potential; it says nothing about combining fields from several charges. It neither entails nor refutes a superposition claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    },
+    {
+      "agent": 2,
+      "answer": "The electric field points in the direction of decreasing electric potential.",
+      "claims": [
+        {
+          "claim_id": "cal-011-a2-c1",
+          "text": "The electric field points in the direction of decreasing electric potential.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "cal-011-a2-c1-e1",
+              "text": "The minus sign tells us that E points in the direction of decreasing potential. The electric field is said to be the gradient (as in grade or slope) of the electric potential.",
+              "source": "OpenStax University Physics Volume 2",
+              "locator": "https://openstax.org/books/university-physics-volume-2/pages/7-4-determining-field-from-potential",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": "Section 7.4, subsection 'Relationship between Voltage and Uniform Electric Field'; italics on the field symbol flattened to plain text."
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.97,
+          "verdict_rationale": "The passage states directly that the field points in the direction of decreasing potential, which is the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "cal-011-a2-c2",
+          "text": "Equipotential lines are always perpendicular to electric field lines.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "cal-011-a2-c2-e1",
+              "text": "It is important to note that equipotential lines are always perpendicular to electric field lines. No work is required to move a charge along an equipotential, since \u0394V=0.",
+              "source": "OpenStax University Physics Volume 2",
+              "locator": "https://openstax.org/books/university-physics-volume-2/pages/7-5-equipotential-surfaces-and-conductors",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": "Section 7.5, opening paragraph; italics flattened to plain text."
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.97,
+          "verdict_rationale": "The cited sentence states exactly this always-perpendicular relation between equipotential lines and field lines.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "cal-011-a2-c3",
+          "text": "For a positive charge, the electric force is directed along the electric field toward lower potential.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "cal-011-a2-c3-e1",
+              "text": "In general, regardless of whether the electric field is uniform, it points in the direction of decreasing potential, because the force on a positive charge is in the direction of the electric field and also in the direction of lower potential V. Furthermore, the magnitude of the electric field equals the rate of decrease of V with distance.",
+              "source": "OpenStax University Physics Volume 2",
+              "locator": "https://openstax.org/books/university-physics-volume-2/pages/7-4-determining-field-from-potential",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": "Section 7.4, subsection 'Relationship between Voltage and Uniform Electric Field'; field-symbol glyph rendered as 'the electric field'."
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.93,
+          "verdict_rationale": "The passage states that the force on a positive charge is in the direction of the electric field and also in the direction of lower potential, which is the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    }
+  ]
+}

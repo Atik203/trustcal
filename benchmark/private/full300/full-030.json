@@ -1,0 +1,248 @@
+{
+  "schema_version": "sciclaim-item-v0.1",
+  "item_id": "full-030",
+  "stratum": "biomedical",
+  "status": "drafted",
+  "question": "During a lab meeting on hemoglobin and oxygen transport, which assertion is right?",
+  "options": [
+    "Hemoglobin loads oxygen in the tissues and unloads it in the lungs.",
+    "Hemoglobin carries oxygen dissolved in plasma rather than bound to red blood cells.",
+    "Hemoglobin delivers oxygen to the lungs for exhalation.",
+    "Hemoglobin loads oxygen in the lungs and unloads it in the tissues."
+  ],
+  "gold_answer": "Hemoglobin loads oxygen in the lungs and unloads it in the tissues.",
+  "source": {
+    "kind": "original",
+    "citation": null,
+    "locator": null,
+    "license": "CC BY 4.0",
+    "changes": null
+  },
+  "pressure_eligible": true,
+  "minority_agent": 2,
+  "conditions": [
+    "evidence_available",
+    "evidence_absent",
+    "evidence_placebo",
+    "evidence_contradictory"
+  ],
+  "notes": "Team-authored original item on hemoglobin and oxygen transport. Passages are team-authored derivations recorded under sciclaim-appx-A. Requires independent annotation and adjudication before any gate result is reported.",
+  "positions": [
+    {
+      "agent": 0,
+      "answer": "Hemoglobin delivers oxygen to the lungs for exhalation.",
+      "claims": [
+        {
+          "claim_id": "full-030-a0-c1",
+          "text": "Each hemoglobin molecule can carry up to four oxygen molecules.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-030-a0-c1-e1",
+              "text": "A hemoglobin tetramer holds four heme groups, and each heme group binds one oxygen molecule.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-030-a0-c1",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.82,
+          "verdict_rationale": "Four heme groups with one oxygen each gives a maximum of four, which entails the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-030-a0-c2",
+          "text": "Hemoglobin binds oxygen most tightly in oxygen-poor tissues.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-030-a0-c2-e1",
+              "text": "Hemoglobin affinity for oxygen is highest where oxygen pressure is high, as in the lungs, and falls where oxygen pressure is low.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-030-a0-c2",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.83,
+          "verdict_rationale": "The passage states affinity is highest in oxygen-rich blood, the opposite of the claim, so the claim is refuted.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-030-a0-c3",
+          "text": "Hemoglobin-based oxygen carriers are approved for routine clinical use worldwide.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-030-a0-c3-e1",
+              "text": "Several hemoglobin-based oxygen carrier products have entered clinical trials for trauma and surgical indications.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-030-a0-c3",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.85,
+          "verdict_rationale": "Trial-stage products do not establish worldwide routine approval, so the claim is neither established nor refuted.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    },
+    {
+      "agent": 1,
+      "answer": "Hemoglobin loads oxygen in the tissues and unloads it in the lungs.",
+      "claims": [
+        {
+          "claim_id": "full-030-a1-c1",
+          "text": "Hemoglobin binds oxygen in the lungs, where the partial pressure of oxygen is high.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-030-a1-c1-e1",
+              "text": "In the pulmonary capillaries the partial pressure of oxygen is high, and oxygen binds to the iron in hemoglobin heme groups.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-030-a1-c1",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.85,
+          "verdict_rationale": "The passage describes oxygen binding to heme iron under high pulmonary oxygen pressure, which entails the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-030-a1-c2",
+          "text": "Mature red blood cells consume oxygen through aerobic respiration.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-030-a1-c2-e1",
+              "text": "Mature red blood cells lack mitochondria and meet their energy needs by anaerobic glycolysis.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-030-a1-c2",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.86,
+          "verdict_rationale": "Cells without mitochondria cannot respire aerobically, which refutes the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-030-a1-c3",
+          "text": "Altitude training raises hemoglobin mass more in every athlete than any other legal intervention.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-030-a1-c3-e1",
+              "text": "Altitude camps were compared with sea-level training for changes in hemoglobin mass across the squad.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-030-a1-c3",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.88,
+          "verdict_rationale": "A comparison with sea-level training alone cannot rank altitude against all other interventions, so the claim is neither established nor refuted.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    },
+    {
+      "agent": 2,
+      "answer": "Hemoglobin loads oxygen in the lungs and unloads it in the tissues.",
+      "claims": [
+        {
+          "claim_id": "full-030-a2-c1",
+          "text": "Hemoglobin releases oxygen in the tissues, where the partial pressure of oxygen is low.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-030-a2-c1-e1",
+              "text": "In systemic capillaries the partial pressure of oxygen is low, so hemoglobin unloads oxygen and it diffuses into tissue cells.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-030-a2-c1",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.88,
+          "verdict_rationale": "The passage states that low tissue oxygen pressure causes hemoglobin to unload oxygen, which entails the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-030-a2-c2",
+          "text": "Oxygen binds to the globin protein chains rather than to heme iron.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-030-a2-c2-e1",
+              "text": "Each oxygen molecule coordinates to the ferrous iron at the center of a heme group held by the globin chains.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-030-a2-c2",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.89,
+          "verdict_rationale": "The passage places binding at the heme iron, not the globin chains, which refutes the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-030-a2-c3",
+          "text": "Hemoglobin concentration is the single strongest determinant of endurance performance.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-030-a2-c3-e1",
+              "text": "The cohort recorded endurance alongside training history, cardiac output, hemoglobin concentration, and muscle fiber composition.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-030-a2-c3",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.91,
+          "verdict_rationale": "The passage lists hemoglobin among several recorded factors without comparing their strength, so the claim is neither established nor refuted.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    }
+  ]
+}

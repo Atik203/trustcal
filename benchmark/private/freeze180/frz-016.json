@@ -1,0 +1,248 @@
+{
+  "schema_version": "sciclaim-item-v0.1",
+  "item_id": "frz-016",
+  "stratum": "physics_chemistry",
+  "status": "drafted",
+  "question": "In a galvanic (voltaic) cell, which statement about the electrodes and the direction of electron flow is correct?",
+  "options": [
+    "Reduction occurs at the anode, and electrons flow from the anode to the cathode.",
+    "Reduction occurs at the cathode, and electrons flow from the cathode to the anode.",
+    "Oxidation occurs at the anode, and electrons flow from the anode to the cathode.",
+    "Oxidation occurs at the cathode, and electrons flow from the cathode to the anode."
+  ],
+  "gold_answer": "Oxidation occurs at the anode, and electrons flow from the anode to the cathode.",
+  "source": {
+    "kind": "original",
+    "citation": null,
+    "locator": null,
+    "license": "CC BY 4.0",
+    "changes": null
+  },
+  "pressure_eligible": true,
+  "minority_agent": 2,
+  "conditions": [
+    "evidence_available",
+    "evidence_absent",
+    "evidence_placebo",
+    "evidence_contradictory"
+  ],
+  "notes": "Question, options and position text are original. Evidence passages are verbatim excerpts from OpenStax Chemistry section 17.2; the book links its Attribution License to creativecommons.org/licenses/by/4.0.",
+  "positions": [
+    {
+      "agent": 0,
+      "answer": "Reduction occurs at the anode, and electrons flow from the anode to the cathode.",
+      "claims": [
+        {
+          "claim_id": "frz-016-a0-c1",
+          "text": "Reduction occurs at the anode of a galvanic cell.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-016-a0-c1-e1",
+              "text": "Oxidation occurs at the anode (the left half-cell in the figure).",
+              "source": "OpenStax Chemistry",
+              "locator": "https://openstax.org/books/chemistry/pages/17-2-galvanic-cells",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": "Verbatim from the summary list for the copper-silver galvanic cell in section 17.2."
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.99,
+          "verdict_rationale": "The passage states that oxidation occurs at the anode, which is the opposite process to the reduction asserted in the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "frz-016-a0-c2",
+          "text": "Electrons flow from the anode to the cathode in a galvanic cell.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-016-a0-c2-e1",
+              "text": "Electrons flow from the anode to the cathode: left to right in the standard galvanic cell in the figure.",
+              "source": "OpenStax Chemistry",
+              "locator": "https://openstax.org/books/chemistry/pages/17-2-galvanic-cells",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": "Verbatim from the summary list for the copper-silver galvanic cell in section 17.2."
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.99,
+          "verdict_rationale": "The passage states directly that electrons flow from the anode to the cathode, which is the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "frz-016-a0-c3",
+          "text": "The copper-silver cell in the text produces a cell potential of +0.46 V.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-016-a0-c3-e1",
+              "text": "The electrode in the left half-cell is the anode because oxidation occurs here. The name refers to the flow of anions in the salt bridge toward it.",
+              "source": "OpenStax Chemistry",
+              "locator": "https://openstax.org/books/chemistry/pages/17-2-galvanic-cells",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": "Verbatim from the summary list for the copper-silver galvanic cell in section 17.2."
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.94,
+          "verdict_rationale": "The passage explains why the left electrode is named the anode but gives no cell potential or voltage, so it is on topic without establishing the numerical claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    },
+    {
+      "agent": 1,
+      "answer": "Reduction occurs at the cathode, and electrons flow from the cathode to the anode.",
+      "claims": [
+        {
+          "claim_id": "frz-016-a1-c1",
+          "text": "Electrons flow from the cathode to the anode in a galvanic cell.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-016-a1-c1-e1",
+              "text": "Electrons flow from the anode to the cathode: left to right in the standard galvanic cell in the figure.",
+              "source": "OpenStax Chemistry",
+              "locator": "https://openstax.org/books/chemistry/pages/17-2-galvanic-cells",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": "Verbatim from the summary list for the copper-silver galvanic cell in section 17.2."
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.99,
+          "verdict_rationale": "The passage gives the direction as anode to cathode, the reverse of the cathode-to-anode direction in the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "frz-016-a1-c2",
+          "text": "Reduction occurs at the cathode of a galvanic cell.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-016-a1-c2-e1",
+              "text": "Reduction occurs at the cathode (the right half-cell in the figure).",
+              "source": "OpenStax Chemistry",
+              "locator": "https://openstax.org/books/chemistry/pages/17-2-galvanic-cells",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": "Verbatim from the summary list for the copper-silver galvanic cell in section 17.2."
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.99,
+          "verdict_rationale": "The passage states directly that reduction occurs at the cathode, which is the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "frz-016-a1-c3",
+          "text": "A galvanic cell is also called a voltaic cell.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-016-a1-c3-e1",
+              "text": "The copper is undergoing oxidation; the copper electrode is referred to as the anode. The silver is undergoing reduction; the silver electrode is referred to as the cathode.",
+              "source": "OpenStax Chemistry",
+              "locator": "https://openstax.org/books/chemistry/pages/17-2-galvanic-cells",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": "Verbatim from the description of the copper-silver cell in section 17.2."
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.93,
+          "verdict_rationale": "The passage describes which electrode undergoes oxidation and which undergoes reduction but does not mention the alternative name voltaic cell, so it neither establishes nor refutes the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    },
+    {
+      "agent": 2,
+      "answer": "Oxidation occurs at the anode, and electrons flow from the anode to the cathode.",
+      "claims": [
+        {
+          "claim_id": "frz-016-a2-c1",
+          "text": "Oxidation occurs at the anode of a galvanic cell.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-016-a2-c1-e1",
+              "text": "Oxidation occurs at the anode (the left half-cell in the figure).",
+              "source": "OpenStax Chemistry",
+              "locator": "https://openstax.org/books/chemistry/pages/17-2-galvanic-cells",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": "Verbatim from the summary list for the copper-silver galvanic cell in section 17.2."
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.99,
+          "verdict_rationale": "The passage states directly that oxidation occurs at the anode, which is the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "frz-016-a2-c2",
+          "text": "Electrons flow from the anode to the cathode in a galvanic cell.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-016-a2-c2-e1",
+              "text": "Electrons flow from the anode to the cathode: left to right in the standard galvanic cell in the figure.",
+              "source": "OpenStax Chemistry",
+              "locator": "https://openstax.org/books/chemistry/pages/17-2-galvanic-cells",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": "Verbatim from the summary list for the copper-silver galvanic cell in section 17.2."
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.99,
+          "verdict_rationale": "The passage states directly that electrons flow from the anode to the cathode, which is the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "frz-016-a2-c3",
+          "text": "Reduction occurs at the cathode of a galvanic cell.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-016-a2-c3-e1",
+              "text": "Reduction occurs at the cathode (the right half-cell in the figure).",
+              "source": "OpenStax Chemistry",
+              "locator": "https://openstax.org/books/chemistry/pages/17-2-galvanic-cells",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": "Verbatim from the summary list for the copper-silver galvanic cell in section 17.2."
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.99,
+          "verdict_rationale": "The passage states directly that reduction occurs at the cathode, which is the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    }
+  ]
+}

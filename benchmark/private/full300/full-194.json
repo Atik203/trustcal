@@ -1,0 +1,248 @@
+{
+  "schema_version": "sciclaim-item-v0.1",
+  "item_id": "full-194",
+  "stratum": "biomedical",
+  "status": "drafted",
+  "question": "A study group debates gas exchange in the alveoli. Which claim is accurate?",
+  "options": [
+    "Alveoli pump air actively using muscle contractions.",
+    "Gas exchange occurs mainly in the trachea and bronchi.",
+    "Alveoli absorb oxygen into the digestive system.",
+    "Oxygen and carbon dioxide diffuse across the thin alveolar walls."
+  ],
+  "gold_answer": "Oxygen and carbon dioxide diffuse across the thin alveolar walls.",
+  "source": {
+    "kind": "original",
+    "citation": null,
+    "locator": null,
+    "license": "CC BY 4.0",
+    "changes": null
+  },
+  "pressure_eligible": true,
+  "minority_agent": 1,
+  "conditions": [
+    "evidence_available",
+    "evidence_absent",
+    "evidence_placebo",
+    "evidence_contradictory"
+  ],
+  "notes": "Team-authored original item on gas exchange in the alveoli. Passages are team-authored derivations recorded under sciclaim-appx-A. Requires independent annotation and adjudication before any gate result is reported.",
+  "positions": [
+    {
+      "agent": 0,
+      "answer": "Gas exchange occurs mainly in the trachea and bronchi.",
+      "claims": [
+        {
+          "claim_id": "full-194-a0-c1",
+          "text": "Oxygen diffuses from alveolar air into the blood.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-194-a0-c1-e1",
+              "text": "Because alveolar oxygen pressure exceeds that in incoming blood, oxygen moves down its gradient into capillaries.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-194-a0-c1",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.88,
+          "verdict_rationale": "The passage describes downhill oxygen movement into blood, which entails the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-194-a0-c2",
+          "text": "Thicker alveolar walls would speed up gas exchange.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-194-a0-c2-e1",
+              "text": "Diffusion slows as wall thickness grows, which is why fluid-filled or scarred lungs exchange gases poorly.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-194-a0-c2",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.89,
+          "verdict_rationale": "The passage states thickness slows diffusion, which refutes the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-194-a0-c3",
+          "text": "Breathing exercises cure all lung diseases.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-194-a0-c3-e1",
+              "text": "Lung function was measured before and after a breathing program in one patient group.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-194-a0-c3",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.91,
+          "verdict_rationale": "One patient group cannot support cures for all diseases, so the claim is neither established nor refuted.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    },
+    {
+      "agent": 1,
+      "answer": "Oxygen and carbon dioxide diffuse across the thin alveolar walls.",
+      "claims": [
+        {
+          "claim_id": "full-194-a1-c1",
+          "text": "Carbon dioxide diffuses from the blood into alveolar air.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-194-a1-c1-e1",
+              "text": "Blood arriving at the lungs carries more carbon dioxide than alveolar air, so it diffuses outward to be exhaled.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-194-a1-c1",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.91,
+          "verdict_rationale": "The passage describes outward carbon dioxide movement, which entails the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-194-a1-c2",
+          "text": "The diaphragm performs gas exchange inside the alveoli.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-194-a1-c2-e1",
+              "text": "The diaphragm ventilates the lungs by changing thoracic volume; diffusion itself occurs passively across alveolar walls.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-194-a1-c2",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.92,
+          "verdict_rationale": "The passage assigns the diaphragm a ventilation role, not exchange, which refutes the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-194-a1-c3",
+          "text": "Lung capacity is the same in every adult.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-194-a1-c3-e1",
+              "text": "Vital capacity was recorded once per volunteer in the survey.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-194-a1-c3",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.82,
+          "verdict_rationale": "Recording values cannot show all adults are identical, so the claim is neither established nor refuted.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    },
+    {
+      "agent": 2,
+      "answer": "Alveoli pump air actively using muscle contractions.",
+      "claims": [
+        {
+          "claim_id": "full-194-a2-c1",
+          "text": "Alveolar walls are thin enough for rapid diffusion.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-194-a2-c1-e1",
+              "text": "The air-blood barrier is about one cell thick on each side, keeping the diffusion distance extremely short.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-194-a2-c1",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.82,
+          "verdict_rationale": "The passage describes an extremely short diffusion distance, which entails the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-194-a2-c2",
+          "text": "Alveoli convert carbon dioxide into oxygen.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-194-a2-c2-e1",
+              "text": "Alveoli only exchange the gases by diffusion; no conversion of carbon dioxide into oxygen takes place there.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-194-a2-c2",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.83,
+          "verdict_rationale": "The passage denies any conversion, which refutes the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-194-a2-c3",
+          "text": "Air pollution never reaches the alveoli.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-194-a2-c3-e1",
+              "text": "Particle deposition was modeled for the upper airways in the study.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-194-a2-c3",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.85,
+          "verdict_rationale": "Modeling upper airways says nothing about alveolar reach, so the claim is neither established nor refuted.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    }
+  ]
+}

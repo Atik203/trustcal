@@ -1,0 +1,248 @@
+{
+  "schema_version": "sciclaim-item-v0.1",
+  "item_id": "full-258",
+  "stratum": "physics_chemistry",
+  "status": "drafted",
+  "question": "A study group debates specific heat capacity. Which claim is accurate?",
+  "options": [
+    "All substances need identical energy to warm by one degree.",
+    "Water heats faster than sand under equal sun.",
+    "Specific heat measures how fast heat flows.",
+    "Specific heat capacity measures energy needed per degree of warming."
+  ],
+  "gold_answer": "Specific heat capacity measures energy needed per degree of warming.",
+  "source": {
+    "kind": "original",
+    "citation": null,
+    "locator": null,
+    "license": "CC BY 4.0",
+    "changes": null
+  },
+  "pressure_eligible": true,
+  "minority_agent": 1,
+  "conditions": [
+    "evidence_available",
+    "evidence_absent",
+    "evidence_placebo",
+    "evidence_contradictory"
+  ],
+  "notes": "Team-authored original item on specific heat capacity. Passages are team-authored derivations recorded under sciclaim-appx-A. Requires independent annotation and adjudication before any gate result is reported.",
+  "positions": [
+    {
+      "agent": 0,
+      "answer": "Water heats faster than sand under equal sun.",
+      "claims": [
+        {
+          "claim_id": "full-258-a0-c1",
+          "text": "Equal masses need different energies for the same temperature rise.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-258-a0-c1-e1",
+              "text": "One kilogram of water needs about five times the energy of one kilogram of sand for the same temperature gain.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-258-a0-c1",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.88,
+          "verdict_rationale": "The passage gives different energies for equal masses, which entails the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-258-a0-c2",
+          "text": "Sand and water warm at the same rate in the sun.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-258-a0-c2-e1",
+              "text": "Lower specific heat makes beaches scorch while adjacent water stays cool.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-258-a0-c2",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.89,
+          "verdict_rationale": "The passage describes scorching sand beside cool water, which refutes the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-258-a0-c3",
+          "text": "Deserts are hot because sand creates heat.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-258-a0-c3-e1",
+              "text": "Surface temperatures were compared across desert and coastal stations.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-258-a0-c3",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.91,
+          "verdict_rationale": "Comparing stations cannot show sand creates heat, so the claim is neither established nor refuted.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    },
+    {
+      "agent": 1,
+      "answer": "Specific heat capacity measures energy needed per degree of warming.",
+      "claims": [
+        {
+          "claim_id": "full-258-a1-c1",
+          "text": "Specific heat is defined per unit mass per degree.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-258-a1-c1-e1",
+              "text": "The quantity is the energy required to raise one kilogram by one kelvin.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-258-a1-c1",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.91,
+          "verdict_rationale": "The passage states the per-mass per-degree definition, which entails the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-258-a1-c2",
+          "text": "Temperature and heat are the same quantity.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-258-a1-c2-e1",
+              "text": "Temperature measures average particle energy while heat measures energy transferred; different masses can share a temperature.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-258-a1-c2",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.92,
+          "verdict_rationale": "The passage distinguishes the two quantities, which refutes the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-258-a1-c3",
+          "text": "Insulation generates warmth.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-258-a1-c3-e1",
+              "text": "Heat loss was measured for walls with and without insulation.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-258-a1-c3",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.82,
+          "verdict_rationale": "Measuring loss cannot show insulation generates heat, so the claim is neither established nor refuted.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    },
+    {
+      "agent": 2,
+      "answer": "All substances need identical energy to warm by one degree.",
+      "claims": [
+        {
+          "claim_id": "full-258-a2-c1",
+          "text": "Water's high specific heat moderates coastal climates.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-258-a2-c1-e1",
+              "text": "Oceans absorb large summer heat with small temperature change and release it slowly in winter.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-258-a2-c1",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.82,
+          "verdict_rationale": "The passage describes small-change absorption and slow release, which entails the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-258-a2-c2",
+          "text": "Adding heat always raises temperature.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-258-a2-c2-e1",
+              "text": "During melting, added heat breaks bonds at constant temperature instead of warming the substance.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-258-a2-c2",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.83,
+          "verdict_rationale": "The passage gives melting as a counterexample, which refutes the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-258-a2-c3",
+          "text": "Cold flows into warm objects.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-258-a2-c3-e1",
+              "text": "Calorimeter readings tracked energy flow direction between bodies.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-258-a2-c3",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.85,
+          "verdict_rationale": "Tracking direction cannot by itself settle the claim, so the claim is neither established nor refuted.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    }
+  ]
+}

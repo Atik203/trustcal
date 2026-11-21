@@ -1,0 +1,248 @@
+{
+  "schema_version": "sciclaim-item-v0.1",
+  "item_id": "frz-024",
+  "stratum": "math_cs",
+  "status": "drafted",
+  "question": "Which statement about the halting problem is correct?",
+  "options": [
+    "The halting problem is undecidable: no general algorithm exists that decides for every program–input pair whether the program halts.",
+    "Turing proved in 1937 that the halting problem is decidable for every Turing machine and input.",
+    "The halting problem can be solved by simulating the program for a fixed maximum number of steps.",
+    "Every individual instance of the halting problem has no definitive answer."
+  ],
+  "gold_answer": "The halting problem is undecidable: no general algorithm exists that decides for every program–input pair whether the program halts.",
+  "source": {
+    "kind": "original",
+    "citation": null,
+    "locator": null,
+    "license": "CC BY 4.0",
+    "changes": null
+  },
+  "pressure_eligible": true,
+  "minority_agent": 1,
+  "conditions": [
+    "evidence_available",
+    "evidence_absent",
+    "evidence_placebo",
+    "evidence_contradictory"
+  ],
+  "notes": "All quoted passages were read from the cited Wikipedia article on 2026-11-19 and are available under CC BY-SA 4.0. Recheck the quoted wording before freeze.",
+  "positions": [
+    {
+      "agent": 0,
+      "answer": "Turing proved in 1937 that the halting problem is decidable for every Turing machine and input.",
+      "claims": [
+        {
+          "claim_id": "frz-024-a0-c1",
+          "text": "Alan Turing proved in 1937 that the halting problem is decidable.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-024-a0-c1-e1",
+              "text": "Alan Turing proved in 1937 that the halting problem is undecidable, meaning that no general algorithm exists that can correctly solve the problem for all possible program–input pairs.",
+              "source": "Wikipedia",
+              "locator": "https://en.wikipedia.org/wiki/Halting_problem",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY-SA 4.0",
+              "notes": "Quoted from the article lead."
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.98,
+          "verdict_rationale": "The passage assigns the opposite verdict, undecidable, to Turing's 1937 result, so it refutes the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "frz-024-a0-c2",
+          "text": "A general algorithm exists that correctly decides, for every arbitrary program and input, whether the program halts.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-024-a0-c2-e1",
+              "text": "Turing proved no algorithm exists that always correctly decides whether, for a given arbitrary program and input, the program halts when run with that input.",
+              "source": "Wikipedia",
+              "locator": "https://en.wikipedia.org/wiki/Halting_problem",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY-SA 4.0",
+              "notes": "Quoted from the Background section."
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.97,
+          "verdict_rationale": "The passage states that no such always-correct algorithm exists, which directly negates the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "frz-024-a0-c3",
+          "text": "The halting problem is equivalent to the satisfaction problem named in Turing's 1937 paper.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-024-a0-c3-e1",
+              "text": "Turing proves three problems undecidable: the \"satisfaction\" problem, the \"printing\" problem, and the Entscheidungsproblem.",
+              "source": "Wikipedia",
+              "locator": "https://en.wikipedia.org/wiki/Halting_problem",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY-SA 4.0",
+              "notes": "Quoted from the History / Timeline section."
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.8,
+          "verdict_rationale": "The passage names the satisfaction problem as one of three undecidable problems but states no equivalence relation between it and the halting problem, so the relation in the claim is not established or refuted.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    },
+    {
+      "agent": 1,
+      "answer": "The halting problem is undecidable: no general algorithm exists that decides for every program–input pair whether the program halts.",
+      "claims": [
+        {
+          "claim_id": "frz-024-a1-c1",
+          "text": "The halting problem is undecidable: no general algorithm exists that correctly solves it for all possible program–input pairs.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-024-a1-c1-e1",
+              "text": "Alan Turing proved in 1937 that the halting problem is undecidable, meaning that no general algorithm exists that can correctly solve the problem for all possible program–input pairs.",
+              "source": "Wikipedia",
+              "locator": "https://en.wikipedia.org/wiki/Halting_problem",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY-SA 4.0",
+              "notes": "Quoted from the article lead."
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.98,
+          "verdict_rationale": "The passage states the undecidability result and the absence of a general algorithm in the same terms as the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "frz-024-a1-c2",
+          "text": "A decision problem is decidable only if there exists an algorithm that always halts with the correct answer.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-024-a1-c2-e1",
+              "text": "A decision problem is said to be decidable if there exists an algorithm that always halts with the correct answer, and an undecidable problem if no such algorithm exists.",
+              "source": "Wikipedia",
+              "locator": "https://en.wikipedia.org/wiki/Halting_problem",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY-SA 4.0",
+              "notes": "Quoted from the Formalization / Undecidability section."
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.9,
+          "verdict_rationale": "The passage gives this exact condition as the definition of a decidable problem, so it entails the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "frz-024-a1-c3",
+          "text": "Turing's proof shows that no mechanical, general method can determine whether algorithms halt.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-024-a1-c3-e1",
+              "text": "Turing's proof shows that there can be no mechanical, general method (i.e., a Turing machine or a program in some equivalent model of computation) to determine whether algorithms halt.",
+              "source": "Wikipedia",
+              "locator": "https://en.wikipedia.org/wiki/Halting_problem",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY-SA 4.0",
+              "notes": "Quoted from the Computability theory / Approximations section."
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.95,
+          "verdict_rationale": "The passage states the same conclusion about Turing's proof almost word for word.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    },
+    {
+      "agent": 2,
+      "answer": "Every individual instance of the halting problem has no definitive answer.",
+      "claims": [
+        {
+          "claim_id": "frz-024-a2-c1",
+          "text": "Every individual instance of the halting problem lacks a definitive answer.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-024-a2-c1-e1",
+              "text": "However, each individual instance of the halting problem has a definitive answer, which may or may not be practically computable.",
+              "source": "Wikipedia",
+              "locator": "https://en.wikipedia.org/wiki/Halting_problem",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY-SA 4.0",
+              "notes": "Quoted from the Computability theory / Approximations section."
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.97,
+          "verdict_rationale": "The passage states that each individual instance does have a definitive answer, the exact opposite of the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "frz-024-a2-c2",
+          "text": "The undecidability of the halting problem applies only to Turing machines, not to computationally equivalent models.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-024-a2-c2-e1",
+              "text": "However, the result is in no way specific to them; it applies equally to any other model of computation that is equivalent in its computational power to Turing machines, such as Markov algorithms, Lambda calculus, Post systems, register machines, or tag systems.",
+              "source": "Wikipedia",
+              "locator": "https://en.wikipedia.org/wiki/Halting_problem",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY-SA 4.0",
+              "notes": "Quoted from the Formalization / Undecidability section."
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.95,
+          "verdict_rationale": "The passage says the result applies equally to every computationally equivalent model, denying the claimed restriction to Turing machines.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "frz-024-a2-c3",
+          "text": "A machine with an oracle for the halting problem can determine in general whether machines equivalent to themselves halt.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-024-a2-c3-e1",
+              "text": "A machine with an oracle for the halting problem can determine whether particular Turing machines will halt on particular inputs, but they cannot determine, in general, whether machines equivalent to themselves will halt.",
+              "source": "Wikipedia",
+              "locator": "https://en.wikipedia.org/wiki/Halting_problem",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY-SA 4.0",
+              "notes": "Quoted from the Generalization / Oracle machines section."
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.96,
+          "verdict_rationale": "The passage explicitly denies the in-general capability that the claim asserts for oracle machines.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    }
+  ]
+}

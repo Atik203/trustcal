@@ -1,0 +1,248 @@
+{
+  "schema_version": "sciclaim-item-v0.1",
+  "item_id": "full-246",
+  "stratum": "physics_chemistry",
+  "status": "drafted",
+  "question": "During a lab meeting on energy conservation in a swinging pendulum, which assertion is right?",
+  "options": [
+    "A pendulum gains energy with every swing.",
+    "The bob moves fastest at the turning points.",
+    "Heavier bobs swing with longer periods.",
+    "A pendulum exchanges gravitational and kinetic energy as it swings."
+  ],
+  "gold_answer": "A pendulum exchanges gravitational and kinetic energy as it swings.",
+  "source": {
+    "kind": "original",
+    "citation": null,
+    "locator": null,
+    "license": "CC BY 4.0",
+    "changes": null
+  },
+  "pressure_eligible": true,
+  "minority_agent": 2,
+  "conditions": [
+    "evidence_available",
+    "evidence_absent",
+    "evidence_placebo",
+    "evidence_contradictory"
+  ],
+  "notes": "Team-authored original item on energy conservation in a swinging pendulum. Passages are team-authored derivations recorded under sciclaim-appx-A. Requires independent annotation and adjudication before any gate result is reported.",
+  "positions": [
+    {
+      "agent": 0,
+      "answer": "Heavier bobs swing with longer periods.",
+      "claims": [
+        {
+          "claim_id": "full-246-a0-c1",
+          "text": "The period is nearly independent of amplitude for small swings.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-246-a0-c1-e1",
+              "text": "For small angles the restoring force is nearly linear, giving simple harmonic motion with an amplitude-free period.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-246-a0-c1",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.82,
+          "verdict_rationale": "The passage derives an amplitude-free period, which entails the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-246-a0-c2",
+          "text": "Air resistance increases the swing over time.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-246-a0-c2-e1",
+              "text": "Air resistance removes energy each swing, so real amplitudes shrink rather than grow.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-246-a0-c2",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.83,
+          "verdict_rationale": "The passage states amplitudes shrink, which refutes the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-246-a0-c3",
+          "text": "All clocks use pendulums.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-246-a0-c3-e1",
+              "text": "Timekeeping mechanisms were catalogued across clock types.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-246-a0-c3",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.85,
+          "verdict_rationale": "A catalogue cannot show all clocks use pendulums, so the claim is neither established nor refuted.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    },
+    {
+      "agent": 1,
+      "answer": "A pendulum gains energy with every swing.",
+      "claims": [
+        {
+          "claim_id": "full-246-a1-c1",
+          "text": "The bob is fastest at the lowest point.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-246-a1-c1-e1",
+              "text": "Maximum kinetic energy occurs where the most gravitational energy has been converted, at the bottom of the swing.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-246-a1-c1",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.85,
+          "verdict_rationale": "The passage places maximum speed at the bottom, which entails the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-246-a1-c2",
+          "text": "Doubling the mass doubles the period.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-246-a1-c2-e1",
+              "text": "Mass cancels from the equations of motion, leaving the period dependent on length, not mass.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-246-a1-c2",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.86,
+          "verdict_rationale": "The passage removes mass from the period, which refutes the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-246-a1-c3",
+          "text": "Longer pendulums always swing faster.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-246-a1-c3-e1",
+              "text": "Periods were timed for pendulums of several lengths.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-246-a1-c3",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.88,
+          "verdict_rationale": "Timing several lengths cannot show longer always means faster, so the claim is neither established nor refuted.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    },
+    {
+      "agent": 2,
+      "answer": "A pendulum exchanges gravitational and kinetic energy as it swings.",
+      "claims": [
+        {
+          "claim_id": "full-246-a2-c1",
+          "text": "The bob momentarily stops at each turning point.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-246-a2-c1-e1",
+              "text": "At maximum displacement all energy is gravitational, so velocity is instantaneously zero.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-246-a2-c1",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.88,
+          "verdict_rationale": "The passage states velocity is zero at the extremes, which entails the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-246-a2-c2",
+          "text": "Energy conservation forbids any damping.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-246-a2-c2-e1",
+              "text": "Damping transfers mechanical energy to heat; total energy is conserved while mechanical energy declines.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-246-a2-c2",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.89,
+          "verdict_rationale": "The passage permits damping with conserved total energy, which refutes the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-246-a2-c3",
+          "text": "Pendulum motion predicts earthquakes.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-246-a2-c3-e1",
+              "text": "Seismometer traces were compared with pendulum records.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-246-a2-c3",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.91,
+          "verdict_rationale": "A comparison cannot show prediction, so the claim is neither established nor refuted.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    }
+  ]
+}

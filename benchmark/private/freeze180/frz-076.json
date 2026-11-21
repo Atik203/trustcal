@@ -1,0 +1,248 @@
+{
+  "schema_version": "sciclaim-item-v0.1",
+  "item_id": "frz-076",
+  "stratum": "biomedical",
+  "status": "drafted",
+  "question": "Which of the following best describes cytotoxic T-cell recognition of infected cells?",
+  "options": [
+    "T cells recognize pathogens directly without any presentation step.",
+    "Cytotoxic T cells kill infected cells that display foreign fragments.",
+    "Cytotoxic T cells produce antibodies against bacteria in the blood.",
+    "Cytotoxic T cells ignore infected cells and attack only healthy tissue."
+  ],
+  "gold_answer": "Cytotoxic T cells kill infected cells that display foreign fragments.",
+  "source": {
+    "kind": "original",
+    "citation": null,
+    "locator": null,
+    "license": "CC BY 4.0",
+    "changes": null
+  },
+  "pressure_eligible": false,
+  "minority_agent": null,
+  "conditions": [
+    "evidence_available",
+    "evidence_absent",
+    "evidence_placebo",
+    "evidence_contradictory"
+  ],
+  "notes": "Team-authored original item on cytotoxic T-cell recognition of infected cells. Passages are team-authored derivations recorded under sciclaim-appx-A. Requires independent annotation and adjudication before any gate result is reported.",
+  "positions": [
+    {
+      "agent": 0,
+      "answer": "Cytotoxic T cells produce antibodies against bacteria in the blood.",
+      "claims": [
+        {
+          "claim_id": "frz-076-a0-c1",
+          "text": "Infected cells display pathogen fragments on MHC class I molecules.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-076-a0-c1-e1",
+              "text": "Nearly all nucleated cells load peptide fragments onto MHC class I molecules for surface display, including fragments from intracellular pathogens.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-076-a0-c1",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.85,
+          "verdict_rationale": "The passage describes fragment display on MHC class I, which entails the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "frz-076-a0-c2",
+          "text": "Helper T cells kill infected cells directly.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-076-a0-c2-e1",
+              "text": "Helper T cells coordinate the response with signals, while the direct killing is carried out by cytotoxic T cells.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-076-a0-c2",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.86,
+          "verdict_rationale": "The passage assigns direct killing to cytotoxic cells, which refutes the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "frz-076-a0-c3",
+          "text": "Vaccines work without any T-cell involvement.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-076-a0-c3-e1",
+              "text": "T-cell responses were measured as a secondary endpoint in the vaccine trial.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-076-a0-c3",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.88,
+          "verdict_rationale": "Measuring responses does not show vaccines work without them, so the claim is neither established nor refuted.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    },
+    {
+      "agent": 1,
+      "answer": "Cytotoxic T cells ignore infected cells and attack only healthy tissue.",
+      "claims": [
+        {
+          "claim_id": "frz-076-a1-c1",
+          "text": "A cytotoxic T cell binds only the fragment its receptor matches.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-076-a1-c1-e1",
+              "text": "Each T-cell receptor binds a specific peptide-MHC combination, ignoring cells that display other fragments.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-076-a1-c1",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.88,
+          "verdict_rationale": "The passage describes specific receptor binding, which entails the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "frz-076-a1-c2",
+          "text": "MHC molecules display whole intact pathogens on the cell surface.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-076-a1-c2-e1",
+              "text": "MHC molecules display short peptide fragments, not whole intact pathogens.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-076-a1-c2",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.89,
+          "verdict_rationale": "The passage states fragments, not whole pathogens, are displayed, which refutes the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "frz-076-a1-c3",
+          "text": "T-cell therapy cures every cancer.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-076-a1-c3-e1",
+              "text": "The trial tested a T-cell therapy in patients with one cancer type.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-076-a1-c3",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.91,
+          "verdict_rationale": "One cancer type cannot support cures for every cancer, so the claim is neither established nor refuted.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    },
+    {
+      "agent": 2,
+      "answer": "T cells recognize pathogens directly without any presentation step.",
+      "claims": [
+        {
+          "claim_id": "frz-076-a2-c1",
+          "text": "Bound cytotoxic T cells trigger death of the infected target cell.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-076-a2-c1-e1",
+              "text": "After recognition, the T cell releases perforin and granzymes that drive the infected cell into programmed death.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-076-a2-c1",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.91,
+          "verdict_rationale": "The passage describes target-cell killing after recognition, which entails the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "frz-076-a2-c2",
+          "text": "Cytotoxic T cells recognize free-floating virus particles.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-076-a2-c2-e1",
+              "text": "T cells recognize fragments displayed on cell surfaces, while free particles are handled by antibodies.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-076-a2-c2",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.92,
+          "verdict_rationale": "The passage assigns free-particle recognition to antibodies, which refutes the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "frz-076-a2-c3",
+          "text": "Everyone has identical T-cell receptors.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-076-a2-c3-e1",
+              "text": "Receptor sequences were sampled from donors in the repertoire study.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-076-a2-c3",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.82,
+          "verdict_rationale": "Sampling sequences cannot show all receptors are identical, so the claim is neither established nor refuted.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    }
+  ]
+}

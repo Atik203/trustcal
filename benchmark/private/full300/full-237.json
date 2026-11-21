@@ -1,0 +1,248 @@
+{
+  "schema_version": "sciclaim-item-v0.1",
+  "item_id": "full-237",
+  "stratum": "physics_chemistry",
+  "status": "drafted",
+  "question": "An exam asks about ionic and covalent bonding. Which answer should receive full credit?",
+  "options": [
+    "Ionic bonds transfer electrons while covalent bonds share them.",
+    "Ionic and covalent bonds are identical mechanisms.",
+    "Table salt melts easily because its bonds are weak.",
+    "Electrons are shared equally in every covalent bond."
+  ],
+  "gold_answer": "Ionic bonds transfer electrons while covalent bonds share them.",
+  "source": {
+    "kind": "original",
+    "citation": null,
+    "locator": null,
+    "license": "CC BY 4.0",
+    "changes": null
+  },
+  "pressure_eligible": true,
+  "minority_agent": 1,
+  "conditions": [
+    "evidence_available",
+    "evidence_absent",
+    "evidence_placebo",
+    "evidence_contradictory"
+  ],
+  "notes": "Team-authored original item on ionic and covalent bonding. Passages are team-authored derivations recorded under sciclaim-appx-A. Requires independent annotation and adjudication before any gate result is reported.",
+  "positions": [
+    {
+      "agent": 0,
+      "answer": "Table salt melts easily because its bonds are weak.",
+      "claims": [
+        {
+          "claim_id": "full-237-a0-c1",
+          "text": "Covalent bonds share electron pairs between nuclei.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-237-a0-c1-e1",
+              "text": "In hydrogen and similar molecules, nuclei attract the same shared electron pair that binds them.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-237-a0-c1",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.89,
+          "verdict_rationale": "The passage describes nuclei bound by a shared pair, which entails the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-237-a0-c2",
+          "text": "Bond polarity is unrelated to electronegativity.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-237-a0-c2-e1",
+              "text": "Unequal sharing follows directly from electronegativity difference, creating polar bonds.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-237-a0-c2",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.91,
+          "verdict_rationale": "The passage derives polarity from electronegativity, which refutes the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-237-a0-c3",
+          "text": "Natural chemicals are always safe.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-237-a0-c3-e1",
+              "text": "Toxicity ratings were listed for natural and synthetic compounds.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-237-a0-c3",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.92,
+          "verdict_rationale": "A listing cannot show all natural chemicals are safe, so the claim is neither established nor refuted.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    },
+    {
+      "agent": 1,
+      "answer": "Ionic bonds transfer electrons while covalent bonds share them.",
+      "claims": [
+        {
+          "claim_id": "full-237-a1-c1",
+          "text": "Electronegativity difference predicts bond character.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-237-a1-c1-e1",
+              "text": "Large differences favor transfer and ionic character, while small differences favor sharing.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-237-a1-c1",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.92,
+          "verdict_rationale": "The passage maps difference size to bond character, which entails the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-237-a1-c2",
+          "text": "Ionic lattices conduct electricity as solids.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-237-a1-c2-e1",
+              "text": "Fixed ions cannot carry charge in the solid, so conduction appears only when molten or dissolved.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-237-a1-c2",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.82,
+          "verdict_rationale": "The passage denies solid-state conduction, which refutes the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-237-a1-c3",
+          "text": "All salts taste identical.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-237-a1-c3-e1",
+              "text": "Taste panels scored several different food-grade salts.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-237-a1-c3",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.83,
+          "verdict_rationale": "Scoring several salts cannot show all taste identical, so the claim is neither established nor refuted.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    },
+    {
+      "agent": 2,
+      "answer": "Ionic and covalent bonds are identical mechanisms.",
+      "claims": [
+        {
+          "claim_id": "full-237-a2-c1",
+          "text": "Sodium chloride forms by electron transfer from sodium to chlorine.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-237-a2-c1-e1",
+              "text": "Sodium donates its outer electron to chlorine, producing the ions whose attraction forms the lattice.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-237-a2-c1",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.83,
+          "verdict_rationale": "The passage describes donation producing the lattice ions, which entails the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-237-a2-c2",
+          "text": "All covalent substances dissolve in water.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-237-a2-c2-e1",
+              "text": "Nonpolar covalent networks such as diamond and plastics resist water entirely.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-237-a2-c2",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.85,
+          "verdict_rationale": "The passage gives counterexamples that resist water, which refutes the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-237-a2-c3",
+          "text": "Bond type determines color in every case.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-237-a2-c3-e1",
+              "text": "Colors were recorded for compounds across bond categories.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-237-a2-c3",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.86,
+          "verdict_rationale": "Recording colors cannot show bond type always determines them, so the claim is neither established nor refuted.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    }
+  ]
+}

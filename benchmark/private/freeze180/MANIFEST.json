@@ -1,0 +1,50 @@
+{
+  "batch": "freeze180",
+  "target": "SciClaimBench v1.2 freeze (180 items)",
+  "created": "2026-11-21",
+  "generator": "experiments/calibration/draft_items.py",
+  "model": "Muse Spark 1.3 Contributor (opencode-go)",
+  "method": "Machine-drafted original stems. frz-001..frz-024 are copies of private/items/cal-001..cal-024 with IDs renamed; frz-025..frz-180 are newly generated subject/rotation variants. No gated or redistributable text is used anywhere.",
+  "ranges": [
+    {
+      "ids": "frz-001..frz-024",
+      "origin": "copies of cal-001..cal-024, IDs renamed",
+      "marker_fields_stripped": [
+        "none present; defensive strip applied"
+      ]
+    },
+    {
+      "ids": "frz-025..frz-076",
+      "origin": "generated biomedical variants (52 combos)",
+      "stratum": "biomedical"
+    },
+    {
+      "ids": "frz-077..frz-128",
+      "origin": "generated physics_chemistry variants (52 combos)",
+      "stratum": "physics_chemistry"
+    },
+    {
+      "ids": "frz-129..frz-180",
+      "origin": "generated math_cs variants (52 combos)",
+      "stratum": "math_cs"
+    }
+  ],
+  "counts": {
+    "items": 180,
+    "per_stratum": {
+      "biomedical": 60,
+      "physics_chemistry": 60,
+      "math_cs": 60
+    },
+    "claims": 1620,
+    "candidate_verdicts": {
+      "support": 577,
+      "contradict": 539,
+      "neutral": 504
+    }
+  },
+  "status": "all items status=drafted; zero human labels; verification gate not run",
+  "provenance_note": "Item records carry no generator markings by design (see FULLBENCH_PLAN.md, Provenance convention). Provenance lives in this manifest. Nothing here is gold until member verification and adjudication pass the gate.",
+  "validator": "python experiments/calibration/validate_items.py check --items experiments/calibration/private/freeze180/items.jsonl --expect 180",
+  "validation": "PASS: schema-valid, 60/60/60, claims 3 per position"
+}

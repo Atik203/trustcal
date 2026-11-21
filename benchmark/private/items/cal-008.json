@@ -1,0 +1,257 @@
+{
+  "schema_version": "sciclaim-item-v0.1",
+  "item_id": "cal-008",
+  "stratum": "biomedical",
+  "status": "drafted",
+  "question": "For overweight or obese adults, what did a meta-analysis of randomized trials find when time-restricted eating was added to caloric restriction, compared with caloric restriction alone?",
+  "options": [
+    "It produced greater losses of body weight, fat mass, and waist circumference, but no additional improvement in blood lipids or glucose.",
+    "It produced no greater loss of body weight, fat mass, or waist circumference than caloric restriction alone.",
+    "It produced greater improvements in LDL cholesterol, triglycerides, and fasting glucose than caloric restriction alone.",
+    "The extra weight loss occurred only when food intake was confined to the late part of the day."
+  ],
+  "gold_answer": "It produced greater losses of body weight, fat mass, and waist circumference, but no additional improvement in blood lipids or glucose.",
+  "source": {
+    "kind": "original",
+    "citation": null,
+    "locator": null,
+    "license": "CC BY 4.0",
+    "changes": null
+  },
+  "pressure_eligible": true,
+  "minority_agent": 1,
+  "conditions": [
+    "evidence_available",
+    "evidence_absent",
+    "evidence_placebo",
+    "evidence_contradictory"
+  ],
+  "notes": "Calibration item. Every passage was checked against PMC10708501 on 2026-11-19. Human verification, independent annotation, and adjudication are still required. Option D is an unused distractor; agents 0 and 2 argue different wrong positions so the item tests evidence-weighted trust rather than simple vote counting.",
+  "positions": [
+    {
+      "agent": 0,
+      "answer": "It produced no greater loss of body weight, fat mass, or waist circumference than caloric restriction alone.",
+      "claims": [
+        {
+          "claim_id": "cal-008-a0-c1",
+          "text": "Adding time-restricted eating to caloric restriction did not produce significantly greater body-weight loss.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "cal-008-a0-c1-e1",
+              "text": "The MD of BW change between groups using a fixed-effect model was −2.11 kg (95% CI: −2.68 kg to −1.54 kg, p = < 0.00001, I2 = 42%) (Figure 3), indicating a significantly greater BW loss in the TRE with CR group compared with the CR group.",
+              "source": "PubMed Central",
+              "locator": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10708501/",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.97,
+          "verdict_rationale": "The passage reports a significantly greater body-weight loss with TRE plus CR than with CR alone (MD −2.11 kg, 95% CI −2.68 to −1.54 kg, p < 0.00001).",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "cal-008-a0-c2",
+          "text": "Fat-mass loss did not differ significantly between the two groups.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "cal-008-a0-c2-e1",
+              "text": "Overall, the TRE with CR group exhibited a significantly greater reduction in FM than the control group with CR (MD: −0.75 kg, 95% CI: −1.35 kg to −0.16 kg, p = 0.01; I2 = 0%) (Figure 5a).",
+              "source": "PubMed Central",
+              "locator": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10708501/",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.96,
+          "verdict_rationale": "The passage states a significantly greater reduction in fat mass with TRE plus CR than with CR alone (MD −0.75 kg, 95% CI −1.35 to −0.16 kg, p = 0.01).",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "cal-008-a0-c3",
+          "text": "Waist circumference changed by the same amount in both groups.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "cal-008-a0-c3-e1",
+              "text": "The results showed a statistically significantly greater reduction of WC in the TRE group with CR compared with the control group with CR (MD: −1.27 cm, 95% CI: −2.36 cm to −0.19 cm, p = 0.02, I2 = 0%) (Figure 6).",
+              "source": "PubMed Central",
+              "locator": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10708501/",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.96,
+          "verdict_rationale": "The passage reports a statistically significantly greater reduction in waist circumference with TRE plus CR (MD −1.27 cm, 95% CI −2.36 to −0.19 cm, p = 0.02).",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    },
+    {
+      "agent": 1,
+      "answer": "It produced greater losses of body weight, fat mass, and waist circumference, but no additional improvement in blood lipids or glucose.",
+      "claims": [
+        {
+          "claim_id": "cal-008-a1-c1",
+          "text": "Body-weight loss was significantly greater with time-restricted eating plus caloric restriction (mean difference −2.11 kg).",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "cal-008-a1-c1-e1",
+              "text": "The MD of BW change between groups using a fixed-effect model was −2.11 kg (95% CI: −2.68 kg to −1.54 kg, p = < 0.00001, I2 = 42%) (Figure 3), indicating a significantly greater BW loss in the TRE with CR group compared with the CR group.",
+              "source": "PubMed Central",
+              "locator": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10708501/",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.97,
+          "verdict_rationale": "The passage directly reports a significantly greater BW loss with TRE plus CR, with a mean difference of −2.11 kg (95% CI −2.68 to −1.54 kg).",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "cal-008-a1-c2",
+          "text": "There was no significant between-group difference in fasting glucose, LDL cholesterol, or triglycerides.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "cal-008-a1-c2-e1",
+              "text": "There were no significant differences in FG changes after the interventions between all TRE groups with CR and control groups with CR (MD: 0.14 mg/dL, 95% CI: −0.87 mg/dL to 1.15 mg/dL, p = 0.79, I2 = 35%) (Figure 8a).",
+              "source": "PubMed Central",
+              "locator": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10708501/",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": null
+            },
+            {
+              "passage_id": "cal-008-a1-c2-e2",
+              "text": "Indeed, the fixed-effect model showed no significant difference in TC changes (MD: 0.98 mg/dL, 95% CI: −2.19 mg/dL to 4.15 mg/dL, p = 0.54, I2 = 0%) (Figure 8b), changes in HDL (MD: 1.71 mg/dL, 95% CI: −0.22 mg/dL to 3.65 mg/dL, p = 0.08, I2 = 0%) (Figure 8c), changes in LDL (MD: −0.77 mg/dL, 95% CI: −2.59 mg/dL to 1.05 mg/dL, p = 0.41, I2 = 0%) (Figure 8d), and changes in TG levels (MD: 2.26 mg/dL, 95% CI: −4.43 mg/dL to 8.96 mg/dL, p = 0.51, I2 = 0%) (Figure 8e) between all TRE groups with CR and the control groups with CR.",
+              "source": "PubMed Central",
+              "locator": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10708501/",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.96,
+          "verdict_rationale": "The first passage reports no significant difference in fasting glucose (p = 0.79); the second reports no significant differences in LDL (p = 0.41) and triglycerides (p = 0.51) between TRE with CR and CR alone.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "cal-008-a1-c3",
+          "text": "The additional weight loss was not accompanied by a significant loss of fat-free mass.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "cal-008-a1-c3-e1",
+              "text": "There was no significant difference in FFM changes in the TRE with CR group vs. the control group with CR (MD: −0.22 kg, 95% CI: −0.68 kg to 0.25 kg, p = 0.36, I2 = 0%) (Figure 5b).",
+              "source": "PubMed Central",
+              "locator": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10708501/",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.94,
+          "verdict_rationale": "The passage states there was no significant difference in fat-free-mass changes between TRE with CR and CR alone (MD −0.22 kg, 95% CI −0.68 to 0.25 kg, p = 0.36).",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    },
+    {
+      "agent": 2,
+      "answer": "It produced greater improvements in LDL cholesterol, triglycerides, and fasting glucose than caloric restriction alone.",
+      "claims": [
+        {
+          "claim_id": "cal-008-a2-c1",
+          "text": "LDL cholesterol fell significantly more with time-restricted eating added to caloric restriction.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "cal-008-a2-c1-e1",
+              "text": "Indeed, the fixed-effect model showed no significant difference in TC changes (MD: 0.98 mg/dL, 95% CI: −2.19 mg/dL to 4.15 mg/dL, p = 0.54, I2 = 0%) (Figure 8b), changes in HDL (MD: 1.71 mg/dL, 95% CI: −0.22 mg/dL to 3.65 mg/dL, p = 0.08, I2 = 0%) (Figure 8c), changes in LDL (MD: −0.77 mg/dL, 95% CI: −2.59 mg/dL to 1.05 mg/dL, p = 0.41, I2 = 0%) (Figure 8d), and changes in TG levels (MD: 2.26 mg/dL, 95% CI: −4.43 mg/dL to 8.96 mg/dL, p = 0.51, I2 = 0%) (Figure 8e) between all TRE groups with CR and the control groups with CR.",
+              "source": "PubMed Central",
+              "locator": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10708501/",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.96,
+          "verdict_rationale": "The passage states there was no significant difference in LDL changes between TRE with CR and CR alone (MD −0.77 mg/dL, 95% CI −2.59 to 1.05 mg/dL, p = 0.41), contradicting a significantly greater fall.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "cal-008-a2-c2",
+          "text": "Triglycerides fell significantly more in the time-restricted-eating group.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "cal-008-a2-c2-e1",
+              "text": "Indeed, the fixed-effect model showed no significant difference in TC changes (MD: 0.98 mg/dL, 95% CI: −2.19 mg/dL to 4.15 mg/dL, p = 0.54, I2 = 0%) (Figure 8b), changes in HDL (MD: 1.71 mg/dL, 95% CI: −0.22 mg/dL to 3.65 mg/dL, p = 0.08, I2 = 0%) (Figure 8c), changes in LDL (MD: −0.77 mg/dL, 95% CI: −2.59 mg/dL to 1.05 mg/dL, p = 0.41, I2 = 0%) (Figure 8d), and changes in TG levels (MD: 2.26 mg/dL, 95% CI: −4.43 mg/dL to 8.96 mg/dL, p = 0.51, I2 = 0%) (Figure 8e) between all TRE groups with CR and the control groups with CR.",
+              "source": "PubMed Central",
+              "locator": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10708501/",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.96,
+          "verdict_rationale": "The passage states there was no significant difference in triglyceride changes (MD 2.26 mg/dL, 95% CI −4.43 to 8.96 mg/dL, p = 0.51) and the point estimate is positive, not a greater fall.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "cal-008-a2-c3",
+          "text": "The greater weight loss occurred only in trials with more than 100 participants per group.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "cal-008-a2-c3-e1",
+              "text": "Our meta-analysis included seven studies with nine interventions and 458 participants.",
+              "source": "PubMed Central",
+              "locator": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10708501/",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.84,
+          "verdict_rationale": "The passage reports only the total number of studies, interventions, and participants; it contains no sample-size-stratified weight-loss estimates, so it neither establishes nor refutes the claimed threshold.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    }
+  ]
+}

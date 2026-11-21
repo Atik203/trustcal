@@ -1,0 +1,50 @@
+{
+  "batch": "full300",
+  "target": "SciClaimBench full-run target (300 items)",
+  "created": "2026-11-21",
+  "generator": "experiments/calibration/draft_items.py",
+  "model": "Muse Spark 1.3 Contributor (opencode-go)",
+  "method": "full-001..full-180 are copies of the freeze180 batch with IDs renamed; full-181..full-300 are newly generated subject/rotation variants disjoint from the freeze combos. No gated or redistributable text is used anywhere.",
+  "ranges": [
+    {
+      "ids": "full-001..full-180",
+      "origin": "copies of frz-001..frz-180, IDs renamed",
+      "marker_fields_stripped": [
+        "none present; defensive strip applied"
+      ]
+    },
+    {
+      "ids": "full-181..full-220",
+      "origin": "generated biomedical variants (40 combos)",
+      "stratum": "biomedical"
+    },
+    {
+      "ids": "full-221..full-260",
+      "origin": "generated physics_chemistry variants (40 combos)",
+      "stratum": "physics_chemistry"
+    },
+    {
+      "ids": "full-261..full-300",
+      "origin": "generated math_cs variants (40 combos)",
+      "stratum": "math_cs"
+    }
+  ],
+  "counts": {
+    "items": 300,
+    "per_stratum": {
+      "biomedical": 100,
+      "physics_chemistry": 100,
+      "math_cs": 100
+    },
+    "claims": 2700,
+    "candidate_verdicts": {
+      "support": 937,
+      "contradict": 899,
+      "neutral": 864
+    }
+  },
+  "status": "all items status=drafted; zero human labels; verification gate not run",
+  "provenance_note": "Item records carry no generator markings by design (see FULLBENCH_PLAN.md, Provenance convention). Provenance lives in this manifest. Nothing here is gold until member verification and adjudication pass the gate.",
+  "validator": "python experiments/calibration/validate_items.py check --items experiments/calibration/private/full300/items.jsonl --expect 300",
+  "validation": "PASS: schema-valid, 100/100/100, claims 3 per position"
+}

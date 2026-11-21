@@ -1,0 +1,248 @@
+{
+  "schema_version": "sciclaim-item-v0.1",
+  "item_id": "full-071",
+  "stratum": "biomedical",
+  "status": "drafted",
+  "question": "Which explanation of platelet aggregation in blood clotting is scientifically accurate?",
+  "options": [
+    "Platelets carry oxygen in place of red blood cells.",
+    "Clotting occurs only inside intact healthy vessels.",
+    "Platelets aggregate at vessel injuries to form the initial clot.",
+    "Platelets dissolve clots after they form."
+  ],
+  "gold_answer": "Platelets aggregate at vessel injuries to form the initial clot.",
+  "source": {
+    "kind": "original",
+    "citation": null,
+    "locator": null,
+    "license": "CC BY 4.0",
+    "changes": null
+  },
+  "pressure_eligible": true,
+  "minority_agent": 0,
+  "conditions": [
+    "evidence_available",
+    "evidence_absent",
+    "evidence_placebo",
+    "evidence_contradictory"
+  ],
+  "notes": "Team-authored original item on platelet aggregation in blood clotting. Passages are team-authored derivations recorded under sciclaim-appx-A. Requires independent annotation and adjudication before any gate result is reported.",
+  "positions": [
+    {
+      "agent": 0,
+      "answer": "Platelets aggregate at vessel injuries to form the initial clot.",
+      "claims": [
+        {
+          "claim_id": "full-071-a0-c1",
+          "text": "Platelets adhere to exposed collagen at a vessel injury.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-071-a0-c1-e1",
+              "text": "When a vessel wall breaks, exposed collagen captures passing platelets at the damage site.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-071-a0-c1",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.86,
+          "verdict_rationale": "The passage describes platelets captured by exposed collagen, which entails the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-071-a0-c2",
+          "text": "Aspirin promotes platelet aggregation.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-071-a0-c2-e1",
+              "text": "Aspirin blocks the platelet enzyme that makes a key aggregation signal, so it reduces rather than promotes clumping.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-071-a0-c2",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.88,
+          "verdict_rationale": "The passage states aspirin reduces clumping, which refutes the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-071-a0-c3",
+          "text": "Clots never form in veins.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-071-a0-c3-e1",
+              "text": "Clot locations were classified as arterial or venous in the registry.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-071-a0-c3",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.89,
+          "verdict_rationale": "Classification alone cannot show venous clots never occur, so the claim is neither established nor refuted.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    },
+    {
+      "agent": 1,
+      "answer": "Platelets carry oxygen in place of red blood cells.",
+      "claims": [
+        {
+          "claim_id": "full-071-a1-c1",
+          "text": "Aggregating platelets release signals that recruit more platelets.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-071-a1-c1-e1",
+              "text": "Activated platelets release chemical messengers that switch nearby platelets to a sticky state and draw them in.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-071-a1-c1",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.89,
+          "verdict_rationale": "The passage describes recruitment signaling, which entails the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-071-a1-c2",
+          "text": "Clotting factors are produced by platelets.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-071-a1-c2-e1",
+              "text": "Clotting factors are plasma proteins made mainly by the liver; platelets supply the surface where they act.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-071-a1-c2",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.91,
+          "verdict_rationale": "The passage assigns factor production to the liver, which refutes the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-071-a1-c3",
+          "text": "Aspirin prevents all heart attacks in everyone who takes it.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-071-a1-c3-e1",
+              "text": "The trial tracked heart attacks among aspirin users and non-users in one age group.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-071-a1-c3",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.92,
+          "verdict_rationale": "One age group cannot support prevention in everyone, so the claim is neither established nor refuted.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    },
+    {
+      "agent": 2,
+      "answer": "Clotting occurs only inside intact healthy vessels.",
+      "claims": [
+        {
+          "claim_id": "full-071-a2-c1",
+          "text": "The platelet plug provides the scaffold for fibrin reinforcement.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-071-a2-c1-e1",
+              "text": "Fibrin strands weave through the assembled platelet plug, strengthening it into a stable clot.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-071-a2-c1",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.92,
+          "verdict_rationale": "The passage describes fibrin strengthening the plug, which entails the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-071-a2-c2",
+          "text": "Platelets prevent clotting by coating vessel injuries.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-071-a2-c2-e1",
+              "text": "Platelets initiate clotting by sticking to injuries and to each other, not by preventing aggregation.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-071-a2-c2",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.82,
+          "verdict_rationale": "The passage states platelets initiate clotting, which refutes the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-071-a2-c3",
+          "text": "Platelet counts are identical in all healthy adults.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-071-a2-c3-e1",
+              "text": "Platelet counts were measured once in each volunteer in the survey.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-071-a2-c3",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.83,
+          "verdict_rationale": "Single measurements cannot show all adults are identical, so the claim is neither established nor refuted.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    }
+  ]
+}

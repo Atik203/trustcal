@@ -5,7 +5,7 @@
 
 ## 0. Before you start (do this once)
 
-1. **Get the private bundle - only verifiers need it.** The blank calibration sheets are already in the repo, so raters and adjudicators start right after cloning. Only the item drafts (`private/items/`, gitignored) come as a bundle: on day 1, Member 2 (annotation lead) gives the verifier their items copy. Never commit private files, never upload them publicly (licence review is still pending).
+1. **Clone and check Python.** Everything you need ships with the repo — draft items and blank calibration sheets are tracked, so there is no bundle to fetch. You need Python 3.10 or newer and one package. Run all three lines (if the middle one errors, run `pip install pyyaml` and retry):
 2. **Check your Python.** You need Python ≥ 3.10 and one package: `pip install pyyaml` (or reuse the project's `trustcal/.venv` if you have it). Run all three lines (if the middle one errors, run `pip install pyyaml` and retry):
    ```bash
    python --version          # 3.10 or newer
@@ -46,13 +46,13 @@ Gates (roadmap §§4–5, calibration README §§1,6–7):
 | Validator | `benchmark/validate_items.py` | yes |
 | Sheet templates (header-only) | `benchmark/annotation/{rater1,rater2,adjudication,effort}.template.csv` | yes |
 | Gate status + score command | `benchmark/status.json` (`next_command`) | yes |
-| **24 drafts (working)** | `benchmark/private/items/cal-001.json` … `cal-024.json` | **no** |
+| **24 drafts (working)** | `benchmark/private/items/cal-001.json` … `cal-024.json` | drafts = yes (tracked); your edits = no |
 | **Blind sheets (working)** | `benchmark/private/calibration/sheets/{rater1,rater2,adjudication,effort}.csv` | blank = yes (tracked); filled copies = no (keep `*_initials` local) |
 | Member packs (you are here) | `benchmark/tasks/00_OVERVIEW.md` … `04_AGENT_PILOT.md` | yes |
 | Member templates | `benchmark/templates/` | yes |
 | Verifier audit protocol | `experiments/verifier_audit/README.md` | yes |
 
-Rule: filled items, evidence text, labels, and adjudication live under `private/` only. Never commit, email, or paste them into a public issue or an external AI tool.
+Rule: your filled sheets, evidence text you add, labels, and adjudication live under `private/` only. Never commit, email, or paste them into a public issue or an external AI tool.
 
 Provenance: items have no AI markings by design; batch manifests hold generation history; gold = verified + adjudicated, nothing else.
 
@@ -67,7 +67,7 @@ python benchmark/validate_items.py score \
   --min-kappa 0.75 --max-defect 0.15 --max-hours 2.0 --max-unresolved 0.05
 ```
 
-Exit 0 = all supplied gates pass; 2 = a gate fails; 1 = incomplete input (blocked, never a pass). Only Member 1 / the agent-pilot runs this; raters never score their own sheets.
+Exit 0 = all supplied gates pass; 2 = a gate fails; 1 = incomplete input (blocked, never a pass). Only Atik (agent pilot, last) runs this; raters never score their own sheets.
 
 ## 4. Words you need (nothing else)
 
@@ -80,11 +80,11 @@ Decision order on every row: contradict first (any refuting passage wins), then 
 
 ## 5. Which pack do I read?
 
-| Pack | Role | Members |
+| Pack | Role | Who |
 | --- | --- | --- |
-| `01_RATER.md` | label blind sheets row by row | Members 4, 5 (SciClaimBench); Members 2, 4 (verifier) |
-| `02_ADJUDICATOR.md` | resolve disagreements, defect review | Member 6 (both audits); Member 3 (defect review) |
-| `03_AUTHOR.md` | draft/verify items: stems, claims, evidence, locators, licences | Members 2, 3 (verify); Member 1 (draft) |
-| `04_AGENT_PILOT.md` | copy-paste agent prompts; agents draft, humans decide every gold verdict | Member 1 / whoever runs the agent |
+| `01_RATER.md` | label blind sheets row by row (216 rows each) | Prottoy = rater 1, Salman = rater 2 |
+| `02_ADJUDICATOR.md` | resolve disagreements, defect review | Rakib + Limu (pair, hardest judgment call) |
+| `03_AUTHOR.md` | verify the 24 drafts (12–16 h) | Yousuf (sole verifier — raters and adjudicators must stay blind) |
+| `04_AGENT_PILOT.md` | copy-paste agent prompts; scoring | Atik, LAST (only after every sheet is in) |
 
-Escalation: benchmark/protocol questions → **P3** (owns N3 benchmark). Verifier-audit questions → **P6** (owns N4). Batch, blinding, submission → Member 2 (annotation lead). Adjudication questions → Member 6.
+Escalation: benchmark/protocol questions → **P3** (owns N3 benchmark). Verifier-audit questions → **P6** (owns N4). Sheets/bundle/channel → whoever gave you the bundle on day 1. Adjudication questions → Rakib + Limu.
