@@ -14,7 +14,15 @@ Agents draft — humans decide every gold verdict and every label.
 2. Build blind sheets: `python benchmark/validate_items.py sheets --items benchmark/private/calibration_items.jsonl --out benchmark/private/calibration/sheets` — then confirm 216 rows each, blank verdict columns, no gold/verifier/arm column.
 3. Structural check: `python benchmark/validate_items.py check --items [BATCH] --expect [N] --strict` (24 calibration, 180 freeze, 300 full). Fix schema errors only — never claim text, evidence, verdict, or licence.
 4. Score only when all sheets are filled: run the exact `next_command` from `status.json`:
-   `python benchmark/validate_items.py score --rater1 benchmark/private/calibration/sheets/rater1.csv --rater2 benchmark/private/calibration/sheets/rater2.csv --adjudication benchmark/private/calibration/sheets/adjudication.csv --effort benchmark/private/calibration/sheets/effort.csv --min-kappa 0.75 --max-defect 0.15 --max-hours 2.0 --max-unresolved 0.05`
+
+   ```bash
+   python benchmark/validate_items.py score \
+     --rater1 benchmark/private/calibration/sheets/rater1.csv \
+     --rater2 benchmark/private/calibration/sheets/rater2.csv \
+     --adjudication benchmark/private/calibration/sheets/adjudication.csv \
+     --effort benchmark/private/calibration/sheets/effort.csv \
+     --min-kappa 0.75 --max-defect 0.15 --max-hours 2.0 --max-unresolved 0.05
+   ```
    Paste JSON + exit code (0 pass / 2 fail / 1 blocked). A failed gate is a finding.
 ⏱ Time: ~1–2 h per batch cycle (human labelling/verification time is separate — see packs 01–03).
 

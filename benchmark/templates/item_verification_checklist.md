@@ -2,7 +2,7 @@
 
 **Verifier:** ____________________
 **Date:** ____________________
-**Batch:** `benchmark/private/items.jsonl`
+**Batch:** `benchmark/private/calibration_items.jsonl`
 **Guide:** [`MEMBER_GUIDE.md`](../MEMBER_GUIDE.md)
 
 One copy per item. Do not edit the source. Send this checklist and your problem list to Atik.
@@ -39,7 +39,7 @@ One copy per item. Do not edit the source. Send this checklist and your problem 
 - [ ] Compound claims are split. None is labeled as one claim.
 - [ ] The cited passages alone decide the claim.
 - [ ] Passages are quoted word for word. Each locator opens.
-- [ ] Verdict order: contradiction first, then support, else neutral.
+- [ ] Verdict order: `contradict` first, then `support`, else `neutral`.
 - [ ] Numbers match after unit change.
 - [ ] Negation is read the right way round.
 - [ ] Shared topic alone is not support.

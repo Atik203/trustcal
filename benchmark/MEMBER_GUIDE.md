@@ -4,7 +4,7 @@ You read evidence. You pick a label. That is the job.
 No code. No models. No paper work.
 
 The full protocol is in [the hub](./README.md). Open your pack first, then label.
-Pass gate: κ ≥ 0.75, defect ≤ 0.15, H ≤ 2.0 h/item, unresolved ≤ 0.05.
+Pass gate: κ ≥ 0.75, defect ≤ 0.15, H_attempt ≤ 2.0 h/item, unresolved ≤ 0.05.
 
 ## 0. 📦 Task packs — start here
 
@@ -34,10 +34,10 @@ Your labels test if humans agree on what the evidence says. See [the hub](./READ
 | Rakib + Limu — adjudicators | Settle disagreements, defect review | Fri 11 Dec |
 | Atik — agent pilot, last | Build sheets, run score | Week of 14 Dec |
 
-Hardest first: Rakib + Limu, then Yousuf, then Prottoy and Salman. Atik goes last.
+Hardest job to easiest: adjudication (Rakib + Limu), then verification (Yousuf), then rating (Prottoy and Salman). Atik runs the score last.
 No one does paper, code, or tests. Atik covers those with agents.
 
-## 4. ⚖️ Rakib + Limu — adjudicators
+## 3. ⚖️ Rakib + Limu — adjudicators
 
 🟢 Your job: Settle each row where Prottoy and Salman disagree.
 You use the codebook. You write a one-line reason per row.
@@ -55,7 +55,7 @@ You use the codebook. You write a one-line reason per row.
 ⏱ Time: 8–11 hours shared.
 📂 Your file: [02_ADJUDICATOR](./tasks/02_ADJUDICATOR.md). Due Fri 11 Dec.
 
-## 5. 🔍 Yousuf — verifier of 24 drafts
+## 4. 🔍 Yousuf — verifier of 24 drafts
 
 🟢 Your job: Check all 24 draft items against the codebook.
 You file one checklist per item plus a problem list.
@@ -73,7 +73,7 @@ You file one checklist per item plus a problem list.
 ⏱ Time: 12–16 hours, about 30–40 minutes per item.
 📂 Your file: [03_AUTHOR](./tasks/03_AUTHOR.md) and [checklist](./templates/item_verification_checklist.md). Due Fri 4 Dec.
 
-## 6. 📝 Prottoy — rater 1
+## 5. 📝 Prottoy — rater 1
 
 🟢 Your job: Label every row in your two blind sheets alone.
 Your sheet plus Salman's sets the κ score.
@@ -88,10 +88,10 @@ Your sheet plus Salman's sets the κ score.
 - Never talk rows over with Salman before both sheets are in.
 - Never use AI or outside facts for a label.
 
-⏱ Time: 11–13 hours.
+⏱ Time: about 11–13 hours total (estimate). A 216-row sheet takes 5–7 h practiced, 8–10 h the first time. The verifier sheet adds 5–6 h.
 📂 Your file: [01_RATER](./tasks/01_RATER.md) and [checklist](./templates/annotation_submission_checklist.md). Due Fri 4 Dec.
 
-## 7. 📋 Salman — rater 2
+## 6. 📋 Salman — rater 2
 
 🟢 Your job: Label every row in your two blind sheets alone.
 Same sheets as Prottoy. Never peek at his.
@@ -106,17 +106,17 @@ Same sheets as Prottoy. Never peek at his.
 - Never talk rows over with Prottoy before both sheets are in.
 - Never use AI or outside facts for a label.
 
-⏱ Time: 11–13 hours.
+⏱ Time: about 11–13 hours total (estimate). A 216-row sheet takes 5–7 h practiced, 8–10 h the first time. The verifier sheet adds 5–6 h.
 📂 Your file: [01_RATER](./tasks/01_RATER.md) and [checklist](./templates/annotation_submission_checklist.md). Due Fri 4 Dec.
 
-## 8. 🤖 Atik — agent pilot and score, last
+## 7. 🤖 Atik — agent pilot and score, last
 
 🟢 Your job: Build sheets, run checks, and post the score.
 You start only after every human sheet is in.
 
 🟡 Do:
 - Build blind sheets and run the validator.
-- Run the score command from [the hub](./README.md). Post κ, defect, H, unresolved.
+- Run the score command from [the hub](./README.md). Post κ, defect, H_attempt, unresolved.
 - Fix item text from problem lists. Rebuild sheets if claims change.
 
 🔴 Never:
@@ -127,7 +127,7 @@ You start only after every human sheet is in.
 ⏱ Time: at the end. Test and paper time is separate.
 📂 Your file: [04_AGENT_PILOT](./tasks/04_AGENT_PILOT.md). Due week of 14 Dec.
 
-## 9.3. ✅ SciClaimBench practice rows
+## 8. ✅ SciClaimBench practice rows
 
 | # | Claim | Passage | Correct label | Why |
 | ---: | --- | --- | --- | --- |
@@ -137,7 +137,7 @@ You start only after every human sheet is in.
 | 4 | Drug X reduced systolic blood pressure and increased heart rate. | Drug X reduced systolic blood pressure by 12 mmHg; heart rate was not reported. | `neutral` | Only one part of the compound claim is supported. |
 | 5 | The reaction released 100 °C of heat. | The reaction reached 212 °F. | `support` | The numbers agree after unit conversion. |
 
-## 9.4. ✅ Verifier audit practice rows
+## 9. ✅ Verifier audit practice rows
 
 | # | Claim | Passages | Correct label | Why |
 | ---: | --- | --- | --- | --- |
@@ -147,14 +147,14 @@ You start only after every human sheet is in.
 | 4 | Drug X lowers systolic blood pressure. | *(empty passage)* | `unverifiable` | Empty evidence never supports a claim. |
 | 5 | Drug X lowers systolic blood pressure. | Drug X is a small molecule with a molecular weight of 412 Da. | `unverifiable` | Topical overlap is not support. |
 
-## 9.5. 🙈 Blinding rules
+## 10. 🙈 Blinding rules
 
 - Do not discuss individual rows with the other rater before both sheets are submitted.
 - Do not open the other rater's sheet, the gold verdict, the verifier label, or the arm map.
 - If you recognize an item from another batch, tell Atik before labeling it.
 - The adjudicator may see both sheets, but not the gold or verifier label.
 
-## 10. 📅 Timeline
+## 11. 📅 Timeline
 
 Raters and Yousuf finish Fri 4 Dec. Adjudication finishes Fri 11 Dec. Score runs week of 14 Dec.
 Start the verifier audit in week 1. The pairs are ready. SciClaimBench sheets come after Atik's drafts.
@@ -169,7 +169,7 @@ Start the verifier audit in week 1. The pairs are ready. SciClaimBench sheets co
 
 A failed κ is a finding, not a team failure. Keep the batch. Fix the codebook. Run a fresh batch.
 
-## 11. 🏁 Done means
+## 12. 🏁 Done means
 
 | Name | Done when |
 | --- | --- |

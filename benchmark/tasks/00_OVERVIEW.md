@@ -17,7 +17,15 @@ Read it once, then open only your own role pack.
 3. Learn the ladder: 24 calibration (8/8/8) → gate passes → 180 freeze (60/60/60, ~410 h) → 300 target (100/100/100, ~684 h).
 4. Learn the gate: κ ≥ 0.75, defect ≤ 0.15, H ≤ 2.0 h/item, unresolved ≤ 0.05. Fail κ or unresolved → keep batch, fix codebook, fresh batch. Fail H or defect → cut to 120 items, not 180.
 5. Only Atik runs the score below, last, after every sheet is in:
-   `python benchmark/validate_items.py score --rater1 benchmark/private/calibration/sheets/rater1.csv --rater2 benchmark/private/calibration/sheets/rater2.csv --adjudication benchmark/private/calibration/sheets/adjudication.csv --effort benchmark/private/calibration/sheets/effort.csv --min-kappa 0.75 --max-defect 0.15 --max-hours 2.0 --max-unresolved 0.05`
+
+   ```bash
+   python benchmark/validate_items.py score \
+     --rater1 benchmark/private/calibration/sheets/rater1.csv \
+     --rater2 benchmark/private/calibration/sheets/rater2.csv \
+     --adjudication benchmark/private/calibration/sheets/adjudication.csv \
+     --effort benchmark/private/calibration/sheets/effort.csv \
+     --min-kappa 0.75 --max-defect 0.15 --max-hours 2.0 --max-unresolved 0.05
+   ```
 
 🏷 Labels (same words in every pack)
 SciClaimBench labels (exact lowercase): `support` · `contradict` · `neutral`.

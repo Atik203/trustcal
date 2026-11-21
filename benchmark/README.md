@@ -11,7 +11,12 @@
 **The gate (all four, one command):** κ ≥ 0.75, defect ≤ 0.15, H_attempt ≤ 2.0 h/item, unresolved ≤ 0.05. Copy and paste this after every sheet is in:
 
 ```bash
-python benchmark/validate_items.py score --rater1 benchmark/private/calibration/sheets/rater1.csv --rater2 benchmark/private/calibration/sheets/rater2.csv --adjudication benchmark/private/calibration/sheets/adjudication.csv --effort benchmark/private/calibration/sheets/effort.csv --min-kappa 0.75 --max-defect 0.15 --max-hours 2.0 --max-unresolved 0.05
+python benchmark/validate_items.py score \
+  --rater1 benchmark/private/calibration/sheets/rater1.csv \
+  --rater2 benchmark/private/calibration/sheets/rater2.csv \
+  --adjudication benchmark/private/calibration/sheets/adjudication.csv \
+  --effort benchmark/private/calibration/sheets/effort.csv \
+  --min-kappa 0.75 --max-defect 0.15 --max-hours 2.0 --max-unresolved 0.05
 ```
 
 | Name | Job | Your file | Due |
@@ -30,11 +35,11 @@ Member guide with examples and the week plan: [`MEMBER_GUIDE.md`](./MEMBER_GUIDE
 
 ## 🟢 1. What this gate decides
 
-The 24-item batch is the test before the 180-item freeze. It answers three questions. Can two raters reach Cohen's κ ≥ 0.75? Is the defect rate ≤ 0.15? Is effort `H_attempt` ≤ 2.0 h/item? If κ fails, keep the failed batch in the report. Revise the codebook and run a fresh batch. If `H_attempt` is over 2.0 h or defects are over 15%, cut the next step to 120 items, not 180. A failed calibration is a finding, not a reason to relabel.
+The 24-item batch is the test before the 180-item freeze. It answers three questions. Can two raters reach Cohen's κ ≥ 0.75? Is the defect rate ≤ 0.15? Is effort `H_attempt` ≤ 2.0 h/item? If κ fails, keep the failed batch in the report. Revise the codebook and run a fresh batch. If `H_attempt` is over 2.0 h or defects are over 0.15, cut the next step to 120 items, not 180. A failed calibration is a finding, not a reason to relabel.
 
 ## 🟡 2. Item sources and licensing
 
-The best source is an original item written for this project. Original items use **CC BY 4.0** when frozen. You may adapt a public-domain or CC BY source only. Then record the citation, a locator (DOI, PMID, arXiv ID, or URL), the licence, and what changed. Do **not** copy gated text (GPQA, HLE, MMLU-Pro test text) into SciClaimBench. Those sets are for comparison only. LLM help is allowed for drafts only. A human must verify every claim, link, and gold verdict. Items carry no AI markings. Provenance lives only in `private/*/MANIFEST.json`.
+The best source is an original item written for this project. Original items use **CC BY 4.0** when frozen. You may adapt a public-domain or CC BY source only. Then record the citation, a locator (DOI, PMID, arXiv ID, or URL), the licence, and what changed. Do **not** copy gated text (GPQA, HLE, MMLU-Pro test text) into SciClaimBench. SciFact passages are audit-only — never paste them into SciClaimBench. Those sets are for comparison only. LLM help is allowed for drafts only. A human must verify every claim, link, and gold verdict. Items carry no AI markings. Provenance lives only in `private/*/MANIFEST.json`.
 
 ## 🟢 3. Domain strata
 
@@ -51,7 +56,7 @@ The unit is a **claim–evidence–verdict triple**. One item has three position
 3. Label alone. Each rater labels every claim from the cited passages only. No talk. No peeking. No outside knowledge. Add 0–1 confidence and a note on hard rows.
 4. Never change a label after seeing the other sheet. First-pass labels set κ.
 5. Adjudicate each disagreement from the codebook. Write the verdict and one-line reason in `adjudication.csv`. Copy agreement rows as they are.
-6. Mark hopeless rows `adjudicated_verdict = unresolved`. They leave the frozen set. Over 5% unresolved blocks the freeze.
+6. Mark hopeless rows `adjudicated_verdict = unresolved`. They leave the frozen set. An unresolved rate over 0.05 blocks the freeze.
 7. Run defect review. A reviewer who did not label checks each frozen triple. Wrong or unsupported triples are defects. Pre-freeze fixes are rework, not defects.
 
 ## 6. Agreement, defect, and effort gates
@@ -63,13 +68,13 @@ The unit is a **claim–evidence–verdict triple**. One item has three position
 | `H_attempt` | Total hours ÷ attempted items, over authoring, both raters, adjudication, rework | **≤ 2.0 h/item** |
 | Unresolved rate | Unresolved claims ÷ claims sent to adjudication | **≤ 0.05** |
 
-Log rows per item in `annotation/effort.template.csv`: `H_attempt = sum(minutes for all phases) / 60 / number of distinct item_id rows`. Track authoring, `rater1`, `rater2`, `adjudication`, and `rework` apart. This projects the 180-item budget. If κ < 0.75, keep the batch, fix the codebook, run a fresh batch. Never delete rows to raise κ. If `H_attempt > 2.0` or defects top 15%, cut to 120 items.
+Log rows per item in `annotation/effort.template.csv`: `H_attempt = sum(minutes for all phases) / 60 / number of distinct item_id rows`. Track authoring, `rater1`, `rater2`, `adjudication`, and `rework` apart. This projects the 180-item budget. If κ < 0.75, keep the batch, fix the codebook, run a fresh batch. Never delete rows to raise κ. If `H_attempt > 2.0` or defects top 0.15, cut to 120 items.
 
 ## 📂 7. The 24 → 180 → 300 freeze ladder
 
 | Size | Role | Split | Entry condition | Decision |
 | ---: | --- | --- | --- | --- |
-| **24** | Calibration batch | 8 / 8 / 8 | protocol frozen | κ ≥ 0.75, defect ≤ 15%, `H_attempt` ≤ 2.0 → 180; else cut to 120 |
+| **24** | Calibration batch | 8 / 8 / 8 | protocol frozen | κ ≥ 0.75, defect ≤ 0.15, `H_attempt` ≤ 2.0 → 180; else cut to 120 |
 | **180** | SciClaimBench v1.2 freeze | 60 / 60 / 60 | 24-item gate passes | freeze by Jan 2027; report κ and defect rate |
 | **300** | Full-run target | 100 / 100 / 100 | 180-item set is clean | target by Feb 2027 |
 

@@ -61,10 +61,7 @@ unverifiable
 
 ### Adjudication
 
-```text
-resolved
-unresolved
-```
+Adjudicated verdict = codebook verdict string, or `unresolved`.
 
 ## 🆘 Need help?
 
