@@ -5,13 +5,14 @@
 
 ## 0. Before you start (do this once)
 
-1. **Get the private bundle.** `benchmark/private/` (draft items + your blind sheets) is gitignored — a fresh clone does NOT have it. Ask P3 (or whoever runs the repo) for the current `private/` bundle and copy it into your `benchmark/` folder. Never commit it, never upload it publicly (licence review is still pending).
-2. **Check your Python.** You need Python ≥ 3.10 and one package: `pip install pyyaml` (or reuse the project's `trustcal/.venv` if you have it). Verify with:
+1. **Get the private bundle - only verifiers need it.** The blank calibration sheets are already in the repo, so raters and adjudicators start right after cloning. Only the item drafts (`private/items/`, gitignored) come as a bundle: on day 1, Member 2 (annotation lead) gives the verifier their items copy. Never commit private files, never upload them publicly (licence review is still pending).
+2. **Check your Python.** You need Python ≥ 3.10 and one package: `pip install pyyaml` (or reuse the project's `trustcal/.venv` if you have it). Run all three lines (if the middle one errors, run `pip install pyyaml` and retry):
    ```bash
    python --version          # 3.10 or newer
-   python benchmark/validate_items.py --help
+   python -c "import yaml"    # silent = ok; error = pip install pyyaml first
+    python benchmark/validate_items.py --help
    ```
-   If the help text prints, you are set — the validator needs nothing else.
+   If all three print without errors, you are set.
 3. **Find your assignment** in the table in §4 below, then read only your role pack.
 
 ## 1. Pipeline map 24 → 180 → 300
@@ -21,7 +22,7 @@
   → verify drafts → blind sheets → 2 raters label → adjudicate
   → score (κ ≥ 0.75, defect ≤ 15%, H ≤ 2.0 h/item, unresolved ≤ 5%)
   → PASS → 180 freeze (60/60/60, ~410 h) → 300 target (100/100/100, ~684 h)
-  → FAIL κ → keep batch, revise codebook, fresh batch (never relabel to raise κ)
+  → FAIL κ or unresolved → keep batch, revise codebook, fresh batch (never relabel to raise κ)
   → FAIL H or defect → cut next step to 120 items, not 180
 ```
 
@@ -46,7 +47,7 @@ Gates (roadmap §§4–5, calibration README §§1,6–7):
 | Sheet templates (header-only) | `benchmark/annotation/{rater1,rater2,adjudication,effort}.template.csv` | yes |
 | Gate status + score command | `benchmark/status.json` (`next_command`) | yes |
 | **24 drafts (working)** | `benchmark/private/items/cal-001.json` … `cal-024.json` | **no** |
-| **Blind sheets (working)** | `benchmark/private/calibration/sheets/{rater1,rater2,adjudication,effort}.csv` | **no** |
+| **Blind sheets (working)** | `benchmark/private/calibration/sheets/{rater1,rater2,adjudication,effort}.csv` | blank = yes (tracked); filled copies = no (keep `*_initials` local) |
 | Member packs (you are here) | `benchmark/tasks/00_OVERVIEW.md` … `04_AGENT_PILOT.md` | yes |
 | Member templates | `benchmark/templates/` | yes |
 | Verifier audit protocol | `experiments/verifier_audit/README.md` | yes |
@@ -75,7 +76,7 @@ Decision order on every row: contradict first (any refuting passage wins), then 
 
 **Five conditions** (authoring only — raters ignore this): `evidence_available` (passages entail the claim) · `evidence_absent` (nothing usable) · `evidence_placebo` (topical but proves nothing) · `evidence_contradictory` (a passage refutes) · pressure-eligible (a correct minority faces a confident wrong majority).
 
-**Other words:** blind sheet = your sheet has no answers in it · adjudication = Member 6 settles disagreements · defect = a frozen item that is wrong (pre-freeze fixes don't count) · kappa = agreement beyond luck, must be ≥ 0.75.
+**Plain words:** gitignored = not on GitHub, P3 hands it to you · commit = saving to GitHub (never with private files) · PII = personal info, never write it · locator = the DOI/PMID/link proving the passage · entails = the passage states it · refutes = the passage says the opposite · atomic = one single checkable fact · gold = the final checked answer.
 
 ## 5. Which pack do I read?
 

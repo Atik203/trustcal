@@ -2,7 +2,7 @@
 
 **Start here:** [`tasks/00_OVERVIEW.md`](tasks/00_OVERVIEW.md) (pipeline, gates, glossary) → pick your role pack below → [`docs/MEMBER_GUIDE.md`](../docs/MEMBER_GUIDE.md) (roles, worked examples, 4/6-week plan).
 
-**Step 0 (once):** `private/` (drafts + blind sheets) is gitignored — get the bundle from P3 and copy it into `benchmark/`; check Python ≥ 3.10 with `pip install pyyaml`. Details in `tasks/00_OVERVIEW.md` §0.
+**Step 0 (once):** blank calibration sheets ship with the repo — raters/adjudicators start right after cloning. Only item drafts live in gitignored `private/` (the verifier gets them from Member 2 on day 1). Check Python ≥ 3.10 with `pip install pyyaml`. Details in `tasks/00_OVERVIEW.md` §0.
 
 | Batch | Items | Location | Sheets | Status |
 |---|---|---|---|---|
@@ -80,8 +80,9 @@ and is used only for the verifier audit, not as an SciClaimBench source.
 
 LLM assistance is allowed for drafting question stems or candidate claims, but
 a human must verify every claim, every evidence link, and every gold verdict.
-Mark such items with `draft_assisted: true` in the item record. An LLM must not
-be the only source of a gold verdict.
+Do NOT mark items as assisted: item records carry no AI markings by team rule
+(provenance lives only in batch manifests). An LLM must never be the only
+source of a gold verdict.
 
 ## 3. Domain strata
 
@@ -223,14 +224,14 @@ From the repository root, with the `trustcal` virtual environment:
 python benchmark/validate_items.py check \
   --items benchmark/items.seed.jsonl
 
-# 2. Strict check: exits 2 until every slot is authored. Use this in CI.
+# 2. Strict check of the drafted batch (per-item files or batch file):
 python benchmark/validate_items.py check \
-  --items benchmark/private/items.jsonl --strict
+  --items benchmark/private/calibration_items.jsonl --expect 24 --strict
 
-# 3. After authoring, write blind rater sheets + adjudication workbook.
+# 3. Blind rater sheets are already generated. To regenerate after authoring edits:
 python benchmark/validate_items.py sheets \
-  --items benchmark/private/items.jsonl \
-  --out benchmark/private/sheets
+  --items benchmark/private/calibration_items.jsonl \
+  --out benchmark/private/calibration/sheets
 
 # 4. After both raters and the adjudicator finish, score the gate.
 python benchmark/validate_items.py score \
@@ -247,17 +248,18 @@ says the gate is blocked; an empty sheet is never a pass.
 
 ## 10. What the team must fill in
 
-To turn the seed batch into a real 24-item calibration set:
+The 24 drafts already exist (`private/items/cal-001..024`, mirrored in
+`private/calibration_items.jsonl`) — the team verifies them, it does not
+author from scratch (`items.seed.jsonl` is only the empty-slot reference):
 
-1. Copy `items.seed.jsonl` to `private/items.jsonl`.
-2. For each of the 24 slots, replace the null fields with a real question,
-   options (or `null`), gold answer, three positions, 3–6 atomic claims per
-   position, and at least one cited passage per claim.
-3. Set `status` to `drafted` when the item is complete; use `annotated`,
-   `adjudicated`, or `frozen` only after those steps actually happen.
-4. Fill the `source` block for every item: `kind`, `citation`, `locator`, and
-   `license`. Original items use `kind = "original"` and `CC BY 4.0`.
-5. Run the strict check, then generate the sheets and label them.
+1. Verify every claim, evidence link, locator, and candidate verdict in all
+   24 drafts against the codebook (§§4–5); file problem lists, don't edit blindly.
+2. Label the blind sheets (2 raters), adjudicate disagreements, log effort.
+3. Set `status` to `annotated` / `adjudicated` / `frozen` only after those
+   steps actually happen.
+4. Confirm the `source` block of every item: `kind`, `citation`, `locator`,
+   and `license`. Original items use `kind = "original"` and `CC BY 4.0`.
+5. Run the strict check, then score the gate (§9).
 
 Do not copy claim or evidence text from a model's own answer without a human
 checking the link. Do not invent a passage, a DOI, or a verdict to fill a slot.
