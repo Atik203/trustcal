@@ -1,0 +1,248 @@
+{
+  "schema_version": "sciclaim-item-v0.1",
+  "item_id": "full-285",
+  "stratum": "math_cs",
+  "status": "drafted",
+  "question": "An exam asks about floating-point rounding. Which answer should receive full credit?",
+  "options": [
+    "Floating-point arithmetic rounds results to fit finite precision.",
+    "Floating-point arithmetic is always exact.",
+    "Adding zero can change a floating-point value.",
+    "Decimal fractions are all represented exactly in binary."
+  ],
+  "gold_answer": "Floating-point arithmetic rounds results to fit finite precision.",
+  "source": {
+    "kind": "original",
+    "citation": null,
+    "locator": null,
+    "license": "CC BY 4.0",
+    "changes": null
+  },
+  "pressure_eligible": true,
+  "minority_agent": 1,
+  "conditions": [
+    "evidence_available",
+    "evidence_absent",
+    "evidence_placebo",
+    "evidence_contradictory"
+  ],
+  "notes": "Team-authored original item on floating-point rounding. Passages are team-authored derivations recorded under sciclaim-appx-A. Requires independent annotation and adjudication before any gate result is reported.",
+  "positions": [
+    {
+      "agent": 0,
+      "answer": "Adding zero can change a floating-point value.",
+      "claims": [
+        {
+          "claim_id": "full-285-a0-c1",
+          "text": "Adding many small numbers to a large one can lose the small ones.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-285-a0-c1-e1",
+              "text": "When magnitudes differ greatly, small addends fall off the end of the finite mantissa.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-285-a0-c1",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.89,
+          "verdict_rationale": "The passage describes small addends lost from the mantissa, which entails the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-285-a0-c2",
+          "text": "Integers beyond two to the fifty-third are all exactly representable in doubles.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-285-a0-c2-e1",
+              "text": "Past two to the fifty-third, doubles skip integers, so large counts lose exactness.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-285-a0-c2",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.91,
+          "verdict_rationale": "The passage states integers are skipped, which refutes the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-285-a0-c3",
+          "text": "Computers do arithmetic without any error.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-285-a0-c3-e1",
+              "text": "Error sources were listed for the numerical pipeline.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-285-a0-c3",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.92,
+          "verdict_rationale": "Listing sources cannot show arithmetic is error-free, so the claim is neither established nor refuted.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    },
+    {
+      "agent": 1,
+      "answer": "Floating-point arithmetic rounds results to fit finite precision.",
+      "claims": [
+        {
+          "claim_id": "full-285-a1-c1",
+          "text": "Floating-point addition is not always associative.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-285-a1-c1-e1",
+              "text": "Different groupings round intermediate results differently, so the final sums can disagree.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-285-a1-c1",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.92,
+          "verdict_rationale": "The passage shows groupings disagreeing, which entails the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-285-a1-c2",
+          "text": "Double precision eliminates all rounding error.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-285-a1-c2-e1",
+              "text": "Doubles only shrink the error; every finite format still rounds most real values.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-285-a1-c2",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.82,
+          "verdict_rationale": "The passage states doubles still round, which refutes the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-285-a1-c3",
+          "text": "Exact arithmetic is always affordable.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-285-a1-c3-e1",
+              "text": "Costs were compared between exact and floating-point implementations.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-285-a1-c3",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.83,
+          "verdict_rationale": "Comparing costs cannot show exact arithmetic is always affordable, so the claim is neither established nor refuted.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    },
+    {
+      "agent": 2,
+      "answer": "Floating-point arithmetic is always exact.",
+      "claims": [
+        {
+          "claim_id": "full-285-a2-c1",
+          "text": "Most decimal fractions have no exact binary representation.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-285-a2-c1-e1",
+              "text": "One tenth expands to a repeating binary fraction, so the stored value is only an approximation.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-285-a2-c1",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.83,
+          "verdict_rationale": "The passage gives a repeating expansion requiring approximation, which entails the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-285-a2-c2",
+          "text": "Rounding errors never matter in practice.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-285-a2-c2-e1",
+              "text": "Accumulated rounding has visibly corrupted simulations, so numerical care remains essential.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-285-a2-c2",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.85,
+          "verdict_rationale": "The passage cites corrupted simulations, which refutes the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-285-a2-c3",
+          "text": "Rounding modes are irrelevant to results.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-285-a2-c3-e1",
+              "text": "Outputs were recorded under two rounding settings.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-285-a2-c3",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.86,
+          "verdict_rationale": "Recording outputs cannot show the modes are irrelevant, so the claim is neither established nor refuted.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    }
+  ]
+}

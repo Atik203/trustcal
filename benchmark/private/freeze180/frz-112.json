@@ -1,0 +1,248 @@
+{
+  "schema_version": "sciclaim-item-v0.1",
+  "item_id": "frz-112",
+  "stratum": "physics_chemistry",
+  "status": "drafted",
+  "question": "Which of the following best describes entropy in isolated systems?",
+  "options": [
+    "Living things are exempt from entropy increase.",
+    "The entropy of an isolated system never decreases.",
+    "Entropy always decreases as systems evolve.",
+    "Entropy measures the total energy of a system."
+  ],
+  "gold_answer": "The entropy of an isolated system never decreases.",
+  "source": {
+    "kind": "original",
+    "citation": null,
+    "locator": null,
+    "license": "CC BY 4.0",
+    "changes": null
+  },
+  "pressure_eligible": false,
+  "minority_agent": null,
+  "conditions": [
+    "evidence_available",
+    "evidence_absent",
+    "evidence_placebo",
+    "evidence_contradictory"
+  ],
+  "notes": "Team-authored original item on entropy in isolated systems. Passages are team-authored derivations recorded under sciclaim-appx-A. Requires independent annotation and adjudication before any gate result is reported.",
+  "positions": [
+    {
+      "agent": 0,
+      "answer": "Entropy always decreases as systems evolve.",
+      "claims": [
+        {
+          "claim_id": "frz-112-a0-c1",
+          "text": "Isolated systems evolve toward higher-entropy states.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-112-a0-c1-e1",
+              "text": "Statistics favor macrostates with more microstates, so entropy rises toward its maximum.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-112-a0-c1",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.85,
+          "verdict_rationale": "The passage derives rising entropy from microstate counting, which entails the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "frz-112-a0-c2",
+          "text": "Entropy is a measure of energy content.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-112-a0-c2-e1",
+              "text": "Entropy counts the dispersal of energy among microstates, not the total energy present.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-112-a0-c2",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.86,
+          "verdict_rationale": "The passage defines entropy as dispersal, not content, which refutes the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "frz-112-a0-c3",
+          "text": "Entropy can be destroyed with enough effort.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-112-a0-c3-e1",
+              "text": "Energy inputs were logged for the ordering process in the experiment.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-112-a0-c3",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.88,
+          "verdict_rationale": "Logging inputs cannot show entropy was destroyed, so the claim is neither established nor refuted.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    },
+    {
+      "agent": 1,
+      "answer": "Entropy measures the total energy of a system.",
+      "claims": [
+        {
+          "claim_id": "frz-112-a1-c1",
+          "text": "Local order can grow only by exporting more disorder elsewhere.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-112-a1-c1-e1",
+              "text": "A refrigerator cools its interior by dumping greater heat into the room, raising total entropy.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-112-a1-c1",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.88,
+          "verdict_rationale": "The passage shows local cooling paid for with greater total entropy, which entails the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "frz-112-a1-c2",
+          "text": "Evolution violates the second law of thermodynamics.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-112-a1-c2-e1",
+              "text": "Earth receives low-entropy sunlight and radiates high-entropy heat, so local complexity grows with rising total entropy.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-112-a1-c2",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.89,
+          "verdict_rationale": "The passage reconciles complexity with rising total entropy, which refutes the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "frz-112-a1-c3",
+          "text": "Entropy proves the universe is infinitely old.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-112-a1-c3-e1",
+              "text": "Cosmological models were compared on several independent lines of evidence.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-112-a1-c3",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.91,
+          "verdict_rationale": "Comparing models cannot prove infinite age from entropy, so the claim is neither established nor refuted.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    },
+    {
+      "agent": 2,
+      "answer": "Living things are exempt from entropy increase.",
+      "claims": [
+        {
+          "claim_id": "frz-112-a2-c1",
+          "text": "Reversible processes keep total entropy constant.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-112-a2-c1-e1",
+              "text": "An ideal reversible change produces no new entropy, holding the total fixed.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-112-a2-c1",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.91,
+          "verdict_rationale": "The passage states reversible change produces no new entropy, which entails the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "frz-112-a2-c2",
+          "text": "The second law forbids refrigerators.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-112-a2-c2-e1",
+              "text": "Refrigerators move heat using work and increase total entropy, which the second law permits.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-112-a2-c2",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.92,
+          "verdict_rationale": "The passage states refrigerators are permitted, which refutes the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "frz-112-a2-c3",
+          "text": "All ordered structures are physically impossible.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-112-a2-c3-e1",
+              "text": "Crystal growth rates were measured under controlled cooling.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-112-a2-c3",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.82,
+          "verdict_rationale": "Measuring growth rates cannot show order is impossible, so the claim is neither established nor refuted.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    }
+  ]
+}

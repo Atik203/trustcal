@@ -1,0 +1,248 @@
+{
+  "schema_version": "sciclaim-item-v0.1",
+  "item_id": "full-131",
+  "stratum": "math_cs",
+  "status": "drafted",
+  "question": "Three agents discuss binary search on sorted arrays. Which position is best supported?",
+  "options": [
+    "Binary search checks every element before deciding.",
+    "Binary search needs extra memory proportional to the array.",
+    "Binary search finds a target in logarithmic time on sorted arrays.",
+    "Binary search works on unsorted arrays."
+  ],
+  "gold_answer": "Binary search finds a target in logarithmic time on sorted arrays.",
+  "source": {
+    "kind": "original",
+    "citation": null,
+    "locator": null,
+    "license": "CC BY 4.0",
+    "changes": null
+  },
+  "pressure_eligible": true,
+  "minority_agent": 2,
+  "conditions": [
+    "evidence_available",
+    "evidence_absent",
+    "evidence_placebo",
+    "evidence_contradictory"
+  ],
+  "notes": "Team-authored original item on binary search on sorted arrays. Passages are team-authored derivations recorded under sciclaim-appx-A. Requires independent annotation and adjudication before any gate result is reported.",
+  "positions": [
+    {
+      "agent": 0,
+      "answer": "Binary search needs extra memory proportional to the array.",
+      "claims": [
+        {
+          "claim_id": "full-131-a0-c1",
+          "text": "Binary search runs in logarithmic time.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-131-a0-c1-e1",
+              "text": "Halving n elements down to one takes a number of steps proportional to log n.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-131-a0-c1",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.92,
+          "verdict_rationale": "The passage counts halving steps as logarithmic, which entails the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-131-a0-c2",
+          "text": "Binary search is faster than constant-time dictionary lookup.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-131-a0-c2-e1",
+              "text": "Hash lookups average constant time, which beats the logarithmic steps of binary search.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-131-a0-c2",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.82,
+          "verdict_rationale": "The passage ranks constant time above logarithmic steps, which refutes the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-131-a0-c3",
+          "text": "Sorting is never worthwhile before searching.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-131-a0-c3-e1",
+              "text": "Total times were compared with and without a sorting pass for repeated queries.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-131-a0-c3",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.83,
+          "verdict_rationale": "One comparison cannot show sorting is never worthwhile, so the claim is neither established nor refuted.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    },
+    {
+      "agent": 1,
+      "answer": "Binary search works on unsorted arrays.",
+      "claims": [
+        {
+          "claim_id": "full-131-a1-c1",
+          "text": "Binary search halves the remaining range with each comparison.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-131-a1-c1-e1",
+              "text": "Each comparison discards the half that cannot contain the target, halving the search interval.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-131-a1-c1",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.83,
+          "verdict_rationale": "The passage describes halving the interval per comparison, which entails the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-131-a1-c2",
+          "text": "Binary search examines the middle element last.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-131-a1-c2-e1",
+              "text": "The algorithm examines the middle element first at every stage, not last.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-131-a1-c2",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.85,
+          "verdict_rationale": "The passage states the middle comes first, which refutes the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-131-a1-c3",
+          "text": "All logarithmic algorithms are identical.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-131-a1-c3-e1",
+              "text": "Step counts were measured for several logarithmic procedures.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-131-a1-c3",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.86,
+          "verdict_rationale": "Measuring counts cannot show all are identical, so the claim is neither established nor refuted.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    },
+    {
+      "agent": 2,
+      "answer": "Binary search finds a target in logarithmic time on sorted arrays.",
+      "claims": [
+        {
+          "claim_id": "full-131-a2-c1",
+          "text": "Binary search requires the array to be sorted.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-131-a2-c1-e1",
+              "text": "Discarding a half is valid only when ordering guarantees the target's side, which sorting provides.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-131-a2-c1",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.86,
+          "verdict_rationale": "The passage makes sorting the guarantee for discarding, which entails the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-131-a2-c2",
+          "text": "Binary search works by scanning from both ends inward.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-131-a2-c2-e1",
+              "text": "Scanning from both ends is a different technique; binary search repeatedly probes the midpoint.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-131-a2-c2",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.88,
+          "verdict_rationale": "The passage identifies midpoint probing, not end scanning, which refutes the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-131-a2-c3",
+          "text": "Binary search is the fastest possible algorithm for every problem.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-131-a2-c3-e1",
+              "text": "Running times were benchmarked for binary search on one lookup task.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-131-a2-c3",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.89,
+          "verdict_rationale": "One benchmark cannot show universal optimality, so the claim is neither established nor refuted.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    }
+  ]
+}

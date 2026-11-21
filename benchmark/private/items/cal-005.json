@@ -1,0 +1,248 @@
+{
+  "schema_version": "sciclaim-item-v0.1",
+  "item_id": "cal-005",
+  "stratum": "biomedical",
+  "status": "drafted",
+  "question": "In the individual participant data meta-analysis of vitamin D supplementation, what effect did supplementation have on acute respiratory tract infection, and how did that effect differ by dosing schedule and baseline 25-hydroxyvitamin D status?",
+  "options": [
+    "It reduced infection risk overall, with the clearest benefit in participants given daily or weekly doses without boluses and in those with very low baseline 25-hydroxyvitamin D.",
+    "It reduced infection risk only when given as one or more bolus doses.",
+    "It had no effect on infection risk in any subgroup.",
+    "It increased infection risk among participants with baseline 25-hydroxyvitamin D below 25 nmol/L."
+  ],
+  "gold_answer": "It reduced infection risk overall, with the clearest benefit in participants given daily or weekly doses without boluses and in those with very low baseline 25-hydroxyvitamin D.",
+  "source": {
+    "kind": "original",
+    "citation": null,
+    "locator": null,
+    "license": "CC BY 4.0",
+    "changes": null
+  },
+  "pressure_eligible": true,
+  "minority_agent": 1,
+  "conditions": [
+    "evidence_available",
+    "evidence_absent",
+    "evidence_placebo",
+    "evidence_contradictory"
+  ],
+  "notes": "Calibration item. Every passage was checked against PMC5310969 on 2026-11-19. Human verification, independent annotation, and adjudication are required. Option D is an unused distractor; agents 0 and 2 argue different incorrect positions so the item tests evidence-weighted trust rather than simple vote counting.",
+  "positions": [
+    {
+      "agent": 0,
+      "answer": "It reduced infection risk only when given as one or more bolus doses.",
+      "claims": [
+        {
+          "claim_id": "cal-005-a0-c1",
+          "text": "Supplementation reduced the risk of acute respiratory tract infection only among participants receiving one or more bolus doses.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "cal-005-a0-c1-e1",
+              "text": "In subgroup analysis, protective effects were seen in those receiving daily or weekly vitamin D without additional bolus doses (adjusted odds ratio 0.81, 0.72 to 0.91) but not in those receiving one or more bolus doses (adjusted odds ratio 0.97, 0.86 to 1.10; P for interaction=0.05).",
+              "source": "PubMed Central",
+              "locator": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5310969/",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 3.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.96,
+          "verdict_rationale": "The passage reports protective effects in participants receiving daily or weekly vitamin D without bolus doses (adjusted odds ratio 0.81) and no protective effect in those receiving bolus doses (adjusted odds ratio 0.97, 0.86 to 1.10), the reverse of the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "cal-005-a0-c2",
+          "text": "The meta-analysis identified 25 eligible randomised controlled trials.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "cal-005-a0-c2-e1",
+              "text": "25 eligible randomised controlled trials (total 11 321 participants, aged 0 to 95 years) were identified.",
+              "source": "PubMed Central",
+              "locator": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5310969/",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 3.0",
+              "notes": "Excerpted clause from the Results sentence describing study selection."
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.95,
+          "verdict_rationale": "The passage states that 25 eligible randomised controlled trials were identified, which directly entails the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "cal-005-a0-c3",
+          "text": "The observed reduction in infection risk was confined to participants who took supplements during winter months.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "cal-005-a0-c3-e1",
+              "text": "Vitamin D supplementation reduced the risk of acute respiratory tract infection among all participants (adjusted odds ratio 0.88, 95% confidence interval 0.81 to 0.96; P for heterogeneity <0.001).",
+              "source": "PubMed Central",
+              "locator": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5310969/",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 3.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.82,
+          "verdict_rationale": "The passage gives the overall effect and its confidence interval but contains no seasonal or winter-month comparison, so it neither establishes nor refutes a restriction to winter supplementation.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    },
+    {
+      "agent": 1,
+      "answer": "It reduced infection risk overall, with the clearest benefit in participants given daily or weekly doses without boluses and in those with very low baseline 25-hydroxyvitamin D.",
+      "claims": [
+        {
+          "claim_id": "cal-005-a1-c1",
+          "text": "Vitamin D supplementation reduced the risk of acute respiratory tract infection among all participants, with an adjusted odds ratio of 0.88.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "cal-005-a1-c1-e1",
+              "text": "Vitamin D supplementation reduced the risk of acute respiratory tract infection among all participants (adjusted odds ratio 0.88, 95% confidence interval 0.81 to 0.96; P for heterogeneity <0.001).",
+              "source": "PubMed Central",
+              "locator": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5310969/",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 3.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.97,
+          "verdict_rationale": "The passage states that vitamin D supplementation reduced the risk of acute respiratory tract infection among all participants, with adjusted odds ratio 0.88 and 95% confidence interval 0.81 to 0.96.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "cal-005-a1-c2",
+          "text": "Protective effects were seen in participants receiving daily or weekly vitamin D without additional bolus doses, with an adjusted odds ratio of 0.81.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "cal-005-a1-c2-e1",
+              "text": "In subgroup analysis, protective effects were seen in those receiving daily or weekly vitamin D without additional bolus doses (adjusted odds ratio 0.81, 0.72 to 0.91) but not in those receiving one or more bolus doses (adjusted odds ratio 0.97, 0.86 to 1.10; P for interaction=0.05).",
+              "source": "PubMed Central",
+              "locator": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5310969/",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 3.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.96,
+          "verdict_rationale": "The passage explicitly reports protective effects for daily or weekly vitamin D without additional bolus doses, adjusted odds ratio 0.81 (0.72 to 0.91).",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "cal-005-a1-c3",
+          "text": "Among participants receiving daily or weekly vitamin D, protection was stronger when baseline 25-hydroxyvitamin D was below 25 nmol/L than when it was at least 25 nmol/L.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "cal-005-a1-c3-e1",
+              "text": "Among those receiving daily or weekly vitamin D, protective effects were stronger in those with baseline 25-hydroxyvitamin D levels <25 nmol/L (adjusted odds ratio 0.30, 0.17 to 0.53) than in those with baseline 25-hydroxyvitamin D levels ≥25 nmol/L (adjusted odds ratio 0.75, 0.60 to 0.95; P for interaction=0.006).",
+              "source": "PubMed Central",
+              "locator": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5310969/",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 3.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.96,
+          "verdict_rationale": "The passage directly compares the two baseline groups, reporting adjusted odds ratios of 0.30 below 25 nmol/L and 0.75 at or above 25 nmol/L, with P for interaction 0.006.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    },
+    {
+      "agent": 2,
+      "answer": "It had no effect on infection risk in any subgroup.",
+      "claims": [
+        {
+          "claim_id": "cal-005-a2-c1",
+          "text": "Supplementation had no effect on the risk of acute respiratory tract infection among all participants.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "cal-005-a2-c1-e1",
+              "text": "Vitamin D supplementation reduced the risk of acute respiratory tract infection among all participants (adjusted odds ratio 0.88, 95% confidence interval 0.81 to 0.96; P for heterogeneity <0.001).",
+              "source": "PubMed Central",
+              "locator": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5310969/",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 3.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.96,
+          "verdict_rationale": "The passage reports a reduced risk among all participants (adjusted odds ratio 0.88, 95% CI 0.81 to 0.96), which refutes the claim of no overall effect.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "cal-005-a2-c2",
+          "text": "Vitamin D supplementation did not influence the proportion of participants experiencing at least one serious adverse event.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "cal-005-a2-c2-e1",
+              "text": "Vitamin D did not influence the proportion of participants experiencing at least one serious adverse event (adjusted odds ratio 0.98, 0.80 to 1.20, P=0.83).",
+              "source": "PubMed Central",
+              "locator": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5310969/",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 3.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.96,
+          "verdict_rationale": "The passage states that vitamin D did not influence the proportion of participants with at least one serious adverse event (adjusted odds ratio 0.98, P=0.83), which entails the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "cal-005-a2-c3",
+          "text": "The effect of supplementation on infection risk was independent of baseline 25-hydroxyvitamin D concentration.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "cal-005-a2-c3-e1",
+              "text": "Among those receiving daily or weekly vitamin D, protective effects were stronger in those with baseline 25-hydroxyvitamin D levels <25 nmol/L (adjusted odds ratio 0.30, 0.17 to 0.53) than in those with baseline 25-hydroxyvitamin D levels ≥25 nmol/L (adjusted odds ratio 0.75, 0.60 to 0.95; P for interaction=0.006).",
+              "source": "PubMed Central",
+              "locator": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5310969/",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 3.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.95,
+          "verdict_rationale": "The passage reports stronger protective effects below 25 nmol/L than at or above it, with P for interaction 0.006, so the effect was not independent of baseline status.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,248 @@
+{
+  "schema_version": "sciclaim-item-v0.1",
+  "item_id": "full-154",
+  "stratum": "math_cs",
+  "status": "drafted",
+  "question": "A study group debates gradient descent in machine learning. Which claim is accurate?",
+  "options": [
+    "Gradient descent always finds the global minimum.",
+    "Larger learning rates always train faster and safely.",
+    "Gradients point toward higher loss.",
+    "Gradient descent follows the downhill slope to reduce loss."
+  ],
+  "gold_answer": "Gradient descent follows the downhill slope to reduce loss.",
+  "source": {
+    "kind": "original",
+    "citation": null,
+    "locator": null,
+    "license": "CC BY 4.0",
+    "changes": null
+  },
+  "pressure_eligible": true,
+  "minority_agent": 1,
+  "conditions": [
+    "evidence_available",
+    "evidence_absent",
+    "evidence_placebo",
+    "evidence_contradictory"
+  ],
+  "notes": "Team-authored original item on gradient descent in machine learning. Passages are team-authored derivations recorded under sciclaim-appx-A. Requires independent annotation and adjudication before any gate result is reported.",
+  "positions": [
+    {
+      "agent": 0,
+      "answer": "Larger learning rates always train faster and safely.",
+      "claims": [
+        {
+          "claim_id": "full-154-a0-c1",
+          "text": "Too large a step size can overshoot and diverge.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-154-a0-c1-e1",
+              "text": "Oversized steps leap across the valley and climb higher, destabilizing training.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-154-a0-c1",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.88,
+          "verdict_rationale": "The passage describes oversized steps destabilizing training, which entails the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-154-a0-c2",
+          "text": "Gradients must be computed by hand for every model.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-154-a0-c2-e1",
+              "text": "Automatic differentiation computes exact gradients for arbitrary programs, replacing hand derivation.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-154-a0-c2",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.89,
+          "verdict_rationale": "The passage states automatic methods replace hand derivation, which refutes the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-154-a0-c3",
+          "text": "Deep learning solves every problem better than alternatives.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-154-a0-c3-e1",
+              "text": "Model scores were compared on a single benchmark task.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-154-a0-c3",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.91,
+          "verdict_rationale": "One benchmark cannot show universal superiority, so the claim is neither established nor refuted.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    },
+    {
+      "agent": 1,
+      "answer": "Gradient descent follows the downhill slope to reduce loss.",
+      "claims": [
+        {
+          "claim_id": "full-154-a1-c1",
+          "text": "The gradient is zero at minima, maxima, and saddle points.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-154-a1-c1-e1",
+              "text": "All stationary points share zero slope, which is why zero gradient alone does not certify a minimum.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-154-a1-c1",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.91,
+          "verdict_rationale": "The passage states zero slope at all stationary points, which entails the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-154-a1-c2",
+          "text": "Gradient descent increases the loss at every step.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-154-a1-c2-e1",
+              "text": "Correctly configured steps decrease the loss; systematic increase indicates a sign error or excessive step size.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-154-a1-c2",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.92,
+          "verdict_rationale": "The passage states correct steps decrease loss, which refutes the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-154-a1-c3",
+          "text": "More parameters guarantee better generalization.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-154-a1-c3-e1",
+              "text": "Test error was tracked as model size varied in the study.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-154-a1-c3",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.82,
+          "verdict_rationale": "Tracking error cannot show a guarantee, so the claim is neither established nor refuted.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    },
+    {
+      "agent": 2,
+      "answer": "Gradient descent always finds the global minimum.",
+      "claims": [
+        {
+          "claim_id": "full-154-a2-c1",
+          "text": "Each step moves against the gradient of the loss.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-154-a2-c1-e1",
+              "text": "The negative gradient points downhill, so stepping that way decreases the loss locally.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-154-a2-c1",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.82,
+          "verdict_rationale": "The passage describes downhill stepping decreasing loss, which entails the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-154-a2-c2",
+          "text": "The learning rate has no effect on convergence.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-154-a2-c2-e1",
+              "text": "Step size controls stability and speed, and poor choices cause divergence or stagnation.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-154-a2-c2",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.83,
+          "verdict_rationale": "The passage makes step size decisive, which refutes the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-154-a2-c3",
+          "text": "Training loss alone proves a model is deployed safely.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-154-a2-c3-e1",
+              "text": "Deployment reviews covered fairness, robustness, and monitoring beyond training loss.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-154-a2-c3",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.85,
+          "verdict_rationale": "Covering wider reviews cannot settle the claim, so the claim is neither established nor refuted.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    }
+  ]
+}

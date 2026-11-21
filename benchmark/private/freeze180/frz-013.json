@@ -1,0 +1,248 @@
+{
+  "schema_version": "sciclaim-item-v0.1",
+  "item_id": "frz-013",
+  "stratum": "physics_chemistry",
+  "status": "drafted",
+  "question": "A ball is launched at an angle above level ground and air resistance is negligible. Which statement about the ball at the highest point of its trajectory is correct?",
+  "options": [
+    "Both the vertical and horizontal components of its velocity are zero.",
+    "The vertical component of velocity is zero, while the horizontal component is constant and nonzero.",
+    "Its acceleration is zero at that point.",
+    "The vertical component of velocity reaches its largest value."
+  ],
+  "gold_answer": "The vertical component of velocity is zero, while the horizontal component is constant and nonzero.",
+  "source": {
+    "kind": "original",
+    "citation": null,
+    "locator": null,
+    "license": "CC BY 4.0",
+    "changes": null
+  },
+  "pressure_eligible": true,
+  "minority_agent": 2,
+  "conditions": [
+    "evidence_available",
+    "evidence_absent",
+    "evidence_placebo",
+    "evidence_contradictory"
+  ],
+  "notes": "Question and claims are original wording; evidence passages are short excerpts from OpenStax University Physics Volume 1, section 4.3, checked 2026-11-19. Inline mathematical notation is normalized from the page's rendered equations.",
+  "positions": [
+    {
+      "agent": 0,
+      "answer": "Both the vertical and horizontal components of its velocity are zero.",
+      "claims": [
+        {
+          "claim_id": "frz-013-a0-c1",
+          "text": "At the highest point, the vertical component of the projectile's velocity is zero.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-013-a0-c1-e1",
+              "text": "In this case, the easiest method is to use v_y = v_0y − gt. Because v_y = 0 at the apex, this equation reduces to simply",
+              "source": "OpenStax University Physics Volume 1",
+              "locator": "https://openstax.org/books/university-physics-volume-1/pages/4-3-projectile-motion",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": "Section 4.3, Example 4.7 solution (b); inline math normalized from the page's rendered equations."
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.96,
+          "verdict_rationale": "The passage states explicitly that the vertical velocity component is zero at the apex, which is exactly the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "frz-013-a0-c2",
+          "text": "At the highest point, the horizontal component of the projectile's velocity is also zero.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-013-a0-c2-e1",
+              "text": "Because gravity is vertical, a_x = 0. If a_x = 0, this means the initial velocity in the x direction is equal to the final velocity in the x direction, or v_x = v_0x.",
+              "source": "OpenStax University Physics Volume 1",
+              "locator": "https://openstax.org/books/university-physics-volume-1/pages/4-3-projectile-motion",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": "Section 4.3, opening discussion; inline math normalized from the page's rendered equations."
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.94,
+          "verdict_rationale": "The passage says the horizontal velocity stays equal to its initial value, which is nonzero for an angled launch, so it refutes the claim that the horizontal component is zero at the apex.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "frz-013-a0-c3",
+          "text": "Air resistance, if included, would reduce the projectile's range below the level-ground value.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-013-a0-c3-e1",
+              "text": "In this section, we consider two-dimensional projectile motion, and our treatment neglects the effects of air resistance.",
+              "source": "OpenStax University Physics Volume 1",
+              "locator": "https://openstax.org/books/university-physics-volume-1/pages/4-3-projectile-motion",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": "Section 4.3, opening paragraph; verbatim."
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.9,
+          "verdict_rationale": "The passage only says that air resistance is neglected in the treatment; it does not state what air resistance would do to the range, so it neither entails nor refutes the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    },
+    {
+      "agent": 1,
+      "answer": "Its acceleration is zero at that point.",
+      "claims": [
+        {
+          "claim_id": "frz-013-a1-c1",
+          "text": "At the apex, the acceleration of the projectile is zero.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-013-a1-c1-e1",
+              "text": "Defining the positive direction to be upward, the components of acceleration are then very simple: a_y = −g, a_x = 0.",
+              "source": "OpenStax University Physics Volume 1",
+              "locator": "https://openstax.org/books/university-physics-volume-1/pages/4-3-projectile-motion",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": "Section 4.3, opening discussion; inline math normalized from the page's rendered equations."
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.96,
+          "verdict_rationale": "The passage gives the vertical acceleration as −g throughout the motion, not zero, so it directly refutes the claim that acceleration vanishes at the apex.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "frz-013-a1-c2",
+          "text": "There is no horizontal acceleration when air resistance is negligible.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-013-a1-c2-e1",
+              "text": "(This choice of axes is the most sensible because acceleration resulting from gravity is vertical; thus, there is no acceleration along the horizontal axis when air resistance is negligible.)",
+              "source": "OpenStax University Physics Volume 1",
+              "locator": "https://openstax.org/books/university-physics-volume-1/pages/4-3-projectile-motion",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": "Section 4.3, opening discussion; verbatim."
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.95,
+          "verdict_rationale": "The passage states directly that there is no acceleration along the horizontal axis when air resistance is negligible, matching the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "frz-013-a1-c3",
+          "text": "The ball spends equal time rising and falling back to its launch height.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-013-a1-c3-e1",
+              "text": "Projectile motion is the motion of an object thrown or projected into the air, subject only to acceleration as a result of gravity.",
+              "source": "OpenStax University Physics Volume 1",
+              "locator": "https://openstax.org/books/university-physics-volume-1/pages/4-3-projectile-motion",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": "Section 4.3, opening paragraph; verbatim."
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.88,
+          "verdict_rationale": "The passage defines projectile motion but says nothing about the time spent rising versus falling, so it does not settle the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    },
+    {
+      "agent": 2,
+      "answer": "The vertical component of velocity is zero, while the horizontal component is constant and nonzero.",
+      "claims": [
+        {
+          "claim_id": "frz-013-a2-c1",
+          "text": "With air resistance negligible, the horizontal velocity component stays constant throughout the flight.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-013-a2-c1-e1",
+              "text": "Because gravity is vertical, a_x = 0. If a_x = 0, this means the initial velocity in the x direction is equal to the final velocity in the x direction, or v_x = v_0x.",
+              "source": "OpenStax University Physics Volume 1",
+              "locator": "https://openstax.org/books/university-physics-volume-1/pages/4-3-projectile-motion",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": "Section 4.3, opening discussion; inline math normalized from the page's rendered equations."
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.95,
+          "verdict_rationale": "The passage states that the horizontal velocity is unchanged from its initial value, which is the constancy asserted in the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "frz-013-a2-c2",
+          "text": "The vertical component of velocity is zero at the projectile's highest point.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-013-a2-c2-e1",
+              "text": "In this case, the easiest method is to use v_y = v_0y − gt. Because v_y = 0 at the apex, this equation reduces to simply",
+              "source": "OpenStax University Physics Volume 1",
+              "locator": "https://openstax.org/books/university-physics-volume-1/pages/4-3-projectile-motion",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": "Section 4.3, Example 4.7 solution (b); inline math normalized from the page's rendered equations."
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.96,
+          "verdict_rationale": "The passage explicitly states that the vertical velocity component is zero at the apex, which is the highest point of the trajectory.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "frz-013-a2-c3",
+          "text": "The projectile's acceleration is vertical, with a downward vertical component and no horizontal component.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-013-a2-c3-e1",
+              "text": "Defining the positive direction to be upward, the components of acceleration are then very simple: a_y = −g, a_x = 0.",
+              "source": "OpenStax University Physics Volume 1",
+              "locator": "https://openstax.org/books/university-physics-volume-1/pages/4-3-projectile-motion",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": "Section 4.3, opening discussion; inline math normalized from the page's rendered equations."
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.95,
+          "verdict_rationale": "The passage gives a_y = −g (downward) and a_x = 0, directly supporting the claim about the acceleration components.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    }
+  ]
+}

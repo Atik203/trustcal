@@ -1,0 +1,248 @@
+{
+  "schema_version": "sciclaim-item-v0.1",
+  "item_id": "full-220",
+  "stratum": "biomedical",
+  "status": "drafted",
+  "question": "Which of the following best describes nucleotide excision repair of ultraviolet DNA damage?",
+  "options": [
+    "UV light strengthens DNA by adding extra bonds.",
+    "Nucleotide excision repair removes UV-damaged DNA segments.",
+    "UV damage is repaired by digesting the entire chromosome.",
+    "Sunscreen works by repairing DNA after damage occurs."
+  ],
+  "gold_answer": "Nucleotide excision repair removes UV-damaged DNA segments.",
+  "source": {
+    "kind": "original",
+    "citation": null,
+    "locator": null,
+    "license": "CC BY 4.0",
+    "changes": null
+  },
+  "pressure_eligible": false,
+  "minority_agent": null,
+  "conditions": [
+    "evidence_available",
+    "evidence_absent",
+    "evidence_placebo",
+    "evidence_contradictory"
+  ],
+  "notes": "Team-authored original item on nucleotide excision repair of ultraviolet DNA damage. Passages are team-authored derivations recorded under sciclaim-appx-A. Requires independent annotation and adjudication before any gate result is reported.",
+  "positions": [
+    {
+      "agent": 0,
+      "answer": "UV damage is repaired by digesting the entire chromosome.",
+      "claims": [
+        {
+          "claim_id": "full-220-a0-c1",
+          "text": "UV light fuses adjacent pyrimidine bases into dimers.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-220-a0-c1-e1",
+              "text": "Ultraviolet photons link neighboring thymine or cytosine bases into cyclobutane dimers that distort the helix.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-220-a0-c1",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.85,
+          "verdict_rationale": "The passage describes photon-induced dimer formation, which entails the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-220-a0-c2",
+          "text": "Repair copies the damaged strand to preserve the mutation.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-220-a0-c2-e1",
+              "text": "Repair uses the intact complementary strand as the template, restoring the original sequence.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-220-a0-c2",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.86,
+          "verdict_rationale": "The passage states the intact strand templates repair, which refutes the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-220-a0-c3",
+          "text": "DNA repair prevents every mutation.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-220-a0-c3-e1",
+              "text": "Mutation counts were compared between repair-proficient and repair-deficient cell lines.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-220-a0-c3",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.88,
+          "verdict_rationale": "A comparison of counts cannot show every mutation is prevented, so the claim is neither established nor refuted.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    },
+    {
+      "agent": 1,
+      "answer": "Sunscreen works by repairing DNA after damage occurs.",
+      "claims": [
+        {
+          "claim_id": "full-220-a1-c1",
+          "text": "Repair enzymes cut out the damaged DNA segment.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-220-a1-c1-e1",
+              "text": "Excision enzymes nick the strand on both sides of the dimer and remove the damaged patch.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-220-a1-c1",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.88,
+          "verdict_rationale": "The passage describes cutting out the damaged patch, which entails the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-220-a1-c2",
+          "text": "Excision repair operates only in skin cells.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-220-a1-c2-e1",
+              "text": "Nucleotide excision repair operates in essentially all nucleated human cells.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-220-a1-c2",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.89,
+          "verdict_rationale": "The passage states the repair operates broadly, which refutes the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-220-a1-c3",
+          "text": "Sunscreen makes UV exposure completely safe.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-220-a1-c3-e1",
+              "text": "Sunburn rates were compared between sunscreen users and non-users at the beach.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-220-a1-c3",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.91,
+          "verdict_rationale": "Comparing sunburn rates cannot show complete safety, so the claim is neither established nor refuted.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    },
+    {
+      "agent": 2,
+      "answer": "UV light strengthens DNA by adding extra bonds.",
+      "claims": [
+        {
+          "claim_id": "full-220-a2-c1",
+          "text": "DNA polymerase fills the gap using the intact strand as template.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-220-a2-c1-e1",
+              "text": "After excision, polymerase synthesizes replacement DNA guided by the undamaged complementary strand.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-220-a2-c1",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.91,
+          "verdict_rationale": "The passage describes template-guided gap filling, which entails the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-220-a2-c2",
+          "text": "Dimers strengthen the DNA helix.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-220-a2-c2-e1",
+              "text": "Dimers kink and destabilize the helix, blocking replication until removed.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-220-a2-c2",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.92,
+          "verdict_rationale": "The passage states dimers destabilize the helix, which refutes the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-220-a2-c3",
+          "text": "All UV damage leads to cancer.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-220-a2-c3-e1",
+              "text": "Cancer outcomes were tracked in participants with measured UV exposure.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-220-a2-c3",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.82,
+          "verdict_rationale": "Tracking outcomes cannot show all damage leads to cancer, so the claim is neither established nor refuted.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    }
+  ]
+}

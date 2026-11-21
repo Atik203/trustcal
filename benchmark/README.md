@@ -2,7 +2,7 @@
 
 **Start here:** [`tasks/00_OVERVIEW.md`](tasks/00_OVERVIEW.md) (pipeline, gates, glossary) → pick your role pack below → [`docs/MEMBER_GUIDE.md`](../docs/MEMBER_GUIDE.md) (roles, worked examples, 4/6-week plan).
 
-**Step 0 (once):** blank calibration sheets ship with the repo — raters/adjudicators start right after cloning. Only item drafts live in gitignored `private/` (the verifier gets them from Member 2 on day 1). Check Python ≥ 3.10 with `pip install pyyaml`. Details in `tasks/00_OVERVIEW.md` §0.
+**Step 0 (once):** draft items and blank calibration sheets ship with the repo — clone and start, no bundle needed. Check Python ≥ 3.10 with `pip install pyyaml`. Details in `tasks/00_OVERVIEW.md` §0. Filled `*_initials` sheets and session manifests always stay local (gitignored).
 
 | Batch | Items | Location | Sheets | Status |
 |---|---|---|---|---|

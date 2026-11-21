@@ -1,0 +1,248 @@
+{
+  "schema_version": "sciclaim-item-v0.1",
+  "item_id": "full-170",
+  "stratum": "math_cs",
+  "status": "drafted",
+  "question": "A study group debates hash collisions. Which claim is accurate?",
+  "options": [
+    "A good hash function eliminates all collisions.",
+    "Collisions prove the hash function is broken.",
+    "Longer tables make collisions impossible.",
+    "Collisions are unavoidable and must be handled by hash tables."
+  ],
+  "gold_answer": "Collisions are unavoidable and must be handled by hash tables.",
+  "source": {
+    "kind": "original",
+    "citation": null,
+    "locator": null,
+    "license": "CC BY 4.0",
+    "changes": null
+  },
+  "pressure_eligible": true,
+  "minority_agent": 1,
+  "conditions": [
+    "evidence_available",
+    "evidence_absent",
+    "evidence_placebo",
+    "evidence_contradictory"
+  ],
+  "notes": "Team-authored original item on hash collisions. Passages are team-authored derivations recorded under sciclaim-appx-A. Requires independent annotation and adjudication before any gate result is reported.",
+  "positions": [
+    {
+      "agent": 0,
+      "answer": "Collisions prove the hash function is broken.",
+      "claims": [
+        {
+          "claim_id": "full-170-a0-c1",
+          "text": "Chaining resolves collisions with per-bucket lists.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-170-a0-c1-e1",
+              "text": "Chained tables store all colliding keys in a list attached to their shared bucket.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-170-a0-c1",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.88,
+          "verdict_rationale": "The passage describes list-based resolution, which entails the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-170-a0-c2",
+          "text": "Open addressing stores colliding keys outside the table.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-170-a0-c2-e1",
+              "text": "Open addressing keeps every key inside the table, probing alternative slots on collision.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-170-a0-c2",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.89,
+          "verdict_rationale": "The passage places all keys inside the table, which refutes the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-170-a0-c3",
+          "text": "Hash tables outperform every data structure always.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-170-a0-c3-e1",
+              "text": "Structure timings were compared on a single workload.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-170-a0-c3",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.91,
+          "verdict_rationale": "One workload cannot show universal superiority, so the claim is neither established nor refuted.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    },
+    {
+      "agent": 1,
+      "answer": "Collisions are unavoidable and must be handled by hash tables.",
+      "claims": [
+        {
+          "claim_id": "full-170-a1-c1",
+          "text": "Good hashing keeps average lookup near constant time.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-170-a1-c1-e1",
+              "text": "Uniform spreading keeps bucket lists short, so average operations stay effectively constant.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-170-a1-c1",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.91,
+          "verdict_rationale": "The passage ties short lists to constant-time averages, which entails the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-170-a1-c2",
+          "text": "Resizing a table can be skipped safely forever.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-170-a1-c2-e1",
+              "text": "Without resizing, growing loads lengthen bucket lists and degrade lookup toward linear time.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-170-a1-c2",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.92,
+          "verdict_rationale": "The passage states lookup degrades without resizing, which refutes the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-170-a1-c3",
+          "text": "Random data never collides.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-170-a1-c3-e1",
+              "text": "Collision counts were measured on randomly generated key sets.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-170-a1-c3",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.82,
+          "verdict_rationale": "Measuring counts cannot show collisions never happen, so the claim is neither established nor refuted.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    },
+    {
+      "agent": 2,
+      "answer": "A good hash function eliminates all collisions.",
+      "claims": [
+        {
+          "claim_id": "full-170-a2-c1",
+          "text": "Mapping more keys than slots forces some collision.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-170-a2-c1-e1",
+              "text": "With more keys than buckets, the counting argument guarantees two keys share a bucket.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-170-a2-c1",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.82,
+          "verdict_rationale": "The passage derives a forced collision, which entails the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-170-a2-c2",
+          "text": "Cryptographic hashing prevents all collisions.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-170-a2-c2-e1",
+              "text": "Even cryptographic hashes collide in principle; their strength is making collisions infeasible to find.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-170-a2-c2",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.83,
+          "verdict_rationale": "The passage affirms collisions in principle, which refutes the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-170-a2-c3",
+          "text": "Hashing encrypts stored passwords by itself.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-170-a2-c3-e1",
+              "text": "Password systems were reviewed for hashing, salting, and key stretching.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-170-a2-c3",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.85,
+          "verdict_rationale": "A review cannot show hashing alone encrypts, so the claim is neither established nor refuted.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    }
+  ]
+}

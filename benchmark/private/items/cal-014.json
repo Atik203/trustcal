@@ -1,0 +1,248 @@
+{
+  "schema_version": "sciclaim-item-v0.1",
+  "item_id": "cal-014",
+  "stratum": "physics_chemistry",
+  "status": "drafted",
+  "question": "Which statement best explains why most chemical reactions proceed faster when the temperature is raised?",
+  "options": [
+    "A higher temperature gives a greater fraction of molecules enough energy to overcome the activation barrier.",
+    "A higher temperature lowers the activation energy of the reaction.",
+    "A higher temperature increases the number of reactant molecules per unit volume.",
+    "A higher temperature decreases the frequency of molecular collisions."
+  ],
+  "gold_answer": "A higher temperature gives a greater fraction of molecules enough energy to overcome the activation barrier.",
+  "source": {
+    "kind": "original",
+    "citation": null,
+    "locator": null,
+    "license": "CC BY 4.0",
+    "changes": null
+  },
+  "pressure_eligible": true,
+  "minority_agent": 2,
+  "conditions": [
+    "evidence_available",
+    "evidence_absent",
+    "evidence_placebo",
+    "evidence_contradictory"
+  ],
+  "notes": "Question and claims are original wording; evidence passages are short excerpts from OpenStax Chemistry 2e, sections 12.5 and 12.2, checked 2026-11-19. Inline mathematical notation is normalized from the page's rendered equations.",
+  "positions": [
+    {
+      "agent": 0,
+      "answer": "A higher temperature lowers the activation energy of the reaction.",
+      "claims": [
+        {
+          "claim_id": "cal-014-a0-c1",
+          "text": "Raising the temperature lowers the activation energy of the reaction.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "cal-014-a0-c1-e1",
+              "text": "The minimum energy necessary to form a product during a collision between reactants is called the activation energy (E_a). How this energy compares to the kinetic energy provided by colliding reactant molecules is a primary factor affecting the rate of a chemical reaction.",
+              "source": "OpenStax Chemistry 2e",
+              "locator": "https://openstax.org/books/chemistry-2e/pages/12-5-collision-theory",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": "Section 12.5, Activation Energy and the Arrhenius Equation; inline math normalized from the page's rendered equations."
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.86,
+          "verdict_rationale": "The passage defines activation energy and compares it with molecular kinetic energy, but it does not say that temperature changes the activation energy, so it does not settle the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "cal-014-a0-c2",
+          "text": "Temperature is a measure of the average kinetic energy of the constituent molecules.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "cal-014-a0-c2-e1",
+              "text": "According to kinetic molecular theory (see chapter on gases), the temperature of matter is a measure of the average kinetic energy of its constituent atoms or molecules.",
+              "source": "OpenStax Chemistry 2e",
+              "locator": "https://openstax.org/books/chemistry-2e/pages/12-5-collision-theory",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": "Section 12.5, Activation Energy and the Arrhenius Equation; verbatim."
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.95,
+          "verdict_rationale": "The passage states directly that temperature measures the average kinetic energy of the atoms or molecules, matching the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "cal-014-a0-c3",
+          "text": "Doubling the concentration of a reactant doubles the rate of every reaction.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "cal-014-a0-c3-e1",
+              "text": "With an increase in the concentration of any reacting substance, the chances for collisions between molecules are increased because there are more molecules per unit of volume. More collisions mean a faster reaction rate, assuming the energy of the collisions is adequate.",
+              "source": "OpenStax Chemistry 2e",
+              "locator": "https://openstax.org/books/chemistry-2e/pages/12-5-collision-theory",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": "Section 12.5, opening paragraph; verbatim."
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.87,
+          "verdict_rationale": "The passage says higher concentration raises the collision chance and the rate, but it gives no proportional relationship and does not discuss doubling, so the stronger claim is not established.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    },
+    {
+      "agent": 1,
+      "answer": "A higher temperature decreases the frequency of molecular collisions.",
+      "claims": [
+        {
+          "claim_id": "cal-014-a1-c1",
+          "text": "Raising the temperature decreases the fraction of molecules energetic enough to react.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "cal-014-a1-c1-e1",
+              "text": "A higher temperature represents a correspondingly greater fraction of molecules possessing sufficient energy (RT) to overcome the activation barrier (E_a), as shown in Figure 12.15(b). This yields a greater value for the rate constant and a correspondingly faster reaction rate.",
+              "source": "OpenStax Chemistry 2e",
+              "locator": "https://openstax.org/books/chemistry-2e/pages/12-5-collision-theory",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": "Section 12.5, Activation Energy and the Arrhenius Equation; inline math normalized from the page's rendered equations."
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.96,
+          "verdict_rationale": "The passage states that a higher temperature gives a greater fraction of sufficiently energetic molecules, the opposite of the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "cal-014-a1-c2",
+          "text": "Chemical reactions generally occur faster at higher temperatures.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "cal-014-a1-c2-e1",
+              "text": "Chemical reactions typically occur faster at higher temperatures.",
+              "source": "OpenStax Chemistry 2e",
+              "locator": "https://openstax.org/books/chemistry-2e/pages/12-2-factors-affecting-reaction-rates",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": "Section 12.2, Temperature of the Reactants; verbatim."
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.96,
+          "verdict_rationale": "The passage repeats the claim word for word.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "cal-014-a1-c3",
+          "text": "At higher temperature molecules collide less frequently than at lower temperature.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "cal-014-a1-c3-e1",
+              "text": "Collision theory explains why most reaction rates increase as concentrations increase. With an increase in the concentration of any reacting substance, the chances for collisions between molecules are increased because there are more molecules per unit of volume.",
+              "source": "OpenStax Chemistry 2e",
+              "locator": "https://openstax.org/books/chemistry-2e/pages/12-5-collision-theory",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": "Section 12.5, opening paragraph; verbatim."
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.88,
+          "verdict_rationale": "The passage relates collision frequency to concentration, not to temperature, so it neither establishes nor refutes the temperature claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    },
+    {
+      "agent": 2,
+      "answer": "A higher temperature gives a greater fraction of molecules enough energy to overcome the activation barrier.",
+      "claims": [
+        {
+          "claim_id": "cal-014-a2-c1",
+          "text": "A higher temperature gives a greater fraction of molecules enough energy to overcome the activation barrier.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "cal-014-a2-c1-e1",
+              "text": "A higher temperature represents a correspondingly greater fraction of molecules possessing sufficient energy (RT) to overcome the activation barrier (E_a), as shown in Figure 12.15(b). This yields a greater value for the rate constant and a correspondingly faster reaction rate.",
+              "source": "OpenStax Chemistry 2e",
+              "locator": "https://openstax.org/books/chemistry-2e/pages/12-5-collision-theory",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": "Section 12.5, Activation Energy and the Arrhenius Equation; inline math normalized from the page's rendered equations."
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.96,
+          "verdict_rationale": "The passage states exactly that a higher temperature increases the fraction of molecules able to surmount the activation barrier, which is the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "cal-014-a2-c2",
+          "text": "Temperature measures the average kinetic energy of the constituent molecules.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "cal-014-a2-c2-e1",
+              "text": "According to kinetic molecular theory (see chapter on gases), the temperature of matter is a measure of the average kinetic energy of its constituent atoms or molecules.",
+              "source": "OpenStax Chemistry 2e",
+              "locator": "https://openstax.org/books/chemistry-2e/pages/12-5-collision-theory",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": "Section 12.5, Activation Energy and the Arrhenius Equation; verbatim."
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.95,
+          "verdict_rationale": "The passage states directly that temperature measures average molecular kinetic energy, matching the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "cal-014-a2-c3",
+          "text": "For many chemical processes the rate approximately doubles for a 10 °C rise in temperature.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "cal-014-a2-c3-e1",
+              "text": "For many chemical processes, reaction rates are approximately doubled when the temperature is raised by 10 °C.",
+              "source": "OpenStax Chemistry 2e",
+              "locator": "https://openstax.org/books/chemistry-2e/pages/12-2-factors-affecting-reaction-rates",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": "Section 12.2, Temperature of the Reactants; verbatim."
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.94,
+          "verdict_rationale": "The passage states the same approximate doubling for a 10 °C increase, so the claim is directly supported.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    }
+  ]
+}

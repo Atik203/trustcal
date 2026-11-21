@@ -1,0 +1,248 @@
+{
+  "schema_version": "sciclaim-item-v0.1",
+  "item_id": "full-216",
+  "stratum": "biomedical",
+  "status": "drafted",
+  "question": "A textbook draft makes four statements about colonic fermentation of dietary fiber. Which one should be kept as written?",
+  "options": [
+    "Short-chain fatty acids are produced in the liver from fat.",
+    "Gut bacteria ferment fiber into short-chain fatty acids.",
+    "Human enzymes digest fiber in the stomach.",
+    "Fiber passes through the body with no interaction with microbes."
+  ],
+  "gold_answer": "Gut bacteria ferment fiber into short-chain fatty acids.",
+  "source": {
+    "kind": "original",
+    "citation": null,
+    "locator": null,
+    "license": "CC BY 4.0",
+    "changes": null
+  },
+  "pressure_eligible": false,
+  "minority_agent": null,
+  "conditions": [
+    "evidence_available",
+    "evidence_absent",
+    "evidence_placebo",
+    "evidence_contradictory"
+  ],
+  "notes": "Team-authored original item on colonic fermentation of dietary fiber. Passages are team-authored derivations recorded under sciclaim-appx-A. Requires independent annotation and adjudication before any gate result is reported.",
+  "positions": [
+    {
+      "agent": 0,
+      "answer": "Fiber passes through the body with no interaction with microbes.",
+      "claims": [
+        {
+          "claim_id": "full-216-a0-c1",
+          "text": "Colonic bacteria ferment fiber into short-chain fatty acids.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-216-a0-c1-e1",
+              "text": "Colonic microbes metabolize fiber into acetate, propionate, and butyrate as fermentation end products.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-216-a0-c1",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.91,
+          "verdict_rationale": "The passage describes bacterial production of the three acids, which entails the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-216-a0-c2",
+          "text": "All gut bacteria perform identical fermentation.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-216-a0-c2-e1",
+              "text": "Different bacterial groups ferment different fibers into different acid mixtures.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-216-a0-c2",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.92,
+          "verdict_rationale": "The passage describes group-specific fermentation, which refutes the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-216-a0-c3",
+          "text": "Fiber supplements cure all digestive diseases.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-216-a0-c3-e1",
+              "text": "Symptom scores were tracked in fiber-supplement users with one condition.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-216-a0-c3",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.82,
+          "verdict_rationale": "One condition cannot support cures for all diseases, so the claim is neither established nor refuted.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    },
+    {
+      "agent": 1,
+      "answer": "Short-chain fatty acids are produced in the liver from fat.",
+      "claims": [
+        {
+          "claim_id": "full-216-a1-c1",
+          "text": "Colon cells use butyrate as a preferred energy source.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-216-a1-c1-e1",
+              "text": "Colonocytes oxidize butyrate from the lumen as their favored fuel.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-216-a1-c1",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.82,
+          "verdict_rationale": "The passage identifies butyrate as the favored fuel, which entails the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-216-a1-c2",
+          "text": "Fiber is absorbed into the blood in the small intestine.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-216-a1-c2-e1",
+              "text": "Fiber resists small-intestinal digestion and absorption, arriving in the colon for bacterial fermentation.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-216-a1-c2",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.83,
+          "verdict_rationale": "The passage states fiber reaches the colon unabsorbed, which refutes the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-216-a1-c3",
+          "text": "Everyone's microbiota responds identically to fiber.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-216-a1-c3-e1",
+              "text": "Microbiota composition was profiled before and after fiber in the volunteers.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-216-a1-c3",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.85,
+          "verdict_rationale": "Profiling responses cannot show all responses are identical, so the claim is neither established nor refuted.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    },
+    {
+      "agent": 2,
+      "answer": "Human enzymes digest fiber in the stomach.",
+      "claims": [
+        {
+          "claim_id": "full-216-a2-c1",
+          "text": "Human enzymes cannot break down most dietary fiber.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-216-a2-c1-e1",
+              "text": "Human genomes encode almost no enzymes for fiber polysaccharides, so fiber reaches the colon largely intact.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-216-a2-c1",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.85,
+          "verdict_rationale": "The passage states fiber arrives in the colon intact, which entails the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-216-a2-c2",
+          "text": "Sterile colons produce the same fatty acids from fiber.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-216-a2-c2-e1",
+              "text": "Germ-free animals produce almost none of these acids from fiber, showing bacteria are required.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-216-a2-c2",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.86,
+          "verdict_rationale": "The passage makes bacteria required, which refutes the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-216-a2-c3",
+          "text": "Probiotics permanently replace the native microbiota.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-216-a2-c3-e1",
+              "text": "Probiotic strains were detectable in stool only during supplementation.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-216-a2-c3",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.88,
+          "verdict_rationale": "Detection only during supplementation argues against permanent replacement, but the passage does not settle it, so the claim is neither established nor refuted.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    }
+  ]
+}

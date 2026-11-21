@@ -1,0 +1,248 @@
+{
+  "schema_version": "sciclaim-item-v0.1",
+  "item_id": "frz-038",
+  "stratum": "biomedical",
+  "status": "drafted",
+  "question": "During a lab meeting on insulin regulation of blood glucose, which assertion is right?",
+  "options": [
+    "Insulin raises blood glucose by stimulating glucose release from the liver.",
+    "Insulin acts only on the brain and has no effect on muscle or fat.",
+    "Glucagon and insulin both lower blood glucose after a meal.",
+    "Insulin lowers blood glucose by promoting glucose uptake and storage."
+  ],
+  "gold_answer": "Insulin lowers blood glucose by promoting glucose uptake and storage.",
+  "source": {
+    "kind": "original",
+    "citation": null,
+    "locator": null,
+    "license": "CC BY 4.0",
+    "changes": null
+  },
+  "pressure_eligible": true,
+  "minority_agent": 2,
+  "conditions": [
+    "evidence_available",
+    "evidence_absent",
+    "evidence_placebo",
+    "evidence_contradictory"
+  ],
+  "notes": "Team-authored original item on insulin regulation of blood glucose. Passages are team-authored derivations recorded under sciclaim-appx-A. Requires independent annotation and adjudication before any gate result is reported.",
+  "positions": [
+    {
+      "agent": 0,
+      "answer": "Glucagon and insulin both lower blood glucose after a meal.",
+      "claims": [
+        {
+          "claim_id": "frz-038-a0-c1",
+          "text": "Insulin stimulates the liver to store glucose as glycogen.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-038-a0-c1-e1",
+              "text": "In the liver, insulin activates glycogen synthesis, converting incoming glucose into stored glycogen.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-038-a0-c1",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.82,
+          "verdict_rationale": "The passage describes insulin-driven glycogen synthesis, which entails the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "frz-038-a0-c2",
+          "text": "Insulin stimulates the liver to break down glycogen into glucose.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-038-a0-c2-e1",
+              "text": "Glycogen breakdown in the liver is driven by glucagon and adrenaline, while insulin suppresses it and favors storage.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-038-a0-c2",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.83,
+          "verdict_rationale": "The passage assigns glycogen breakdown to other hormones and says insulin suppresses it, which refutes the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "frz-038-a0-c3",
+          "text": "Dietary chromium supplements cure insulin resistance.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-038-a0-c3-e1",
+              "text": "Chromium intake was recorded as a dietary variable in the observational cohort.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-038-a0-c3",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.85,
+          "verdict_rationale": "Merely recording intake establishes nothing about cures, so the claim is neither established nor refuted.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    },
+    {
+      "agent": 1,
+      "answer": "Insulin raises blood glucose by stimulating glucose release from the liver.",
+      "claims": [
+        {
+          "claim_id": "frz-038-a1-c1",
+          "text": "Pancreatic beta cells release insulin when blood glucose rises.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-038-a1-c1-e1",
+              "text": "Rising blood glucose stimulates pancreatic beta cells to secrete insulin into the bloodstream.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-038-a1-c1",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.85,
+          "verdict_rationale": "The passage describes glucose-stimulated insulin secretion, which entails the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "frz-038-a1-c2",
+          "text": "Type 1 diabetes is caused by insulin resistance in muscle tissue.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-038-a1-c2-e1",
+              "text": "Type 1 diabetes results from autoimmune destruction of insulin-producing beta cells, leaving little insulin to act.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-038-a1-c2",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.86,
+          "verdict_rationale": "The passage identifies beta-cell loss, not muscle resistance, as the cause, which refutes the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "frz-038-a1-c3",
+          "text": "Insulin pumps eliminate hypoglycaemia in all users.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-038-a1-c3-e1",
+              "text": "Pump users logged hypoglycaemic episodes alongside sensor readings during the study period.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-038-a1-c3",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.88,
+          "verdict_rationale": "Logging episodes does not show elimination in all users, so the claim is neither established nor refuted.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    },
+    {
+      "agent": 2,
+      "answer": "Insulin lowers blood glucose by promoting glucose uptake and storage.",
+      "claims": [
+        {
+          "claim_id": "frz-038-a2-c1",
+          "text": "Insulin promotes glucose uptake into muscle and fat cells.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-038-a2-c1-e1",
+              "text": "Insulin signaling moves glucose transporters to the surface of muscle and fat cells, increasing glucose entry.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-038-a2-c1",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.88,
+          "verdict_rationale": "The passage states that insulin signaling increases glucose entry into muscle and fat, which entails the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "frz-038-a2-c2",
+          "text": "Insulin secretion increases during fasting and starvation.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-038-a2-c2-e1",
+              "text": "During fasting, insulin secretion falls while glucagon rises to maintain blood glucose from stored fuels.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-038-a2-c2",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.89,
+          "verdict_rationale": "The passage states insulin falls during fasting, the opposite of the claim, so the claim is refuted.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "frz-038-a2-c3",
+          "text": "A new insulin analogue controls glucose better than all existing insulins in every patient.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-038-a2-c3-e1",
+              "text": "The trial compared the new analogue with one existing insulin for change in average glucose over six months.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-038-a2-c3",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.91,
+          "verdict_rationale": "One comparator and one outcome cannot support superiority over all insulins in every patient, so the claim is neither established nor refuted.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    }
+  ]
+}

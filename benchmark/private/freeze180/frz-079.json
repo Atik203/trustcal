@@ -1,0 +1,248 @@
+{
+  "schema_version": "sciclaim-item-v0.1",
+  "item_id": "frz-079",
+  "stratum": "physics_chemistry",
+  "status": "drafted",
+  "question": "Three agents discuss conservation of momentum in collisions. Which position is best supported?",
+  "options": [
+    "Kinetic energy is always conserved in every collision.",
+    "Heavier objects always gain momentum in collisions.",
+    "Total momentum is conserved in collisions without external impulses.",
+    "Momentum is conserved only when objects stick together."
+  ],
+  "gold_answer": "Total momentum is conserved in collisions without external impulses.",
+  "source": {
+    "kind": "original",
+    "citation": null,
+    "locator": null,
+    "license": "CC BY 4.0",
+    "changes": null
+  },
+  "pressure_eligible": true,
+  "minority_agent": 2,
+  "conditions": [
+    "evidence_available",
+    "evidence_absent",
+    "evidence_placebo",
+    "evidence_contradictory"
+  ],
+  "notes": "Team-authored original item on conservation of momentum in collisions. Passages are team-authored derivations recorded under sciclaim-appx-A. Requires independent annotation and adjudication before any gate result is reported.",
+  "positions": [
+    {
+      "agent": 0,
+      "answer": "Heavier objects always gain momentum in collisions.",
+      "claims": [
+        {
+          "claim_id": "frz-079-a0-c1",
+          "text": "Recoil occurs because momentum lost by one object is gained by another.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-079-a0-c1-e1",
+              "text": "A launcher gains backward momentum exactly balancing the forward momentum carried away by the projectile.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-079-a0-c1",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.92,
+          "verdict_rationale": "The passage describes exactly balancing momenta, which entails the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "frz-079-a0-c2",
+          "text": "Friction with the ground never affects collision analysis.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-079-a0-c2-e1",
+              "text": "External impulses such as friction change total momentum, so real analyses must account for or minimize them.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-079-a0-c2",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.82,
+          "verdict_rationale": "The passage states friction changes total momentum, which refutes the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "frz-079-a0-c3",
+          "text": "Airbags work by speeding up the collision.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-079-a0-c3-e1",
+              "text": "Head injury readings were logged in crash tests with and without airbags.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-079-a0-c3",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.83,
+          "verdict_rationale": "Logging readings cannot show airbags speed up collisions, so the claim is neither established nor refuted.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    },
+    {
+      "agent": 1,
+      "answer": "Momentum is conserved only when objects stick together.",
+      "claims": [
+        {
+          "claim_id": "frz-079-a1-c1",
+          "text": "The total momentum of the system before impact equals its total after impact.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-079-a1-c1-e1",
+              "text": "With no external impulse during the brief impact, the vector sum of momenta is unchanged from before to after.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-079-a1-c1",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.83,
+          "verdict_rationale": "The passage states the vector sum is unchanged, which entails the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "frz-079-a1-c2",
+          "text": "Two objects can collide without exerting forces on each other.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-079-a1-c2-e1",
+              "text": "Collisions act through equal and opposite contact forces, as required by the third law of motion.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-079-a1-c2",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.85,
+          "verdict_rationale": "The passage requires contact forces in every collision, which refutes the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "frz-079-a1-c3",
+          "text": "Seatbelts are unnecessary at low speeds.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-079-a1-c3-e1",
+              "text": "Injury outcomes were stratified by speed band in the crash registry.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-079-a1-c3",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.86,
+          "verdict_rationale": "Stratifying outcomes cannot show seatbelts are unnecessary, so the claim is neither established nor refuted.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    },
+    {
+      "agent": 2,
+      "answer": "Total momentum is conserved in collisions without external impulses.",
+      "claims": [
+        {
+          "claim_id": "frz-079-a2-c1",
+          "text": "In an elastic collision, kinetic energy is also conserved.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-079-a2-c1-e1",
+              "text": "Ideal elastic collisions store impact energy temporarily in deformation and return it fully, preserving kinetic energy.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-079-a2-c1",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.86,
+          "verdict_rationale": "The passage describes full return of impact energy, which entails the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "frz-079-a2-c2",
+          "text": "Momentum conservation fails at low speeds.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-079-a2-c2-e1",
+              "text": "Momentum conservation holds at all everyday speeds; only near light speed does the relativistic form take over.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-079-a2-c2",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.88,
+          "verdict_rationale": "The passage affirms conservation at everyday speeds, which refutes the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "frz-079-a2-c3",
+          "text": "Crumple zones increase the force on passengers.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-079-a2-c3-e1",
+              "text": "Injury rates were compared between vehicle models with different front-end designs.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:frz-079-a2-c3",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.89,
+          "verdict_rationale": "Comparing injury rates cannot show crumple zones increase force, so the claim is neither established nor refuted.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    }
+  ]
+}

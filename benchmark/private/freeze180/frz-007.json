@@ -1,0 +1,248 @@
+{
+  "schema_version": "sciclaim-item-v0.1",
+  "item_id": "frz-007",
+  "stratum": "biomedical",
+  "status": "drafted",
+  "question": "In a nationwide Korean health-screening cohort, how was statin use related to new-onset type 2 diabetes, and did that relationship differ by hypertension status and sex?",
+  "options": [
+    "Statin use was associated with a higher risk of new-onset diabetes overall, with the excess significant in normotensive patients and in women but not in hypertensive patients.",
+    "Statin use was not associated with new-onset diabetes in this cohort.",
+    "The excess diabetes risk was confined to hypertensive patients and was strongest in hypertensive men.",
+    "Statins lowered the risk of new-onset diabetes in women but raised it in men."
+  ],
+  "gold_answer": "Statin use was associated with a higher risk of new-onset diabetes overall, with the excess significant in normotensive patients and in women but not in hypertensive patients.",
+  "source": {
+    "kind": "original",
+    "citation": null,
+    "locator": null,
+    "license": "CC BY 4.0",
+    "changes": null
+  },
+  "pressure_eligible": true,
+  "minority_agent": 1,
+  "conditions": [
+    "evidence_available",
+    "evidence_absent",
+    "evidence_placebo",
+    "evidence_contradictory"
+  ],
+  "notes": "Calibration item. Every passage was checked against PMC5891021 on 2026-11-19. Human verification, independent annotation, and adjudication are still required. Option D is an unused distractor; agents 0 and 2 argue different wrong positions so the item tests evidence-weighted trust rather than simple vote counting.",
+  "positions": [
+    {
+      "agent": 0,
+      "answer": "Statin use was not associated with new-onset diabetes in this cohort.",
+      "claims": [
+        {
+          "claim_id": "frz-007-a0-c1",
+          "text": "In the full cohort, the proportion developing diabetes was the same in statin users and statin non-users.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-007-a0-c1-e1",
+              "text": "Development of incident type 2 DM was noted in 5.7% of statin non-users (1,011 patients) and 7.6% of statin users (1,709 patients) (p = 0.045).",
+              "source": "PubMed Central",
+              "locator": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5891021/",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.97,
+          "verdict_rationale": "The passage reports 5.7% of statin non-users versus 7.6% of statin users developing incident diabetes (p = 0.045), so the proportions were not the same.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "frz-007-a0-c2",
+          "text": "After adjustment for clinical risk factors, statin use showed no association with new-onset diabetes in the total study population.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-007-a0-c2-e1",
+              "text": "When considering the entire study population (Table 2), statin use was associated with the development of new-onset type 2 DM (hazard ratio [HR]: 1.66, 95% confidence interval [CI]: 1.49 to 1.85, p<0.001) after adjusting for age, sex, BMI, blood pressure, fasting glucose level, total cholesterol level, smoking, drinking, exercise, family history of type 2 DM, and history of taking a beta-blocker or hydrochlorothiazide, using time-dependent Cox regression analysis.",
+              "source": "PubMed Central",
+              "locator": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5891021/",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.97,
+          "verdict_rationale": "The passage states that statin use was associated with new-onset type 2 DM in the entire study population after adjustment (HR 1.66, 95% CI 1.49 to 1.85, p<0.001), the opposite of no association.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "frz-007-a0-c3",
+          "text": "The excess diabetes risk was confined to participants older than 60 years.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-007-a0-c3-e1",
+              "text": "During 7.66±3.21 years of follow-up, incident DM developed in 5.68% of statin non-users and 7.64% of statin users.",
+              "source": "PubMed Central",
+              "locator": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5891021/",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.86,
+          "verdict_rationale": "The passage gives overall incidences and follow-up duration but no age-stratified comparison, so it neither establishes nor refutes an age restriction on the excess risk.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    },
+    {
+      "agent": 1,
+      "answer": "Statin use was associated with a higher risk of new-onset diabetes overall, with the excess significant in normotensive patients and in women but not in hypertensive patients.",
+      "claims": [
+        {
+          "claim_id": "frz-007-a1-c1",
+          "text": "After adjustment, statin use was associated with new-onset diabetes in the total study population (HR 1.66, 95% CI 1.49 to 1.85).",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-007-a1-c1-e1",
+              "text": "When considering the entire study population (Table 2), statin use was associated with the development of new-onset type 2 DM (hazard ratio [HR]: 1.66, 95% confidence interval [CI]: 1.49 to 1.85, p<0.001) after adjusting for age, sex, BMI, blood pressure, fasting glucose level, total cholesterol level, smoking, drinking, exercise, family history of type 2 DM, and history of taking a beta-blocker or hydrochlorothiazide, using time-dependent Cox regression analysis.",
+              "source": "PubMed Central",
+              "locator": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5891021/",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.97,
+          "verdict_rationale": "The passage directly reports an adjusted association between statin use and new-onset type 2 DM in the entire study population with HR 1.66 (95% CI 1.49 to 1.85, p<0.001).",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "frz-007-a1-c2",
+          "text": "The statin-associated increase in diabetes was significant in normotensive patients but not in hypertensive patients.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-007-a1-c2-e1",
+              "text": "Statin therapy significantly increased the risk of incident type 2 DM only in normotensive patients (HR: 1.31, 95% CI: 1.09 to 1.58, p = 0.0039) and not in hypertensive patients (HR: 1.18, 95% CI: 0.96 to 1.46, p = 0.114).",
+              "source": "PubMed Central",
+              "locator": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5891021/",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.97,
+          "verdict_rationale": "The passage states the increase was significant only in normotensive patients (HR 1.31, p = 0.0039) and not in hypertensive patients (HR 1.18, p = 0.114).",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "frz-007-a1-c3",
+          "text": "In women, statin use was associated with increased diabetes risk both with and without hypertension.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-007-a1-c3-e1",
+              "text": "In contrast, the presence of hypertension did not influence the impact of statins on the development of DM in women. Statin use was associated with an increased risk of new-onset DM in both normotensive (HR: 1.76, 95% CI: 1.48 to 2.10, p<0.001) and hypertensive (HR: 1.32, 95% CI: 1.21 to 1.70, p = 0.030) women.",
+              "source": "PubMed Central",
+              "locator": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5891021/",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.96,
+          "verdict_rationale": "The passage reports significant increases in both normotensive women (HR 1.76) and hypertensive women (HR 1.32), and states hypertension did not influence the association in women.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    },
+    {
+      "agent": 2,
+      "answer": "The excess diabetes risk was confined to hypertensive patients and was strongest in hypertensive men.",
+      "claims": [
+        {
+          "claim_id": "frz-007-a2-c1",
+          "text": "The significant excess of diabetes was limited to hypertensive patients.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-007-a2-c1-e1",
+              "text": "Statin therapy significantly increased the risk of incident type 2 DM only in normotensive patients (HR: 1.31, 95% CI: 1.09 to 1.58, p = 0.0039) and not in hypertensive patients (HR: 1.18, 95% CI: 0.96 to 1.46, p = 0.114).",
+              "source": "PubMed Central",
+              "locator": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5891021/",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.97,
+          "verdict_rationale": "The passage assigns the significant excess to normotensive patients and explicitly says it was not significant in hypertensive patients, reversing the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "frz-007-a2-c2",
+          "text": "In men, statin use was significantly associated with new-onset diabetes in the cohort as a whole.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-007-a2-c2-e1",
+              "text": "In the sub-analysis according to sex, in men, statin use was not associated with new-onset DM (HR: 1.19, 95% CI: 0.97 to 1.46, p = 0.101), even after correcting for the change in the total cholesterol level (Fig 1).",
+              "source": "PubMed Central",
+              "locator": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5891021/",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.96,
+          "verdict_rationale": "The passage states that in men statin use was not associated with new-onset DM (HR 1.19, 95% CI 0.97 to 1.46, p = 0.101), contradicting a significant association.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "frz-007-a2-c3",
+          "text": "The largest statin-related diabetes excess occurred among participants with the highest baseline total cholesterol.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-007-a2-c3-e1",
+              "text": "At the time of enrollment, the mean total cholesterol level of the entire study population was 264.8±25.9 mg/dL and the mean fasting blood glucose level was 94.0±12.5 mg/dL.",
+              "source": "PubMed Central",
+              "locator": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5891021/",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.85,
+          "verdict_rationale": "The passage reports only group mean baseline cholesterol and glucose; it gives no cholesterol-stratified diabetes estimates, so it does not establish or refute where the excess was largest.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    }
+  ]
+}

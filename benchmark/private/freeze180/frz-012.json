@@ -1,0 +1,248 @@
+{
+  "schema_version": "sciclaim-item-v0.1",
+  "item_id": "frz-012",
+  "stratum": "physics_chemistry",
+  "status": "drafted",
+  "question": "Which statement about how the volume of a gas depends on its pressure, temperature, or amount is correct?",
+  "options": [
+    "At constant temperature, the volume of a given amount of gas is inversely proportional to its pressure.",
+    "At constant temperature, the volume of a given amount of gas is directly proportional to its pressure.",
+    "At constant pressure, the volume of a gas is inversely proportional to its temperature on the kelvin scale.",
+    "At constant pressure and temperature, the volume of a gas is inversely proportional to the number of moles."
+  ],
+  "gold_answer": "At constant temperature, the volume of a given amount of gas is inversely proportional to its pressure.",
+  "source": {
+    "kind": "original",
+    "citation": null,
+    "locator": null,
+    "license": "CC BY 4.0",
+    "changes": null
+  },
+  "pressure_eligible": true,
+  "minority_agent": 0,
+  "conditions": [
+    "evidence_available",
+    "evidence_absent",
+    "evidence_placebo",
+    "evidence_contradictory"
+  ],
+  "notes": "Question, options and claims are original wording. All evidence passages are verbatim excerpts from OpenStax, Chemistry 2e, section 9.2 Relating Pressure, Volume, Amount, and Temperature: The Ideal Gas Law, retrieved 2026-11-19; that book is released under the Creative Commons Attribution licence (CC BY 4.0). Italics in the source are flattened to plain text.",
+  "positions": [
+    {
+      "agent": 0,
+      "answer": "At constant temperature, the volume of a given amount of gas is inversely proportional to its pressure.",
+      "claims": [
+        {
+          "claim_id": "frz-012-a0-c1",
+          "text": "At constant temperature, the volume of a given amount of gas is inversely proportional to its pressure.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-012-a0-c1-e1",
+              "text": "The relationship between the volume and pressure of a given amount of gas at constant temperature was first published by the English natural philosopher Robert Boyle over 300 years ago. It is summarized in the statement now known as Boyle's law: The volume of a given amount of gas held at constant temperature is inversely proportional to the pressure under which it is measured.",
+              "source": "OpenStax Chemistry 2e",
+              "locator": "https://openstax.org/books/chemistry-2e/pages/9-2-relating-pressure-volume-amount-and-temperature-the-ideal-gas-law",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": "Section 9.2, subsection 'Volume and Pressure: Boyle's Law'; italics on the law statement flattened to plain text."
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.97,
+          "verdict_rationale": "The passage states Boyle's law in exactly these terms: at constant temperature the volume is inversely proportional to the pressure.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "frz-012-a0-c2",
+          "text": "Increasing the pressure on a gas at constant temperature decreases its volume.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-012-a0-c2-e1",
+              "text": "Unlike the P-T and V-T relationships, pressure and volume are not directly proportional to each other. Instead, P and V exhibit inverse proportionality: Increasing the pressure results in a decrease of the volume of the gas.",
+              "source": "OpenStax Chemistry 2e",
+              "locator": "https://openstax.org/books/chemistry-2e/pages/9-2-relating-pressure-volume-amount-and-temperature-the-ideal-gas-law",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": "Section 9.2, subsection 'Volume and Pressure: Boyle's Law'; italics flattened to plain text."
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.96,
+          "verdict_rationale": "The passage states directly that increasing pressure results in a decrease in gas volume.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "frz-012-a0-c3",
+          "text": "At constant pressure and temperature, gas volume is inversely proportional to the number of moles.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-012-a0-c3-e1",
+              "text": "Over time, this relationship was supported by many experimental observations as expressed by Avogadro's law: For a confined gas, the volume (V) and number of moles (n) are directly proportional if the pressure and temperature both remain constant.",
+              "source": "OpenStax Chemistry 2e",
+              "locator": "https://openstax.org/books/chemistry-2e/pages/9-2-relating-pressure-volume-amount-and-temperature-the-ideal-gas-law",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": "Section 9.2, subsection 'Moles of Gas and Volume: Avogadro's Law'; italics on the law statement flattened to plain text."
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.96,
+          "verdict_rationale": "The passage states that volume and number of moles are directly proportional at constant pressure and temperature, which refutes the claimed inverse proportionality.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    },
+    {
+      "agent": 1,
+      "answer": "At constant temperature, the volume of a given amount of gas is directly proportional to its pressure.",
+      "claims": [
+        {
+          "claim_id": "frz-012-a1-c1",
+          "text": "At constant temperature, the pressure and volume of a gas are directly proportional to each other.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-012-a1-c1-e1",
+              "text": "Unlike the P-T and V-T relationships, pressure and volume are not directly proportional to each other. Instead, P and V exhibit inverse proportionality: Increasing the pressure results in a decrease of the volume of the gas.",
+              "source": "OpenStax Chemistry 2e",
+              "locator": "https://openstax.org/books/chemistry-2e/pages/9-2-relating-pressure-volume-amount-and-temperature-the-ideal-gas-law",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": "Section 9.2, subsection 'Volume and Pressure: Boyle's Law'; italics flattened to plain text."
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.97,
+          "verdict_rationale": "The passage explicitly says pressure and volume are not directly proportional but exhibit inverse proportionality, so it refutes the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "frz-012-a1-c2",
+          "text": "At constant pressure, the volume of a gas is directly proportional to its temperature on the kelvin scale.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-012-a1-c2-e1",
+              "text": "The relationship between the volume and temperature of a given amount of gas at constant pressure is known as Charles's law in recognition of the French scientist and balloon flight pioneer Jacques Alexandre César Charles. Charles's law states that the volume of a given amount of gas is directly proportional to its temperature on the kelvin scale when the pressure is held constant.",
+              "source": "OpenStax Chemistry 2e",
+              "locator": "https://openstax.org/books/chemistry-2e/pages/9-2-relating-pressure-volume-amount-and-temperature-the-ideal-gas-law",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": "Section 9.2, subsection 'Temperature and Volume: Charles's Law'; italics on the law statement flattened to plain text."
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.96,
+          "verdict_rationale": "The cited sentence states Charles's law in exactly the claimed form, so it entails the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "frz-012-a1-c3",
+          "text": "At constant temperature, the pressure of a gas is inversely proportional to its volume.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-012-a1-c3-e1",
+              "text": "The relationship between the volume and temperature of a given amount of gas at constant pressure is known as Charles's law in recognition of the French scientist and balloon flight pioneer Jacques Alexandre César Charles. Charles's law states that the volume of a given amount of gas is directly proportional to its temperature on the kelvin scale when the pressure is held constant.",
+              "source": "OpenStax Chemistry 2e",
+              "locator": "https://openstax.org/books/chemistry-2e/pages/9-2-relating-pressure-volume-amount-and-temperature-the-ideal-gas-law",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": "Section 9.2, subsection 'Temperature and Volume: Charles's Law'; italics on the law statement flattened to plain text."
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.84,
+          "verdict_rationale": "The passage states a volume-temperature relation at constant pressure. It neither states nor refutes a pressure-volume relation at constant temperature, so the cited evidence is merely on topic.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    },
+    {
+      "agent": 2,
+      "answer": "At constant pressure and temperature, the volume of a gas is inversely proportional to the number of moles.",
+      "claims": [
+        {
+          "claim_id": "frz-012-a2-c1",
+          "text": "At constant pressure and temperature, the volume of a confined gas is directly proportional to the number of moles.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-012-a2-c1-e1",
+              "text": "Over time, this relationship was supported by many experimental observations as expressed by Avogadro's law: For a confined gas, the volume (V) and number of moles (n) are directly proportional if the pressure and temperature both remain constant.",
+              "source": "OpenStax Chemistry 2e",
+              "locator": "https://openstax.org/books/chemistry-2e/pages/9-2-relating-pressure-volume-amount-and-temperature-the-ideal-gas-law",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": "Section 9.2, subsection 'Moles of Gas and Volume: Avogadro's Law'; italics on the law statement flattened to plain text."
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.96,
+          "verdict_rationale": "The passage states exactly this direct proportionality between volume and moles at constant pressure and temperature.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "frz-012-a2-c2",
+          "text": "At constant pressure, the volume of a gas decreases when its temperature on the kelvin scale increases.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-012-a2-c2-e1",
+              "text": "Charles's law states that the volume of a given amount of gas is directly proportional to its temperature on the kelvin scale when the pressure is held constant.",
+              "source": "OpenStax Chemistry 2e",
+              "locator": "https://openstax.org/books/chemistry-2e/pages/9-2-relating-pressure-volume-amount-and-temperature-the-ideal-gas-law",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": "Section 9.2, subsection 'Temperature and Volume: Charles's Law'; italics on the law statement flattened to plain text."
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.96,
+          "verdict_rationale": "The passage states a direct proportionality, so raising the kelvin temperature raises the volume rather than decreasing it.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "frz-012-a2-c3",
+          "text": "At standard temperature and pressure, one mole of an ideal gas has a volume of about 22.4 L.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "frz-012-a2-c3-e1",
+              "text": "At STP, one mole of an ideal gas has a volume of about 22.4 L—this is referred to as the standard molar volume (Figure 9.18).",
+              "source": "OpenStax Chemistry 2e",
+              "locator": "https://openstax.org/books/chemistry-2e/pages/9-2-relating-pressure-volume-amount-and-temperature-the-ideal-gas-law",
+              "retrieved_at": "2026-11-19",
+              "license": "CC BY 4.0",
+              "notes": "Section 9.2, subsection 'Standard Conditions of Temperature and Pressure'; verbatim."
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.96,
+          "verdict_rationale": "The passage states this standard molar volume directly, so the claim is entailed.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    }
+  ]
+}

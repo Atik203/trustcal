@@ -75,6 +75,12 @@ The roadmap's ~410 h envelope for 180 items (2.28 h/item) is a planning
 envelope, not the gate: the gate is the 2.0 h/item ceiling above. If measured
 `H_attempt` exceeds 2.0 at S0, the 180 freeze does not start.
 
+**S0 failure routing (all four gates, no gaps):** κ < 0.75 → keep batch,
+revise codebook, run a fresh 24 (never relabel to raise κ). Defect > 0.15 or
+H_attempt > 2.0 → cut to the 120-item S1 contingency (same gates on the 120).
+Unresolved > 0.05 → treat like a κ failure: fix sheets/codebook, fresh batch
+(unresolved means the material, not the raters, failed — relabelling can't fix it).
+
 ## 4. File map
 
 ```text
@@ -82,7 +88,7 @@ benchmark/
   draft_items.py            generator (this production system; committed)
   FULLBENCH_PLAN.md         this file (committed)
   validate_items.py         validator / sheet builder / gate scorer (committed)
-  private/                  gitignored; filled items + human labels live here
+  private/                  draft items + blank calibration sheets tracked; filled sheets, session manifests stay gitignored
     items/cal-001..024.json 24-item calibration drafts (8/8/8)
     calibration/sheets/     S0 blind sheets (rater1/rater2/adjudication/effort/manifest)
     freeze180/
@@ -149,5 +155,4 @@ to carry `draft_assisted: true`. This production system deliberately does not:
 3. **Label the blind sheets** (both raters), **adjudicate** disagreements,
    run the **defect review**, and log **effort** — the gate needs all four.
 4. Decide S1 vs S2 after S0 scores; run the licence review before any freeze.
-5. Nothing here is committed: `private/` is gitignored, and no commit was
-   made by the production system.
+5. Draft items and blank calibration sheets are committed so members start from a clone; filled `*_initials` sheets and session manifests stay gitignored and local.

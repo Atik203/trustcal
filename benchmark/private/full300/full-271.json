@@ -1,0 +1,248 @@
+{
+  "schema_version": "sciclaim-item-v0.1",
+  "item_id": "full-271",
+  "stratum": "math_cs",
+  "status": "drafted",
+  "question": "Which explanation of overfitting and the train-test split is scientifically accurate?",
+  "options": [
+    "Testing on training data validates a model.",
+    "More complex models always generalize better.",
+    "Overfitting is memorization that fails on new data.",
+    "Training error alone measures generalization."
+  ],
+  "gold_answer": "Overfitting is memorization that fails on new data.",
+  "source": {
+    "kind": "original",
+    "citation": null,
+    "locator": null,
+    "license": "CC BY 4.0",
+    "changes": null
+  },
+  "pressure_eligible": true,
+  "minority_agent": 0,
+  "conditions": [
+    "evidence_available",
+    "evidence_absent",
+    "evidence_placebo",
+    "evidence_contradictory"
+  ],
+  "notes": "Team-authored original item on overfitting and the train-test split. Passages are team-authored derivations recorded under sciclaim-appx-A. Requires independent annotation and adjudication before any gate result is reported.",
+  "positions": [
+    {
+      "agent": 0,
+      "answer": "Overfitting is memorization that fails on new data.",
+      "claims": [
+        {
+          "claim_id": "full-271-a0-c1",
+          "text": "Overfit models fit noise in the training data.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-271-a0-c1-e1",
+              "text": "Excess capacity encodes sampling quirks that do not repeat in fresh data.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-271-a0-c1",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.86,
+          "verdict_rationale": "The passage describes encoding non-repeating quirks, which entails the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-271-a0-c2",
+          "text": "Test data may be used for training when convenient.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-271-a0-c2-e1",
+              "text": "Training on the test set destroys its role as an unbiased judge of generalization.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-271-a0-c2",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.88,
+          "verdict_rationale": "The passage states training destroys the test role, which refutes the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-271-a0-c3",
+          "text": "Human review is obsolete after automation.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-271-a0-c3-e1",
+              "text": "Review workloads were tracked before and after tool deployment.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-271-a0-c3",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.89,
+          "verdict_rationale": "Tracking workloads cannot show review is obsolete, so the claim is neither established nor refuted.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    },
+    {
+      "agent": 1,
+      "answer": "Testing on training data validates a model.",
+      "claims": [
+        {
+          "claim_id": "full-271-a1-c1",
+          "text": "A held-out test set estimates fresh-data performance.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-271-a1-c1-e1",
+              "text": "Because the model never trained on it, held-out data mimics unseen future inputs.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-271-a1-c1",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.89,
+          "verdict_rationale": "The passage describes held-out data mimicking unseen inputs, which entails the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-271-a1-c2",
+          "text": "Regularization always harms accuracy.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-271-a1-c2-e1",
+              "text": "Well-tuned regularization trades small training loss for better fresh-data accuracy.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-271-a1-c2",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.91,
+          "verdict_rationale": "The passage describes accuracy gains from regularization, which refutes the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-271-a1-c3",
+          "text": "Machine learning eliminates the need for data collection.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-271-a1-c3-e1",
+              "text": "Data budgets were discussed for the proposed project.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-271-a1-c3",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.92,
+          "verdict_rationale": "Discussing budgets cannot settle the claim, so the claim is neither established nor refuted.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    },
+    {
+      "agent": 2,
+      "answer": "More complex models always generalize better.",
+      "claims": [
+        {
+          "claim_id": "full-271-a2-c1",
+          "text": "Validation data should guide model selection, not final reporting.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-271-a2-c1-e1",
+              "text": "Tuning on validation leaks information into choices, so final claims need untouched test data.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-271-a2-c1",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "support",
+          "gold_confidence": 0.92,
+          "verdict_rationale": "The passage requires untouched data for final claims, which entails the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-271-a2-c2",
+          "text": "Zero training error guarantees deployment success.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-271-a2-c2-e1",
+              "text": "Memorized training sets give zero error while fresh-data error stays high, the hallmark of overfitting.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-271-a2-c2",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "contradict",
+          "gold_confidence": 0.82,
+          "verdict_rationale": "The passage pairs zero training error with high fresh error, which refutes the claim.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        },
+        {
+          "claim_id": "full-271-a2-c3",
+          "text": "Every dataset supports any model.",
+          "atomic": true,
+          "evidence": [
+            {
+              "passage_id": "full-271-a2-c3-e1",
+              "text": "Dataset-model fit was assessed for the candidate approaches.",
+              "source": "Original derivation",
+              "locator": "sciclaim-appx-A:full-271-a2-c3",
+              "retrieved_at": "2026-11-21",
+              "license": "CC BY 4.0",
+              "notes": null
+            }
+          ],
+          "gold_verdict": "neutral",
+          "gold_confidence": 0.83,
+          "verdict_rationale": "Assessing fit cannot show every dataset fits any model, so the claim is neither established nor refuted.",
+          "annotator_notes": null,
+          "adjudication": null,
+          "defect_flag": null
+        }
+      ]
+    }
+  ]
+}
