@@ -20,12 +20,13 @@ python benchmark/validate_items.py score --rater1 benchmark/private/<batch>/shee
   --min-kappa 0.75 --max-defect 0.15 --max-hours 2.0 --max-unresolved 0.05
 ```
 
-| Role | Open this | Owner |
+| Who | Your job | Open this first | Then |
 |---|---|---|
-| Rater (label rows) | [`tasks/01_RATER.md`](tasks/01_RATER.md) | P3 + annotators |
-| Adjudicator (settle rows) | [`tasks/02_ADJUDICATOR.md`](tasks/02_ADJUDICATOR.md) | P3 |
-| Author (write/check items) | [`tasks/03_AUTHOR.md`](tasks/03_AUTHOR.md) | P3 |
-| Agent pilot (run helpers) | [`tasks/04_AGENT_PILOT.md`](tasks/04_AGENT_PILOT.md) | P2 + P4 |
+| **Prottoy (PR)** — rater 1 | Label all 216 SciClaimBench rows + 180 verifier rows | [`tasks/01_RATER.md`](tasks/01_RATER.md) | [`templates/annotation_submission_checklist.md`](templates/annotation_submission_checklist.md) |
+| **Salman (SA)** — rater 2 | Same sheets, independently (never peek at Prottoy's) | [`tasks/01_RATER.md`](tasks/01_RATER.md) | [`templates/annotation_submission_checklist.md`](templates/annotation_submission_checklist.md) |
+| **Yousuf (YO)** — verifier | Check all 24 drafts, file the problem list | [`tasks/03_AUTHOR.md`](tasks/03_AUTHOR.md) | [`templates/item_verification_checklist.md`](templates/item_verification_checklist.md) (one per item) |
+| **Rakib + Limu (RK+LM)** — adjudicators (pair) | Settle disagreements, defect review | [`tasks/02_ADJUDICATOR.md`](tasks/02_ADJUDICATOR.md) | `templates/` checklists as needed |
+| **Atik** — agent pilot, LAST | Run helpers + score only after every sheet is in | [`tasks/04_AGENT_PILOT.md`](tasks/04_AGENT_PILOT.md) | — |
 
 Three rules: no gated text ever · items have no AI markings · nothing is gold until humans verify it and the gate passes.
 
