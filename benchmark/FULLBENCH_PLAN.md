@@ -142,7 +142,9 @@ to carry `draft_assisted: true`. This production system deliberately does not:
   every claim, evidence link, locator, and verdict, both raters label blind,
   and adjudication resolves disagreements. All items sit at
   `status=drafted`; `score` stays blocked (exit 1) until the sheets hold real
-  human labels. A machine-drafted candidate verdict that no member has
+  human labels. Atik runs a text-match sweep of new/edited batches against
+  GPQA/HLE/MMLU-Pro/SciFact sources at assembly time; anything flagged goes
+  back to the author. A machine-drafted candidate verdict that no member has
   confirmed is a draft annotation, not a gold verdict, regardless of which
   fields the schema requires to be structurally present.
 

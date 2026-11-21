@@ -1,4 +1,4 @@
-# Annotation submission checklist
+# Annotation submission checklist (SciClaimBench calibration: 216 rows + header; verifier audit: 180 rows + header)
 
 **Rater:** ____________________  
 **Task:** SciClaimBench / verifier audit  
@@ -13,16 +13,13 @@ Complete this checklist before uploading a sheet.
 - [ ] I did not edit the original batch or template.
 - [ ] The header row is unchanged.
 - [ ] I did not add or delete columns.
-- [ ] The row count matches the batch manifest or the expected 180 rows.
+- [ ] The row count matches the batch (calibration: 216 data rows + header = 217 lines; verifier: 180 + header). Never add comment lines above the header — they break CSV readers.
 - [ ] The file opens without a delimiter or encoding error.
 
 ## Labels
 
-- [ ] Every row has a label.
-- [ ] I used the exact label strings from the codebook.
-- [ ] I did not use `other` unless the response is outside the taxonomy.
-- [ ] I did not leave a label blank.
-- [ ] I recorded confidence for every hard row.
+- [ ] Every row has a verdict and a confidence (0–1); nothing left blank. Every hard row also has a note.
+- [ ] I used only the exact codebook strings (`support` / `contradict` / `neutral` for SciClaimBench; `supported` / `contradicted` / `unverifiable` for the verifier audit). No other label exists.
 - [ ] I wrote a short note for every hard row.
 - [ ] I did not put names, emails, phone numbers, addresses, or payment identifiers in `notes`.
 

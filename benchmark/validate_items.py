@@ -475,8 +475,15 @@ def _read_rows(path: Path, required: tuple[str, ...]) -> list[dict]:
 
 
 def _labels(path: Path, column: str) -> dict[str, str]:
+    rows = _read_rows(path, ("claim_id", column))
+    if rows and not any(_text(row.get(column)) for row in rows):
+        raise InputError(
+            f"{path}: BLOCKED — no human labels yet (column {column!r} is blank). "
+            "This is the expected state before raters fill their sheets; "
+            "fill the sheets and re-run score."
+        )
     labels: dict[str, str] = {}
-    for index, row in enumerate(_read_rows(path, ("claim_id", column)), start=2):
+    for index, row in enumerate(rows, start=2):
         claim_id = _text(row.get("claim_id"))
         if not claim_id:
             raise InputError(f"{path}: row {index} has no claim_id")

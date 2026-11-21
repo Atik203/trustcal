@@ -6,14 +6,14 @@
 ## 0. Before you start (do this once)
 
 1. **Clone and check Python.** Everything you need ships with the repo — draft items and blank calibration sheets are tracked, so there is no bundle to fetch. You need Python 3.10 or newer and one package. Run all three lines (if the middle one errors, run `pip install pyyaml` and retry):
-2. **Check your Python.** You need Python ≥ 3.10 and one package: `pip install pyyaml` (or reuse the project's `trustcal/.venv` if you have it). Run all three lines (if the middle one errors, run `pip install pyyaml` and retry):
+**Run these three lines once** (or reuse the project's `trustcal/.venv` if you have it):
    ```bash
    python --version          # 3.10 or newer
    python -c "import yaml"    # silent = ok; error = pip install pyyaml first
     python benchmark/validate_items.py --help
    ```
    If all three print without errors, you are set.
-3. **Find your assignment** in the table in §4 below, then read only your role pack.
+2. **Find your assignment** in the table in §4 below, then read only your role pack. Know where finished work goes: your filled sheets, checklists, and problem lists go to the shared private folder — ask P3 for its location on day 1 (with your member number and team-channel invite).
 
 ## 1. Pipeline map 24 → 180 → 300
 

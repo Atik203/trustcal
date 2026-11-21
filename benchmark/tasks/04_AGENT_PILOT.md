@@ -25,7 +25,9 @@ verification is what confers gold.
 Assemble the drafted items at [BATCH: benchmark/private/calibration_items.jsonl]
 and run: python benchmark/validate_items.py sheets --items [BATCH]
 --out benchmark/private/calibration/sheets
-Then verify: rater1.csv and rater2.csv have identical row counts, blank verdict/confidence/notes,
+Then verify: rater1.csv and rater2.csv open with identical TRUE row counts — use
+`Import-Csv` (`.Count`), never line counts (multiline evidence fields make line
+counts lie: 235 lines = 216 rows). Both verdict/confidence/notes columns blank,
 and NO gold_verdict/verifier/arm column; adjudication.csv has the extra rater1_verdict,
 rater2_verdict, agreement, adjudicated_verdict, adjudication_notes, defect_flag, defect_type
 columns. Report row counts and manifest hash. Do not label anything.
@@ -34,7 +36,9 @@ columns. Report row counts and manifest hash. Do not label anything.
 ### C. Validator-runner — structural check
 
 ```text
-Run: python benchmark/validate_items.py check --items [BATCH] --strict
+Run: python benchmark/validate_items.py check --items [BATCH] --expect [N] --strict
+(24 calibration, 180 freeze, 300 full — match --expect to the batch, or a good
+batch fails on counts alone)
 Paste the full output (items/authored/claims/passages/strata/verdicts + every ERROR line).
 Fix schema errors only (counts, IDs, missing fields, strata balance 8/8/8). Do not change
 any claim text, evidence, verdict, or licence to make it pass. Unfilled slots are honest;
@@ -42,6 +46,10 @@ fabricated passages or verdicts are defects.
 ```
 
 ### D. Kappa-scorer — score only after humans finish
+
+Example effort rows (exact format — one per item, `annotator` = your initials):
+`cal-001,rater1,22,AB,"steady pace"` · `cal-001,rater2,25,CD,"checked locators"`
+Full template: `benchmark/annotation/effort.template.csv`.
 
 ```text
 All sheets are submitted (rater1.csv, rater2.csv, adjudication.csv, effort.csv all filled,
@@ -58,7 +66,7 @@ labels, do not relabel anything. A failed gate is a finding: keep the batch, rep
 - Pilots never label claims, adjudicate, or set gold verdicts. Agent output stays outside the item record until a human verifies it; verification confers gold.
 - Generation history lives only in batch manifests maintained by the production-system agent — `private/freeze180/MANIFEST.json` and `private/full300/MANIFEST.json`. Members never touch them, and no provenance or AI-related label ever goes into an item file.
 - One owner per file; verifier-audit scoring uses `build_audit.py assemble` + `verifier_audit.py score` (see `experiments/verifier_audit/README.md` §7), not this validator.
-- After scoring, post the κ / defect / H_attempt / unresolved numbers + pass/fail to the team channel and Member 2's agreement report.
+- After scoring, post the κ / defect / H_attempt / unresolved numbers + pass/fail to the team channel and P3's agreement report.
 
 ## Inputs → outputs
 
@@ -78,4 +86,4 @@ labels, do not relabel anything. A failed gate is a finding: keep the batch, rep
 
 ## Escalation
 
-Benchmark/protocol → **P3**. Verifier questions → **P6**. Batch/blinding → Member 2. Anything asking the agent to decide a verdict or label → refuse and route to the human owner.
+Benchmark/protocol → **P3**. Verifier questions → **P6**. Batch/blinding → P3. Anything asking the agent to decide a verdict or label → refuse and route to the human owner.
