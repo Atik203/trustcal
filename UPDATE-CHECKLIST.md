@@ -12,22 +12,23 @@
 | Item | Value |
 |---|---|
 | Branches | `main` = release/deployed frontend; `dev` = development |
-| Release tip | `v0.2.1` on both `main` and `dev`; `p0-release` tag = `7f2c11f`. |
+| Release tip | past PR #21 on both `main` and `dev` (core3 complete); `p0-release` tag = `7f2c11f`. |
 | Tags | `p0-gate` = `055a244`; `p0-release` = `7f2c11f` |
 | P0 gate | **13/13 passed, 0 failed, 0 pending** |
-| Tests | **639 passed** (514 at the P0 release) |
-| Report | `FYDP_Summer/out/fydp.pdf` - 70 pages, 80 cited works, explicit pdfLaTeX, 0 errors/undefined refs |
-| Journal | `Papev_Summer26_6/out/cas-sc-template.pdf` - 19 pages, 71 cited works, explicit pdfLaTeX, 0 errors/undefined refs |
+| Tests | **661 passed** (514 at the P0 release) |
+| Report | `FYDP_Report/fydp.pdf` – 75 pages, 80+ cited works, explicit pdfLaTeX, 0 errors/undefined refs |
+| Journal | `Journal_Paper/cas-sc-template.pdf` – 21 pages, 71 cited works, explicit pdfLaTeX, 0 errors/undefined refs |
 | Figures | six journal + two report-only figures at 6000 × 3375 (600+ DPI) |
 | Frontend | `npm run build` passes and prerenders all routes; `npm run lint` exits 0 |
 | Main stack (4-bit) | Qwen3.8-27B-AWQ-INT4 / Gemma-4-26B-A4B-AWQ / Mistral-24B-AWQ, **~53.3 GB** pinned |
 | Final stack | Qwen3.8-27B-FP8 / Gemma-4-26B-A4B-FP8 / Mistral-24B-AWQ, **73.68 GB** pinned |
-| 18 GB test gate | **NOT RUN** — `uiu-h200` 18 GB; 8–9B AWQ cache + Q4_K_M test route |
+| 18 GB test gate | **PASS 18–19 Nov 2026** — `uiu-h200` 18 GB; 8–9B AWQ trio + Q4_K_M templates, schema-valid |
 | 4-bit 80 GB smoke | **PASS 20 Nov 2026** — three 24–27B 4-bit models on 96 GB spot hosts (vLLM 0.34.0); B8/injection/placebo 5/5, oracle 4/4 valid (5th lost to a spot eviction) |
 | Core-prefix gate | **25+25 COMPLETE 20 Nov 2026** — `gpqa_main` seed 1, B8 vs B8-no-trust; feasibility/timing only (+0.08 at n=25 is noise, not efficacy) |
+| **Core row 2/24** | **COMPLETE 21 Nov 2026** — `gpqa_main` seed 1, 399+399 debates; B8 0.624 vs control 0.586, McNemar p=0.086 (n.s.); feasibility/timing, no efficacy claim |
 | FP8 96 GB smoke | **PASS 20 Nov 2026** - B8 5/5 valid, accuracy 4/5 (n=5 noise); mean 282.4 s vs 299.6 s 4-bit; not a Full-matrix gate |
 
-**P0 is engineering readiness, not efficacy evidence.** No accuracy, CMR, or sign-reversal claim exists yet. The 25+25 prefix is feasibility/timing only.
+**P0 is engineering readiness, not efficacy evidence.** First-row accuracy is measured (0.624 vs 0.586, p=0.086, not significant) — still no efficacy, CMR, or sign-reversal claim. The 25+25 prefix was feasibility/timing only.
 
 ---
 
@@ -151,7 +152,7 @@ next/*  short-lived slice branches; deleted after merge
 
 ## 9. What not to do
 
-- Do not run the main matrix before the pilot.
+- Do not run the Full matrix before v1.5 sign-off and the `sciclaim_180` loader.
 - Do not claim efficacy from P0 or from mock/integration tests.
 - Do not use BrokenMath/BrokenArXiv for evidence grounding or CCR.
 - Do not use ECR as a primary metric.
@@ -203,5 +204,5 @@ No “done” without a command and its output.
 | `docs/agent/08_COMPUTE_COST.md` | Real Vast.ai costs |
 | `experiments/p0/WAVE2.md` | P0 landing record |
 | `trustcal/IMPLEMENTATION_STATUS.md` | What is wired vs approximate |
-| `Papev_Summer26_6/CLAIMS_AUDIT.md` | Journal claims |
-| `FYDP_Summer/CLAIMS_AUDIT.md` | Report claims |
+| `Journal_Paper/CLAIMS_AUDIT.md` | Journal claims |
+| `FYDP_Report/CLAIMS_AUDIT.md` | Report claims |
