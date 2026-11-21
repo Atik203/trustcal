@@ -1,6 +1,6 @@
 # 01 — Current State
 
-**Snapshot:** 20 November 2026. **Branches:** `main` = `v0.2.1`; `dev` is ahead with pre-N1a hardening plus the N1a smoke and 25+25 Core-prefix records. **Tags:** `p0-gate` = `055a244`; `p0-release` = `7f2c11f`. **P0 is released; N1a smoke PASS; 25+25 prefix complete as feasibility/timing only; FP8 smoke PASS (serving); thread-parallel build implemented, locally verified, cloud proof pending; no running host (destroyed after a bidding war, $1.20 credit left, awaiting top-up); no efficacy results exist.**
+**Snapshot:** 21 November 2026. **Branches:** `main` = `v0.2.1` plus supervisor-report merges through PR #20 (`c55903b`); `dev` is ahead with pre-N1a hardening plus the N1a smoke and Core records. **Tags:** `p0-gate` = `055a244`; `p0-release` = `7f2c11f`. **P0 is released; N1a smoke PASS; N1b FP8 smoke PASS (serving); core3 first Core row COMPLETE 21 Nov 2026 (399+399 debates, B8 0.6241 vs control 0.5865, McNemar p=0.086); post-400 speed A/Bs READY; v1.5 + sciclaim_180 loader, then Full; host 61635389 STOPPED (warm fallback, ~$0.71/day), credit left $2.67; no other running host.**
 
 This file is the status source of truth. If code and this file disagree, **code wins**; update this file and report the discrepancy. The order of work is `roadmap.md`.
 
@@ -144,13 +144,14 @@ The detailed pre-P0 findings (injection without retrieval, CCR=0 in B8, `evidenc
 - The code paths for vanilla MAD, mock end-to-end, options/parser, trust projection, metrics, manifest, and verifier interface.
 - The N1a 4-bit smoke: B8/injection/placebo 5/5 PASS, oracle 4/4 valid records (5th lost to a spot eviction), per-debate times recorded; local mirror `trustcal/results/n1a/` (gitignored).
 - The 25+25 Core-prefix counts and timings (`experiments/core_prefix/README.md`): 25/25 unique records per arm, no duplicates or torn lines; B8 mean 245.5 s, control 185.5 s per debate.
+- The core3 completed row (`experiments/core3/README.md`): 399+399 debates (q27 quarantined), both runners clean, summaries 2026-11-21T07:29Z/07:42Z; B8 acc 0.6241 (249/399, CI 0.576–0.672) vs control 0.5865 (234/399, CI 0.536–0.634); paired 208/41/26/124; exact McNemar p=0.086; MPR 0.78/0.75; ARR 0.657/0.702; CCR-e 0.102/0.150; AUROC 0.518, Brier 0.292; 15.3 GPU-h, mean pair 138 s; 2 of 24 Core rows ≈ 800/8,000 debates. Sample lock and provenance hashes unchanged.
 - The 73.68 GB FP8 stack serving 3/3 on 96 GB (PASS 20 Nov 2026: B8 5/5 valid); the subset precision replication is still ahead.
 - The compiled page counts and the absence of LaTeX errors/undefined references.
 - The model-serving lessons from Gate 0 (quantization, vLLM nightly, sequential startup).
 
 ## 8. What cannot be trusted today
 
-- Any efficacy claim (accuracy, CMR, CCR, trust AUROC, sign reversal). Paid runs so far are the N1a smoke and the 25+25 feasibility/timing prefix only; the +0.08 prefix delta at n=25 is noise, not efficacy.
+- Any efficacy claim (accuracy, CMR, CCR, trust AUROC, sign reversal). Paid runs so far are the N1a smoke, the 25+25 feasibility/timing prefix, and the completed core3 row (399+399, McNemar p=0.086 — one dataset-seed, not significant, not a G3 pass).
 - Any claim that the injection arm alone tests the mechanism; the full B8+injection+trust path is wired and smoke-tested but not run at scale.
 - Any claim that B8 beats B4/iMAD/ConsensAgent; the prefix is underpowered (n=25/arm) and the approximate baselines carry fidelity labels.
 - Any claim of a formal bound or the R6 law; the theory is derived/not proved until an independent check.
@@ -175,6 +176,7 @@ The detailed pre-P0 findings (injection without retrieval, CCR=0 in B8, `evidenc
 - [x] N1.0 18 GB test gate: 8–9B vLLM trio and Q4_K_M main templates PASS with two mocks.
 - [x] N1a 4-bit smoke. **PASS 20 Nov 2026** (96 GB spot hosts, same 4-bit stack, vLLM 0.34.0).
 - [x] Core-prefix gate. **25+25 COMPLETE 20 Nov 2026** — feasibility/timing only, not a G2 pass.
+- [x] First Core dataset-seed (`gpqa_main` seed 1, B8 + B8-no-trust). **COMPLETE 21 Nov 2026** — 399+399 debates, McNemar p=0.086; 2 of 24 Core rows ≈ 800/8,000. Supervisor milestones 100–400(final) merged (main PR #20 = `c55903b`); B8 definitions via PR #19.
 - [x] N1b 96 GB FP8 smoke. **PASS 20 Nov 2026** (B8 5/5 valid; serving only, no precision claim).
 - [ ] Pilot passes G2. **Pending Dec 2026–Jan 2027.**
 - [x] Docs updated; `main` = `dev` with the full pipeline.

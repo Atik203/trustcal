@@ -1,7 +1,8 @@
 # Post-400 speed and cost plan
 
-**Status:** queued. Nothing here is applied until `core3` reaches 400 pairs; the row's
-condition stays frozen until then.
+**Status:** READY 21 Nov 2026. `core3` reached 399+399 debates (q27 quarantined)
+and the row is complete, so the speed/cost A/Bs are unblocked. The row's
+condition stays frozen.
 
 Measured baseline: ~68 s per debate (137–155 s per B8+control pair), on a 96 GB
 RTX PRO 6000 at $1.59/h all-in.

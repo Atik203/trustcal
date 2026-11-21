@@ -287,6 +287,8 @@ Then run `configs/experiments_precision.yaml`.
 
 **G3 pass:** primary endpoint measured with CIs; B8 > B8-no-trust direction; pre-registration unchanged.
 
+**Status (21 Nov 2026): first Core dataset-seed COMPLETE** — `gpqa_main` seed 1, B8 + B8-no-trust arms (`experiments/core3/`): 399+399 debates (q27 quarantined), 798 total, both runners clean. Final: B8 acc 0.6241 (249/399, CI 0.576–0.672) vs control 0.5865 (234/399, CI 0.536–0.634); paired 208/41/26/124; exact McNemar p=0.086. Counts as 2 of 24 Core rows ≈ 800/8,000 debates (10%). Full remains blocked on the v1.5 amendment + `sciclaim_180` loader (§9, §14.3).
+
 **Cost:** 1,280 GPU-h conservative cap (planned ~1,067 GPU-h), **$175–210**. Not runnable from the current $50 tranche.
 
 **Owner:** P2 + P4.

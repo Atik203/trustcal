@@ -89,8 +89,11 @@ export function OverviewPage() {
                 We target <strong>≥20% sycophancy reduction</strong> (CCR
                 metric) vs. vanilla MAD on GPQA-Main, MMLU-Pro STEM and SciClaimBench
                 primary sets; HLE is the abstention control, and
-                BrokenMath/BrokenArXiv are appendix-only. The Core run (24 runs)
-                is pre-registered; no efficacy claim is made yet.
+                BrokenMath/BrokenArXiv are appendix-only. Row 2/24 of the Core run
+                (GPQA-Main seed 1, B8 vs B8-no-trust) is complete: 798 debates
+                (399/arm, q27 quarantined), accuracy 62.4% vs 58.7% with exact
+                McNemar p&nbsp;=&nbsp;0.086 (not significant) — feasibility and
+                timing demonstrated, no efficacy claim.
               </p>
             </div>
           </div>
@@ -110,9 +113,11 @@ export function OverviewPage() {
             <p className="mt-3 text-[10px] leading-relaxed text-[#64748b] dark:text-[#94a3b8]">
               <strong>Current report evidence:</strong> 70-pp report, 19-pp journal,
               0 undefined references; tags <code>p0-gate</code> and{" "}
-              <code>p0-release</code>. Next: N1 96 GB smoke + FP8 precision
+              <code>p0-release</code>. Core row 2/24 (GPQA-Main seed 1) complete:
+              798 debates, ~15.3 GPU-h, mean pair 138&nbsp;s, McNemar
+              p&nbsp;=&nbsp;0.086 (n.s.). Next: N1 96 GB smoke + FP8 precision
               replication → WP-18 placebo/oracle → 24-item calibration →
-              verifier audit → G2 pilot (Dec 2026) → G3 Core (Jan 2027) →
+              verifier audit → G2 pilot (Dec 2026) → remaining Core rows →
               G4/G5 Full (Feb 2027).
             </p>
           </div>
@@ -134,7 +139,7 @@ export function OverviewPage() {
             {
               icon: CheckCircle,
               title: "The Goal",
-              desc: "Target ≥20% sycophancy reduction on GPQA-Main, MMLU-Pro STEM and SciClaimBench; 4 executable arms and a 6-arm target, with B1–B10 as comparison definitions. Efficacy is not yet measured.",
+              desc: "Target ≥20% sycophancy reduction on GPQA-Main, MMLU-Pro STEM and SciClaimBench; 4 executable arms and a 6-arm target, with B1–B10 as comparison definitions. Row 2/24 complete (798 debates, McNemar p=0.086, n.s.) — feasibility shown, no efficacy claim.",
             },
           ].map(({ icon: Icon, title, desc }) => (
             <div

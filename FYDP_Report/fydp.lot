@@ -1,0 +1,27 @@
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {3.1}{\ignorespaces Functional requirements and their verification. Gate-tested means the path runs without a GPU; paid-run evidence is still outstanding where marked.}}{12}{table.3.1}%
+\contentsline {table}{\numberline {3.2}{\ignorespaces Arms and controls. Core v1.0 is the executable matrix; Full is the 32-row gold-evidence target (36-row gold-answer alternate) pending WP-18.}}{20}{table.3.2}%
+\contentsline {table}{\numberline {3.3}{\ignorespaces Datasets and roles. SciClaimBench is a benchmark-freeze addition, not a Core v1.0 dataset.}}{21}{table.3.3}%
+\contentsline {table}{\numberline {3.4}{\ignorespaces Project phases, dates, deliverables, and gates.}}{23}{table.3.4}%
+\contentsline {table}{\numberline {3.5}{\ignorespaces Budget envelope. Core and Full share the 4-bit 24--27B matrix stack on one 80\,GB A100 spot; the 96\,GB FP8 stack is limited to the N1 smoke and precision replication.}}{24}{table.3.5}%
+\contentsline {table}{\numberline {3.6}{\ignorespaces Module ownership across the six team members.}}{24}{table.3.6}%
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {4.1}{\ignorespaces Serving configurations. The matrix stack is planned for Core and Full; the 96\,GB precision stack is limited to the N1 smoke and the GPQA replication.}}{27}{table.4.1}%
+\contentsline {table}{\numberline {4.2}{\ignorespaces P0 changes present in the implementation. Gate-tested means the path is exercised by the 13-check P0 gate, not that it has been validated on a paid run.}}{31}{table.4.2}%
+\contentsline {table}{\numberline {4.3}{\ignorespaces Gate~0 measurements for the vanilla debate loop. These values validate serving, orchestration, and parsing; they do not measure trust or collapse.}}{33}{table.4.3}%
+\contentsline {table}{\numberline {4.4}{\ignorespaces Measured engineering results at the time of writing. None of these is an efficacy result.}}{35}{table.4.4}%
+\contentsline {table}{\numberline {4.5}{\ignorespaces Conditions referenced in this chapter. Only B8 and B8-no-trust run in the Core row; the remaining three appear solely in the 5-question smokes.}}{36}{table.4.5}%
+\contentsline {table}{\numberline {4.6}{\ignorespaces Milestone snapshots of the first Core row (GPQA-Main, seed~1, question~27 excluded). The 100--300 rows are the frozen supervisor-report snapshots (paired $n$ of 100, 152, 201, 255, 302); 350 and Final are computed from the completed records.}}{37}{table.4.6}%
+\contentsline {table}{\numberline {4.7}{\ignorespaces Final endpoints of the first Core row (GPQA-Main, seed~1, $n=399$ eligible pairs). The paired gap is +0.038 with exact McNemar $p=0.086$: feasibility and timing evidence, not an efficacy claim.}}{38}{table.4.7}%
+\contentsline {table}{\numberline {4.8}{\ignorespaces 4-bit N1a smoke (53\,GB stack, one 96\,GB card, 5 questions per arm). One injection item showed a transient effect the first check missed: the targeted agent moved under the injected consensus in round~2 and reverted by round~3; the check now detects any post-injection change. The oracle arm's fifth record was lost to a spot eviction, not to the pipeline.}}{39}{table.4.8}%
+\contentsline {table}{\numberline {4.9}{\ignorespaces FP8 precision smoke (73.68\,GB stack, one 96\,GB card, same 5 questions as the 4-bit smoke). Mean 282.4\,s versus 299.6\,s: the same pace, so FP8 is a fidelity check, not a speed-up. FP8 endpoints: MPR 0.75, ARR 0.60, CCR-e 0.0.}}{39}{table.4.9}%
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {5.1}{\ignorespaces Planning envelope for the project.}}{46}{table.5.1}%
+\contentsline {table}{\numberline {5.2}{\ignorespaces Compute plan and the one completed GPU run.}}{47}{table.5.2}%
+\contentsline {table}{\numberline {5.3}{\ignorespaces Mapping with complex problem solving (Washington Accord P1--P7).}}{48}{table.5.3}%
+\contentsline {table}{\numberline {5.4}{\ignorespaces Knowledge profile mapping for P1 (K1--K8).}}{50}{table.5.4}%
+\contentsline {table}{\numberline {5.5}{\ignorespaces Mapping with complex engineering activities (A1--A5).}}{51}{table.5.5}%
+\contentsline {table}{\numberline {5.6}{\ignorespaces Mapping with program outcomes (PO1--PO12).}}{53}{table.5.6}%
+\addvspace {10\p@ }

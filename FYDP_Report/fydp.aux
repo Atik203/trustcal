@@ -183,8 +183,8 @@
 \citation{phan2026hle}
 \citation{petrov2025brokenmath,dekoninck2026matharena}
 \citation{gao2023enabling}
-\@writefile{lot}{\contentsline {table}{\numberline {3.3}{\ignorespaces Datasets and roles. EG-SSS is a benchmark-freeze addition, not a Core v1.0 dataset.}}{21}{table.3.3}\protected@file@percent }
-\newlabel{tab:datasets}{{3.3}{21}{Datasets and roles. EG-SSS is a benchmark-freeze addition, not a Core v1.0 dataset}{table.3.3}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {3.3}{\ignorespaces Datasets and roles. SciClaimBench is a benchmark-freeze addition, not a Core v1.0 dataset.}}{21}{table.3.3}\protected@file@percent }
+\newlabel{tab:datasets}{{3.3}{21}{Datasets and roles. SciClaimBench is a benchmark-freeze addition, not a Core v1.0 dataset}{table.3.3}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {3.3}Project Plan}{22}{section.3.3}\protected@file@percent }
 \newlabel{sec:project-plan}{{3.3}{22}{Project Plan}{section.3.3}{}}
 \citation{cohen1960coefficient}
@@ -227,82 +227,101 @@
 \newlabel{sec:results-discussion}{{4.3}{34}{Results and Discussion}{section.4.3}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {4.4}{\ignorespaces Measured engineering results at the time of writing. None of these is an efficacy result.}}{35}{table.4.4}\protected@file@percent }
 \newlabel{tab:engineering-results}{{4.4}{35}{Measured engineering results at the time of writing. None of these is an efficacy result}{table.4.4}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {4.5}{\ignorespaces Projected and target values used for planning. None of these is a measured result. The 2-point accuracy gain is illustrative and below the pre-registered MDE; the AUROC, $\kappa $, verifier, and citation rows are gate thresholds or sample plans, not effect estimates.}}{36}{table.4.5}\protected@file@percent }
-\newlabel{tab:expected-results}{{4.5}{36}{Projected and target values used for planning. None of these is a measured result. The 2-point accuracy gain is illustrative and below the pre-registered MDE; the AUROC, $\kappa $, verifier, and citation rows are gate thresholds or sample plans, not effect estimates}{table.4.5}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {4.5}{\ignorespaces Conditions referenced in this chapter. Only B8 and B8-no-trust run in the Core row; the remaining three appear solely in the 5-question smokes.}}{36}{table.4.5}\protected@file@percent }
+\newlabel{tab:core-conditions}{{4.5}{36}{Conditions referenced in this chapter. Only B8 and B8-no-trust run in the Core row; the remaining three appear solely in the 5-question smokes}{table.4.5}{}}
+\newlabel{eq:impl-verdict-score}{{4.4}{36}{Trust-weight equations}{equation.4.4}{}}
+\newlabel{eq:impl-decision}{{4.5}{36}{Trust-weight equations}{equation.4.5}{}}
+\citation{wilson1927probable}
+\citation{efron1993introduction,koehn2004statistical}
+\citation{mcnemar1947note}
+\citation{hanley1982meaning,brier1950verification}
+\newlabel{eq:metric-accuracy}{{4.6}{37}{Endpoint and metric definitions}{equation.4.6}{}}
+\newlabel{eq:metric-collapse}{{4.7}{37}{Endpoint and metric definitions}{equation.4.7}{}}
+\newlabel{eq:metric-trust}{{4.8}{37}{Endpoint and metric definitions}{equation.4.8}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {4.6}{\ignorespaces Milestone snapshots of the first Core row (GPQA-Main, seed~1, question~27 excluded). The 100--300 rows are the frozen supervisor-report snapshots (paired $n$ of 100, 152, 201, 255, 302); 350 and Final are computed from the completed records.}}{37}{table.4.6}\protected@file@percent }
+\newlabel{tab:core-milestones}{{4.6}{37}{Milestone snapshots of the first Core row (GPQA-Main, seed~1, question~27 excluded). The 100--300 rows are the frozen supervisor-report snapshots (paired $n$ of 100, 152, 201, 255, 302); 350 and Final are computed from the completed records}{table.4.6}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {4.7}{\ignorespaces Final endpoints of the first Core row (GPQA-Main, seed~1, $n=399$ eligible pairs). The paired gap is +0.038 with exact McNemar $p=0.086$: feasibility and timing evidence, not an efficacy claim.}}{38}{table.4.7}\protected@file@percent }
+\newlabel{tab:core-final}{{4.7}{38}{Final endpoints of the first Core row (GPQA-Main, seed~1, $n=399$ eligible pairs). The paired gap is +0.038 with exact McNemar $p=0.086$: feasibility and timing evidence, not an efficacy claim}{table.4.7}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.1}{\ignorespaces First completed Core row (GPQA-Main, seed~1, 399 eligible pairs; question~27 quarantined). Top left: cumulative accuracy after each question (thin lines) with milestone snapshots and 95\% CIs (markers; B8 circles, control squares). Top right: minority-position retention (MPR) at milestones. Bottom left: collapse rate on evidence-exposed items (CCR-e). Bottom right: mean question-pair time in seconds. The B8 lead (+0.038 at $n=399$) is not significant (exact McNemar $p=0.086$); the figure is read as feasibility and timing evidence.}}{38}{figure.4.1}\protected@file@percent }
+\newlabel{fig:core-results}{{4.1}{38}{First completed Core row (GPQA-Main, seed~1, 399 eligible pairs; question~27 quarantined). Top left: cumulative accuracy after each question (thin lines) with milestone snapshots and 95\% CIs (markers; B8 circles, control squares). Top right: minority-position retention (MPR) at milestones. Bottom left: collapse rate on evidence-exposed items (CCR-e). Bottom right: mean question-pair time in seconds. The B8 lead (+0.038 at $n=399$) is not significant (exact McNemar $p=0.086$); the figure is read as feasibility and timing evidence}{figure.4.1}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {4.8}{\ignorespaces 4-bit N1a smoke (53\,GB stack, one 96\,GB card, 5 questions per arm). One injection item showed a transient effect the first check missed: the targeted agent moved under the injected consensus in round~2 and reverted by round~3; the check now detects any post-injection change. The oracle arm's fifth record was lost to a spot eviction, not to the pipeline.}}{39}{table.4.8}\protected@file@percent }
+\newlabel{tab:core-smokes}{{4.8}{39}{4-bit N1a smoke (53\,GB stack, one 96\,GB card, 5 questions per arm). One injection item showed a transient effect the first check missed: the targeted agent moved under the injected consensus in round~2 and reverted by round~3; the check now detects any post-injection change. The oracle arm's fifth record was lost to a spot eviction, not to the pipeline}{table.4.8}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {4.9}{\ignorespaces FP8 precision smoke (73.68\,GB stack, one 96\,GB card, same 5 questions as the 4-bit smoke). Mean 282.4\,s versus 299.6\,s: the same pace, so FP8 is a fidelity check, not a speed-up. FP8 endpoints: MPR 0.75, ARR 0.60, CCR-e 0.0.}}{39}{table.4.9}\protected@file@percent }
+\newlabel{tab:core-fp8}{{4.9}{39}{FP8 precision smoke (73.68\,GB stack, one 96\,GB card, same 5 questions as the 4-bit smoke). Mean 282.4\,s versus 299.6\,s: the same pace, so FP8 is a fidelity check, not a speed-up. FP8 endpoints: MPR 0.75, ARR 0.60, CCR-e 0.0}{table.4.9}{}}
 \citation{zheng2023judging,wang2024large}
 \citation{gema2025mmulredux,plank2022labelvariation}
-\@writefile{toc}{\contentsline {section}{\numberline {4.4}Summary}{37}{section.4.4}\protected@file@percent }
-\newlabel{sec:implementation-summary}{{4.4}{37}{Summary}{section.4.4}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.4}Summary}{41}{section.4.4}\protected@file@percent }
+\newlabel{sec:implementation-summary}{{4.4}{41}{Summary}{section.4.4}{}}
 \citation{li2024survey}
-\@writefile{toc}{\contentsline {chapter}{\numberline {5}Standards and Design Constraints}{38}{chapter.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {5}Standards and Design Constraints}{42}{chapter.5}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
 \@writefile{loa}{\addvspace {10\p@ }}
-\@writefile{toc}{\contentsline {section}{\numberline {5.1}Compliance with the Standards}{38}{section.5.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.1}Software Standards}{38}{subsection.5.1.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.2}Hardware Standards}{39}{subsection.5.1.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.3}Communication Standards}{39}{subsection.5.1.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {5.2}Design Constraints}{40}{section.5.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.1}Economic Constraint}{40}{subsection.5.2.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.2}Environmental Constraint}{40}{subsection.5.2.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.3}Ethical Constraint}{40}{subsection.5.2.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.4}Health and Safety Constraint}{41}{subsection.5.2.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.5}Social Constraint}{41}{subsection.5.2.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.6}Political Constraint}{41}{subsection.5.2.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.7}Sustainability}{41}{subsection.5.2.7}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {5.3}Cost Analysis}{41}{section.5.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5.1}Compliance with the Standards}{42}{section.5.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.1}Software Standards}{42}{subsection.5.1.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.2}Hardware Standards}{43}{subsection.5.1.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.3}Communication Standards}{43}{subsection.5.1.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5.2}Design Constraints}{44}{section.5.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.1}Economic Constraint}{44}{subsection.5.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.2}Environmental Constraint}{44}{subsection.5.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.3}Ethical Constraint}{44}{subsection.5.2.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.4}Health and Safety Constraint}{45}{subsection.5.2.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.5}Social Constraint}{45}{subsection.5.2.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.6}Political Constraint}{45}{subsection.5.2.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.7}Sustainability}{45}{subsection.5.2.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5.3}Cost Analysis}{45}{section.5.3}\protected@file@percent }
 \citation{wang2024mmlupro}
 \citation{rein2024gpqa}
-\@writefile{lot}{\contentsline {table}{\numberline {5.1}{\ignorespaces Planning envelope for the project.}}{42}{table.5.1}\protected@file@percent }
-\newlabel{tab:budget-sic}{{5.1}{42}{Planning envelope for the project}{table.5.1}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {5.2}{\ignorespaces Compute plan and the one completed GPU run.}}{43}{table.5.2}\protected@file@percent }
-\newlabel{tab:budget-phase}{{5.2}{43}{Compute plan and the one completed GPU run}{table.5.2}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {5.4}Complex Engineering Problem}{43}{section.5.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.4.1}Complex Problem Solving}{43}{subsection.5.4.1}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {5.3}{\ignorespaces Mapping with complex problem solving (Washington Accord P1--P7).}}{44}{table.5.3}\protected@file@percent }
-\newlabel{tab:p_solve}{{5.3}{44}{Mapping with complex problem solving (Washington Accord P1--P7)}{table.5.3}{}}
-\@writefile{toc}{\contentsline {subsubsection}{P1: Depth of Knowledge Required}{44}{section*.42}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{P2: Range of Conflicting Requirements}{44}{section*.43}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{P3: Depth of Analysis}{44}{section*.44}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{P4: Familiarity of Issues}{44}{section*.45}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{P5: Extent of Applicable Codes}{45}{section*.46}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{P6: Extent of Stakeholder Involvement}{45}{section*.47}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{P7: Interdependence}{45}{section*.48}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{K1: Natural sciences}{45}{section*.49}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {5.4}{\ignorespaces Knowledge profile mapping for P1 (K1--K8).}}{46}{table.5.4}\protected@file@percent }
-\newlabel{tab:knowledge}{{5.4}{46}{Knowledge profile mapping for P1 (K1--K8)}{table.5.4}{}}
-\@writefile{toc}{\contentsline {paragraph}{K2: Mathematics}{46}{section*.50}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{K3: Engineering fundamentals}{46}{section*.51}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{K4: Specialist knowledge}{46}{section*.52}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{K5: Engineering methods}{46}{section*.53}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{K6: Computational methods}{46}{section*.54}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{K7: Codes and practices}{47}{section*.55}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{K8: Research and context}{47}{section*.56}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.4.2}Engineering Activities}{47}{subsection.5.4.2}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {5.5}{\ignorespaces Mapping with complex engineering activities (A1--A5).}}{47}{table.5.5}\protected@file@percent }
-\newlabel{tab:e_act}{{5.5}{47}{Mapping with complex engineering activities (A1--A5)}{table.5.5}{}}
-\@writefile{toc}{\contentsline {subsubsection}{A1: Range of Resources}{47}{section*.57}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{A2: Level of Interaction}{47}{section*.58}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{A3: Innovation}{48}{section*.59}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{A4: Consequences for Society and Environment}{48}{section*.60}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{A5: Familiarity}{48}{section*.61}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.4.3}Program Outcomes}{48}{subsection.5.4.3}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {5.6}{\ignorespaces Mapping with program outcomes (PO1--PO12).}}{49}{table.5.6}\protected@file@percent }
-\newlabel{tab:po_map}{{5.6}{49}{Mapping with program outcomes (PO1--PO12)}{table.5.6}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {5.5}Summary}{49}{section.5.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {chapter}{\numberline {6}Conclusion}{50}{chapter.6}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5.1}{\ignorespaces Planning envelope for the project.}}{46}{table.5.1}\protected@file@percent }
+\newlabel{tab:budget-sic}{{5.1}{46}{Planning envelope for the project}{table.5.1}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {5.2}{\ignorespaces Compute plan and the one completed GPU run.}}{47}{table.5.2}\protected@file@percent }
+\newlabel{tab:budget-phase}{{5.2}{47}{Compute plan and the one completed GPU run}{table.5.2}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5.4}Complex Engineering Problem}{47}{section.5.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4.1}Complex Problem Solving}{47}{subsection.5.4.1}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5.3}{\ignorespaces Mapping with complex problem solving (Washington Accord P1--P7).}}{48}{table.5.3}\protected@file@percent }
+\newlabel{tab:p_solve}{{5.3}{48}{Mapping with complex problem solving (Washington Accord P1--P7)}{table.5.3}{}}
+\@writefile{toc}{\contentsline {subsubsection}{P1: Depth of Knowledge Required}{48}{section*.45}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{P2: Range of Conflicting Requirements}{48}{section*.46}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{P3: Depth of Analysis}{48}{section*.47}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{P4: Familiarity of Issues}{48}{section*.48}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{P5: Extent of Applicable Codes}{49}{section*.49}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{P6: Extent of Stakeholder Involvement}{49}{section*.50}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{P7: Interdependence}{49}{section*.51}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{K1: Natural sciences}{49}{section*.52}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5.4}{\ignorespaces Knowledge profile mapping for P1 (K1--K8).}}{50}{table.5.4}\protected@file@percent }
+\newlabel{tab:knowledge}{{5.4}{50}{Knowledge profile mapping for P1 (K1--K8)}{table.5.4}{}}
+\@writefile{toc}{\contentsline {paragraph}{K2: Mathematics}{50}{section*.53}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{K3: Engineering fundamentals}{50}{section*.54}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{K4: Specialist knowledge}{50}{section*.55}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{K5: Engineering methods}{50}{section*.56}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{K6: Computational methods}{51}{section*.57}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{K7: Codes and practices}{51}{section*.58}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{K8: Research and context}{51}{section*.59}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4.2}Engineering Activities}{51}{subsection.5.4.2}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5.5}{\ignorespaces Mapping with complex engineering activities (A1--A5).}}{51}{table.5.5}\protected@file@percent }
+\newlabel{tab:e_act}{{5.5}{51}{Mapping with complex engineering activities (A1--A5)}{table.5.5}{}}
+\@writefile{toc}{\contentsline {subsubsection}{A1: Range of Resources}{51}{section*.60}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{A2: Level of Interaction}{51}{section*.61}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{A3: Innovation}{52}{section*.62}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{A4: Consequences for Society and Environment}{52}{section*.63}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{A5: Familiarity}{52}{section*.64}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4.3}Program Outcomes}{52}{subsection.5.4.3}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5.6}{\ignorespaces Mapping with program outcomes (PO1--PO12).}}{53}{table.5.6}\protected@file@percent }
+\newlabel{tab:po_map}{{5.6}{53}{Mapping with program outcomes (PO1--PO12)}{table.5.6}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5.5}Summary}{53}{section.5.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {6}Conclusion}{54}{chapter.6}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
 \@writefile{loa}{\addvspace {10\p@ }}
-\newlabel{chapter:conclusion}{{6}{50}{Conclusion}{chapter.6}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {6.1}Summary}{50}{section.6.1}\protected@file@percent }
-\newlabel{sec:conclusion-summary}{{6.1}{50}{Summary}{section.6.1}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {6.2}Limitations}{50}{section.6.2}\protected@file@percent }
-\newlabel{sec:conclusion-limitations}{{6.2}{50}{Limitations}{section.6.2}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {6.3}Future Work}{51}{section.6.3}\protected@file@percent }
-\newlabel{sec:conclusion-future}{{6.3}{51}{Future Work}{section.6.3}{}}
+\newlabel{chapter:conclusion}{{6}{54}{Conclusion}{chapter.6}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6.1}Summary}{54}{section.6.1}\protected@file@percent }
+\newlabel{sec:conclusion-summary}{{6.1}{54}{Summary}{section.6.1}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6.2}Limitations}{55}{section.6.2}\protected@file@percent }
+\newlabel{sec:conclusion-limitations}{{6.2}{55}{Limitations}{section.6.2}{}}
 \bibstyle{unsrt}
 \bibdata{fydp}
+\@writefile{toc}{\contentsline {section}{\numberline {6.3}Future Work}{56}{section.6.3}\protected@file@percent }
+\newlabel{sec:conclusion-future}{{6.3}{56}{Future Work}{section.6.3}{}}
 \bibcite{du2024improving}{{1}{}{{}}{{}}}
 \bibcite{wei2022chain}{{2}{}{{}}{{}}}
 \bibcite{wang-etal-2024-rethinking-bounds}{{3}{}{{}}{{}}}
@@ -379,10 +398,13 @@
 \bibcite{efron1993introduction}{{74}{}{{}}{{}}}
 \bibcite{card2020little}{{75}{}{{}}{{}}}
 \bibcite{pineau2021improving}{{76}{}{{}}{{}}}
-\bibcite{zheng2023judging}{{77}{}{{}}{{}}}
-\bibcite{wang2024large}{{78}{}{{}}{{}}}
-\bibcite{gema2025mmulredux}{{79}{}{{}}{{}}}
-\bibcite{plank2022labelvariation}{{80}{}{{}}{{}}}
-\@writefile{toc}{\contentsline {chapter}{References}{61}{chapter*.62}\protected@file@percent }
+\bibcite{wilson1927probable}{{77}{}{{}}{{}}}
+\bibcite{hanley1982meaning}{{78}{}{{}}{{}}}
+\bibcite{brier1950verification}{{79}{}{{}}{{}}}
+\bibcite{zheng2023judging}{{80}{}{{}}{{}}}
+\bibcite{wang2024large}{{81}{}{{}}{{}}}
+\bibcite{gema2025mmulredux}{{82}{}{{}}{{}}}
+\bibcite{plank2022labelvariation}{{83}{}{{}}{{}}}
+\@writefile{toc}{\contentsline {chapter}{References}{66}{chapter*.65}\protected@file@percent }
 \providecommand\NAT@force@numbers{}\NAT@force@numbers
-\gdef \@abspage@last{69}
+\gdef \@abspage@last{75}

@@ -35,13 +35,13 @@ export const ideaMetadata: IdeaMetadata[] = [
     targetVenue: 'TACL (rolling) · EMNLP 2028 fallback',
     status: 'Recommended',
     docType: 'FYDP Proposal · Idea 1 of 1 · Rank #1 · P0 gate 13/13',
-    subtitle: 'Domain: Agentic AI · LLM Reasoning · Multi-Agent Systems · Trust Calibration · P0 status, no efficacy results yet',
+    subtitle: 'Domain: Agentic AI · LLM Reasoning · Multi-Agent Systems · Trust Calibration · P0 status · Core row 2/24 (GPQA-Main seed 1) complete: feasibility + timing, efficacy n.s. (McNemar p=0.086)',
     coverItems: [
       { label: 'Target Venue', value: 'TACL (rolling) · EMNLP 2028 fallback' },
       { label: 'P0 Gate', value: '13 / 13 passed' },
       { label: 'P0 Tests', value: '514' },
       { label: 'Project Report', value: '70-pp report · 19-pp journal · 0 undefined refs' },
-      { label: 'Core Matrix', value: '24 runs · 1,280 GPU-h' },
+      { label: 'Core Matrix', value: 'Row 2/24 complete · 798 debates · p=0.086 (n.s.)' },
     ],
     kpis: [
       { value: '514', label: 'P0 Tests Passing', variant: 'default' },

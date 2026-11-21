@@ -5,7 +5,7 @@ Canonical agent instructions for this directory: the P0-released implementation 
 ## Golden rules
 
 - **vLLM owns the GPU.** `scripts/serve.sh` is the only GPU-touching file; everything else is plain Python over the OpenAI-compatible APIs at `127.0.0.1:8000-8002`. Use `127.0.0.1`, never `localhost`: the Windows IPv6 fallback costs about 2s per request.
-- **`configs/models.yaml` is the only model switch** (Dev ↔ Final). Serve commands are generated from it by `scripts/gen_serve_cmds.py` — never hand-edit commands into `serve.sh`, and never rename a served model (`--served-model-name` mismatches caused request 404s in an earlier draft).
+- **`configs/models.yaml` is the only model switch** (Dev ↔ Four-bit ↔ Final). Serve commands are generated from it by `scripts/gen_serve_cmds.py` — never hand-edit commands into `serve.sh`, and never rename a served model (`--served-model-name` mismatches caused request 404s in an earlier draft).
 - **Order discipline (blueprint §13 / roadmap):** 18 GB test gate → 4-bit smoke → pilot → Core matrix → 96 GB FP8 smoke/precision → Full matrix. Never run a matrix before the pilot. The Core matrix is four conditions × 3 datasets × 2 seeds = 24 rows; the six-arm Full target is a separate later design. The 96 GB smoke is not a gate for the 4-bit Full matrix. On the 4-bit path the pilot can be the **Core prefix** (first 25–50 questions of the actual B8 and B8-no-trust rows, `--limit 400 --stop-after N`) instead of a separate 100–150-question run; that substitution needs a signed amendment, and the prefix is resumed as part of Core only if it passes.
 - **The Core matrix source is `configs/experiments_fourbit.yaml`**, not `configs/datasets.yaml`. `datasets.yaml` carries dataset revisions/provenance and loader defaults; its `seeds` and `sample_caps` are not the matrix values. `configs/experiments.yaml` is the released historical Core config. Do not add the six-arm target to it; WP-18 added a separate `configs/experiments_full.yaml`.
 - **`results/` is gitignored and load-bearing** (Gate 0 logs, trust trajectories, matrix summaries). Copy artifacts off the box before destroying an instance.
@@ -16,7 +16,7 @@ Canonical agent instructions for this directory: the P0-released implementation 
 | Path | Owns |
 | --- | --- |
 | `configs/models.yaml` | agent → checkpoint, port, quant, VRAM split, per-agent flags, Final pins |
-| `configs/phase.yaml` | default phase (`dev` or `final`) when a CLI does not pass `--phase` |
+| `configs/phase.yaml` | default phase (`dev`, `fourbit`, or `final`) when a CLI does not pass `--phase` |
 | `configs/experiments.yaml` | released Core matrix: 4 conditions × 3 datasets × 2 seeds |
 | `configs/experiments_full.yaml` | six-arm Full matrix; 32-row gold-evidence default / 36-row gold-answer alternate |
 | `configs/datasets.yaml` | dataset revisions, splits, provenance, loader seeds/caps (not the matrix) |
@@ -67,11 +67,11 @@ The **six-arm target** adds `B8-placebo` (cross-agent round-pool verdict shuffle
 
 ## Dev stack (RTX A6000 48GB)
 
-Quantized checkpoints pinned in `models.yaml` — the model names stay the roadmap's, the artifacts are 4-bit AWQ (Qwen), QAT w4a16 (Gemma), AWQ 4-bit (Ministral; the official FP8 checkpoint cannot run on Ampere). Nightly vLLM is mandatory; `install_vllm.sh` auto-detects the wheel index from the driver (≥580 → cu130, else cu129).
+Quantized checkpoints pinned in `models.yaml` — the model names stay the roadmap's, the artifacts are 4-bit AWQ (Qwen), QAT w4a16 (Gemma), AWQ 4-bit (Ministral; the official FP8 checkpoint cannot run on Ampere). Pinned vLLM 0.34.0 is the default (`VLLM_NIGHTLY=1` is the fallback); `install_vllm.sh` auto-detects the wheel index from the driver (≥580 → cu130, else cu129).
 
 ## 4-bit matrix stack (RTX A100 80GB)
 
-`models.yaml` pins Qwen3.8-27B-AWQ-INT4 (21.0GB), Gemma-4-26B-A4B AWQ (17.2GB), and Mistral-24B-AWQ (15.06GB) at **53.3GB** total weights, with a 0.90 utilization sum and 8192-token context. This is the main Core/Full matrix stack. The offline check is:
+`models.yaml` pins Qwen3.8-27B-AWQ-INT4 (21.0GB), Gemma-4-26B-A4B AWQ (17.2GB), and Mistral-24B-AWQ (15.06GB) at **53.26GB** total weights, with a 0.90 utilization sum and 8192-token context. This is the main Core/Full matrix stack. The offline check is:
 
 ```bash
 python scripts/check_stack.py --phase fourbit
@@ -151,11 +151,11 @@ The test-only stack is:
 
 Download Q4_K_M test files on the university host, one at a time, not in the cloud; keep the project under 200 GB. The cloud host downloads only the final AWQ/FP8 stack.
 
-With the current **$50** tranche, the allowed spend is the 80 GB 4-bit smoke (~$1–2), the 80 GB pilot (~$15–20), and optionally one 96 GB 5-question smoke (~$2–8) after the pilot is stable. Do not run a 96 GB pilot (~$37–45) or the FP8 precision replication (~$25–40) from this tranche. Ask the user before any GPU run; do not expose ports; record approved hardware/driver/CUDA/environment changes in `docs/DECISIONS.md`.
+Budget rule: run Core/Full matrix work on the 80 GB on-demand 4-bit path; reserve the 96 GB class for FP8-specific checks only after their smoke passes. Ask the user before any GPU run; do not expose ports; record approved hardware/driver/CUDA/environment changes in `docs/DECISIONS.md`.
 
 ## Managing the GPU instance from a local machine (Vast.ai)
 
-> **Not the current access path.** The university `uiu-h200` slice is the approved GPU. Do not create a Vast instance without explicit user approval. The notes below are retained for a future approved fallback.
+> **Approval-gated path.** The university `uiu-h200` slice is the default approved GPU. Do not create a cloud instance without explicit user approval. The notes below are retained for an approved fallback.
 
 Vast's supported agent integration is the **CLI + agent skill** (no official MCP server; third-party MCP servers exist but are not vendored here). Install the skill for opencode and other skills-framework agents:
 

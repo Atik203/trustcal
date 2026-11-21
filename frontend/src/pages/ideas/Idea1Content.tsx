@@ -84,6 +84,17 @@ export function Idea1Content() {
             done.
           </p>
         </Callout>
+        <Callout variant="success" title="✅ Completed Core row 2/24 — GPQA-Main seed 1 (Nov 2026)">
+          <p className="mb-2">
+            <strong>B8 (trust) vs B8-no-trust (majority): 798 debates (399/arm, q27 quarantined).</strong>{" "}
+            Accuracy 62.4% (249/399, 95% CI 57.6–67.2) vs 58.7% (234/399, CI 53.6–63.4);
+            paired outcomes 208 both / 41 B8-only / 26 control-only / 124 neither;
+            exact McNemar p&nbsp;=&nbsp;0.086 (<strong>not significant</strong>).
+            MPR 0.78/0.75, ARR 0.66/0.70, CCR-e 0.10/0.15, ~15.3 GPU-h, mean pair 138 s.
+            Milestones 100/150/200/250/300/350/400 (final) merged upstream. This demonstrates
+            <strong> feasibility + timing</strong>, not efficacy — no efficacy claim is made.
+          </p>
+        </Callout>
         <p className="mb-3 text-sm sm:text-base">
           We propose a{" "}
           <strong>trust-calibrated multi-agent scientific deliberation</strong>{" "}
@@ -1098,7 +1109,10 @@ export function Idea1Content() {
         <p className="text-xs text-[#64748b] dark:text-[#94a3b8] mb-4">
           <strong>Executable now:</strong> B3, B4-matched, B8-no-trust, and B8
           (4 arms × GPQA 400 / MMLU-Pro 400 / HLE 200 × 2 seeds = 24 runs,
-          1,280 GPU-h). The 6-arm target adds B8-placebo and B8-oracle through
+          1,280 GPU-h). Row 2/24 (GPQA-Main seed 1, B8 vs B8-no-trust) is
+          complete: 798 debates (399/arm, q27 quarantined), accuracy 62.4% vs
+          58.7%, exact McNemar p&nbsp;=&nbsp;0.086 (n.s.) — feasibility + timing,
+          no efficacy claim. The 6-arm target adds B8-placebo and B8-oracle through
           WP-18; the pre-registration records both the target and the executable
           subset. The primary Full matrix is 32 rows with the gold-evidence
           oracle on SciClaimBench; the 36-row alternate uses gold-answer trust.
@@ -1336,7 +1350,7 @@ export function Idea1Content() {
             {
               step: 12,
               title: "Core run (24 runs) then Full run target",
-              desc: "G3 Core: 4 arms × GPQA 400 / MMLU-Pro 400 / HLE 200 × 2 seeds = 24 runs at 1,280 GPU-h. G4/G5 Full primary: 32 rows at 300 items/dataset with the gold-evidence oracle on SciClaimBench (1,280 GPU-h); the 36-row gold-answer alternate is 1,440 GPU-h. B8-placebo/B8-oracle are WP-18.",
+              desc: "G3 Core: 4 arms × GPQA 400 / MMLU-Pro 400 / HLE 200 × 2 seeds = 24 runs at 1,280 GPU-h. Row 2/24 (GPQA-Main seed 1, B8 vs B8-no-trust) complete Nov 2026: 798 debates, McNemar p=0.086 (n.s.). G4/G5 Full primary: 32 rows at 300 items/dataset with the gold-evidence oracle on SciClaimBench (1,280 GPU-h); the 36-row gold-answer alternate is 1,440 GPU-h. B8-placebo/B8-oracle are WP-18.",
             },
             {
               step: 13,

@@ -43,11 +43,11 @@ frontend/            React app (Vite root; see Routes below)
     pages/               One component per route
   scripts/prerender.mjs  Headless-Chrome prerender, runs after vite build
 trustcal/              Python pipeline (P0 released; vLLM serving + debate runner; see trustcal/AGENTS.md)
-  configs/             models.yaml (Dev/Final switch), experiments.yaml (Core matrix),
+  configs/             models.yaml (Dev/Four-bit/Final switch), experiments.yaml (Core matrix),
                        phase.yaml (default stack), datasets.yaml (revisions/provenance)
   src/trustcal/        inference · agents · orchestrator (injection) · trust · retrieval ·
                        eval · runner · preflight
-  scripts/             setup.sh, serve.sh, run_experiment.py, run_matrix.py, p0_gate.py,
+  setup.sh (top level); scripts/ serve.sh, run_experiment.py, run_matrix.py, p0_gate.py,
                        check_stack.py, preflight.py, mock_vllm.py, annotate.py, smoke_test.py
 experiments/           Per-run reports + committed artifacts and `next/WP-*.md` planning
                        records (index in experiments/README.md)
@@ -122,7 +122,7 @@ The university GPU is the current approved compute path. Use it only for this pr
 
 The 18 GB slice cannot hold the 53.26 GB 4-bit matrix stack, the 73.68 GB FP8 stack, or the ~25 GB dev trio. Do not schedule the Core/Full matrices, the multi-model smoke, or the FP8 precision replication on it. Use it only for single-model interface, prompt, parser, or retrieval checks: 8–9B AWQ with vLLM, or Q4_K_M main models with llama.cpp at 4k context, one model at a time. Do not download Q4_K_M test files on a cloud host; download them on the university host and keep the project under 200 GB.
 
-With the current **$50** tranche, do not run a 96 GB pilot or precision replication. The allowed spend is the 80 GB 4-bit smoke (~$1–2), the 80 GB pilot (~$15–20), and optionally one 96 GB 5-question smoke (~$2–8) after the pilot is stable; keep $20–30 as a retry/bandwidth reserve.
+Budget rule: run Core/Full matrix work on the 80 GB on-demand 4-bit path; reserve the 96 GB class for FP8-specific checks only after their smoke passes. Ask the user before any paid GPU run and record the chosen offer and cost in the run notes; keep a retry/bandwidth reserve.
 
 ## Cloud GPU rental (Vast.ai and similar)
 
