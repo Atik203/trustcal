@@ -41,12 +41,84 @@ export interface RiskRow {
   mitigation: string;
 }
 
+// Completed Core row — GPQA-Main seed 1, B8 (trust) vs B8-no-trust
+// (majority). Single source of truth for the finished row; pages and
+// slides render from this, so the numbers stay consistent.
+export interface CoreRowResult {
+  dataset: string;
+  seed: number;
+  debatesPerArm: number;
+  totalDebates: number;
+  quarantined: string;
+  b8Accuracy: string;
+  b8Correct: number;
+  b8CiLow: number;
+  b8CiHigh: number;
+  controlAccuracy: string;
+  controlCorrect: number;
+  controlCiLow: number;
+  controlCiHigh: number;
+  pairedBoth: number;
+  pairedB8Only: number;
+  pairedControlOnly: number;
+  pairedNeither: number;
+  mcnemarP: number;
+  mprB8: number;
+  mprControl: number;
+  arrB8: number;
+  arrControl: number;
+  ccrB8: number;
+  ccrControl: number;
+  gpuHours: number;
+  meanPairSeconds: number;
+  milestones: string;
+}
+
+export const coreRowResult: CoreRowResult = {
+  dataset: 'GPQA-Main',
+  seed: 1,
+  debatesPerArm: 399,
+  totalDebates: 798,
+  quarantined: 'q27 (options are literal letters)',
+  b8Accuracy: '62.4%',
+  b8Correct: 249,
+  b8CiLow: 57.6,
+  b8CiHigh: 67.2,
+  controlAccuracy: '58.7%',
+  controlCorrect: 234,
+  controlCiLow: 53.6,
+  controlCiHigh: 63.4,
+  pairedBoth: 208,
+  pairedB8Only: 41,
+  pairedControlOnly: 26,
+  pairedNeither: 124,
+  mcnemarP: 0.086,
+  mprB8: 0.78,
+  mprControl: 0.75,
+  arrB8: 0.66,
+  arrControl: 0.70,
+  ccrB8: 0.10,
+  ccrControl: 0.15,
+  gpuHours: 15.3,
+  meanPairSeconds: 138,
+  milestones: '100 / 150 / 200 / 250 / 300 / 350 / 400 (final)',
+};
+
+// Short honest summary: feasibility + timing demonstrated, no efficacy claim
+// (exact McNemar p = 0.086, not significant; CIs overlap).
+export const coreRowSummary =
+  'Row 2/24 (GPQA-Main seed 1, B8 vs B8-no-trust) complete Nov 2026: 798 debates ' +
+  '(399/arm, q27 quarantined). Accuracy 62.4% (249/399, 95% CI 57.6–67.2) vs 58.7% ' +
+  '(234/399, CI 53.6–63.4); paired 208/41/26/124, exact McNemar p = 0.086 (n.s.). ' +
+  'MPR 0.78/0.75, ARR 0.66/0.70, CCR-e 0.10/0.15, ~15.3 GPU-h, mean pair 138 s. ' +
+  'Feasibility + timing demonstrated; no efficacy claim.';
+
 // Execution plan — P0 (Nov 2026) through paper submission (Dec 2027)
 export const ganttPhases: GanttPhase[] = [
   { name: 'Ph 0: Literature & Setup', duration: 'Jul–Sep 2026', deliverables: 'Literature freeze, vLLM 3-model serving on the A6000, Gate 0 MAD reproduction — passed 16 Sep 2026 (10/10 debates × 3 rounds)', progress: 100, barVariant: 'teal' },
   { name: 'Ph 1: P0 Engineering', duration: 'Oct–Nov 2026', deliverables: 'Core wired: options in prompts, parser/scorer, trust simplex projection, verifier interface, claim-domain routing, endpoints, manifest/resume. 514 tests; P0 gate 13/13 passed.', progress: 100, barVariant: 'default' },
   { name: 'Ph 2: Pilot run', duration: 'Dec 2026', deliverables: 'N1 96 GB smoke + FP8 precision replication ($25–40) → WP-18 placebo/oracle → 24-item calibration → verifier audit (150–200 pairs; lexical 0.58 balanced accuracy; target ≥0.75, κ ≥0.60) → 50-question Month-1 pilot → 100–150-question G2 pilot. 3 seeds for the pilot; 2 for the main matrix. G2 decides whether the Core run proceeds.', progress: 0, barVariant: 'amber' },
-  { name: 'Ph 3: Core run', duration: 'Jan 2027', deliverables: 'G3 Core run: 4 executable arms (B3, B4-matched, B8-no-trust, B8) × GPQA-Main 400 / MMLU-Pro 400 / HLE 200 × 2 seeds = 24 runs, 1,280 GPU-h. B8-oracle is not a Core arm; SciClaimBench is not in Core v1.0 (180 items at the v1.2 benchmark freeze). PRE_REGISTRATION.md v1.0.', progress: 0, barVariant: 'rose' },
+  { name: 'Ph 3: Core run', duration: 'Jan 2027', deliverables: 'G3 Core run: 4 executable arms (B3, B4-matched, B8-no-trust, B8) × GPQA-Main 400 / MMLU-Pro 400 / HLE 200 × 2 seeds = 24 runs, 1,280 GPU-h. Row 2/24 (GPQA-Main seed 1, B8 vs B8-no-trust) complete Nov 2026: 798 debates, McNemar p=0.086 (n.s.). B8-oracle is not a Core arm; SciClaimBench is not in Core v1.0 (180 items at the v1.2 benchmark freeze). PRE_REGISTRATION.md v1.0.', progress: 8, barVariant: 'rose' },
   { name: 'Ph 4: Full run + benchmark', duration: 'Feb 2027', deliverables: 'G4/G5 Full: 32 rows at 300 items/dataset with the gold-evidence oracle on SciClaimBench (1,280 GPU-h; $210), plus a 36-row gold-answer alternate (1,440 GPU-h; $235). Adds B8-placebo/B8-oracle via WP-18. SciClaimBench ladder: 180 floor, 300 target, 600 stretch, 800 no-go.', progress: 0, barVariant: 'rose' },
   { name: 'Ph 5: Human Eval + SDT', duration: 'Mar 2027', deliverables: 'Human evaluation / SDT, benchmark annotation, and verifier-audit follow-up.', progress: 0, barVariant: 'default' },
   { name: 'Ph 6: Results Freeze', duration: 'Apr 2027', deliverables: 'Freeze results, CIs, and effect sizes. No new runs or arm changes after the freeze.', progress: 0, barVariant: 'amber' },
@@ -78,8 +150,8 @@ export const milestones: TimelineItem[] = [
   {
     milestone: 'Core run',
     date: 'Jan 2027',
-    description: 'G3 Core run: 4 executable arms × GPQA-Main 400 / MMLU-Pro 400 / HLE 200 × 2 seeds = 24 runs, budgeted at 1,280 GPU-h. B8-oracle is not a Core arm, and SciClaimBench is not in Core v1.0. No efficacy claim is made before the pre-registered analysis.',
-    deliverable: 'G3 Core matrix + pre-registered causal contrast (B8 vs B8-no-trust)',
+    description: 'G3 Core run: 4 executable arms × GPQA-Main 400 / MMLU-Pro 400 / HLE 200 × 2 seeds = 24 runs, budgeted at 1,280 GPU-h. Row 2/24 (GPQA-Main seed 1, B8 vs B8-no-trust) complete Nov 2026: 798 debates (399/arm, q27 quarantined), accuracy 62.4% vs 58.7%, exact McNemar p = 0.086 (n.s.) — feasibility + timing demonstrated, no efficacy claim. B8-oracle is not a Core arm, and SciClaimBench is not in Core v1.0.',
+    deliverable: 'G3 Core matrix + pre-registered causal contrast (B8 vs B8-no-trust) — row 2/24 done',
   },
   {
     milestone: 'Full run + benchmark',

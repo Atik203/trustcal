@@ -1,7 +1,26 @@
 # core3 — gpqa_main seed 1, B8 vs B8-no-trust (resilient row)
 
-**Status:** 30/400 records per arm. Question 27 is quarantined. The 27 records
-written before the resilience layer were adopted, not re-run.
+**Status:** COMPLETE 21 Nov 2026 — 399 debates/arm (q27 quarantined of 400),
+798 total. Both runners exited cleanly; summaries written 2026-11-21T07:29Z
+(B8) / 07:42Z (control). The 27 records written before the resilience layer
+were adopted, not re-run.
+
+## Final result
+
+| Metric | B8 (trust, n=399) | Control (majority, n=399) |
+| --- | --- | --- |
+| Final accuracy (95% CI) | 0.6241 (249/399, 0.576–0.672) | 0.5865 (234/399, 0.536–0.634) |
+| Paired (both / B8-only / ctl-only / neither) | 208 / 41 / 26 / 124 | — |
+| Exact McNemar | p = 0.086 (not significant) | — |
+| MPR | 0.78 | 0.75 |
+| ARR | 0.657 | 0.702 |
+| CCR-e | 0.102 | 0.150 |
+| Trust AUROC / Brier | 0.518 / 0.292 | — |
+| Cost | 15.3 GPU-h; row spend ~$17–19; mean pair 138 s | — |
+
+Host `61635389` (96 GB S, $1.59/h) is STOPPED, not destroyed (warm fallback,
+~$0.71/day); credit left $2.67. Counts as 2 of 24 Core rows ≈ 800/8,000
+debates (10%).
 
 ## Identity
 
@@ -19,6 +38,10 @@ The 400-question parent sample is frozen in `parent_sample.json` (captured at
 `b5faa10`) and `sample.lock.json`. A later loader change cannot shift this row.
 
 ## Resume
+
+**RETIRED 21 Nov 2026 — row complete (399+399).** Host `61635389` is stopped
+(warm fallback), both runners exited cleanly, and no resume is needed. The
+commands below are kept for provenance only.
 
 ```bash
 # after a host restart the vLLM servers are gone; restart the FOURBIT stack:
@@ -63,7 +86,9 @@ still has no record.
 
 ## Timing and cost
 
-Measured on the 30 records: ~145 s per pair, ~$1.59/h → ~369 remaining pairs
-(q31–q399; q27 stays quarantined) ≈ 15 h ≈ **$23–25**. The row resumes at the
-first question id without a record; the 27 adopted records and the three smoke
-records are never re-run.
+Actuals: 798 debates at ~138 s mean per pair, 15.3 GPU-h on host `61635389`
+(96 GB S, $1.59/h) → row spend **~$17–19**. The host is stopped, not
+destroyed (~$0.71/day warm fallback); credit left $2.67.
+
+(Superseded 30-record estimate: ~145 s per pair, ~$23–25 for the remaining
+369 pairs.)

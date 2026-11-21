@@ -7,5 +7,6 @@
 \contentsline {figure}{\numberline {3.3}{\ignorespaces Mock-up of the command-line interface for running experiments and writing JSON result packages.}}{15}{figure.3.3}%
 \contentsline {figure}{\numberline {3.4}{\ignorespaces Mock-up of the planned web dashboard showing agent positions, the trust trajectory, and per-claim evidence verdicts.}}{15}{figure.3.4}%
 \addvspace {10\p@ }
+\contentsline {figure}{\numberline {4.1}{\ignorespaces First completed Core row (GPQA-Main, seed~1, 399 eligible pairs; question~27 quarantined). Top left: cumulative accuracy after each question (thin lines) with milestone snapshots and 95\% CIs (markers; B8 circles, control squares). Top right: minority-position retention (MPR) at milestones. Bottom left: collapse rate on evidence-exposed items (CCR-e). Bottom right: mean question-pair time in seconds. The B8 lead (+0.038 at $n=399$) is not significant (exact McNemar $p=0.086$); the figure is read as feasibility and timing evidence.}}{38}{figure.4.1}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }

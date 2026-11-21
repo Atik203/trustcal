@@ -1,4 +1,6 @@
-# FYDP Roadmap — Trust-Calibrated Multi-Agent Scientific Deliberation
+# FYDP Roadmap - Trust-Calibrated Multi-Agent Scientific Deliberation
+
+**Status key:** ✅ Done · 🟡 Running / next up · ⬜ Todo · 🔴 Blocked
 
 Phase-by-phase execution plan for **November 2026 – December 2027**. This file is the order-of-work source of truth for agents and the team. It is not a results document.
 
@@ -127,9 +129,9 @@ Run **one model at a time** with llama.cpp, `--ctx-size 4096`, q8 KV cache, and 
 
 ---
 
-## 3. Phase N1 — Hardware readiness
+## 🟡 3. Phase N1 — Hardware readiness
 
-### N1.0 — Free 18 GB test-only validation (Nov 2026)
+### ✅ N1.0 — Free 18 GB test-only validation (Nov 2026)
 
 **Objective:** finalize code, prompts, parser, serving flags, records, and the mock path before paying for cloud GPUs.
 
@@ -161,7 +163,7 @@ Run **one model at a time** with llama.cpp, `--ctx-size 4096`, q8 KV cache, and 
 
 **Cost:** $0 GPU. Time and university bandwidth only.
 
-### N1a — 4-bit three-model cloud smoke (Nov–Dec 2026)
+### ✅ N1a — 4-bit three-model cloud smoke (Nov–Dec 2026)
 
 **Objective:** prove the 53.26 GB stack serves all three models together.
 
@@ -185,7 +187,7 @@ python scripts/smoke_test.py --phase fourbit --limit 5 --arm B8-oracle
 
 **Cost:** 4–8 GPU-h, **$1–2** at $0.136/h. Do not add the separate $15–20 100–150-question pilot; use the Core-prefix gate (`§14.1`) after the smoke.
 
-### N1b — FP8 final-stack smoke and precision (Feb 2027)
+### 🟡 N1b — FP8 final-stack smoke and precision (Feb 2027)
 
 **Objective:** prove the 73.68 GB FP8 stack and run the small GPQA precision replication.
 
@@ -208,7 +210,7 @@ Then run `configs/experiments_precision.yaml`.
 
 ---
 
-## 4. Phase N2 — WP-18 and v1.3 sign-off (Nov–Dec 2026)
+## 🔴 4. Phase N2 — WP-18 and v1.3 sign-off (Nov–Dec 2026)
 
 **Objective:** freeze the six-arm semantics and the Full definition before any confirmatory row.
 
@@ -225,7 +227,7 @@ Then run `configs/experiments_precision.yaml`.
 
 ---
 
-## 5. Phase N3 — SciClaimBench calibration and freeze (Nov 2026–Feb 2027)
+## 🟡 5. Phase N3 — SciClaimBench calibration and freeze (Nov 2026–Feb 2027)
 
 **Objective:** build SciClaimBench at the scale the design can defend.
 
@@ -247,7 +249,7 @@ Then run `configs/experiments_precision.yaml`.
 
 ---
 
-## 6. Phase N4 — Verifier audit (Nov–Dec 2026)
+## 🟡 6. Phase N4 — Verifier audit (Nov–Dec 2026)
 
 **Objective:** turn the lexical verifier into a measured component.
 
@@ -259,7 +261,7 @@ Then run `configs/experiments_precision.yaml`.
 
 ---
 
-## 7. Phase N5 — Pilot run R2 (Dec 2026–Jan 2027)
+## ⬜ 7. Phase N5 — Pilot run R2 (Dec 2026–Jan 2027)
 
 **Objective:** verify wiring and estimate the effect before spending Core-run money.
 
@@ -275,7 +277,7 @@ Then run `configs/experiments_precision.yaml`.
 
 ---
 
-## 8. Phase N6 — Core run R3 (Jan–Feb 2027)
+## 🟡 8. Phase N6 — Core run R3 (Jan–Feb 2027)
 
 **Objective:** the minimum causal package.
 
@@ -287,13 +289,15 @@ Then run `configs/experiments_precision.yaml`.
 
 **G3 pass:** primary endpoint measured with CIs; B8 > B8-no-trust direction; pre-registration unchanged.
 
+**Status (21 Nov 2026): first Core dataset-seed COMPLETE** — `gpqa_main` seed 1, B8 + B8-no-trust arms (`experiments/core3/`): 399+399 debates (q27 quarantined), 798 total, both runners clean. Final: B8 acc 0.6241 (249/399, CI 0.576–0.672) vs control 0.5865 (234/399, CI 0.536–0.634); paired 208/41/26/124; exact McNemar p=0.086. Counts as 2 of 24 Core rows ≈ 800/8,000 debates (10%). Full remains blocked on the v1.5 amendment + `sciclaim_180` loader (§9, §14.3).
+
 **Cost:** 1,280 GPU-h conservative cap (planned ~1,067 GPU-h), **$175–210**. Not runnable from the current $50 tranche.
 
 **Owner:** P2 + P4.
 
 ---
 
-## 9. Phase N7 — Full run R5 (Feb–Mar 2027)
+## 🔴 9. Phase N7 — Full run R5 (Feb–Mar 2027)
 
 **Objective:** the complete 6-arm matrix for the paper.
 
@@ -316,7 +320,7 @@ Then run `configs/experiments_precision.yaml`.
 
 ---
 
-## 10. Phase N8 — Human evaluation and SDT (Mar 2027)
+## ⬜ 10. Phase N8 — Human evaluation and SDT (Mar 2027)
 
 **Scope:** 150–200 paired items, 3 raters; UWS/EWE/ARR taxonomy; citation faithfulness (300 pairs); expert ceiling (60 items); κ/ICC; SDT 3-axis for the paper, 6-axis for the thesis.
 
@@ -326,7 +330,7 @@ Then run `configs/experiments_precision.yaml`.
 
 ---
 
-## 11. Phase N9 — Law-testing and ablations (Apr 2027)
+## ⬜ 11. Phase N9 — Law-testing and ablations (Apr 2027)
 
 **Scope:** q sweep, ρ measurement/manipulation, granularity (claim vs document vs shuffled), shared-error floor, N/K/α/β robustness, natural-divergence subset.
 
@@ -338,7 +342,7 @@ Then run `configs/experiments_precision.yaml`.
 
 ---
 
-## 12. Phase N10 — Thesis (May–Jun 2027)
+## ⬜ 12. Phase N10 — Thesis (May–Jun 2027)
 
 **Scope:** full 6-arm matrix, 300–600 benchmark, 6-axis SDT, full proofs, SEA-Cert, negative results, accreditation, reproducibility.
 
@@ -346,7 +350,7 @@ Then run `configs/experiments_precision.yaml`.
 
 ---
 
-## 13. Phase N11 — Paper (Aug–Dec 2027)
+## ⬜ 13. Phase N11 — Paper (Aug–Dec 2027)
 
 **Scope:** the sharp boundary/causal/benchmark paper from the thesis.
 

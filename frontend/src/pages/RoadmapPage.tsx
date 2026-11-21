@@ -150,7 +150,7 @@ const monthPlan: MonthPlan[] = [
     phase: 'Core run',
     hours: '~20 hr/wk',
     learn: 'Nothing new — debugging discipline and log inspection only. If you need a concept, look it up on demand.',
-    build: 'G3 Core run: 4 arms × GPQA-Main 400 / MMLU-Pro 400 / HLE 200 × 2 seeds = 24 runs, 1,280 GPU-h. B8-oracle is not a Core arm; SciClaimBench is not in Core v1.0. No efficacy claim until the pre-registered analysis.',
+    build: 'G3 Core run: 4 arms × GPQA-Main 400 / MMLU-Pro 400 / HLE 200 × 2 seeds = 24 runs, 1,280 GPU-h. Row 2/24 (GPQA-Main seed 1, B8 vs B8-no-trust) complete Nov 2026: 798 debates (399/arm), McNemar p=0.086 (n.s.) — feasibility + timing, no efficacy claim. B8-oracle is not a Core arm; SciClaimBench is not in Core v1.0.',
     links: [],
   },
   {
@@ -309,7 +309,7 @@ export function RoadmapPage() {
               { step: 8, title: 'Baselines B1–B4', desc: 'Built and mock-verified; B3 and B4-matched are in the executable matrix.' },
               { step: 9, title: 'Baselines B5–B6 (Self-Consistency, MoA)', desc: 'Independent of core mechanism. Can build in parallel with step 10.' },
               { step: 10, title: 'Baseline B9 (iMAD reimplementation)', desc: 'Highest difficulty (~10 days). Sequenced last.' },
-              { step: 11, title: 'Core run → Full run', desc: 'G3 Core: 24 runs at 1,280 GPU-h. G4/G5 Full primary: 32 rows at 300 items/dataset with the gold-evidence oracle on SciClaimBench (1,280 GPU-h); the 36-row gold-answer alternate is 1,440 GPU-h. B8-placebo/B8-oracle are WP-18.' },
+              { step: 11, title: 'Core run → Full run', desc: 'G3 Core: 24 runs at 1,280 GPU-h; row 2/24 (GPQA-Main seed 1) complete Nov 2026: 798 debates, McNemar p=0.086 (n.s.). G4/G5 Full primary: 32 rows at 300 items/dataset with the gold-evidence oracle on SciClaimBench (1,280 GPU-h); the 36-row gold-answer alternate is 1,440 GPU-h. B8-placebo/B8-oracle are WP-18.' },
               { step: 12, title: 'Human evaluation + failure analysis', desc: 'Last — requires completed experimental results to annotate against.' },
             ].map(({ step, title, desc }) => (
               <div key={step} className="flex gap-3 items-start bg-[#f0f2f7] dark:bg-[#1a1d35] border border-[#e2e8f0] dark:border-[rgba(255,255,255,0.1)] rounded-md p-3 sm:p-4 hover:border-[#3b5bdb] dark:hover:border-[#3b5bdb] transition-colors">

@@ -178,8 +178,11 @@ export function ProposalPage() {
           }}
         >
           <strong>Implementation status (Nov 2026).</strong> P0 is engineering
-          readiness: 615 tests, 13/13 gate checks passed. No efficacy result has
-          been measured. Planned work is labelled as planned throughout.
+          readiness: 615 tests, 13/13 gate checks passed. Core row 2/24
+          (GPQA-Main seed 1, B8 vs B8-no-trust) is complete — 798 debates,
+          McNemar p&nbsp;=&nbsp;0.086 (not significant): feasibility + timing
+          demonstrated, no efficacy claim. All other planned work is labelled
+          as planned throughout.
         </p>
 
         <h2 style={h2Style}>Abstract</h2>
@@ -933,6 +936,54 @@ study. Scaling ablations at <em>N</em> &isin; &#123;2, 3, 5&#125; are planned
           made that B8 beats all B1&ndash;B10 comparison definitions.
         </p>
 
+        <h3 style={h3Style}>Completed Core row 2/24 — GPQA-Main seed 1 (Nov 2026)</h3>
+        <p>
+          The first Core row (B8 trust-weighted vs B8-no-trust majority control)
+          is finished: <strong>798 debates (399/arm)</strong>, with question 27
+          quarantined (options are literal letters) and excluded from the
+          denominators; milestones 100/150/200/250/300/350/400 (final) are
+          merged upstream. Accuracy is <strong>62.4% (249/399, 95% CI
+          57.6&ndash;67.2)</strong> for B8 vs <strong>58.7% (234/399, CI
+          53.6&ndash;63.4)</strong> for the control; paired outcomes are 208
+          both correct, 41 B8-only, 26 control-only, 124 neither (exact McNemar{" "}
+          <em>p</em>&nbsp;=&nbsp;0.086, <strong>not significant</strong>).
+          MPR 0.78/0.75, ARR 0.66/0.70, CCR-e 0.10/0.15. The row consumed
+          ~15.3 GPU-h at a mean 138&nbsp;s per pair. This demonstrates that the
+          pipeline runs end to end at scale (feasibility + timing); it is{" "}
+          <strong>not an efficacy claim</strong>.
+        </p>
+        <table style={tableStyle}>
+          <thead>
+            <tr>
+              <th style={thStyle}>Metric</th>
+              <th style={thStyle}>B8 (trust, n=399)</th>
+              <th style={thStyle}>Control (majority, n=399)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style={tdStyle}>Accuracy (95% CI)</td>
+              <td style={tdStyle}>62.4% (57.6&ndash;67.2)</td>
+              <td style={tdStyle}>58.7% (53.6&ndash;63.4)</td>
+            </tr>
+            <tr>
+              <td style={tdStyle}>MPR</td>
+              <td style={tdStyle}>0.78</td>
+              <td style={tdStyle}>0.75</td>
+            </tr>
+            <tr>
+              <td style={tdStyle}>ARR</td>
+              <td style={tdStyle}>0.66</td>
+              <td style={tdStyle}>0.70</td>
+            </tr>
+            <tr>
+              <td style={tdStyle}>CCR-e</td>
+              <td style={tdStyle}>0.10</td>
+              <td style={tdStyle}>0.15</td>
+            </tr>
+          </tbody>
+        </table>
+
         <h3 style={h3Style}>8.4 Ablation studies</h3>
         <p>
           Four planned ablation conditions isolate the contribution of each architectural
@@ -1018,9 +1069,11 @@ corpus); (A4) adaptive confidence gating disabled (debate runs on every
 
         <h2 style={h2Style}>10. Timeline and Milestones</h2>
         <p>
-          P0 was released in Nov 2026. The N1 96 GB smoke + FP8 precision
+          P0 was released in Nov 2026. Row 2/24 of the Core matrix (GPQA-Main
+          seed 1, B8 vs B8-no-trust: 798 debates, McNemar p&nbsp;=&nbsp;0.086,
+          n.s.) is already complete. The N1 96 GB smoke + FP8 precision
           replication, WP-18 placebo/oracle, 24-item calibration and verifier
-          audit precede the G2 pilot in Dec 2026. The G3 Core run follows in Jan 2027, and the G4/G5
+          audit precede the G2 pilot in Dec 2026. The remaining G3 Core rows follow in Jan 2027, and the G4/G5
           Full run plus the benchmark ladder in Feb 2027. Core and Full are
           separate matrices on the same 4-bit main stack; do not assume Core
           cells are reusable. The plan totals $500&ndash;600 with a $600 hard
@@ -1064,7 +1117,7 @@ corpus); (A4) adaptive confidence gating disabled (debate runs on every
             <tr>
               <td style={tdStyle}>Jan 2027</td>
               <td style={tdStyle}>Core run</td>
-              <td style={tdStyle}>G3: 4 arms × GPQA-Main 400 / MMLU-Pro 400 / HLE 200 × 2 seeds = 24 runs, 1,280 GPU-h; B8-oracle is not a Core arm; SciClaimBench is not in Core v1.0</td>
+              <td style={tdStyle}>G3: 4 arms × GPQA-Main 400 / MMLU-Pro 400 / HLE 200 × 2 seeds = 24 runs, 1,280 GPU-h; row 2/24 (GPQA-Main seed 1) complete Nov 2026: 798 debates, McNemar p=0.086 (n.s.); B8-oracle is not a Core arm; SciClaimBench is not in Core v1.0</td>
               <td style={tdStyle}>Core matrix + pre-registered causal contrast (B8 vs B8-no-trust)</td>
             </tr>
             <tr>

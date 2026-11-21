@@ -1,11 +1,11 @@
 \chapter{Implementation and Results}\label{chapter:implementation}
 
-This chapter records the implementation of the trust-calibrated deliberation framework and the results available at the time of writing. It separates three kinds of evidence. The first is what ran on real hardware: Gate~0, a vanilla multi-agent debate on ten GPQA questions, and a small live smoke of the optional B7 ceiling. The second is what the P0 gate checks without a GPU: option rendering, answer parsing, trust bounds, endpoints, dataset pins, claim routing, the manifest guard, and the matrix budget. The third is the test suite, which exercises the same modules on synthetic and mock inputs. The comparative matrix has not been run, so the chapter makes no claim that trust weighting reduces collapse or improves accuracy. Where a result does not yet exist, the chapter uses a clearly labelled projected value and states the basis for it.
+This chapter records the implementation of the trust-calibrated deliberation framework and the results available at the time of writing. It separates three kinds of evidence. The first is what ran on real hardware: Gate~0, a vanilla multi-agent debate on ten GPQA questions, a small live smoke of the optional B7 ceiling, the 4-bit N1a smoke, the FP8 precision smoke, and the first completed Core row (B8 trust versus the B8-no-trust majority control on GPQA-Main, seed~1). The second is what the P0 gate checks without a GPU: option rendering, answer parsing, trust bounds, endpoints, dataset pins, claim routing, the manifest guard, and the matrix budget. The third is the test suite, which exercises the same modules on synthetic and mock inputs. The completed row is reported as feasibility and timing evidence: with an exact McNemar $p=0.086$ the chapter makes no claim that trust weighting reduces collapse or improves accuracy. Where a result does not yet exist, the chapter uses a clearly labelled projected value and states the basis for it.
 
 \section{Environment Setup}\label{sec:environment-setup}
 
 \paragraph*{Hardware and software.}
-The pipeline runs in three configurations. The development configuration is the one used for Gate~0. The matrix configuration is planned for Core and Full: the 4-bit 24--27B trio (Qwen3.8-27B-AWQ-INT4, 21.0\,GB; Gemma~4 26B-A4B AWQ, 17.2\,GB; Mistral 24B AWQ, 15.06\,GB; 53.3\,GB total) on one 80\,GB A100 PCIe spot. The precision configuration is the pinned 96\,GB FP8 stack, used only for the N1 smoke and the GPQA precision replication (B3, B8-no-trust, B8; 150--200 questions; one seed). Table~\ref{tab:stack} lists all three. The development card is an NVIDIA RTX A6000 with 48\,GB of memory (about 45\,GB usable), hosted on a Vast.ai instance with 12 vCPU, 72\,GB of system RAM, and a 100\,GB container disk. The operating system was Ubuntu 22.04, Python was 3.12.3, PyTorch was 2.11.0 with CUDA 12.8, and vLLM was the nightly build \texttt{0.29.1rc1.dev128}. The precision card is an NVIDIA RTX PRO 6000 Blackwell with 96\,GB. The pinned FP8 checkpoints are Qwen3.8-27B-FP8 (29.95\,GB), Gemma~4 26B-A4B-FP8-dynamic (28.67\,GB), and Mistral Small 3.2 24B-AWQ (15.06\,GB), totalling 73.68\,GB. The precision context length is 8{,}192 tokens, and the three servers are configured to use 0.90 of the card in total.
+The pipeline runs in three configurations. The development configuration is the one used for Gate~0. The matrix configuration is planned for Core and Full: the 4-bit 24--27B trio (Qwen3.8-27B-AWQ-INT4, 21.0\,GB; Gemma~4 26B-A4B AWQ, 17.2\,GB; Mistral 24B AWQ, 15.06\,GB; 53.3\,GB total) on one 80\,GB A100 PCIe spot. The precision configuration is the pinned 96\,GB FP8 stack, used only for the N1 smoke and the GPQA precision replication (B3, B8-no-trust, B8; 150--200 questions; one seed). Table~\ref{tab:stack} lists all three. The development card is an NVIDIA RTX A6000 with 48\,GB of memory (about 45\,GB usable), hosted on a Vast.ai instance with 12 vCPU, 72\,GB of system RAM, and a 100\,GB container disk. The operating system was Ubuntu 22.04, Python was 3.12.3, PyTorch was 2.11.0 with CUDA 12.8, and vLLM was the nightly build \texttt{0.29.1rc1.dev128}. The precision card is an NVIDIA RTX PRO 6000 Blackwell with 96\,GB. The pinned FP8 checkpoints are Qwen3.8-27B-FP8 (29.95\,GB), Gemma~4 26B-A4B-FP8-dynamic (28.67\,GB), and Mistral Small 3.2 24B-AWQ (15.06\,GB), totalling 73.68\,GB. The precision context length is 4{,}096 tokens with at most 16 concurrent sequences per server: at FP8 weight sizes the 8{,}192-token context left no room for the KV cache, so the smoke configuration halves the context (the worst-case prompt occupies 2{,}438 tokens against 3{,}072 available), and the three servers are configured to use 0.90 of the card in total.
 
 \begin{table}[H]
   \centering
@@ -18,11 +18,11 @@ The pipeline runs in three configurations. The development configuration is the 
     \hline
     GPU & RTX A6000 48\,GB (45\,GB usable) & 80\,GB A100 PCIe spot & RTX PRO 6000 Blackwell 96\,GB \\
     \hline
-    Host & 12 vCPU, 72\,GB RAM, 100\,GB disk & Vast.ai spot; host per instance & Not yet provisioned \\
+    Host & 12 vCPU, 72\,GB RAM, 100\,GB disk & Vast.ai spot; host per instance & 96\,GB RTX PRO 6000 Blackwell spot \\
     \hline
-    Software & Ubuntu 22.04, Python 3.12.3, PyTorch 2.11.0, CUDA 12.8 & Python 3.10 or newer; matrix image smoke pending & Python 3.10 or newer; image smoke test pending \\
+    Software & Ubuntu 22.04, Python 3.12.3, PyTorch 2.11.0, CUDA 12.8 & Python 3.10 or newer; matrix image smoke pending & Python 3.10 or newer; precision image smoke passed \\
     \hline
-    vLLM & 0.29.1rc1.dev128 & Pinned with the matrix image; smoke pending & Pinned with the precision image; smoke test pending \\
+    vLLM & 0.29.1rc1.dev128 & Pinned with the matrix image; smoke pending & Pinned with the precision image; smoke passed (vLLM 0.34.0) \\
     \hline
     Agent 1 & Qwen3.5-9B-AWQ, 4-bit AWQ & Qwen3.8-27B-AWQ-INT4, 21.0\,GB & Qwen3.8-27B-FP8, 29.95\,GB \\
     \hline
@@ -30,15 +30,15 @@ The pipeline runs in three configurations. The development configuration is the 
     \hline
     Agent 3 & Ministral-3-14B, AWQ 4-bit & Mistral 24B, AWQ 4-bit, 15.06\,GB & Mistral Small 3.2 24B, AWQ, 15.06\,GB \\
     \hline
-    Context & 4{,}096 tokens & 8{,}192 tokens & 8{,}192 tokens \\
+    Context & 4{,}096 tokens & 8{,}192 tokens & 4{,}096 tokens, at most 16 concurrent sequences \\
     \hline
-    Serving & OpenAI-compatible, ports 8000--8002, sequential readiness-gated startup & Same interface; matrix smoke pending & Same interface; precision smoke pending \\
+    Serving & OpenAI-compatible, ports 8000--8002, sequential readiness-gated startup & Same interface; first Core row complete on 96\,GB & Same interface; FP8 smoke passed \\
     \hline
   \end{tabular}
   \label{tab:stack}
 \end{table}
 
-The development stack uses 4-bit checkpoints because the A6000 is an Ampere card. The official Ministral FP8 checkpoint cannot run on Ampere: vLLM's W8A8 sm80 kernel fails. The development agent therefore uses an AWQ 4-bit checkpoint of the same model. This is a precision change, not a model change, and it is recorded in the model configuration. The matrix stack uses 4-bit checkpoints of the 24--27B families on the 80\,GB A100; their weights total 53.3\,GB, which leaves room for the KV cache. The precision stack uses two FP8 checkpoints and one AWQ checkpoint. The total weight footprint of 73.68\,GB leaves room for the KV cache on the 96\,GB card, but the precision stack has not been exercised on hardware; the smoke test remains outstanding.
+The development stack uses 4-bit checkpoints because the A6000 is an Ampere card. The official Ministral FP8 checkpoint cannot run on Ampere: vLLM's W8A8 sm80 kernel fails. The development agent therefore uses an AWQ 4-bit checkpoint of the same model. This is a precision change, not a model change, and it is recorded in the model configuration. The matrix stack uses 4-bit checkpoints of the 24--27B families on the 80\,GB A100; their weights total 53.3\,GB, which leaves room for the KV cache. The precision stack uses two FP8 checkpoints and one AWQ checkpoint. The total weight footprint of 73.68\,GB leaves room for the KV cache on the 96\,GB card, and the precision stack has since served all three models together in the FP8 smoke (5/5 valid records, three rounds each).
 
 \paragraph*{Model stack and serving.}
 All model calls go through the OpenAI-compatible chat-completion interface. The client retries failed calls up to three attempts with exponential backoff, does not retry an HTTP 400, and treats an empty completion as a failed attempt. Generation uses temperature 0.7 and a 1{,}024-token output cap in the development configuration. Peer positions are truncated to 1{,}500 characters in revision prompts so that the three-agent transcript fits the 4{,}096-token context. The first Gate~0 run exposed this constraint: an early prompt overflow combined 2{,}049 input tokens with a 2{,}048-token output budget against a 4{,}096-token context. The cap and the peer truncation are the fix, and both are now part of the configuration rather than an operator habit.
@@ -85,7 +85,7 @@ The runner writes one JSON line per completed debate and appends it immediately,
 The optional B7 external-answer ceiling is implemented as an appendix arm. It sends each question to OpenAI GPT-6 Luna three times, records every sample, and reports the mean single-call accuracy with a question-level bootstrap confidence interval and the three-sample majority accuracy. It is not part of the Core or Full matrix and is not the internal B8-oracle arm.
 
 \paragraph*{P0 hardening.}
-Table~\ref{tab:p0-changes} lists the P0 changes that are present in the release. The table uses ``gate-tested'' for a path that the P0 gate exercises without a GPU. The gate reports 13 passed, 0 failed, and 0 pending checks. The verifier human audit, the SciClaimBench calibration set, the paid Core run, the Full run, and the precision-stack smoke test are outside the gate and remain outstanding.
+Table~\ref{tab:p0-changes} lists the P0 changes that are present in the release. The table uses ``gate-tested'' for a path that the P0 gate exercises without a GPU. The gate reports 13 passed, 0 failed, and 0 pending checks. The verifier human audit, the SciClaimBench calibration set, the remaining Core rows, and the Full run are outside the gate and remain outstanding.
 
 \begin{table}[H]
   \centering
@@ -205,9 +205,9 @@ Table~\ref{tab:engineering-results} collects the measured engineering evidence. 
     \hline
     Gate~0 & 10/10 debates, 90/90 positions, 370.8\,s mean & Measured \\
     \hline
-    Precision stack fit & 73.68\,GB of 96\,GB; 0.90 utilization sum & Offline check \\
+    Precision stack serve & FP8 smoke passed: 5/5 valid, 4{,}096 ctx, 16 seqs & Measured \\
     \hline
-    Core matrix dry run & 24 runs; 1{,}280 GPU-h cap & Planned \\
+    First Core row (B8 vs control) & 798 debates, 399 pairs, about 15.3 GPU-h & Measured \\
     \hline
     B7 live smoke & 3 samples; `B/B/B'; schema-valid record & Measured, one question \\
     \hline
@@ -217,50 +217,185 @@ Table~\ref{tab:engineering-results} collects the measured engineering evidence. 
   \label{tab:engineering-results}
 \end{table}
 
-The P0 gate and the test suite show that the contracts hold on the tested inputs. The gate is not a substitute for a paid run: it exercises the parser, the trust projection, the endpoint definitions, and the manifest guard, but it does not exercise the live retrieval APIs or a representative question set. Gate~0 shows that the serving layer and the three-agent loop run end to end. It does not show that trust changes a decision, because the trust path was not active in that run. The precision-stack fit is an offline budget check; it does not prove that vLLM can load all three checkpoints together on the 96\,GB card. The B7 smoke shows that the optional ceiling works end to end, but it is one question and it is not part of the confirmatory matrix.
+The P0 gate and the test suite show that the contracts hold on the tested inputs. The gate is not a substitute for a paid run: it exercises the parser, the trust projection, the endpoint definitions, and the manifest guard, but it does not exercise the live retrieval APIs or a representative question set. Gate~0 shows that the serving layer and the three-agent loop run end to end. It does not show that trust changes a decision, because the trust path was not active in that run. The precision stack has now served all three FP8 checkpoints together and passed its smoke; the 80\,GB A100 serving run is still pending, so the matrix-card claim remains a plan, not a measurement. The B7 smoke shows that the optional ceiling works end to end, but it is one question and it is not part of the confirmatory matrix. The first Core row is the first comparative measurement: it is reported in full below and read as feasibility and timing evidence, not as an efficacy result.
 
-\paragraph*{Expected efficacy results.}
-The efficacy results do not exist yet. The Core and Full matrices have not run, and the verifier audit and benchmark freeze are outstanding. To keep the design and the eventual analysis connected, Table~\ref{tab:expected-results} records the projected values that the study is designed to test. These are not measured results, and they are not reported as findings. The 20--30\% figure is the design target for the relative reduction in sycophantic collapse; the 2-percentage-point accuracy gain is an illustrative planning assumption, not a standalone hypothesis, and it is below the 7.5-point minimum detectable difference after Holm. The primary accuracy claim is therefore tied to the pre-registered paired contrast and its confidence interval, not to the 2-point illustration.
+\paragraph*{Completed first Core row.}
+The first Core row pairs B8 against B8-no-trust on GPQA-Main, seed~1, with the 4-bit 24--27B stack (Qwen3.8-27B-AWQ-INT4, Gemma~4 26B-A4B AWQ, Mistral Small 3.2 24B AWQ; 53.26\,GB) served by vLLM 0.34.0 on one 96\,GB RTX PRO 6000, three rounds at temperature 0.7, progressive retrieval with per-agent source partitioning, and a lexical verifier. It holds 798 debates (399 per arm), 7{,}182 agent-round responses, 14{,}201 claim-level verdicts, and 2{,}787 retrieved passages, consuming about 15.3 GPU-hours at a mean of 138\,s per pair (median 125\,s for B8, 127\,s for control). Question~27 is quarantined (its options are the literal letters) and excluded, leaving 399 eligible questions; both arms run concurrently, so a pair costs the slower arm's time. Table~\ref{tab:core-conditions} fixes the condition names used below. This row is 2 of the 24 Core rows and contributes 798 of the 8{,}000 Core debates (10\%).
 
 \begin{table}[H]
   \centering
-  \caption{Projected and target values used for planning. None of these is a measured result. The 2-point accuracy gain is illustrative and below the pre-registered MDE; the AUROC, $\kappa$, verifier, and citation rows are gate thresholds or sample plans, not effect estimates.}
+  \caption{Conditions referenced in this chapter. Only B8 and B8-no-trust run in the Core row; the remaining three appear solely in the 5-question smokes.}
   \renewcommand{\arraystretch}{1.25}
   \small
-  \begin{tabular}{|p{0.30\textwidth}|p{0.26\textwidth}|p{0.34\textwidth}|}
+  \begin{tabular}{|p{0.20\textwidth}|p{0.68\textwidth}|}
     \hline
-    Quantity & Planning value or target & Basis \\
+    Condition & Definition \\
     \hline
-    Collapse reduction (CCR/CMR) & 20--30\% relative & Design target; matrix not run \\
+    B8 & Full treatment: retrieval + verifier + trust-weighted aggregation \emph{during} debate \\
     \hline
-    Final-answer accuracy & +2 percentage points & Illustrative planning value; below the 7.5-point MDE \\
+    B8-no-trust & Primary control: identical prompts, evidence, and source partitioning; majority vote \\
     \hline
-    Trust AUROC & $\ge0.65$ & G2 pilot gate \\
+    Injection & One-shot injected false consensus probe of sycophancy (smoke only) \\
     \hline
-    Injection $\kappa$ & $\ge0.75$ & G2 pilot gate \\
+    B8-placebo & B8 pipeline with trust weights shuffled across agents; null control (smoke only) \\
     \hline
-    Verifier balanced accuracy & $\ge0.75$ & N4 audit target \\
-    \hline
-    Citation faithfulness & 300 claim--citation pairs & Planned human evaluation \\
+    B8-oracle & Trust from gold evidence; mechanism ceiling (smoke only) \\
     \hline
   \end{tabular}
-  \label{tab:expected-results}
+  \label{tab:core-conditions}
 \end{table}
 
-The projected values serve three purposes. First, they make the expected direction of the study explicit before the matrix runs. Second, they let the sample-size and power calculation be checked against a concrete effect. Third, they make the eventual result easier to interpret: a result near the projection is consistent with the design; a result near zero requires the boundary analysis; a negative average effect is consistent with backfire, but mechanism attribution requires the pre-registered placebo/oracle contrasts and the N9 boundary manipulation. The projections are not evidence, and a null or negative result is reportable under the pre-registration.
+On the 399 paired questions, B8 reaches 0.6241 accuracy (249/399, 95\% CI 0.576--0.672) against 0.5865 for the control (234/399, CI 0.536--0.634): both correct on 208, B8-only on 41, control-only on 26, neither on 124, exact McNemar $p=0.086$. The gap is +0.038, below the pre-registered 7.5-point minimum detectable difference after Holm, and the test is not significant at any conventional level. Minority-position retention is 0.78 versus 0.75; the adaptation rate when the majority is correct is 0.657 (182/277) versus 0.702 (177/252); the collapse rate on evidence-exposed items is 0.102 (13/128) versus 0.150 (23/153). Trust calibration is uninformative: AUROC 0.518 ($n=69$) and Brier 0.292 ($n=127$). Table~\ref{tab:core-milestones} shows the frozen milestone snapshots; Table~\ref{tab:core-final} collects the final endpoints; Figure~\ref{fig:core-results} plots the trajectories.
+
+\paragraph*{Trust-weight equations.}
+Each claim $c$ receives a verifier verdict $v(c) \in \{\mathrm{support}, \mathrm{refute}, \mathrm{insufficient}\}$, mapped to a logit score
+\begin{equation}
+  s(c) = \begin{cases} +1 & v(c)=\mathrm{support}, \\ -1 & v(c)=\mathrm{refute}, \\ 0 & v(c)=\mathrm{insufficient}, \end{cases}
+  \label{eq:impl-verdict-score}
+\end{equation}
+so $V_i$ ($H_i$) counts agent $i$'s supported (contradicted) claims and $n_i$ the claims checked. The per-agent evidence term $(\alpha V_i-\beta H_i)/n_i$ accumulates through Eq.~\eqref{eq:impl-trust-update}; one softmax and the projection onto Eq.~\eqref{eq:impl-trust-simplex} yield the round's trust vector, with a closing pass on the final positions so aggregation uses the final-position vector. Dividing by $n_i$ is the claim-count normalization: duplicating every claim leaves the evidence term unchanged. The final answers are
+\begin{equation}
+  \hat{a}_{\mathrm{B8}} = \arg\max_a \sum_{i:\,p_i=a} w_i, \qquad \hat{a}_{\mathrm{ctrl}} = \arg\max_a \sum_{i:\,p_i=a} 1,
+  \label{eq:impl-decision}
+\end{equation}
+a trust-weighted plurality for B8 and an unweighted majority for the control, with ties resolved to the first observed answer. Both answers are scored from the same transcripts, so the contrast isolates the trust signal and the aggregation rule.
+
+\paragraph*{Endpoint and metric definitions.}
+Final-answer accuracy and its paired difference are
+\begin{equation}
+  \mathrm{Acc} = \frac{1}{n}\sum_{q=1}^{n} \mathbf{1}[\hat{a}_q = g_q], \qquad \Delta = \mathrm{Acc}_{\mathrm{B8}} - \mathrm{Acc}_{\mathrm{ctrl}},
+  \label{eq:metric-accuracy}
+\end{equation}
+with Wilson 95\% intervals per arm~\cite{wilson1927probable}, a question-clustered bootstrap interval for $\Delta$~\cite{efron1993introduction,koehn2004statistical}, and an exact McNemar test on seed~1~\cite{mcnemar1947note}. Retention and collapse endpoints are
+\begin{equation}
+  \mathrm{MPR} = \frac{\text{minority-correct debates retained}}{\text{minority-correct debates}}, \;\; \mathrm{ARR} = \frac{\text{adapted when the majority was correct}}{\text{majority-correct debates}}, \;\; \mathrm{CCR}_e = \frac{\text{collapsed on evidence-exposed items}}{\text{evidence-exposed items}},
+  \label{eq:metric-collapse}
+\end{equation}
+where MPR is minority-position retention, ARR the adaptation rate when the majority is correct, and CCR-e the collapse rate on evidence-exposed items. Trust calibration is
+\begin{equation}
+  \mathrm{AUROC} = P(w^+ > w^-), \qquad \mathrm{Brier} = \frac{1}{m}\sum_{j=1}^{m}(w_j - o_j)^2,
+  \label{eq:metric-trust}
+\end{equation}
+where each agent's final trust weight scores whether that agent's final answer is correct~\cite{hanley1982meaning,brier1950verification}; the realised $m$ is reported because not every debate exposes evidence.
+
+\begin{table}[H]
+  \centering
+  \caption{Milestone snapshots of the first Core row (GPQA-Main, seed~1, question~27 excluded). The 100--300 rows are the frozen supervisor-report snapshots (paired $n$ of 100, 152, 201, 255, 302); 350 and Final are computed from the completed records.}
+  \renewcommand{\arraystretch}{1.25}
+  \small
+  \begin{tabular}{|c|c|c|c|}
+    \hline
+    Milestone ($n$) & B8 accuracy (95\% CI) & Control accuracy (95\% CI) & McNemar $p$ \\
+    \hline
+    100 (100) & 0.64 (0.55--0.73) & 0.61 (0.51--0.71) & 0.629 \\
+    \hline
+    150 (152) & 0.62 (0.55--0.70) & 0.59 (0.51--0.66) & 0.307 \\
+    \hline
+    200 (201) & 0.63 (0.56--0.69) & 0.57 (0.51--0.64) & 0.099 \\
+    \hline
+    250 (255) & 0.62 (0.56--0.68) & 0.59 (0.53--0.65) & 0.233 \\
+    \hline
+    300 (302) & 0.63 (0.58--0.69) & 0.59 (0.54--0.65) & 0.126 \\
+    \hline
+    350 (350) & 0.62 (0.57--0.67) & 0.59 (0.54--0.65) & 0.245 \\
+    \hline
+    Final (399) & 0.62 (0.58--0.67) & 0.59 (0.54--0.63) & 0.086 \\
+    \hline
+  \end{tabular}
+  \label{tab:core-milestones}
+\end{table}
+
+\begin{table}[H]
+  \centering
+  \caption{Final endpoints of the first Core row (GPQA-Main, seed~1, $n=399$ eligible pairs). The paired gap is +0.038 with exact McNemar $p=0.086$: feasibility and timing evidence, not an efficacy claim.}
+  \renewcommand{\arraystretch}{1.25}
+  \small
+  \begin{tabular}{|p{0.30\textwidth}|p{0.30\textwidth}|p{0.30\textwidth}|}
+    \hline
+    Metric & B8 (trust) & Control (majority) \\
+    \hline
+    Accuracy (95\% CI) & 0.6241 (249/399; 0.576--0.672) & 0.5865 (234/399; 0.536--0.634) \\
+    \hline
+    Paired outcomes & \multicolumn{2}{p{0.60\textwidth}|}{Both correct 208; B8-only 41; control-only 26; neither 124; McNemar $p=0.086$} \\
+    \hline
+    MPR & 0.78 & 0.75 \\
+    \hline
+    ARR & 0.657 (182/277) & 0.702 (177/252) \\
+    \hline
+    CCR-e & 0.102 (13/128) & 0.150 (23/153) \\
+    \hline
+    Trust AUROC & 0.518 ($n=69$) & n/a \\
+    \hline
+    Trust Brier & 0.292 ($n=127$) & n/a \\
+    \hline
+    Evidence coverage & 178/399 & 230/399 \\
+    \hline
+    Median time & 125\,s & 127\,s \\
+    \hline
+  \end{tabular}
+  \label{tab:core-final}
+\end{table}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{fig-core-results.png}
+  \caption{First completed Core row (GPQA-Main, seed~1, 399 eligible pairs; question~27 quarantined). Top left: cumulative accuracy after each question (thin lines) with milestone snapshots and 95\% CIs (markers; B8 circles, control squares). Top right: minority-position retention (MPR) at milestones. Bottom left: collapse rate on evidence-exposed items (CCR-e). Bottom right: mean question-pair time in seconds. The B8 lead (+0.038 at $n=399$) is not significant (exact McNemar $p=0.086$); the figure is read as feasibility and timing evidence.}
+  \label{fig:core-results}
+\end{figure}
+
+\paragraph*{Smoke results.}
+Table~\ref{tab:core-smokes} collects the two hardware smokes that de-risked the row. The 4-bit N1a smoke served the full 53\,GB three-model stack on one 96\,GB card with every harness path running end to end. The FP8 smoke served the 73.68\,GB stack the same way after one config fix (4{,}096-token context, at most 16 concurrent sequences per server). Neither smoke is a finding: at $n=5$ the 4/5 versus 2/5 FP8 accuracy gap is noise in both directions.
+
+\begin{table}[H]
+  \centering
+  \caption{4-bit N1a smoke (53\,GB stack, one 96\,GB card, 5 questions per arm). One injection item showed a transient effect the first check missed: the targeted agent moved under the injected consensus in round~2 and reverted by round~3; the check now detects any post-injection change. The oracle arm's fifth record was lost to a spot eviction, not to the pipeline.}
+  \renewcommand{\arraystretch}{1.25}
+  \small
+  \begin{tabular}{|p{0.20\textwidth}|p{0.16\textwidth}|p{0.18\textwidth}|p{0.14\textwidth}|p{0.18\textwidth}|}
+    \hline
+    Arm & Records & Accuracy & MPR & Mean s/debate \\
+    \hline
+    B8 & 5/5 valid, 3 rounds & 0.40 (2/5) & 0.50 & 299.6 \\
+    \hline
+    Injection & 5/5 valid, 3 rounds & 0.80 (4/5) & 0.75 & 137.3 \\
+    \hline
+    B8-placebo & 5/5 valid, 3 rounds & 0.60 (3/5) & 0.75 & 258.1 \\
+    \hline
+    B8-oracle & 4/4 valid, 3 rounds & 1.00 (4/4) & --- & $\sim$280 \\
+    \hline
+  \end{tabular}
+  \label{tab:core-smokes}
+\end{table}
+
+\begin{table}[H]
+  \centering
+  \caption{FP8 precision smoke (73.68\,GB stack, one 96\,GB card, same 5 questions as the 4-bit smoke). Mean 282.4\,s versus 299.6\,s: the same pace, so FP8 is a fidelity check, not a speed-up. FP8 endpoints: MPR 0.75, ARR 0.60, CCR-e 0.0.}
+  \renewcommand{\arraystretch}{1.25}
+  \small
+  \begin{tabular}{|p{0.16\textwidth}|p{0.11\textwidth}|p{0.11\textwidth}|p{0.11\textwidth}|p{0.11\textwidth}|p{0.11\textwidth}|}
+    \hline
+    Stack & Q0 & Q1 & Q2 & Q3 & Q4 \\
+    \hline
+    4-bit (s) & 414.9 & 297.2 & 272.4 & 285.4 & 228.0 \\
+    \hline
+    FP8 (s) & 420.1 & 239.7 & 185.5 & 277.9 & 288.6 \\
+    \hline
+  \end{tabular}
+  \label{tab:core-fp8}
+\end{table}
 
 \paragraph*{Discussion.}
-The engineering results support a narrow conclusion: the framework can be built, exercised, and audited, and the evaluation plan is executable. They do not support a claim that trust-calibrated deliberation reduces sycophantic collapse. Three gaps separate the current evidence from that claim. The first is the verifier. The default lexical verifier has a synthetic balanced accuracy of 0.58, and the human audit has not run. A trust signal built on a weak verifier can amplify a confident wrong majority, so the verifier audit is a scientific prerequisite, not a cleanup task. The second gap is the benchmark. SciClaimBench is not built, and the 24-item calibration is the first test of whether the annotation plan is feasible. The third gap is the paid matrix. The Core run is the first test of the primary contrast; the Full run is the first test of the placebo and oracle controls.
+The completed row supports a narrow conclusion: the full treatment and its matched control can be served together, run to completion, and scored on every pre-registered endpoint at about 138\,s per pair. It does not support a claim that trust-calibrated deliberation reduces sycophantic collapse. The paired gap is +3.8 points with $p=0.086$; the milestone snapshots never leave the 0.62--0.64 band for B8 against 0.57--0.61 for control, and every milestone $p$-value exceeds 0.05. A result in the design's expected direction at this $n$ is also consistent with noise, and the gap is below the pre-registered 7.5-point minimum detectable difference after Holm, so the study as designed cannot promote this row to an efficacy finding.
 
-The expected values in Table~\ref{tab:expected-results} should be read against those gaps. A 20--30\% relative collapse reduction is a meaningful target only if the baseline collapse rate is high enough to leave room for it. The Gate~2 pilot is designed to measure that baseline before the Core run. The 2-point accuracy gain is deliberately modest. The safety analysis uses a 5-point non-inferiority margin on all eligible items; the primary paired accuracy test has a 7.5-point Holm MDE on pressure-eligible items, so the study is not powered to detect a 2-point difference on its own. The 2-point figure is useful for discussion, not for a standalone claim.
+The trust signal itself is uninformative in this row. AUROC 0.518 on 69 agents is chance-level discrimination, and Brier 0.292 shows no calibration to exploit. The default verifier is lexical: support requires a shared term, so paraphrased evidence is missed and spurious overlap is rewarded, and the trust weights inherit both failures. The pre-registration treats verifier accuracy as a moderator for exactly this reason, and the 150--200-pair human audit is still outstanding; a matrix re-run under an audited verifier (cross-encoder or LLM judge) is the condition for any high-$q$ claim, not a cleanup step.
 
-The optional B7 ceiling is a reference, not a competitor. It answers a different question: what does a strong single call get on the same items? It cannot replace the B8 versus B8-no-trust contrast, and it is not part of the Core or Full matrix. Its three-sample design reduces the sampling noise that a single call would introduce, but it is still an external reference and not a test of the mechanism.
+The secondary endpoints point the same way. B8 retains the correct minority slightly more often (MPR 0.78 versus 0.75) and collapses less often on evidence-exposed items (CCR-e 0.102 versus 0.150), but adapts less often when the majority is correct (ARR 0.657 versus 0.702): the trust weights add inertia in both directions. None of these contrasts is tested for significance in this report, the CCR-e denominators (128 and 153) are small, and the pressure arms are absent from this row, so the CMR and CCR denominators are empty and the collapse reading is exploratory. The optional B7 ceiling remains a reference, not a competitor: it answers what a strong single call gets on the same items, and it cannot replace the B8 versus B8-no-trust contrast.
 
 \paragraph*{Threats to validity.}
 The first threat is verifier quality. The lexical default can mistake a shared term for support, miss a negation, or misread a numeric claim. The cross-encoder is optional, and the NLI and LLM-judge paths are interfaces rather than validated components. LLM judges also show position, verbosity, and self-enhancement bias, so judge-based verifier outputs are treated as a measurement instrument rather than ground truth~\cite{zheng2023judging,wang2024large}. The human audit of 150--200 pairs is the gate that must pass before a high-$q$ claim. The second threat is retrieval coverage. The routing and deduplication logic are tested, but the live APIs are not; rate limits, malformed responses, and sparse domains can turn claims into unverifiable ones. The third threat is shared error. Three heterogeneous models reduce but do not eliminate correlated mistakes, and the shared-error floor bounds what any independent verifier can certify.
 
-The fourth threat is benchmark gold. SciClaimBench is team-built, so its gold evidence and verdicts require annotation discipline and a defect-rate report. MMLU-Redux found errors in a substantial share of re-annotated MMLU questions, and human label variation is itself a known problem, so the SciClaimBench protocol treats adjudication and defect reporting as part of the measurement~\cite{gema2025mmulredux,plank2022labelvariation}. The fifth threat is model-family specificity: the result will be conditional on the three chosen checkpoints and the 80\,GB matrix stack. The sixth is stochasticity: the local models run at temperature 0.7, and the optional B7 ceiling uses three samples per question. The analysis averages over seeds where the design allows it and reports the variation that remains. The seventh is compute: the 4-bit matrix stack has not been exercised as a trio on the A100, and the precision stack has not been smoke-tested, so a hardware failure could delay the matrix without changing the scientific question.
+The fourth threat is benchmark gold. SciClaimBench is team-built, so its gold evidence and verdicts require annotation discipline and a defect-rate report. MMLU-Redux found errors in a substantial share of re-annotated MMLU questions, and human label variation is itself a known problem, so the SciClaimBench protocol treats adjudication and defect reporting as part of the measurement~\cite{gema2025mmulredux,plank2022labelvariation}. The fifth threat is model-family specificity: the result is conditional on the three chosen 4-bit checkpoints and the stack that served them. The sixth is stochasticity: the local models run at temperature 0.7, and the optional B7 ceiling uses three samples per question. The analysis averages over seeds where the design allows it and reports the variation that remains. The seventh is scope and compute. This row covers one dataset and one seed, so dataset and seed generality are untested; the pressure arms are absent, so CMR is unmeasurable and CCR-e is exploratory. The 4-bit trio has now served together on the 96\,GB card at a measured 138\,s per pair (about 15.3 GPU-hours for the row), but the 80\,GB A100 serving run is still pending, so a hardware change could still delay the remaining rows without changing the scientific question.
 
 \section{Summary}\label{sec:implementation-summary}
 
-The implementation is complete enough to run the debate loop, render and score multiple-choice options, decompose claims, route claims to domain-specific sources, update a bounded trust vector, aggregate a weighted answer, log a record, and validate the result schema. Gate~0 validates the base loop on ten GPQA questions. The P0 gate validates the wiring that Gate~0 did not cover, and the 615-test suite covers the contracts on synthetic and mock inputs. The engineering results do not establish efficacy. The expected values in this chapter are projections, not findings. The remaining work is the verifier human audit, the SciClaimBench calibration set, the WP-18 placebo/oracle slice, the precision-stack smoke test, and the paid Core and Full matrices. Those are the conditions for an efficacy claim, and none of them is met in this report.
+The implementation is complete enough to run the debate loop, render and score multiple-choice options, decompose claims, route claims to domain-specific sources, update a bounded trust vector, aggregate a weighted answer, log a record, and validate the result schema. Gate~0 validates the base loop on ten GPQA questions. The P0 gate validates the wiring that Gate~0 did not cover, and the 615-test suite covers the contracts on synthetic and mock inputs. The first Core row adds the first comparative measurement: B8 at 0.6241 against 0.5865 for the matched majority control on 399 eligible GPQA-Main pairs, with exact McNemar $p=0.086$, MPR 0.78 versus 0.75, and an uninformative trust AUROC of 0.518. Those numbers are feasibility and timing evidence, not efficacy. The remaining work is the verifier human audit, the SciClaimBench calibration set, the WP-18 placebo/oracle slice, the second seed, and the remaining Core and Full rows. Those are the conditions for an efficacy claim, and none of them is met in this report.

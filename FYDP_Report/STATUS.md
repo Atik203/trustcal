@@ -56,6 +56,29 @@ Engine: pdfTeX 3.141592653-2.6-1.40.29 (TeX Live 2026). Each pdfLaTeX pass exite
 - The runner record adapter is wired; check a sample record for `manifest_hash`, `final_answer`, and the trust fields before the paid run.
 - Check the regenerated 600+ DPI figures against the new captions.
 
+## 2026-11-21 — core3 first Core row COMPLETE (399+399 debates)
+
+`experiments/core3` (`gpqa_main` seed 1, B8 vs B8-no-trust, fourbit stack) is
+complete: 399 debates/arm (q27 quarantined of 400), 798 total; both runners
+exited cleanly, summaries written 2026-11-21T07:29Z (B8) / 07:42Z (control).
+Final: B8 acc 0.6241 (249/399, CI 0.576–0.672) vs control 0.5865 (234/399,
+CI 0.536–0.634); paired both 208 / B8-only 41 / ctl-only 26 / neither 124;
+exact McNemar p = 0.086 (not significant); MPR 0.78/0.75; ARR 0.657/0.702;
+CCR-e 0.102/0.150; trust AUROC 0.518, Brier 0.292; 15.3 GPU-h, mean pair
+138 s. Host 61635389 (96 GB S, $1.59/h) STOPPED, not destroyed (warm fallback
+~$0.71/day); credit left $2.67; row spend ~$17–19.
+
+What the `.tex` now contains: the report `.tex` files above are unchanged
+since 9 Nov (still the engineering report, no efficacy claims). The completed
+row is recorded in `docs/supervisor_report/`: `core_auto.tex` holds the final
+400-pair milestone table (798 debates, paired counts, McNemar p = 0.086,
+milestones 100/150/200/250/300/350/400-final merged) and the B8-conditions
+definitions paragraph (PR #19); `core_limits.tex` holds the reading guide and
+limits text. Merged to main as PR #20 = `c55903b`.
+
+Next (in order): post-400 speed A/Bs (`experiments/next/post-400-speed-cost.md`,
+now READY), then v1.5 + `sciclaim_180` loader, then Full.
+
 ## Stage naming
 
 The report uses the glossary names: **Core run** (legacy "C+") and **Full run** (legacy "TACL full"). "TACL" is not used as a stage name. No "C+" or "TACL full" remains in the report prose or tables.

@@ -688,7 +688,7 @@ function FinalResultsSlide() {
         badgeBg="#ccfbf1"
         badgeColor={TEAL}
         title="P0 Build: Status, Not Efficacy"
-        subtitle="What is implemented and verified; the Core run is pre-registered, not run."
+        subtitle="What is implemented and verified; first Core row complete (feasibility + timing, efficacy n.s.)."
       />
       <div className="grid grid-cols-[1.45fr_1fr] gap-[2cqw] flex-1 min-h-0">
         <div className="flex flex-col justify-center min-h-0">
@@ -718,9 +718,9 @@ function FinalResultsSlide() {
                 "report + journal, 0 undefined references",
               ],
               [
-                "Core run",
-                "24 runs",
-                "4 arms × GPQA 400 / MMLU-Pro 400 / HLE 200 × 2 seeds = 1,280 GPU-h · Jan 2027",
+                "Core row 2/24",
+                "Complete",
+                "GPQA seed 1 B8 vs B8-no-trust: 798 debates · 62.4% vs 58.7% · McNemar p=0.086 (n.s.)",
               ],
               [
                 "Main stack",
@@ -742,15 +742,16 @@ function FinalResultsSlide() {
         >
           <ul className="flex flex-col justify-center h-full">
             <Bullet>
-              No efficacy result: the Core run (24 runs, Jan 2027) is
-              pre-registered, not run.
+              First Core row complete (Nov 2026): 798 debates, ~15.3 GPU-h,
+              mean pair 138 s — pipeline runs end to end at scale.
             </Bullet>
             <Bullet>
               The 50-question Month-1 pilot and the 100–150-question G2 pilot are
               planned, not run. The 10-debate Gate 0 run is not the pilot.
             </Bullet>
             <Bullet>
-              CCR/MPR/ECR comparisons are planned, not measured.
+              Efficacy is not claimed: B8 62.4% vs control 58.7%, exact
+              McNemar p=0.086 (not significant); MPR 0.78/0.75.
             </Bullet>
             <Bullet>
               Guarantees are structural — floor, ceiling and sum — not accuracy
@@ -762,8 +763,8 @@ function FinalResultsSlide() {
       <NoteStrip color={TEAL}>
         Next: N1 96 GB smoke + FP8 precision replication → WP-18
         (placebo/oracle) → 24-item calibration → verifier audit → G2 pilot (Dec
-        2026) → G3 Core (Jan 2027) → G4/G5 Full (Feb 2027). No efficacy claim is
-        made yet.
+        2026) → remaining Core rows → G4/G5 Full (Feb 2027). Row 2/24 shows
+        feasibility + timing; no efficacy claim (p=0.086, n.s.).
       </NoteStrip>
     </div>
   );
@@ -868,8 +869,8 @@ function FinalLimitationsSlide() {
           <ul className="flex flex-col justify-center h-full">
             <Bullet>
               The 50-question Month-1 pilot and 100–150-question G2 pilot are
-              planned; the Core run (24 runs, Jan 2027) is pre-registered, not
-              yet run.
+              planned; Core row 2/24 (GPQA seed 1) is complete with McNemar
+              p=0.086 (n.s.) — feasibility, not efficacy.
             </Bullet>
             <Bullet>
               Injection is an explicit upper-bound stress test, not everyday
@@ -930,8 +931,8 @@ function FinalConclusionSlide() {
         >
           <ul className="flex flex-col justify-center h-full">
             <Bullet>
-              Status: the P0 mechanism is implemented and tested; no efficacy
-              claim yet.
+              Status: the P0 mechanism is implemented and tested; Core row
+              2/24 complete (798 debates, p=0.086, n.s.) — no efficacy claim.
             </Bullet>
             <Bullet>
               The pilot shows the pipeline runs end to end on three models.
@@ -941,8 +942,8 @@ function FinalConclusionSlide() {
             </Bullet>
             <Bullet>
               Remaining: N1 96 GB smoke + FP8 precision replication → WP-18 →
-              24-item calibration → verifier audit → G2 pilot (Dec 2026) → G3
-              Core (Jan 2027) → G4/G5 Full (Feb 2027), then ablations, human
+              24-item calibration → verifier audit → G2 pilot (Dec 2026) →
+              remaining Core rows → G4/G5 Full (Feb 2027), then ablations, human
               study and open-source release.
             </Bullet>
           </ul>
@@ -1004,13 +1005,13 @@ function FinalCompactConclusionSlide() {
               Extends to law or medicine where an evidence corpus exists.
             </Bullet>
             <Bullet>
-              Status: mechanism implemented and tested; efficacy not yet
-              measured.
+              Status: mechanism implemented and tested; Core row 2/24 complete
+              (798 debates, p=0.086, n.s.) — no efficacy claim.
             </Bullet>
             <Bullet>
               Remaining: N1 96 GB smoke + FP8 precision replication → WP-18 →
-              24-item calibration → verifier audit → G2 pilot (Dec 2026) → G3
-              Core (Jan 2027) → G4/G5 Full (Feb 2027), then ablations, human
+              24-item calibration → verifier audit → G2 pilot (Dec 2026) →
+              remaining Core rows → G4/G5 Full (Feb 2027), then ablations, human
               study and open-source release.
             </Bullet>
           </ul>
