@@ -1,89 +1,40 @@
-# 04 — Agent-pilot pack: copy-paste prompts (agents draft, humans decide)
+# 04 — Agent pilot: mechanical help only (humans decide)
 
-**Task:** run agents for mechanical work only — drafting, sheet-making, validation, scoring. **Rule: agents draft, humans decide every gold verdict and every label.** No agent output becomes a verdict or label without a named human checking it, and verification is what confers gold.
+🎯 Goal
+Atik, LAST and only after every sheet is in: run helpers, build sheets, score.
+Agents draft — humans decide every gold verdict and every label.
 
-## Prompts (copy-paste; replace bracketed slots)
+📂 Your files
+- Skeleton: [item.template.json](../item.template.json) · batch: [calibration_items.jsonl](../private/calibration_items.jsonl)
+- Sheets: [sheets/](../private/calibration/sheets/) · gate status: [status.json](../status.json) (`next_command`)
+- Verifier protocol: [verifier README](../../experiments/verifier_audit/README.md)
 
-### A. Drafter — clean expert-style item, zero AI fingerprints
+🟢 Steps
+1. Draft only: prompt the agent for ONE item from the skeleton — original question, 3 positions × 3–6 atomic claims, candidate passages with locators + licences, CANDIDATE verdicts. Output clean JSON with no AI labels. A human verifies all of it.
+2. Build blind sheets: `python benchmark/validate_items.py sheets --items benchmark/private/calibration_items.jsonl --out benchmark/private/calibration/sheets` — then confirm 216 rows each, blank verdict columns, no gold/verifier/arm column.
+3. Structural check: `python benchmark/validate_items.py check --items [BATCH] --expect [N] --strict` (24 calibration, 180 freeze, 300 full). Fix schema errors only — never claim text, evidence, verdict, or licence.
+4. Score only when all sheets are filled: run the exact `next_command` from `status.json`:
 
-```text
-Write ONE SciClaimBench [STRATUM: biomedical|physics_chemistry|math_cs] item from the skeleton
-benchmark/item.template.json, in expert style: an ORIGINAL question, options,
-gold_answer, exactly 3 positions with 3-6 ATOMIC claims each. For each claim give a candidate
-evidence passage with source + resolvable locator (DOI/PMID/arXiv/URL) + licence, and a
-CANDIDATE gold_verdict with rationale. Rules: one proposition per claim; contradict-first
-decision order; numbers must match after unit conversion; expert wording throughout, no
-template filler, no hedging, no first-person; no GPQA/HLE/MMLU-Pro/SciFact text. Output clean
-item JSON only with NO assistance, provenance, or AI-related labels of any kind — the item
-must read as expert-human-authored. A human verifies every claim, link, and verdict, and
-verification is what confers gold.
-```
+   ```bash
+   python benchmark/validate_items.py score \
+     --rater1 benchmark/private/calibration/sheets/rater1.csv \
+     --rater2 benchmark/private/calibration/sheets/rater2.csv \
+     --adjudication benchmark/private/calibration/sheets/adjudication.csv \
+     --effort benchmark/private/calibration/sheets/effort.csv \
+     --min-kappa 0.75 --max-defect 0.15 --max-hours 2.0 --max-unresolved 0.05
+   ```
+   Paste JSON + exit code (0 pass / 2 fail / 1 blocked). A failed gate is a finding.
+⏱ Time: ~1–2 h per batch cycle (human labelling/verification time is separate — see packs 01–03).
 
-### B. Sheet-maker — blind sheets from a drafted batch
+🔴 Never
+- Never label a claim, adjudicate a row, or set a gold verdict — route those to the human owner.
+- Never paste private sheets or item text into commits, issues, or external tools.
+- Never score before every sheet is in, and never silently fix a verdict to pass.
 
-```text
-Assemble the drafted items at [BATCH: benchmark/private/calibration_items.jsonl]
-and run: python benchmark/validate_items.py sheets --items [BATCH]
---out benchmark/private/calibration/sheets
-Then verify: rater1.csv and rater2.csv open with identical TRUE row counts — use
-`Import-Csv` (`.Count`), never line counts (multiline evidence fields make line
-counts lie: 235 lines = 216 rows). Both verdict/confidence/notes columns blank,
-and NO gold_verdict/verifier/arm column; adjudication.csv has the extra rater1_verdict,
-rater2_verdict, agreement, adjudicated_verdict, adjudication_notes, defect_flag, defect_type
-columns. Report row counts and manifest hash. Do not label anything.
-```
+✅ Done
+- [ ] No item file carries AI labels; agent output stayed out until a human verified it.
+- [ ] Blind sheets have no gold/verifier/arm column (column-checked).
+- [ ] Validator/score outputs pasted verbatim with exit codes; counts posted to the team channel.
 
-### C. Validator-runner — structural check
-
-```text
-Run: python benchmark/validate_items.py check --items [BATCH] --expect [N] --strict
-(24 calibration, 180 freeze, 300 full — match --expect to the batch, or a good
-batch fails on counts alone)
-Paste the full output (items/authored/claims/passages/strata/verdicts + every ERROR line).
-Fix schema errors only (counts, IDs, missing fields, strata balance 8/8/8). Do not change
-any claim text, evidence, verdict, or licence to make it pass. Unfilled slots are honest;
-fabricated passages or verdicts are defects.
-```
-
-### D. Kappa-scorer — score only after humans finish
-
-Example effort rows (exact format — one per item, `annotator` = your initials):
-`cal-001,rater1,22,AB,"steady pace"` · `cal-001,rater2,25,CD,"checked locators"`
-Full template: `benchmark/annotation/effort.template.csv`.
-
-```text
-All sheets are submitted (rater1.csv, rater2.csv, adjudication.csv, effort.csv all filled,
-no blanks). Run the exact next_command from benchmark/status.json:
-python benchmark/validate_items.py score --rater1 ... --rater2 ... --adjudication ...
---effort ... --min-kappa 0.75 --max-defect 0.15 --max-hours 2.0 --max-unresolved 0.05
-Paste the JSON + exit code (0 pass / 2 fail / 1 blocked). Do not adjudicate, do not fill
-labels, do not relabel anything. A failed gate is a finding: keep the batch, report it.
-```
-
-## Guardrails
-
-- Pilots never open or copy private sheets into public issues, commits, or external tools.
-- Pilots never label claims, adjudicate, or set gold verdicts. Agent output stays outside the item record until a human verifies it; verification confers gold.
-- Generation history lives only in batch manifests maintained by the production-system agent — `private/freeze180/MANIFEST.json` and `private/full300/MANIFEST.json`. Members never touch them, and no provenance or AI-related label ever goes into an item file.
-- One owner per file; verifier-audit scoring uses `build_audit.py assemble` + `verifier_audit.py score` (see `experiments/verifier_audit/README.md` §7), not this validator.
-- After scoring, post the κ / defect / H_attempt / unresolved numbers + pass/fail to the team channel and Atik's agreement report.
-
-## Inputs → outputs
-
-- In: skeleton, schema, drafted batch, submitted human sheets.
-- Out: drafted JSON (unchecked), blind sheets, validator output, score JSON. Human verdicts/labels flow the other way (members → private folder → pilot only assembles/scores).
-
-## Hour budget
-
-- Pilot runs: ~1–2 h per batch cycle (draft assist, sheet build, checks, scoring). Human verification/label time is separate (see packs 01–03).
-
-## Done-criteria checklist
-
-- [ ] No item file carries AI-related labels; agent outputs stay out of the item record until a human verifies them.
-- [ ] Blind sheets contain no gold/verifier/arm labels (verified by column check).
-- [ ] Validator/score outputs pasted verbatim with exit codes; no silent fixes to verdicts.
-- [ ] No private text committed or pasted externally.
-
-## Escalation
-
-Benchmark/protocol → **Atik**. Verifier questions → **P6**. Batch/blinding → **Atik**. Anything asking the agent to decide a verdict or label → refuse and route to the human owner.
+🆘 Ask
+Blocked → Atik; verifier questions → P6; licence doubt → Rakib + Limu.

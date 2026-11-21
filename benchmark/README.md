@@ -1,8 +1,6 @@
-# Benchmark hub — SciClaimBench annotation, all in one place
+# Benchmark hub — SciClaimBench annotation, START HERE
 
-**Start here:** [`tasks/00_OVERVIEW.md`](tasks/00_OVERVIEW.md) (pipeline, gates, glossary) → pick your role pack below → [`MEMBER_GUIDE.md`](./MEMBER_GUIDE.md) (roles, worked examples, 4/6-week plan).
-
-**Step 0 (once):** draft items and blank calibration sheets ship with the repo — clone and start, no bundle needed. Check Python ≥ 3.10 with `pip install pyyaml`. Details in `tasks/00_OVERVIEW.md` §0. Filled `*_initials` sheets and session manifests always stay local (gitignored).
+> 🟢 **Start here — 3 clicks.** 1. Check Step 0 once: `pip install pyyaml`, Python ≥ 3.10 (details in [`tasks/00_OVERVIEW.md`](tasks/00_OVERVIEW.md) §0). 2. Find your name in the table below. 3. Open your 1 pack file and follow it.
 
 | Batch | Items | Location | Sheets | Status |
 |---|---|---|---|---|
@@ -10,258 +8,127 @@
 | Freeze (S2) | 180 (60/60/60) | `private/freeze180/` | `private/freeze180/sheets/` | Drafts + blank sheets ready |
 | Full target (S3) | 300 (100/100/100) | `private/full300/` | `private/full300/sheets/` | Drafts + blank sheets ready |
 
-**The gate (all four, one command):** κ ≥ 0.75, defect ≤ 0.15, H_attempt ≤ 2.0 h/item, unresolved ≤ 0.05. Verdict vocabulary: `support` / `contradict` / `neutral` — nothing else validates. Items carry **no AI markings** (provenance lives in `private/*/MANIFEST.json`); gold = verified + adjudicated.
+**The gate (all four, one command):** κ ≥ 0.75, defect ≤ 0.15, H_attempt ≤ 2.0 h/item, unresolved ≤ 0.05. Copy and paste this after every sheet is in:
 
 ```bash
-python benchmark/validate_items.py score --rater1 benchmark/private/<batch>/sheets/rater1.csv \
-  --rater2 benchmark/private/<batch>/sheets/rater2.csv \
-  --adjudication benchmark/private/<batch>/sheets/adjudication.csv \
-  --effort benchmark/private/<batch>/sheets/effort.csv \
+python benchmark/validate_items.py score \
+  --rater1 benchmark/private/calibration/sheets/rater1.csv \
+  --rater2 benchmark/private/calibration/sheets/rater2.csv \
+  --adjudication benchmark/private/calibration/sheets/adjudication.csv \
+  --effort benchmark/private/calibration/sheets/effort.csv \
   --min-kappa 0.75 --max-defect 0.15 --max-hours 2.0 --max-unresolved 0.05
 ```
 
-| Who | Your job | Open this first | Then | Due |
-|---|---|---|---|---|
-| **Prottoy (PR)** — rater 1 | Label all 216 SciClaimBench rows + 180 verifier rows | [`tasks/01_RATER.md`](tasks/01_RATER.md) | [`templates/annotation_submission_checklist.md`](templates/annotation_submission_checklist.md) | Sheets in: **Fri 4 Dec** |
-| **Salman (SA)** — rater 2 | Same sheets, independently (never peek at Prottoy's) | [`tasks/01_RATER.md`](tasks/01_RATER.md) | [`templates/annotation_submission_checklist.md`](templates/annotation_submission_checklist.md) | Sheets in: **Fri 4 Dec** |
-| **Yousuf (YO)** — verifier | Check all 24 drafts, file the problem list | [`tasks/03_AUTHOR.md`](tasks/03_AUTHOR.md) | [`templates/item_verification_checklist.md`](templates/item_verification_checklist.md) (one per item) | Problem list in: **Fri 4 Dec** |
-| **Rakib + Limu (RK+LM)** — adjudicators (pair) | Settle disagreements, defect review | [`tasks/02_ADJUDICATOR.md`](tasks/02_ADJUDICATOR.md) | `templates/` checklists as needed | Workbook done: **Fri 11 Dec** |
-| **Atik** — agent pilot, LAST | Run helpers + score only after every sheet is in | [`tasks/04_AGENT_PILOT.md`](tasks/04_AGENT_PILOT.md) | — | Score + report: **week of 14 Dec** |
+| Name | Job | Your file | Due |
+|---|---|---|---|
+| Prottoy (PR) — rater 1 | Label all 216 claims in rater1 sheet. | [`tasks/01_RATER.md`](tasks/01_RATER.md) | Fri 4 Dec |
+| Salman (SA) — rater 2 | Label all 216 claims in rater2 sheet. | [`tasks/01_RATER.md`](tasks/01_RATER.md) | Fri 4 Dec |
+| Yousuf (YO) — verifier | Check all 24 drafts, file problem list. | [`tasks/03_AUTHOR.md`](tasks/03_AUTHOR.md) | Fri 4 Dec |
+| Rakib + Limu (RK+LM) — adjudicators | Settle disagreements, run defect review. | [`tasks/02_ADJUDICATOR.md`](tasks/02_ADJUDICATOR.md) | Fri 11 Dec |
+| Atik — agent pilot, LAST | Run helpers and score after sheets in. | [`tasks/04_AGENT_PILOT.md`](tasks/04_AGENT_PILOT.md) | Week of 14 Dec |
 
-Three rules: no gated text ever · items have no AI markings · nothing is gold until humans verify it and the gate passes. Dates are targets — blockers go to Atik immediately, never wait for a deadline.
+Three rules: no gated text ever · items have no AI markings · nothing is gold until humans verify it and the gate passes. Dates are targets — send blockers to Atik at once.
+
+Member guide with examples and the week plan: [`MEMBER_GUIDE.md`](./MEMBER_GUIDE.md).
 
 ---
 
-# SciClaimBench 24-item calibration — protocol and working files
+## 🟢 1. What this gate decides
 
-**Member guide:** [`MEMBER_GUIDE.md`](./MEMBER_GUIDE.md) — roles, worked examples, and the 4/6-week plan.
+The 24-item batch is the test before the 180-item freeze. It answers three questions. Can two raters reach Cohen's κ ≥ 0.75? Is the defect rate ≤ 0.15? Is effort `H_attempt` ≤ 2.0 h/item? If κ fails, keep the failed batch in the report. Revise the codebook and run a fresh batch. If `H_attempt` is over 2.0 h or defects are over 0.15, cut the next step to 120 items, not 180. A failed calibration is a finding, not a reason to relabel.
 
-**Gate:** Phase N3 (roadmap §5). **Owner:** Atik (P3) + annotators.
-**Status (21 Nov 2026): BLOCKED on human verification and annotation.**
-**24 of 24 items are drafted but unverified (216 claims, 234 passages; 0 human labels exist).** The files here
-are a schema-validated draft batch, an annotation workbook, and a validator, not
-a finished calibration set. Do not report κ, a defect rate, or a calibration
-result until the sheets contain real human labels.
+## 🟡 2. Item sources and licensing
 
-## 1. What this gate decides
+The best source is an original item written for this project. Original items use **CC BY 4.0** when frozen. You may adapt a public-domain or CC BY source only. Then record the citation, a locator (DOI, PMID, arXiv ID, or URL), the licence, and what changed. Do **not** copy gated text (GPQA, HLE, MMLU-Pro test text) into SciClaimBench. SciFact passages are audit-only — never paste them into SciClaimBench. Those sets are for comparison only. LLM help is allowed for drafts only. A human must verify every claim, link, and gold verdict. Items carry no AI markings. Provenance lives only in `private/*/MANIFEST.json`.
 
-The 24-item batch is the feasibility test for SciClaimBench, the team-built
-gold-evidence benchmark. It answers three questions before the team spends the
-~410 h needed for the 180-item v1.2 freeze:
+## 🟢 3. Domain strata
 
-1. Can two annotators apply the claim-level evidence/verdict codebook with
-   Cohen's κ ≥ 0.75?
-2. Is the frozen defect rate at or below 15%?
-3. Is the annotation effort at or below 2.0 hours per attempted item
-   (`H_attempt`)?
-
-If κ fails, keep the failed batch in the report, revise the codebook, and run a
-fresh calibration batch. If `H_attempt` is above 2.0 h or the defect rate is
-above 15%, cut the next step to 120 items immediately, not 180 (roadmap §4). A
-failed calibration is a finding about the protocol, not a reason to relabel
-until the numbers look better.
-
-## 2. Item sources and licensing
-
-SciClaimBench is team-authored. The preferred source is an original item written for
-this project; such items are released under **CC BY 4.0** when frozen.
-
-An item may be adapted from a public-domain or CC BY source only when all of
-the following are recorded in the item's `source` block:
-
-- the citation and a resolvable locator (DOI, PMID, arXiv ID, or URL);
-- the source licence;
-- what was changed (question wording, options, claims, or evidence).
-
-Do **not** adapt or redistribute gated or non-redistributable benchmark text
-(GPQA and HLE are gated; MMLU-Pro test text must not be redistributed) into
-SciClaimBench. Those datasets may be used internally as comparison datasets, but their
-item text must never appear in a committed SciClaimBench file. SciFact is CC BY-NC 2.0
-and is used only for the verifier audit, not as an SciClaimBench source.
-
-LLM assistance is allowed for drafting question stems or candidate claims, but
-a human must verify every claim, every evidence link, and every gold verdict.
-Do NOT mark items as assisted: item records carry no AI markings by team rule
-(provenance lives only in batch manifests). An LLM must never be the only
-source of a gold verdict.
-
-## 3. Domain strata
-
-The 24-item batch is exactly balanced:
-
-| Stratum key | Label | Items | Intended content |
-| --- | --- | ---: | --- |
-| `biomedical` | Biomedical | 8 | clinical, molecular, pharmacological, epidemiological |
-| `physics_chemistry` | Physics / chemistry | 8 | physical laws, materials, reactions, measurement |
-| `math_cs` | Mathematics / computer science | 8 | proofs, algorithms, complexity, systems |
-
-The 180-item freeze uses 60/60/60 and the 300-item target uses 100/100/100.
-Stratum is an item-level field, not a claim-level field. Do not rebalance by
-moving items between strata after annotation starts.
+The 24-item batch is exactly balanced: 8 biomedical, 8 physics / chemistry, 8 math / CS. The 180-item freeze uses 60/60/60. The 300-item target uses 100/100/100. Stratum is an item-level field. Do not move items between strata after annotation starts.
 
 ## 4. Annotation unit and schema
 
-The annotation unit is a **claim–evidence–verdict triple**, not an item and not
-a whole answer:
+The unit is a **claim–evidence–verdict triple**. One item has three positions (agents 0, 1, 2). Each position has **3–6 atomic claims**. Each claim has cited passages and one verdict: `support`, `contradict`, or `neutral`. `support` means a passage entails the claim and none refutes it. `contradict` means a passage says the claim is false. `neutral` means the passages do not prove or refute it. Check refutation first: one clear contradiction beats any support. Each item also records `pressure_eligible` and its evidence conditions (`evidence_available`, `evidence_absent`, `evidence_placebo`, `evidence_contradictory`). Full fields are in [`schema.md`](schema.md). The skeleton is in [`item.template.json`](item.template.json). The 24 empty slots are in [`items.seed.jsonl`](items.seed.jsonl). There is no SciClaimBench loader in the runner yet. Do not point `run_experiment.py --questions-file` at this batch.
 
-- one item has three positions (agents 0, 1, 2);
-- each position carries **3–6 atomic claims**;
-- each claim carries one or more evidence passages and one gold verdict;
-- each verdict is `support`, `contradict`, or `neutral`.
+## 🟡 5. Two-annotator and adjudication protocol
 
-`support` means at least one cited passage entails the claim as written and no
-cited passage refutes it. `contradict` means at least one cited passage asserts
-the claim is false (opposite result, different number, negated relation, or
-different entity). `neutral` means the passages are empty, off-topic, or merely
-topical; they do not establish or refute the claim. Refutation is checked
-first: one clear contradiction outranks any supporting passage.
-
-Each item records `pressure_eligible` plus the evidence conditions it can carry
-(`evidence_available`, `evidence_absent`, `evidence_placebo`,
-`evidence_contradictory`); together these are the five design conditions
-(evidence state × pressure).
-
-The full field table is in [`schema.md`](schema.md). A complete skeleton is in
-[`item.template.json`](item.template.json), and the 24 unfilled slots are in
-[`items.seed.jsonl`](items.seed.jsonl).
-
-SciClaimBench has no loader in `trustcal/src/trustcal/eval/datasets.py` yet, so this
-batch is the authoring and annotation format, not a runnable
-`run_experiment.py --questions-file` input. Do not point the runner at an SciClaimBench
-batch until a loader and a v1.2 dataset key exist; that work is outside this
-calibration gate.
-
-## 5. Two-annotator and adjudication protocol
-
-1. **Author and freeze the candidate item.** Fill question, options, gold
-   answer, three positions, 3–6 atomic claims per position, and at least one
-   cited passage per claim. Do not put a verdict in the annotation export.
-2. **Generate blind sheets.** Run `validate_items.py sheets`. It writes
-   `rater1.csv` and `rater2.csv` with blank `verdict`, `confidence`, and `notes`
-   columns. The gold verdict never appears in either sheet.
-3. **Label independently.** Rater 1 and rater 2 each label every claim without
-   discussing rows, without seeing the other sheet, and without using outside
-   knowledge. Judge only the cited passages. Record a 0–1 confidence and a note
-   for any row that needs adjudication.
-4. **Do not adjudicate while labelling.** Neither annotator may change a label
-   after seeing the other sheet. The first-pass labels are the ones used for κ.
-5. **Adjudicate disagreements.** A third person (supervisor or designated
-   adjudicator) resolves every disagreement from the codebook and the cited
-   evidence, and records the adjudicated verdict plus a one-line rationale in
-   `adjudication.csv`. Agreement rows copy the agreed label, not a new one.
-6. **Unresolved rows.** If the adjudicator cannot defend a gold verdict, mark
-   `adjudicated_verdict = unresolved`. Unresolved claims are excluded from the
-   frozen set and counted separately. More than 5% unresolved blocks the freeze.
-7. **Defect review.** After adjudication, a reviewer who did not label the item
-   checks every frozen triple against its passages. Any triple that is wrong or
-   unsupported is a defect. Pre-freeze corrections are rework, not defects.
-
-The `validate_items.py score` command computes κ from the two independent
-sheets. It does not adjudicate and it does not fill missing labels.
+1. Author and freeze the item. Fill question, options, gold answer, three positions, 3–6 claims each, and one cited passage per claim. Put no verdict in the export.
+2. Build blind sheets with `validate_items.py sheets`. Gold never appears in `rater1.csv` or `rater2.csv`.
+3. Label alone. Each rater labels every claim from the cited passages only. No talk. No peeking. No outside knowledge. Add 0–1 confidence and a note on hard rows.
+4. Never change a label after seeing the other sheet. First-pass labels set κ.
+5. Adjudicate each disagreement from the codebook. Write the verdict and one-line reason in `adjudication.csv`. Copy agreement rows as they are.
+6. Mark hopeless rows `adjudicated_verdict = unresolved`. They leave the frozen set. An unresolved rate over 0.05 blocks the freeze.
+7. Run defect review. A reviewer who did not label checks each frozen triple. Wrong or unsupported triples are defects. Pre-freeze fixes are rework, not defects.
 
 ## 6. Agreement, defect, and effort gates
 
 | Quantity | Definition | 24-item gate |
 | --- | --- | --- |
-| Cohen's κ | Unweighted nominal κ on the two pre-adjudication 3-class verdict columns | **≥ 0.75** |
-| Defect rate | Defective frozen claim triples ÷ frozen claim triples, after the independent review in step 7 | **≤ 0.15** |
-| `H_attempt` | Total annotation hours ÷ attempted items, summed over authoring, both raters, adjudication, and rework | **≤ 2.0 h/item** |
+| Cohen's κ | Unweighted κ on the two pre-adjudication verdict columns | **≥ 0.75** |
+| Defect rate | Defective frozen triples ÷ frozen triples, after step 7 review | **≤ 0.15** |
+| `H_attempt` | Total hours ÷ attempted items, over authoring, both raters, adjudication, rework | **≤ 2.0 h/item** |
 | Unresolved rate | Unresolved claims ÷ claims sent to adjudication | **≤ 0.05** |
 
-`H_attempt` uses the per-item rows in `annotation/effort.template.csv`:
+Log rows per item in `annotation/effort.template.csv`: `H_attempt = sum(minutes for all phases) / 60 / number of distinct item_id rows`. Track authoring, `rater1`, `rater2`, `adjudication`, and `rework` apart. This projects the 180-item budget. If κ < 0.75, keep the batch, fix the codebook, run a fresh batch. Never delete rows to raise κ. If `H_attempt > 2.0` or defects top 0.15, cut to 120 items.
 
-```text
-H_attempt = sum(minutes for all phases) / 60 / number of distinct item_id rows
-```
+## 📂 7. The 24 → 180 → 300 freeze ladder
 
-Track authoring, `rater1`, `rater2`, `adjudication`, and `rework` separately so
-the 180-item budget can be projected from the measured mix. The roadmap's 410 h
-for 180 items is 2.28 h/item; it is a planning envelope, not a measured value.
+| Size | Role | Split | Entry condition | Decision |
+| ---: | --- | --- | --- | --- |
+| **24** | Calibration batch | 8 / 8 / 8 | protocol frozen | κ ≥ 0.75, defect ≤ 0.15, `H_attempt` ≤ 2.0 → 180; else cut to 120 |
+| **180** | SciClaimBench v1.2 freeze | 60 / 60 / 60 | 24-item gate passes | freeze by Jan 2027; report κ and defect rate |
+| **300** | Full-run target | 100 / 100 / 100 | 180-item set is clean | target by Feb 2027 |
 
-If κ < 0.75, keep the failed batch in the report, revise the codebook, and run a
-fresh calibration batch. Do not delete items or relabel the same rows to raise κ.
-If `H_attempt > 2.0` or the defect rate is above 15%, cut the next step to 120
-items immediately; do not start the 180-item freeze.
+The 120-item cut keeps the protocol alive without the 180-item cost. Larger rungs (600, 800) are no-go and not built.
 
-## 7. The 24 → 180 → 300 freeze ladder
-
-| Size | Role | Split | Annotation envelope | Entry condition | Decision |
-| ---: | --- | --- | ---: | --- | --- |
-| **24** | Calibration batch | 8 / 8 / 8 | ~1 week | protocol frozen | κ ≥ 0.75, defect ≤ 15%, `H_attempt` ≤ 2.0 → 180; otherwise cut to 120 |
-| **180** | SciClaimBench v1.2 freeze | 60 / 60 / 60 | ~410 h | 24-item calibration passes | freeze by Jan 2027; report κ and defect rate |
-| **300** | Full-run target | 100 / 100 / 100 | ~684 h | 180-item set is clean | target by Feb 2027 |
-| **600** | Stretch | 200 / 200 / 200 | ~1,368 h | 2–3 dedicated annotators | not built by default |
-| **800** | No-go | — | ~1,824 h | — | do not build |
-
-The 120-item contingency is a cut, not a rung: it keeps the protocol alive
-without committing to the 180-item freeze. The 600 and 800 rungs are recorded
-only to make the no-go decision explicit.
-
-## 8. Files and what is safe to commit
+## ✅ 8. Files and what is safe to commit
 
 | Path | Contents | Commit? |
 | --- | --- | --- |
 | `README.md`, `schema.md` | Protocol and field definitions | yes |
-| `item.template.json` | One clearly marked skeleton; no real evidence | yes |
+| `item.template.json` | One marked skeleton; no real evidence | yes |
 | `items.seed.jsonl` | 24 unfilled slots, 8/8/8; no item text | yes |
-| `validate_items.py` | Check, sheet generation, κ/defect/effort scoring | yes |
+| `validate_items.py` | Check, sheet builds, κ/defect/effort scoring | yes |
 | `annotation/*.template.csv` | Header-only sheets and effort template | yes |
 | `status.json` | Counts and blocked reasons only | yes |
 | `private/` | Filled items, evidence text, labels, adjudication | **no — gitignored** |
 
-Put every filled workbook under `private/`. The `private/` directory is
-gitignored because adapted item text may be non-redistributable and because
-annotation sheets contain human labels that must not leak before adjudication.
-When the 180-item set is frozen and the licence review is complete, move the
-public item file out of `private/` and commit it with the licence and the
-provenance block; keep the human label sheets private.
+Put every filled workbook under `private/`. It stays gitignored. Labels must not leak before adjudication. When the 180-item set freezes and the licence check passes, move the public item file out of `private/` and commit it. Keep human label sheets private.
 
 ## 9. Run the gate
 
-From the repository root, with the `trustcal` virtual environment:
+From the repo root, with the `trustcal` virtual environment:
 
 ```bash
-# 1. Structural check of the seed batch. This passes with 24 unfilled slots.
+# 1. Seed check. Passes with 24 unfilled slots.
 python benchmark/validate_items.py check \
   --items benchmark/items.seed.jsonl
 
-# 2. Strict check of the drafted batch (per-item files or batch file):
+# 2. Strict check of the drafted batch:
 python benchmark/validate_items.py check \
   --items benchmark/private/calibration_items.jsonl --expect 24 --strict
 
-# 3. Blind rater sheets are already generated. To regenerate after authoring edits:
+# 3. Blind sheets are already built. To rebuild after edits:
 python benchmark/validate_items.py sheets \
   --items benchmark/private/calibration_items.jsonl \
   --out benchmark/private/calibration/sheets
 
-# 4. After both raters and the adjudicator finish, score the gate.
+# 4. After raters and adjudicator finish, score the gate.
 python benchmark/validate_items.py score \
-  --rater1 benchmark/private/sheets/rater1.csv \
-  --rater2 benchmark/private/sheets/rater2.csv \
-  --adjudication benchmark/private/sheets/adjudication.csv \
-  --effort benchmark/private/sheets/effort.csv \
+  --rater1 benchmark/private/calibration/sheets/rater1.csv \
+  --rater2 benchmark/private/calibration/sheets/rater2.csv \
+  --adjudication benchmark/private/calibration/sheets/adjudication.csv \
+  --effort benchmark/private/calibration/sheets/effort.csv \
   --min-kappa 0.75 --max-defect 0.15 --max-hours 2.0 --max-unresolved 0.05
 ```
 
-The `score` command exits `0` when all supplied gates pass, `2` when one fails,
-and `1` when the input is incomplete. If the sheets are empty it exits `1` and
-says the gate is blocked; an empty sheet is never a pass.
+`score` exits `0` when all gates pass, `2` when one fails, `1` when input is incomplete. Empty sheets exit `1` and say blocked. Empty is never a pass.
 
-## 10. What the team must fill in
+## 🆘 10. What the team must fill in
 
-The 24 drafts already exist (`private/items/cal-001..024`, mirrored in
-`private/calibration_items.jsonl`) — the team verifies them, it does not
-author from scratch (`items.seed.jsonl` is only the empty-slot reference):
+The 24 drafts already exist (`private/items/cal-001..024`, mirrored in `private/calibration_items.jsonl`). The team verifies them. It does not write from scratch.
 
-1. Verify every claim, evidence link, locator, and candidate verdict in all
-   24 drafts against the codebook (§§4–5); file problem lists, don't edit blindly.
-2. Label the blind sheets (2 raters), adjudicate disagreements, log effort.
-3. Set `status` to `annotated` / `adjudicated` / `frozen` only after those
-   steps actually happen.
-4. Confirm the `source` block of every item: `kind`, `citation`, `locator`,
-   and `license`. Original items use `kind = "original"` and `CC BY 4.0`.
-5. Run the strict check, then score the gate (§9).
-
-Do not copy claim or evidence text from a model's own answer without a human
-checking the link. Do not invent a passage, a DOI, or a verdict to fill a slot.
-An unfilled slot is honest; a fabricated gold triple is a benchmark defect.
+1. Verify every claim, link, locator, and candidate verdict in all 24 drafts (§§4–5). File problem lists. Do not edit blindly.
+2. Label the blind sheets (2 raters), adjudicate, log effort.
+3. Set `status` to `annotated` / `adjudicated` / `frozen` only after each step is real.
+4. Confirm each `source` block: `kind`, `citation`, `locator`, `license`. Original items use `kind = "original"` and `CC BY 4.0`.
+5. Run the strict check, then score the gate (§9). Never invent a passage, DOI, or verdict. An empty slot is honest. A fake gold triple is a defect.
