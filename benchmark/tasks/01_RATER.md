@@ -12,7 +12,7 @@
    - SciClaimBench labels: `support` · `contradict` · `neutral` (exact lowercase).
    - Verifier labels: `supported` · `contradicted` · `unverifiable` (exact lowercase — different words on purpose).
 4. Apply the decision order to **every** row:
-   1. If **any** cited passage refutes the claim as written → `contradict` / `contradicted` (refutation wins even if another passage supports).
+   1. If **any** cited passage refutes the claim as written → `contradict` (refutation wins even if another passage supports).
    2. Else if **at least one** passage entails the claim → `support` / `supported`.
    3. Else → `neutral` / `unverifiable`.
 5. Log effort as you go (sheet `effort.csv` columns `item_id,phase,minutes,annotator,notes`): one row per item with `phase=rater1` (or `rater2`) and your minutes. This feeds H_attempt ≤ 2.0 h/item.

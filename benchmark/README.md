@@ -2,6 +2,8 @@
 
 **Start here:** [`tasks/00_OVERVIEW.md`](tasks/00_OVERVIEW.md) (pipeline, gates, glossary) → pick your role pack below → [`docs/MEMBER_GUIDE.md`](../docs/MEMBER_GUIDE.md) (roles, worked examples, 4/6-week plan).
 
+**Step 0 (once):** `private/` (drafts + blind sheets) is gitignored — get the bundle from P3 and copy it into `benchmark/`; check Python ≥ 3.10 with `pip install pyyaml`. Details in `tasks/00_OVERVIEW.md` §0.
+
 | Batch | Items | Location | Sheets | Status |
 |---|---|---|---|---|
 | Calibration (S0) | 24 (8/8/8) | `private/items/cal-001..024` | `private/calibration/sheets/` | Drafted, schema-valid; **0 human labels** |
@@ -20,15 +22,12 @@ python benchmark/validate_items.py score --rater1 benchmark/private/<batch>/shee
 
 | Role | Open this | Owner |
 |---|---|---|
-| Rater (label blind rows) | [`tasks/01_RATER.md`](tasks/01_RATER.md) + `templates/` forms | P3 + annotators |
-| Adjudicator (resolve + defect flags) | [`tasks/02_ADJUDICATOR.md`](tasks/02_ADJUDICATOR.md) | P3 |
-| Author (draft/verify items) | [`tasks/03_AUTHOR.md`](tasks/03_AUTHOR.md) | P3 |
-| Agent pilot (run agents for drafting/scoring) | [`tasks/04_AGENT_PILOT.md`](tasks/04_AGENT_PILOT.md) | P2 + P4 |
-| Full plan (gates, budgets, cut-to-120) | [`FULLBENCH_PLAN.md`](FULLBENCH_PLAN.md) | P3 |
+| Rater (label rows) | [`tasks/01_RATER.md`](tasks/01_RATER.md) | P3 + annotators |
+| Adjudicator (settle rows) | [`tasks/02_ADJUDICATOR.md`](tasks/02_ADJUDICATOR.md) | P3 |
+| Author (write/check items) | [`tasks/03_AUTHOR.md`](tasks/03_AUTHOR.md) | P3 |
+| Agent pilot (run helpers) | [`tasks/04_AGENT_PILOT.md`](tasks/04_AGENT_PILOT.md) | P2 + P4 |
 
-**Rules that block a freeze:** no gated/non-redistributable text (no GPQA/HLE/MMLU-Pro items — ever); adaptations only from public-domain/CC-BY sources with citation + locator + licence recorded; licence review before any freeze (CC BY-SA/BY-NC-SA excerpts flagged); nothing is gold until member verification + adjudication pass the gate above.
-
-**For maintainers:** raw drafts/sheets live under `private/` (gitignored). Schema: [`schema.md`](schema.md). Generators: [`validate_items.py`](validate_items.py), [`draft_items.py`](draft_items.py). Batch state: [`status.json`](status.json). Related: verifier audit (`../experiments/verifier_audit/`), injection sheets (`../trustcal/scripts/annotate.py`).
+Three rules: no gated text ever · items have no AI markings · nothing is gold until humans verify it and the gate passes.
 
 ---
 
