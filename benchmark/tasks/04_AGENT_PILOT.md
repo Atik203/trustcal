@@ -29,4 +29,4 @@ Agents draft — humans decide every gold verdict and every label.
 - [ ] Validator/score outputs pasted verbatim with exit codes; counts posted to the team channel.
 
 🆘 Ask
-Blocked → post in the team channel; verifier questions → P6; licence doubt → Rakib + Limu.
+Blocked → Atik; verifier questions → P6; licence doubt → Rakib + Limu.
