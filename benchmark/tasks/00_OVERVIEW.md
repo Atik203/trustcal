@@ -3,6 +3,17 @@
 **Who this is for:** all members (no annotation experience needed). Start here, then read only your role pack.
 **Current work:** the 24-item calibration first. The 180-item freeze and 300-item target start only after the κ gate passes. Do not start 180/300 authoring on your own.
 
+## 0. Before you start (do this once)
+
+1. **Get the private bundle.** `benchmark/private/` (draft items + your blind sheets) is gitignored — a fresh clone does NOT have it. Ask P3 (or whoever runs the repo) for the current `private/` bundle and copy it into your `benchmark/` folder. Never commit it, never upload it publicly (licence review is still pending).
+2. **Check your Python.** You need Python ≥ 3.10 and one package: `pip install pyyaml` (or reuse the project's `trustcal/.venv` if you have it). Verify with:
+   ```bash
+   python --version          # 3.10 or newer
+   python benchmark/validate_items.py --help
+   ```
+   If the help text prints, you are set — the validator needs nothing else.
+3. **Find your assignment** in the table in §4 below, then read only your role pack.
+
 ## 1. Pipeline map 24 → 180 → 300
 
 ```text
@@ -57,23 +68,14 @@ python benchmark/validate_items.py score \
 
 Exit 0 = all supplied gates pass; 2 = a gate fails; 1 = incomplete input (blocked, never a pass). Only Member 1 / the agent-pilot runs this; raters never score their own sheets.
 
-## 4. Glossary
+## 4. Words you need (nothing else)
 
-**Five design conditions** (schema `conditions` + `pressure_eligible`):
+**Your three labels** (exact lowercase, every sheet, every item): `support` · `contradict` · `neutral`.
+Decision order on every row: contradict first (any refuting passage wins), then support (≥1 passage entails, none refutes), else neutral.
 
-| Condition | Meaning |
-| --- | --- |
-| `evidence_available` | cited passages entail the claim |
-| `evidence_absent` | no usable passage (empty/off-topic) |
-| `evidence_placebo` | topical passage that does not establish the claim |
-| `evidence_contradictory` | at least one passage refutes the claim |
-| pressure (−eligible) | a correct minority agent faces a confident wrong majority; `pressure_eligible: true` + `minority_agent: 0/1/2` |
+**Five conditions** (authoring only — raters ignore this): `evidence_available` (passages entail the claim) · `evidence_absent` (nothing usable) · `evidence_placebo` (topical but proves nothing) · `evidence_contradictory` (a passage refutes) · pressure-eligible (a correct minority faces a confident wrong majority).
 
-**Three verdict labels (SciClaimBench):** `support` (≥1 passage entails, none refutes) · `contradict` (≥1 passage refutes — checked first, wins over any support) · `neutral` (empty, off-topic, or merely topical). Decision order: contradict → support → otherwise neutral.
-
-**Three verdict labels (verifier audit — different task, do not mix):** `supported` · `contradicted` · `unverifiable`.
-
-**Other terms:** claim–evidence–verdict triple = one atomic claim + its cited passages + one verdict · atomic = one checkable proposition (split compounds) · blind sheet = rater sheet with no gold/verifier/arm label · adjudication = third person resolves disagreements, writes `adjudicated_verdict` + one-line reason (`unresolved` if indefensible) · defect = a frozen triple that is wrong or unsupported (pre-freeze fixes are rework, not defects) · H_attempt = hours ÷ items attempted · κ = chance-corrected rater agreement.
+**Other words:** blind sheet = your sheet has no answers in it · adjudication = Member 6 settles disagreements · defect = a frozen item that is wrong (pre-freeze fixes don't count) · kappa = agreement beyond luck, must be ≥ 0.75.
 
 ## 5. Which pack do I read?
 
