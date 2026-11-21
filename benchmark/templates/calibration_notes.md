@@ -1,24 +1,24 @@
 # Rater calibration notes
 
-This is a **human rater calibration session**, not model training. Atik or an agent may prepare the deck, examples, and practice rows; Atik facilitates the session, answers codebook questions, protects blinding, and signs the notes.
+Human rater training. Not model training. Atik runs the session, answers codebook questions, guards blinding, and signs these notes.
 
-**Date:** ____________________  
-**Lead:** ____________________  
-**Attendees:** ____________________  
+**Date:** ____________________
+**Lead:** ____________________
+**Attendees:** ____________________
 **Codebook version:** ____________________
 
-## Documents covered
+## 📂 Docs covered
 
-- [ ] `README.md`
-- [ ] `FYDP_Summer/fydp.pdf` (abstract, Chapters 3–4)
-- [ ] `PRE_REGISTRATION.md`
-- [ ] `benchmark/README.md`
-- [ ] `benchmark/schema.md`
-- [ ] `experiments/verifier_audit/README.md`
-- [ ] `docs/GLOSSARY.md`
-- [ ] `../MEMBER_GUIDE.md`
+- [ ] [`README.md`](README.md) (this folder)
+- [ ] [`FYDP_Report/fydp.pdf`](../../FYDP_Report/fydp.pdf) (abstract, Chapters 3–4)
+- [ ] [`PRE_REGISTRATION.md`](../../PRE_REGISTRATION.md)
+- [ ] [`benchmark/README.md`](../README.md)
+- [ ] [`benchmark/schema.md`](../schema.md)
+- [ ] [`experiments/verifier_audit/README.md`](../../experiments/verifier_audit/README.md)
+- [ ] [`docs/GLOSSARY.md`](../../docs/GLOSSARY.md)
+- [ ] [`MEMBER_GUIDE.md`](../MEMBER_GUIDE.md)
 
-## Practice rows
+## ✏️ Practice rows
 
 | Row | Task | Correct label | Rater 1 | Rater 2 | Adjudicated | Note |
 | ---: | --- | --- | --- | --- | --- | --- |
@@ -28,30 +28,30 @@ This is a **human rater calibration session**, not model training. Atik or an ag
 | 4 | SciClaimBench | | | | | |
 | 5 | SciClaimBench | | | | | |
 
-## Disagreements discussed
+## 💬 Disagreements talked through
 
 | Row | Why we disagreed | Decision | Codebook change needed? |
 | ---: | --- | --- | --- |
 | | | | |
 | | | | |
 
-## Rules confirmed
+## 🙈 Rules agreed
 
-- [ ] Blinding: no discussion of individual rows before both sheets are submitted.
-- [ ] No access to gold, verifier, or arm labels.
-- [ ] No LLM-generated labels.
-- [ ] No outside knowledge.
-- [ ] Exact label strings.
-- [ ] Private folder only; no raw data in GitHub or public tools.
-- [ ] Ask the annotation lead when the codebook is ambiguous.
+- [ ] No talk about single rows before both sheets are in.
+- [ ] No gold, verifier, or arm labels open.
+- [ ] No LLM-made labels.
+- [ ] No outside facts.
+- [ ] Exact label strings only.
+- [ ] Private folder only. No raw data on GitHub or public tools.
+- [ ] Ask the annotation lead when the codebook is unclear.
 
-## Open questions
+## ❓ Open questions
 
 | Question | Owner | Answer |
 | --- | --- | --- |
 | | | |
 | | | |
 
-## Sign-off
+## 📤 Sign-off
 
 **Lead signature:** ____________________
