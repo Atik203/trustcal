@@ -11,9 +11,9 @@
 | Branches | `main` = `dev` = `v0.2.1` (current release line) |
 | Tags | `p0-gate` = `055a244`; `p0-release` = `7f2c11f` |
 | P0 gate | **13/13 passed** |
-| Tests | **615 passed** (514 at the P0 release) |
-| Report | `FYDP_Summer/out/fydp.pdf` - 70 pages, 80 cited works, 0 errors/undefined refs |
-| Journal | `Papev_Summer26_6/out/cas-sc-template.pdf` - 19 pages, 71 cited works, 0 errors/undefined refs |
+| Tests | **661 passed** (514 at the P0 release) |
+| Report | `FYDP_Report/fydp.pdf` – 75 pages, 80+ cited works, 0 errors/undefined refs |
+| Journal | `Journal_Paper/cas-sc-template.pdf` – 21 pages, 71 cited works, 0 errors/undefined refs |
 | Main stack | Qwen3.8-27B-AWQ-INT4 / Gemma-4-26B-A4B-AWQ / Mistral-24B-AWQ, **53.26 GB** pinned |
 | Final stack | Qwen3.8-27B-FP8 / Gemma-4-26B-A4B-FP8 / Mistral-24B-AWQ, **73.68 GB** pinned |
 | 18 GB dev gate | H200 MIG `1g.18gb`; 8–9B AWQ cache + Q4_K_M test route; **not run** |

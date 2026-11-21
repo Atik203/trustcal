@@ -1,6 +1,6 @@
 # 04 — Literature, Prior Art, and Missing References (8 November 2026 Snapshot)
 
-> **Historical snapshot — literature verified 8 November 2026.** This file is retained for the prior-art matrix and gap map. The manuscript claim audit in §7 was **resolved on 9 November 2026**; the authoritative record is `Papev_Summer26_6/CLAIMS_AUDIT.md` and `FYDP_Summer/CLAIMS_AUDIT.md`. Do not present §7 as the current manuscript state.
+> **Historical snapshot — literature verified 8 November 2026.** This file is retained for the prior-art matrix and gap map. The manuscript claim audit in §7 was **resolved on 9 November 2026**; the authoritative record is `Journal_Paper/CLAIMS_AUDIT.md` and `FYDP_Report/CLAIMS_AUDIT.md`. Do not present §7 as the current manuscript state.
 
 **Snapshot:** 8 November 2026. **Purpose:** give an agent the exact novelty boundary, the papers that preempt parts of the project, and the references the 8 November 2026 draft was missing.
 
@@ -240,7 +240,7 @@ The FYDP's 8 November 2026 related work was missing the 2025–2026 empirical sy
 
 ## 7. Claims in the 8 November 2026 draft that had to be deleted or rewritten (historical)
 
-> **Resolved 9 November 2026.** This table is the historical audit source. The applied changes are in `Papev_Summer26_6/CLAIMS_AUDIT.md` and `FYDP_Summer/CLAIMS_AUDIT.md`; the manuscripts now compile as engineering reports with no efficacy claims.
+> **Resolved 9 November 2026.** This table is the historical audit source. The applied changes are in `Journal_Paper/CLAIMS_AUDIT.md` and `FYDP_Report/CLAIMS_AUDIT.md`; the manuscripts now compile as engineering reports with no efficacy claims.
 
 | Historical claim (file:line) | Problem | Rewrite |
 |---|---|---|

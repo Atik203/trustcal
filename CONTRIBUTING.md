@@ -60,7 +60,7 @@ New datasets or benchmark items need a provenance note, a fixed revision, and a 
 The report and journal are release artifacts. A content change must:
 
 1. update the claim or number in both manuscripts when the claim is shared
-2. update the relevant audit record (`FYDP_Summer/CLAIMS_AUDIT.md`, `Papev_Summer26_6/CLAIMS_AUDIT.md`, or `docs/CONSISTENCY_AUDIT.md`)
+2. update the relevant audit record (`FYDP_Report/CLAIMS_AUDIT.md` or `Journal_Paper/CLAIMS_AUDIT.md`)
 3. recompile both PDFs and confirm the page count and citation count
 4. keep projections clearly labelled as projections
 

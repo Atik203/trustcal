@@ -26,8 +26,8 @@ The framework runs three heterogeneous agents for three rounds. Each response is
 | --- | --- |
 | [`frontend/`](frontend/) | React 19 + TypeScript + Vite 8 site for the proposal, roadmap, papers, and defence decks |
 | [`trustcal/`](trustcal/) | Python pipeline: vLLM serving, debate loop, retrieval, verifier, trust operator, evaluation, runner |
-| [`FYDP_Summer/`](FYDP_Summer/) | Full project report ([`fydp.pdf`](FYDP_Summer/fydp.pdf), 70 pp) |
-| [`Papev_Summer26_6/`](Papev_Summer26_6/) | Journal-style manuscript ([`cas-sc-template.pdf`](Papev_Summer26_6/cas-sc-template.pdf), 19 pp) |
+| [`FYDP_Report/`](FYDP_Report/) | Full project report ([`fydp.pdf`](FYDP_Report/fydp.pdf), 75 pp) |
+| [`Journal_Paper/`](Journal_Paper/) | Journal-style manuscript ([`cas-sc-template.pdf`](Journal_Paper/cas-sc-template.pdf), 21 pp) |
 | [`PRE_REGISTRATION.md`](PRE_REGISTRATION.md) | Endpoints, hypotheses, exclusions, stopping rules, and the v1.3 stack amendment |
 | [`literature_review/`](literature_review/) | Paper matrix, gap map, and per-paper reviews |
 | [`experiments/`](experiments/) | Run reports, gate artifacts, calibration protocols, and `next/WP-*.md` records |
@@ -112,14 +112,14 @@ Read [`trustcal/AGENTS.md`](trustcal/AGENTS.md) before launching a paid instance
 ### Report and journal
 
 ```bash
-cd FYDP_Summer
+cd FYDP_Report
 pdflatex -output-directory=out -interaction=nonstopmode -halt-on-error fydp.tex
 bibtex out/fydp
 pdflatex -output-directory=out -interaction=nonstopmode -halt-on-error fydp.tex
 pdflatex -output-directory=out -interaction=nonstopmode -halt-on-error fydp.tex
 ```
 
-The journal uses the same sequence with `Papev_Summer26_6/cas-sc-template.tex`. Compiled PDFs are committed for review.
+The journal uses the same sequence with `Journal_Paper/cas-sc-template.tex`. Compiled PDFs are committed for review.
 
 ## Evaluation design
 

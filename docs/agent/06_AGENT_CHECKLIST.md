@@ -423,7 +423,7 @@ Stop immediately and report if:
 | Verifier/retrieval | `retrieval/`, `orchestrator/debate.py` | Agent D |
 | Baselines | `orchestrator/strategies.py`, `runner.py` | Agent E |
 | Datasets/injection | `eval/datasets.py`, `orchestrator/injection.py`, `configs/` | Agent F |
-| Writing/repro | `Papev...`, `FYDP_Summer`, `docs/agent/` | Human lead |
+| Writing/repro | `Journal_Paper`, `FYDP_Report`, `docs/agent/` | Human lead |
 
 **One owner per file.** If two agents need the same file, serialize; do not merge in parallel.
 

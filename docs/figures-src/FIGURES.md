@@ -15,14 +15,14 @@ Canonical SVG sources for the six journal figures and two report-specific drawin
 
 ## Report-only figures
 
-The report keeps the journal versions of `fig-pipeline`, `fig-claim-example`, `fig-trust-detail`, and `fig-round-loop`. Its context and level-1 DFD drawings are different from the journal versions, so they have their own sources and are written only to `FYDP_Summer/`:
+The report keeps the journal versions of `fig-pipeline`, `fig-claim-example`, `fig-trust-detail`, and `fig-round-loop`. Its context and level-1 DFD drawings are different from the journal versions, so they have their own sources and are written only to `FYDP_Report/`:
 
 | Source | Output | Pixels | Report width | Report DPI | Used by |
 | --- | --- | --- | --- | --- | --- |
-| `report-context.svg` | `FYDP_Summer/fig-context.png` | 6000 × 3375 | 5.91 in (`\textwidth`) | 1016 | Report Fig. 3.1 |
-| `report-dataflow.svg` | `FYDP_Summer/fig-dataflow.png` | 6000 × 3375 | 5.91 in (`\textwidth`) | 1016 | Report Fig. 3.2 |
+| `report-context.svg` | `FYDP_Report/fig-context.png` | 6000 × 3375 | 5.91 in (`\textwidth`) | 1016 | Report Fig. 3.1 |
+| `report-dataflow.svg` | `FYDP_Report/fig-dataflow.png` | 6000 × 3375 | 5.91 in (`\textwidth`) | 1016 | Report Fig. 3.2 |
 
-The report-only PNGs are **not** written to `docs/figures/`, `frontend/public/figures/`, or `Papev_Summer26_6/`. The output names stay `fig-context.png` and `fig-dataflow.png` so the report's `\includegraphics` calls do not change.
+The report-only PNGs are **not** written to `docs/figures/`, `frontend/public/figures/`, or `Journal_Paper/`. The output names stay `fig-context.png` and `fig-dataflow.png` so the report's `\includegraphics` calls do not change.
 
 Journal widths use the `cas-sc` text width: 192 mm paper − 2 × 13.7 mm margins = 164.6 mm. Report widths use A4 with 3 cm margins (150 mm). DPI is `6000 / displayed width in inches`. The journal PNGs are served by the site from `frontend/public/figures/` at `/figures/<name>.png`.
 
@@ -54,7 +54,7 @@ From `frontend/`:
 node scripts/build_figures.mjs
 ```
 
-The script reads each SVG, verifies `width="6000" height="3375" viewBox="0 0 1600 900"`, renders it in headless Chrome, and checks the PNG IHDR before writing. It writes the six journal figures to `docs/figures/`, `frontend/public/figures/`, and `Papev_Summer26_6/`; four of them also go to `FYDP_Summer/`. The two report-only drawings replace `FYDP_Summer/fig-context.png` and `FYDP_Summer/fig-dataflow.png`. It never touches `uiu.png`. Any PNG not exactly 6000 × 3375 px aborts the build.
+The script reads each SVG, verifies `width="6000" height="3375" viewBox="0 0 1600 900"`, renders it in headless Chrome, and checks the PNG IHDR before writing. It writes the six journal figures to `docs/figures/`, `frontend/public/figures/`, and `Journal_Paper/`; four of them also go to `FYDP_Report/`. The two report-only drawings replace `FYDP_Report/fig-context.png` and `FYDP_Report/fig-dataflow.png`. It never touches `uiu.png`. Any PNG not exactly 6000 × 3375 px aborts the build.
 
 ## Manuscript alignment notes
 

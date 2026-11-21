@@ -17,4 +17,4 @@
 | [`agent/`](agent/) | Execution plans, current-state notes, cost model, and agent checklists |
 | [`figures-src/`](figures-src/) | Editable figure sources and rendering notes |
 
-The report and journal sources live in [`../FYDP_Summer/`](../FYDP_Summer/) and [`../Papev_Summer26_6/`](../Papev_Summer26_6/). The pre-registration is [`../PRE_REGISTRATION.md`](../PRE_REGISTRATION.md).
+The report and journal sources live in [`../FYDP_Report/`](../FYDP_Report/) and [`../Journal_Paper/`](../Journal_Paper/). The pre-registration is [`../PRE_REGISTRATION.md`](../PRE_REGISTRATION.md).
