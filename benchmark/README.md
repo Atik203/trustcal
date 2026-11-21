@@ -36,7 +36,7 @@ Three rules: no gated text ever · items have no AI markings · nothing is gold 
 
 **Member guide:** [`docs/MEMBER_GUIDE.md`](../docs/MEMBER_GUIDE.md) — roles, worked examples, and the 4/6-week plan.
 
-**Gate:** Phase N3 (roadmap §5). **Owner:** P3 + annotators.
+**Gate:** Phase N3 (roadmap §5). **Owner:** Atik (P3) + annotators.
 **Status (21 Nov 2026): BLOCKED on human verification and annotation.**
 **24 of 24 items are drafted but unverified (216 claims, 234 passages; 0 human labels exist).** The files here
 are a schema-validated draft batch, an annotation workbook, and a validator, not

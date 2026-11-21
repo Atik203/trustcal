@@ -66,7 +66,7 @@ labels, do not relabel anything. A failed gate is a finding: keep the batch, rep
 - Pilots never label claims, adjudicate, or set gold verdicts. Agent output stays outside the item record until a human verifies it; verification confers gold.
 - Generation history lives only in batch manifests maintained by the production-system agent — `private/freeze180/MANIFEST.json` and `private/full300/MANIFEST.json`. Members never touch them, and no provenance or AI-related label ever goes into an item file.
 - One owner per file; verifier-audit scoring uses `build_audit.py assemble` + `verifier_audit.py score` (see `experiments/verifier_audit/README.md` §7), not this validator.
-- After scoring, post the κ / defect / H_attempt / unresolved numbers + pass/fail to the team channel and P3's agreement report.
+- After scoring, post the κ / defect / H_attempt / unresolved numbers + pass/fail to the team channel and Atik's agreement report.
 
 ## Inputs → outputs
 
@@ -86,4 +86,4 @@ labels, do not relabel anything. A failed gate is a finding: keep the batch, rep
 
 ## Escalation
 
-Benchmark/protocol → **P3**. Verifier questions → **P6**. Batch/blinding → P3. Anything asking the agent to decide a verdict or label → refuse and route to the human owner.
+Benchmark/protocol → **Atik**. Verifier questions → **P6**. Batch/blinding → **Atik**. Anything asking the agent to decide a verdict or label → refuse and route to the human owner.

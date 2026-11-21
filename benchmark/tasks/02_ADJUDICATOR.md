@@ -28,7 +28,7 @@
 - **Fix yourself (adjudication workbook only):** verdict choice, rationale wording, agreement-row copy, defect flags on triples you review.
 - **Send back to Atik (never edit item source):** dead locators (open the DOI/PMID/URL yourself — a link that does not resolve, or resolves to a page without the passage, is dead), missing passages, non-atomic claims needing splits, suspected gated-text copy, licence gaps, blinding leaks, unresolved rate trending above 5%. Return a written problem list with `claim_id`s; Atik edits and regenerates sheets.
 - **Blinding ends at adjudication submit.** After both raters' sheets are in and you have adjudicated, you may open item files for defect review (you are checking decided triples, not labelling blind). Never open them before your adjudication is submitted.
-- **Never:** open gold/verifier labels while adjudicating; delete an unresolved row; relabel to raise κ; change the codebook unilaterally (needs P3).
+- **Never:** open gold/verifier labels while adjudicating; delete an unresolved row; relabel to raise κ; change the codebook unilaterally (needs Atik).
 
 ## Inputs → outputs
 
@@ -49,4 +49,4 @@
 
 ## Escalation
 
-Codebook ambiguity → P3. Verifier-audit questions → **P6**. Blinding leak / PII / licence breach → Atik privately. Privacy/licence sign-off owner: Rakib + Limu.
+Codebook ambiguity → Atik. Verifier-audit questions → **P6**. Blinding leak / PII / licence breach → Atik privately. Privacy/licence sign-off owner: Rakib + Limu.
