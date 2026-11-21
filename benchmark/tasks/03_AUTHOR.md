@@ -4,16 +4,16 @@
 
 ## Steps
 
-1. Start from the skeleton `experiments/calibration/item.template.json` (copy it, delete `template`/`_instructions`, set a real `item_id` like `cal-025`). Never edit a frozen item in place.
+1. Start from the skeleton `benchmark/item.template.json` (copy it, delete `template`/`_instructions`, set a real `item_id` like `cal-025`). Never edit a frozen item in place.
 2. Write an **original** stem: question + options (or `null` for free-form) + `gold_answer` (one of the options). Original items ship `source.kind: "original"`, `license: "CC BY 4.0"`.
 3. Write exactly three positions (`agent` 0, 1, 2), each with 3–6 **atomic** claims (one proposition each; split compounds — "X lowers BP and raises HR" becomes two claims). Set `pressure_eligible` + `minority_agent` (0/1/2) when a correct minority can be pressured.
 4. Attach ≥1 evidence passage per claim: verbatim/faithful excerpt + `passage_id` + `source` + resolvable `locator` (DOI, PMID, arXiv ID, or URL — open it and check) + `retrieved_at` (YYYY-MM-DD) + `license`. Original derivations use `source: "Original derivation"`, locator = internal note/appendix ID, item licence.
 5. Set each `gold_verdict` by the decision order (contradict-first), with `gold_confidence` (0–1) + `verdict_rationale`. A human re-checks every claim, every evidence link, and every verdict before it counts. Items carry no assistance or provenance labels — they read as expert-human-authored throughout.
-6. Verify (Members 2/3, one `docs/member/templates/item_verification_checklist.md` per item): question answerable, gold answer valid, 3 positions, 3–6 claims each, unique `claim_id`s, every evidence object complete, numbers after unit conversion, negation correct, topical ≠ support, licence block complete. **Return a problem list; never edit the source file.**
+6. Verify (Members 2/3, one `benchmark/templates/item_verification_checklist.md` per item): question answerable, gold answer valid, 3 positions, 3–6 claims each, unique `claim_id`s, every evidence object complete, numbers after unit conversion, negation correct, topical ≠ support, licence block complete. **Return a problem list; never edit the source file.**
 7. Validate before handing off:
    ```bash
-   python experiments/calibration/validate_items.py check \
-     --items experiments/calibration/private/calibration_items.jsonl --strict
+   python benchmark/validate_items.py check \
+     --items benchmark/private/calibration_items.jsonl --strict
    ```
    Fix errors; `check` without `--strict` passes seeds with unfilled slots (that is not an authored batch).
 
@@ -33,7 +33,7 @@
 ## Inputs → outputs
 
 - In: `item.template.json` + `schema.md` + source material you wrote or a CC-BY/public-domain source with locator.
-- Out: drafted item JSON (`experiments/calibration/private/items/cal-NNN.json`, status `drafted`) → Member 1 assembles the batch; verification checklists + problem lists → Member 1. Verdicts in verified items are candidate golds, not frozen labels.
+- Out: drafted item JSON (`benchmark/private/items/cal-NNN.json`, status `drafted`) → Member 1 assembles the batch; verification checklists + problem lists → Member 1. Verdicts in verified items are candidate golds, not frozen labels.
 
 ## Hour budget
 

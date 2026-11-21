@@ -5,7 +5,7 @@
 ## Steps
 
 1. Wait until **both** rater sheets are submitted. Open the adjudication workbook only then.
-   - SciClaimBench: `experiments/calibration/private/calibration/sheets/adjudication.csv`.
+   - SciClaimBench: `benchmark/private/calibration/sheets/adjudication.csv`.
    - Verifier: `experiments/verifier_audit/private/scifact/audit_sheet.csv` (master sheet — never send to raters; it carries the verifier label).
 2. Copy labels mechanically first: fill `rater1_verdict` / `rater2_verdict` (SciClaimBench) or `rater1_label` / `rater2_label` (verifier) from the submitted sheets. Agreement rows: copy the agreed label into `adjudicated_verdict` / `human_label` — do not invent a new one.
 3. For every disagreement row, re-read the claim + cited passages and apply the codebook decision order (contradict first, then support, otherwise neutral). Fill `adjudicated_verdict` (`support`/`contradict`/`neutral`, or `unresolved`) plus a one-line `adjudication_notes` / `notes` rationale citing the deciding passage (e.g. "e2 refutes dose; contradict per refutation-first rule").
@@ -31,7 +31,7 @@
 
 ## Inputs → outputs
 
-- In: submitted `rater1.csv` + `rater2.csv`, codebook (`experiments/calibration/README.md` §§4–5), effort rows.
+- In: submitted `rater1.csv` + `rater2.csv`, codebook (`benchmark/README.md` §§4–5), effort rows.
 - Out: filled `adjudication.csv` (`adjudicated_verdict`, `adjudication_notes`, `defect_flag`, `defect_type`) / verifier `audit_sheet.csv` (`human_label`, `confidence`, `notes`) → private folder. Unresolved rows listed, not deleted.
 
 ## Hour budget

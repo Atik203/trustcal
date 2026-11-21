@@ -27,15 +27,15 @@
     "defect review and effort logging are not done"
   ],
   "files": {
-    "protocol": "experiments/calibration/README.md",
-    "schema": "experiments/calibration/schema.md",
-    "template": "experiments/calibration/item.template.json",
-    "seed_batch": "experiments/calibration/items.seed.jsonl",
-    "validator": "experiments/calibration/validate_items.py",
-    "sheet_templates": "experiments/calibration/annotation/",
-    "draft_batch": "experiments/calibration/private/calibration_items.jsonl",
-    "blind_sheets": "experiments/calibration/private/calibration/sheets/",
-    "annotator_guide": "experiments/calibration/private/ANNOTATOR_GUIDE.md"
+    "protocol": "benchmark/README.md",
+    "schema": "benchmark/schema.md",
+    "template": "benchmark/item.template.json",
+    "seed_batch": "benchmark/items.seed.jsonl",
+    "validator": "benchmark/validate_items.py",
+    "sheet_templates": "benchmark/annotation/",
+    "draft_batch": "benchmark/private/calibration_items.jsonl",
+    "blind_sheets": "benchmark/private/calibration/sheets/",
+    "annotator_guide": "benchmark/private/ANNOTATOR_GUIDE.md"
   },
-  "next_command": "python experiments/calibration/validate_items.py score --rater1 experiments/calibration/private/calibration/sheets/rater1.csv --rater2 experiments/calibration/private/calibration/sheets/rater2.csv --adjudication experiments/calibration/private/calibration/sheets/adjudication.csv --effort experiments/calibration/private/calibration/sheets/effort.csv --min-kappa 0.75 --max-defect 0.15 --max-hours 2.0 --max-unresolved 0.05"
+  "next_command": "python benchmark/validate_items.py score --rater1 benchmark/private/calibration/sheets/rater1.csv --rater2 benchmark/private/calibration/sheets/rater2.csv --adjudication benchmark/private/calibration/sheets/adjudication.csv --effort benchmark/private/calibration/sheets/effort.csv --min-kappa 0.75 --max-defect 0.15 --max-hours 2.0 --max-unresolved 0.05"
 }

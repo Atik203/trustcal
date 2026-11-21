@@ -4,7 +4,7 @@ import { resolve } from 'path';
 /**
  * Render an SVG file to a PNG at an exact pixel size.
  * Usage: node scripts/svg2png.mjs <input.svg> <output.png> [width] [height]
- * Example: node scripts/svg2png.mjs ../FYDP_Summer/data-flow.svg ../FYDP_Summer/fig-dataflow.png 2752 1536
+ * Example: node scripts/svg2png.mjs ../FYDP_Report/data-flow.svg ../FYDP_Report/fig-dataflow.png 2752 1536
  */
 
 const [, , inputArg, outputArg, widthArg, heightArg] = process.argv;
@@ -35,3 +35,4 @@ try {
 } finally {
   await browser.close();
 }
+

@@ -1,11 +1,11 @@
 """Validate SciClaimBench calibration items, build blind sheets, and score the gate.
 
-    python experiments/calibration/validate_items.py check \
-        --items experiments/calibration/items.seed.jsonl
-    python experiments/calibration/validate_items.py sheets \
-        --items experiments/calibration/private/items.jsonl \
-        --out experiments/calibration/private/sheets
-    python experiments/calibration/validate_items.py score \
+    python benchmark/validate_items.py check \
+        --items benchmark/items.seed.jsonl
+    python benchmark/validate_items.py sheets \
+        --items benchmark/private/items.jsonl \
+        --out benchmark/private/sheets
+    python benchmark/validate_items.py score \
         --rater1 .../rater1.csv --rater2 .../rater2.csv \
         --adjudication .../adjudication.csv --effort .../effort.csv
 
@@ -28,7 +28,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
+REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "trustcal" / "src"))
 
 from trustcal.eval.agreement import agreement_report  # noqa: E402
@@ -728,3 +728,4 @@ def main(argv: list[str] | None = None) -> int:
 
 if __name__ == "__main__":
     sys.exit(main())
+

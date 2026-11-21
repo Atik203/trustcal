@@ -50,7 +50,7 @@ __pycache__/
 # Annotation / audit working data. These may contain non-redistributable
 # item text (SciFact is CC BY-NC 2.0; GPQA and HLE are gated; MMLU-Pro test
 # text should not be redistributed).
-/experiments/calibration/private/
+/benchmark/private/
 /experiments/verifier_audit/private/
 
 docs/supervisor_report/main.aux

@@ -8,7 +8,7 @@
 
 ```text
 Write ONE SciClaimBench [STRATUM: biomedical|physics_chemistry|math_cs] item from the skeleton
-experiments/calibration/item.template.json, in expert style: an ORIGINAL question, options,
+benchmark/item.template.json, in expert style: an ORIGINAL question, options,
 gold_answer, exactly 3 positions with 3-6 ATOMIC claims each. For each claim give a candidate
 evidence passage with source + resolvable locator (DOI/PMID/arXiv/URL) + licence, and a
 CANDIDATE gold_verdict with rationale. Rules: one proposition per claim; contradict-first
@@ -22,9 +22,9 @@ verification is what confers gold.
 ### B. Sheet-maker — blind sheets from a drafted batch
 
 ```text
-Assemble the drafted items at [BATCH: experiments/calibration/private/calibration_items.jsonl]
-and run: python experiments/calibration/validate_items.py sheets --items [BATCH]
---out experiments/calibration/private/calibration/sheets
+Assemble the drafted items at [BATCH: benchmark/private/calibration_items.jsonl]
+and run: python benchmark/validate_items.py sheets --items [BATCH]
+--out benchmark/private/calibration/sheets
 Then verify: rater1.csv and rater2.csv have identical row counts, blank verdict/confidence/notes,
 and NO gold_verdict/verifier/arm column; adjudication.csv has the extra rater1_verdict,
 rater2_verdict, agreement, adjudicated_verdict, adjudication_notes, defect_flag, defect_type
@@ -34,7 +34,7 @@ columns. Report row counts and manifest hash. Do not label anything.
 ### C. Validator-runner — structural check
 
 ```text
-Run: python experiments/calibration/validate_items.py check --items [BATCH] --strict
+Run: python benchmark/validate_items.py check --items [BATCH] --strict
 Paste the full output (items/authored/claims/passages/strata/verdicts + every ERROR line).
 Fix schema errors only (counts, IDs, missing fields, strata balance 8/8/8). Do not change
 any claim text, evidence, verdict, or licence to make it pass. Unfilled slots are honest;
@@ -45,8 +45,8 @@ fabricated passages or verdicts are defects.
 
 ```text
 All sheets are submitted (rater1.csv, rater2.csv, adjudication.csv, effort.csv all filled,
-no blanks). Run the exact next_command from experiments/calibration/status.json:
-python experiments/calibration/validate_items.py score --rater1 ... --rater2 ... --adjudication ...
+no blanks). Run the exact next_command from benchmark/status.json:
+python benchmark/validate_items.py score --rater1 ... --rater2 ... --adjudication ...
 --effort ... --min-kappa 0.75 --max-defect 0.15 --max-hours 2.0 --max-unresolved 0.05
 Paste the JSON + exit code (0 pass / 2 fail / 1 blocked). Do not adjudicate, do not fill
 labels, do not relabel anything. A failed gate is a finding: keep the batch, report it.

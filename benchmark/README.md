@@ -1,8 +1,42 @@
+# Benchmark hub — SciClaimBench annotation, all in one place
+
+**Start here:** [`tasks/00_OVERVIEW.md`](tasks/00_OVERVIEW.md) (pipeline, gates, glossary) → pick your role pack below → [`docs/MEMBER_GUIDE.md`](../docs/MEMBER_GUIDE.md) (roles, worked examples, 4/6-week plan).
+
+| Batch | Items | Location | Sheets | Status |
+|---|---|---|---|---|
+| Calibration (S0) | 24 (8/8/8) | `private/items/cal-001..024` | `private/calibration/sheets/` | Drafted, schema-valid; **0 human labels** |
+| Freeze (S2) | 180 (60/60/60) | `private/freeze180/` | `private/freeze180/sheets/` | Drafts + blank sheets ready |
+| Full target (S3) | 300 (100/100/100) | `private/full300/` | `private/full300/sheets/` | Drafts + blank sheets ready |
+
+**The gate (all four, one command):** κ ≥ 0.75, defect ≤ 0.15, H_attempt ≤ 2.0 h/item, unresolved ≤ 0.05. Verdict vocabulary: `support` / `contradict` / `neutral` — nothing else validates. Items carry **no AI markings** (provenance lives in `private/*/MANIFEST.json`); gold = verified + adjudicated.
+
+```bash
+python benchmark/validate_items.py score --rater1 benchmark/private/<batch>/sheets/rater1.csv \
+  --rater2 benchmark/private/<batch>/sheets/rater2.csv \
+  --adjudication benchmark/private/<batch>/sheets/adjudication.csv \
+  --effort benchmark/private/<batch>/sheets/effort.csv \
+  --min-kappa 0.75 --max-defect 0.15 --max-hours 2.0 --max-unresolved 0.05
+```
+
+| Role | Open this | Owner |
+|---|---|---|
+| Rater (label blind rows) | [`tasks/01_RATER.md`](tasks/01_RATER.md) + `templates/` forms | P3 + annotators |
+| Adjudicator (resolve + defect flags) | [`tasks/02_ADJUDICATOR.md`](tasks/02_ADJUDICATOR.md) | P3 |
+| Author (draft/verify items) | [`tasks/03_AUTHOR.md`](tasks/03_AUTHOR.md) | P3 |
+| Agent pilot (run agents for drafting/scoring) | [`tasks/04_AGENT_PILOT.md`](tasks/04_AGENT_PILOT.md) | P2 + P4 |
+| Full plan (gates, budgets, cut-to-120) | [`FULLBENCH_PLAN.md`](FULLBENCH_PLAN.md) | P3 |
+
+**Rules that block a freeze:** no gated/non-redistributable text (no GPQA/HLE/MMLU-Pro items — ever); adaptations only from public-domain/CC-BY sources with citation + locator + licence recorded; licence review before any freeze (CC BY-SA/BY-NC-SA excerpts flagged); nothing is gold until member verification + adjudication pass the gate above.
+
+**For maintainers:** raw drafts/sheets live under `private/` (gitignored). Schema: [`schema.md`](schema.md). Generators: [`validate_items.py`](validate_items.py), [`draft_items.py`](draft_items.py). Batch state: [`status.json`](status.json). Related: verifier audit (`../experiments/verifier_audit/`), injection sheets (`../trustcal/scripts/annotate.py`).
+
+---
+
 # SciClaimBench 24-item calibration — protocol and working files
 
-**Member guide:** [`docs/MEMBER_GUIDE.md`](../../docs/MEMBER_GUIDE.md) — roles, worked examples, and the 4/6-week plan.
+**Member guide:** [`docs/MEMBER_GUIDE.md`](../docs/MEMBER_GUIDE.md) — roles, worked examples, and the 4/6-week plan.
 
-**Gate:** Phase N3 (roadmap §4). **Owner:** P3 + annotators.
+**Gate:** Phase N3 (roadmap §5). **Owner:** P3 + annotators.
 **Status (21 Nov 2026): BLOCKED on human verification and annotation.**
 **24 of 24 items are drafted but unverified (216 claims, 234 passages; 0 human labels exist).** The files here
 are a schema-validated draft batch, an annotation workbook, and a validator, not
@@ -187,24 +221,24 @@ From the repository root, with the `trustcal` virtual environment:
 
 ```bash
 # 1. Structural check of the seed batch. This passes with 24 unfilled slots.
-python experiments/calibration/validate_items.py check \
-  --items experiments/calibration/items.seed.jsonl
+python benchmark/validate_items.py check \
+  --items benchmark/items.seed.jsonl
 
 # 2. Strict check: exits 2 until every slot is authored. Use this in CI.
-python experiments/calibration/validate_items.py check \
-  --items experiments/calibration/private/items.jsonl --strict
+python benchmark/validate_items.py check \
+  --items benchmark/private/items.jsonl --strict
 
 # 3. After authoring, write blind rater sheets + adjudication workbook.
-python experiments/calibration/validate_items.py sheets \
-  --items experiments/calibration/private/items.jsonl \
-  --out experiments/calibration/private/sheets
+python benchmark/validate_items.py sheets \
+  --items benchmark/private/items.jsonl \
+  --out benchmark/private/sheets
 
 # 4. After both raters and the adjudicator finish, score the gate.
-python experiments/calibration/validate_items.py score \
-  --rater1 experiments/calibration/private/sheets/rater1.csv \
-  --rater2 experiments/calibration/private/sheets/rater2.csv \
-  --adjudication experiments/calibration/private/sheets/adjudication.csv \
-  --effort experiments/calibration/private/sheets/effort.csv \
+python benchmark/validate_items.py score \
+  --rater1 benchmark/private/sheets/rater1.csv \
+  --rater2 benchmark/private/sheets/rater2.csv \
+  --adjudication benchmark/private/sheets/adjudication.csv \
+  --effort benchmark/private/sheets/effort.csv \
   --min-kappa 0.75 --max-defect 0.15 --max-hours 2.0 --max-unresolved 0.05
 ```
 

@@ -16,7 +16,7 @@
 
 ## 0. Task packs and current work
 
-Role task packs with exact commands, paths, budgets, and done-criteria live in [`docs/member/tasks/`](member/tasks/):
+Role task packs with exact commands, paths, budgets, and done-criteria live in [`benchmark/tasks/`](member/tasks/):
 
 - [`00_OVERVIEW.md`](member/tasks/00_OVERVIEW.md) — pipeline map 24→180→300, gates, file map, glossary. Read first.
 - [`01_RATER.md`](member/tasks/01_RATER.md) — label blind sheets (Members 4, 5; verifier audit: Members 2, 4).
@@ -24,7 +24,7 @@ Role task packs with exact commands, paths, budgets, and done-criteria live in [
 - [`03_AUTHOR.md`](member/tasks/03_AUTHOR.md) — draft/verify items (Members 2, 3 verify; Member 1 drafts).
 - [`04_AGENT_PILOT.md`](member/tasks/04_AGENT_PILOT.md) — copy-paste agent prompts; agents draft, humans decide every gold verdict.
 
-**Current work (Nov 2026): verify the 24-item calibration first** — drafts at `experiments/calibration/private/items/cal-001..024.json`, blind sheets at `experiments/calibration/private/calibration/sheets/`, validator `experiments/calibration/validate_items.py`, score command in `experiments/calibration/status.json` under `next_command`. The 180-item freeze and 300-item target start only after the κ ≥ 0.75 / defect ≤ 15% / H ≤ 2.0 h gate passes. The 4/6-week plan in Section 10 is unchanged.
+**Current work (Nov 2026): verify the 24-item calibration first** — drafts at `benchmark/private/items/cal-001..024.json`, blind sheets at `benchmark/private/calibration/sheets/`, validator `benchmark/validate_items.py`, score command in `benchmark/status.json` under `next_command`. The 180-item freeze and 300-item target start only after the κ ≥ 0.75 / defect ≤ 15% / H ≤ 2.0 h gate passes. The 4/6-week plan in Section 10 is unchanged.
 
 > **Note on Member 1.** Member 1 (Atik) runs the experiments, the Python pipeline, the GPU runs, the item drafting with AI agents, the analysis, and the manuscript integration. His work is not assigned in this guide. The tasks below are only the **human-judgment work that cannot be delegated to an agent** without changing the study. If a task can be automated, Member 1 or an agent does it; it is not listed here.
 
@@ -94,8 +94,8 @@ These are planning estimates, not ledger numbers. Member 1's item drafting and e
 | 1 | [`README.md`](../README.md) | Project status, claim boundary, repository map |
 | 2 | [`FYDP_Report/fydp.pdf`](../FYDP_Report/fydp.pdf) | The full report; read the abstract, Chapter 3, and Chapter 4 |
 | 3 | [`PRE_REGISTRATION.md`](../PRE_REGISTRATION.md) | Endpoints, hypotheses, exclusions, stopping rules |
-| 4 | [`experiments/calibration/README.md`](../experiments/calibration/README.md) | SciClaimBench protocol, κ/defect/effort gates, 24 → 180 → 300 ladder |
-| 5 | [`experiments/calibration/schema.md`](../experiments/calibration/schema.md) | Item, position, claim, evidence, and verdict fields |
+| 4 | [`benchmark/README.md`](../benchmark/README.md) | SciClaimBench protocol, κ/defect/effort gates, 24 → 180 → 300 ladder |
+| 5 | [`benchmark/schema.md`](../benchmark/schema.md) | Item, position, claim, evidence, and verdict fields |
 | 6 | [`experiments/verifier_audit/README.md`](../experiments/verifier_audit/README.md) | 180-pair audit, blind sheets, κ and balanced accuracy |
 | 7 | [`docs/GLOSSARY.md`](GLOSSARY.md) | Terms and metric names |
 | 8 | This guide | Your role, examples, deadlines, and submission rules |
@@ -114,14 +114,14 @@ Use these links directly. Do not search the repository for the files.
 | Journal PDF | <https://github.com/Atik203/trustcal/blob/main/Journal_Paper/cas-sc-template.pdf> |
 | Pre-registration | <https://github.com/Atik203/trustcal/blob/main/PRE_REGISTRATION.md> |
 | Roadmap and gates | <https://github.com/Atik203/trustcal/blob/main/roadmap.md> |
-| SciClaimBench protocol | <https://github.com/Atik203/trustcal/blob/main/experiments/calibration/README.md> |
-| SciClaimBench schema | <https://github.com/Atik203/trustcal/blob/main/experiments/calibration/schema.md> |
-| SciClaimBench validator | <https://github.com/Atik203/trustcal/blob/main/experiments/calibration/validate_items.py> |
-| SciClaimBench sheet templates | <https://github.com/Atik203/trustcal/tree/main/experiments/calibration/annotation> |
+| SciClaimBench protocol | <https://github.com/Atik203/trustcal/blob/main/benchmark/README.md> |
+| SciClaimBench schema | <https://github.com/Atik203/trustcal/blob/main/benchmark/schema.md> |
+| SciClaimBench validator | <https://github.com/Atik203/trustcal/blob/main/benchmark/validate_items.py> |
+| SciClaimBench sheet templates | <https://github.com/Atik203/trustcal/tree/main/benchmark/annotation> |
 | Verifier audit protocol | <https://github.com/Atik203/trustcal/blob/main/experiments/verifier_audit/README.md> |
 | Verifier audit builder | <https://github.com/Atik203/trustcal/blob/main/experiments/verifier_audit/build_audit.py> |
 | Verifier audit master template | <https://github.com/Atik203/trustcal/blob/main/experiments/verifier_audit/audit_sheet.template.csv> |
-| Member templates | <https://github.com/Atik203/trustcal/tree/main/docs/member/templates> |
+| Member templates | <https://github.com/Atik203/trustcal/tree/main/benchmark/templates> |
 | Glossary | <https://github.com/Atik203/trustcal/blob/main/docs/GLOSSARY.md> |
 | Claims audit (report) | <https://github.com/Atik203/trustcal/blob/main/FYDP_Report/CLAIMS_AUDIT.md> |
 | Defence Q&A | <https://github.com/Atik203/trustcal/blob/main/docs/FYDP1_defence_Q&A.md> |
@@ -653,7 +653,7 @@ A failed κ or balanced-accuracy gate is a **finding**, not a failure of the tea
 > Please read `docs/MEMBER_GUIDE.md` and the eight documents in Section 3 before our first meeting. You do not need to know the domain in advance. We will do a short practice batch together. The recommended sprint is six weeks, with a four-week compressed option if the draft items are ready by Day 5.
 >
 > Guide: https://github.com/Atik203/trustcal/blob/main/docs/MEMBER_GUIDE.md
-> Templates: https://github.com/Atik203/trustcal/tree/main/docs/member/templates
+> Templates: https://github.com/Atik203/trustcal/tree/main/benchmark/templates
 >
 > Member 2: annotation lead, verifier rater 1, SciClaimBench item co-verifier.
 > Member 3: SciClaimBench item lead, cross-review, verifier QA, defect review.
@@ -673,14 +673,14 @@ A failed κ or balanced-accuracy gate is a **finding**, not a failure of the tea
 | Journal PDF | <https://github.com/Atik203/trustcal/blob/main/Journal_Paper/cas-sc-template.pdf> |
 | Pre-registration | <https://github.com/Atik203/trustcal/blob/main/PRE_REGISTRATION.md> |
 | Roadmap | <https://github.com/Atik203/trustcal/blob/main/roadmap.md> |
-| SciClaimBench protocol | <https://github.com/Atik203/trustcal/blob/main/experiments/calibration/README.md> |
-| SciClaimBench schema | <https://github.com/Atik203/trustcal/blob/main/experiments/calibration/schema.md> |
-| SciClaimBench validator | <https://github.com/Atik203/trustcal/blob/main/experiments/calibration/validate_items.py> |
-| SciClaimBench templates | <https://github.com/Atik203/trustcal/tree/main/experiments/calibration/annotation> |
+| SciClaimBench protocol | <https://github.com/Atik203/trustcal/blob/main/benchmark/README.md> |
+| SciClaimBench schema | <https://github.com/Atik203/trustcal/blob/main/benchmark/schema.md> |
+| SciClaimBench validator | <https://github.com/Atik203/trustcal/blob/main/benchmark/validate_items.py> |
+| SciClaimBench templates | <https://github.com/Atik203/trustcal/tree/main/benchmark/annotation> |
 | Verifier protocol | <https://github.com/Atik203/trustcal/blob/main/experiments/verifier_audit/README.md> |
 | Verifier builder | <https://github.com/Atik203/trustcal/blob/main/experiments/verifier_audit/build_audit.py> |
 | Verifier master template | <https://github.com/Atik203/trustcal/blob/main/experiments/verifier_audit/audit_sheet.template.csv> |
-| Member templates | <https://github.com/Atik203/trustcal/tree/main/docs/member/templates> |
+| Member templates | <https://github.com/Atik203/trustcal/tree/main/benchmark/templates> |
 | Glossary | <https://github.com/Atik203/trustcal/blob/main/docs/GLOSSARY.md> |
 | Report claims audit | <https://github.com/Atik203/trustcal/blob/main/FYDP_Report/CLAIMS_AUDIT.md> |
 | Defence Q&A | <https://github.com/Atik203/trustcal/blob/main/docs/FYDP1_defence_Q&A.md> |

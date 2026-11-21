@@ -5,7 +5,7 @@
 ## Steps
 
 1. Get your sheet from Member 2 in the private folder. Confirm the filename and row count before starting.
-   - SciClaimBench: `experiments/calibration/private/calibration/sheets/rater1.csv` (Member 4) or `rater2.csv` (Member 5). Expect ~216 rows (24 items × 9 claims), not 24.
+   - SciClaimBench: `benchmark/private/calibration/sheets/rater1.csv` (Member 4) or `rater2.csv` (Member 5). Expect ~216 rows (24 items × 9 claims), not 24.
    - Verifier audit: `experiments/verifier_audit/private/scifact/sheets/rater1.csv` (Member 2) or `rater2.csv` (Member 4). Expect 180 rows.
 2. Confirm blinding: your sheet must have **no** `gold_verdict`, `verifier_label`, or arm column. If you see one, stop and tell Member 2.
 3. Label row by row, top to bottom, in one or two sittings per batch. For each row fill exactly three columns: verdict, confidence (0–1), notes.
@@ -16,7 +16,7 @@
    2. Else if **at least one** passage entails the claim → `support` / `supported`.
    3. Else → `neutral` / `unverifiable`.
 5. Log effort as you go (sheet `effort.csv` columns `item_id,phase,minutes,annotator,notes`): one row per item with `phase=rater1` (or `rater2`) and your minutes. This feeds H_attempt ≤ 2.0 h/item.
-6. Submit: save a copy with your initials (`rater1_<initials>.csv`), complete `docs/member/templates/annotation_submission_checklist.md`, upload to the private folder, post filename + row count in the team channel. Do not edit the original batch.
+6. Submit: save a copy with your initials (`rater1_<initials>.csv`), complete `benchmark/templates/annotation_submission_checklist.md`, upload to the private folder, post filename + row count in the team channel. Do not edit the original batch.
 
 ## Worked example (SciClaimBench labels; same logic applies to verifier labels)
 
@@ -45,7 +45,7 @@ Claim: "Drug X reduced systolic blood pressure by 12 mmHg versus placebo."
 
 ## Inputs → outputs
 
-- In: blind `rater1.csv`/`rater2.csv` from Member 2 (private folder) + codebook (`experiments/calibration/README.md` §§4–5, verifier `sheets/codebook.md`).
+- In: blind `rater1.csv`/`rater2.csv` from Member 2 (private folder) + codebook (`benchmark/README.md` §§4–5, verifier `sheets/codebook.md`).
 - Out: `rater1_<initials>.csv` / `rater2_<initials>.csv` (every row labelled) + `effort.csv` rows + `submission_<initials>.md` checklist → private folder.
 
 ## Hour budget

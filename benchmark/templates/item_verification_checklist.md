@@ -2,7 +2,7 @@
 
 **Verifier:** ____________________  
 **Date:** ____________________  
-**Batch:** `experiments/calibration/private/items.jsonl`  
+**Batch:** `benchmark/private/items.jsonl`  
 **Guide:** [`docs/MEMBER_GUIDE.md`](../../MEMBER_GUIDE.md)
 
 Use one copy per item. Do not edit the item source; return the completed checklist and a written problem list to Member 1.
