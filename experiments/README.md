@@ -10,7 +10,7 @@ Index of every experimental run for the trustcal pipeline. One folder per experi
 
 **P0 is an engineering record, not an efficacy result.** No Core or Full matrix has run; no accuracy, CCR, CMR, or sign-reversal claim exists. The `p0/` folder records the gate, the integration history, and the release tags only.
 
-**WP naming note.** The landed P0 [`p0/WP-13.md`](p0/WP-13.md) is the B8-no-trust prompt split. The placebo/oracle slice is **WP-18** (implemented; v1.3 sign-off pending). **WP-19** records the 18 GB test-only validation plan; its run report is [`n1_smoke/`](n1_smoke/README.md).
+**WP naming note.** The landed P0 [`p0/WP-13.md`](p0/WP-13.md) is the B8-no-trust prompt split. The placebo/oracle slice is **WP-18** (implemented; v1.3 sign-off pending). The 18 GB test-only validation plan (retired WP-19, now in git history); its run report is [`n1_smoke/`](n1_smoke/README.md).
 
 ## Annotation gates in progress
 

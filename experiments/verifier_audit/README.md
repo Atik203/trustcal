@@ -2,7 +2,7 @@
 
 **Member guide:** [`docs/MEMBER_GUIDE.md`](../../docs/MEMBER_GUIDE.md) — roles, worked examples, and the 4/6-week plan.
 
-**Gate:** Phase N4 (roadmap §5), harness `trustcal/scripts/verifier_audit.py` (P0-6 / WP-08).
+**Gate:** Phase N4 (roadmap §5), harness `trustcal/scripts/verifier_audit.py` (retired P0 slices; see `experiments/p0/README.md`).
 **Owner:** P6 + annotators.
 **Status (9 Nov 2026): 180 real pairs generated; 0 human labels. BLOCKED on two
 annotators and one adjudicator.** This is not a completed audit and no κ or
