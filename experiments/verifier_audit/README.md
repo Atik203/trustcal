@@ -1,6 +1,6 @@
 # Verifier audit — 150–200 claim–passage pairs
 
-**Member guide:** [`docs/MEMBER_GUIDE.md`](../../docs/MEMBER_GUIDE.md) — roles, worked examples, and the 4/6-week plan.
+**Member guide:** [`benchmark/MEMBER_GUIDE.md`](../../benchmark/MEMBER_GUIDE.md) — roles, worked examples, and the 4/6-week plan.
 
 **Gate:** Phase N4 (roadmap §5), harness `trustcal/scripts/verifier_audit.py` (retired P0 slices; see `experiments/p0/README.md`).
 **Owner:** P6 + annotators.

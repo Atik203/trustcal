@@ -1,6 +1,6 @@
 # Benchmark hub — SciClaimBench annotation, all in one place
 
-**Start here:** [`tasks/00_OVERVIEW.md`](tasks/00_OVERVIEW.md) (pipeline, gates, glossary) → pick your role pack below → [`docs/MEMBER_GUIDE.md`](../docs/MEMBER_GUIDE.md) (roles, worked examples, 4/6-week plan).
+**Start here:** [`tasks/00_OVERVIEW.md`](tasks/00_OVERVIEW.md) (pipeline, gates, glossary) → pick your role pack below → [`MEMBER_GUIDE.md`](./MEMBER_GUIDE.md) (roles, worked examples, 4/6-week plan).
 
 **Step 0 (once):** draft items and blank calibration sheets ship with the repo — clone and start, no bundle needed. Check Python ≥ 3.10 with `pip install pyyaml`. Details in `tasks/00_OVERVIEW.md` §0. Filled `*_initials` sheets and session manifests always stay local (gitignored).
 
@@ -20,21 +20,21 @@ python benchmark/validate_items.py score --rater1 benchmark/private/<batch>/shee
   --min-kappa 0.75 --max-defect 0.15 --max-hours 2.0 --max-unresolved 0.05
 ```
 
-| Who | Your job | Open this first | Then |
-|---|---|---|
-| **Prottoy (PR)** — rater 1 | Label all 216 SciClaimBench rows + 180 verifier rows | [`tasks/01_RATER.md`](tasks/01_RATER.md) | [`templates/annotation_submission_checklist.md`](templates/annotation_submission_checklist.md) |
-| **Salman (SA)** — rater 2 | Same sheets, independently (never peek at Prottoy's) | [`tasks/01_RATER.md`](tasks/01_RATER.md) | [`templates/annotation_submission_checklist.md`](templates/annotation_submission_checklist.md) |
-| **Yousuf (YO)** — verifier | Check all 24 drafts, file the problem list | [`tasks/03_AUTHOR.md`](tasks/03_AUTHOR.md) | [`templates/item_verification_checklist.md`](templates/item_verification_checklist.md) (one per item) |
-| **Rakib + Limu (RK+LM)** — adjudicators (pair) | Settle disagreements, defect review | [`tasks/02_ADJUDICATOR.md`](tasks/02_ADJUDICATOR.md) | `templates/` checklists as needed |
-| **Atik** — agent pilot, LAST | Run helpers + score only after every sheet is in | [`tasks/04_AGENT_PILOT.md`](tasks/04_AGENT_PILOT.md) | — |
+| Who | Your job | Open this first | Then | Due |
+|---|---|---|---|---|
+| **Prottoy (PR)** — rater 1 | Label all 216 SciClaimBench rows + 180 verifier rows | [`tasks/01_RATER.md`](tasks/01_RATER.md) | [`templates/annotation_submission_checklist.md`](templates/annotation_submission_checklist.md) | Sheets in: **Fri 4 Dec** |
+| **Salman (SA)** — rater 2 | Same sheets, independently (never peek at Prottoy's) | [`tasks/01_RATER.md`](tasks/01_RATER.md) | [`templates/annotation_submission_checklist.md`](templates/annotation_submission_checklist.md) | Sheets in: **Fri 4 Dec** |
+| **Yousuf (YO)** — verifier | Check all 24 drafts, file the problem list | [`tasks/03_AUTHOR.md`](tasks/03_AUTHOR.md) | [`templates/item_verification_checklist.md`](templates/item_verification_checklist.md) (one per item) | Problem list in: **Fri 4 Dec** |
+| **Rakib + Limu (RK+LM)** — adjudicators (pair) | Settle disagreements, defect review | [`tasks/02_ADJUDICATOR.md`](tasks/02_ADJUDICATOR.md) | `templates/` checklists as needed | Workbook done: **Fri 11 Dec** |
+| **Atik** — agent pilot, LAST | Run helpers + score only after every sheet is in | [`tasks/04_AGENT_PILOT.md`](tasks/04_AGENT_PILOT.md) | — | Score + report: **week of 14 Dec** |
 
-Three rules: no gated text ever · items have no AI markings · nothing is gold until humans verify it and the gate passes.
+Three rules: no gated text ever · items have no AI markings · nothing is gold until humans verify it and the gate passes. Dates are targets — blockers go to Atik immediately, never wait for a deadline.
 
 ---
 
 # SciClaimBench 24-item calibration — protocol and working files
 
-**Member guide:** [`docs/MEMBER_GUIDE.md`](../docs/MEMBER_GUIDE.md) — roles, worked examples, and the 4/6-week plan.
+**Member guide:** [`MEMBER_GUIDE.md`](./MEMBER_GUIDE.md) — roles, worked examples, and the 4/6-week plan.
 
 **Gate:** Phase N3 (roadmap §5). **Owner:** Atik (P3) + annotators.
 **Status (21 Nov 2026): BLOCKED on human verification and annotation.**

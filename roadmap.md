@@ -478,7 +478,7 @@ next/*  short-lived slice branches; deleted after merge
 | `AGENTS.md` | Canonical repository and university-GPU rules |
 | `trustcal/AGENTS.md` | Pipeline and serving rules |
 | `docs/DECISIONS.md` | Approved hardware, environment, and reuse decisions |
-| `docs/MEMBER_GUIDE.md` | Member roles and annotation plan |
+| `benchmark/MEMBER_GUIDE.md` | Member roles and annotation plan |
 | `docs/GLOSSARY.md` | Core run / Full run / TACL naming |
 | `PRE_REGISTRATION.md` | Frozen endpoints, arms, analysis, stopping rules |
 | `docs/agent/03_EXPERIMENT_PLAN.md` | Power, design, benchmark details |
