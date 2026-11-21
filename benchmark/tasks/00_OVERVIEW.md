@@ -6,14 +6,14 @@
 ## 0. Before you start (do this once)
 
 1. **Clone and check Python.** Everything you need ships with the repo — draft items and blank calibration sheets are tracked, so there is no bundle to fetch. You need Python 3.10 or newer and one package. Run all three lines (if the middle one errors, run `pip install pyyaml` and retry):
-**Run these three lines once** (or reuse the project's `trustcal/.venv` if you have it):
+**Run these three lines once** (or reuse the project's `trustcal/.venv` if you have it — then skip the pip step):
    ```bash
    python --version          # 3.10 or newer
    python -c "import yaml"    # silent = ok; error = pip install pyyaml first
     python benchmark/validate_items.py --help
    ```
    If all three print without errors, you are set.
-2. **Find your assignment** in the table in §4 below, then read only your role pack. Know where finished work goes: your filled sheets, checklists, and problem lists go to the shared private folder — ask P3 for its location on day 1 (with your member number and team-channel invite).
+2. **Find your assignment** in the table in §5 below, then read only your role pack. Know where finished work goes: your filled sheets, checklists, and problem lists go to the shared private folder — ask Atik (Atik, the benchmark owner) for its location on day 1, with your member number and team-channel invite.
 
 ## 1. Pipeline map 24 → 180 → 300
 
@@ -76,7 +76,7 @@ Decision order on every row: contradict first (any refuting passage wins), then 
 
 **Five conditions** (authoring only — raters ignore this): `evidence_available` (passages entail the claim) · `evidence_absent` (nothing usable) · `evidence_placebo` (topical but proves nothing) · `evidence_contradictory` (a passage refutes) · pressure-eligible (a correct minority faces a confident wrong majority).
 
-**Plain words:** gitignored = not on GitHub, P3 hands it to you · commit = saving to GitHub (never with private files) · PII = personal info, never write it · locator = the DOI/PMID/link proving the passage · entails = the passage states it · refutes = the passage says the opposite · atomic = one single checkable fact · gold = the final checked answer.
+**Plain words:** gitignored = not on GitHub (but drafts + blank sheets ARE tracked, so you already have them) · commit = saving to GitHub (never with private files) · PII = personal info, never write it · locator = the DOI/PMID/link proving the passage · entails = the passage states it · refutes = the passage says the opposite · atomic = one single checkable fact · gold = the final checked answer.
 
 ## 5. Which pack do I read?
 
@@ -87,4 +87,4 @@ Decision order on every row: contradict first (any refuting passage wins), then 
 | `03_AUTHOR.md` | verify the 24 drafts (12–16 h) | Yousuf (sole verifier — raters and adjudicators must stay blind) |
 | `04_AGENT_PILOT.md` | copy-paste agent prompts; scoring | Atik, LAST (only after every sheet is in) |
 
-Escalation: benchmark/protocol questions → **P3** (owns N3 benchmark). Verifier-audit questions → **P6** (owns N4). Sheets/bundle/channel → whoever gave you the bundle on day 1. Adjudication questions → Rakib + Limu.
+Escalation: benchmark/protocol questions **→ Atik** (benchmark owner). Verifier-audit questions **→ P6**. Batch/blinding/submission **→ Atik**. Adjudication questions **→ Rakib + Limu**.

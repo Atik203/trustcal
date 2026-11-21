@@ -2,14 +2,14 @@
 
 **Task:** independently label every claim in your blind sheet against the cited passages only. Your sheet plus the second rater's sheet is the κ gate (≥ 0.75).
 
-**Never open `benchmark/private/items/` or any `cal-*.json` file.** Item files contain the gold answers — opening one destroys your blinding for those rows. Work ONLY from your sheet's `claim` + `evidence_text` columns. If you open one by accident, tell P3 immediately and those rows get reassigned.
+**Never open `benchmark/private/items/` or any `cal-*.json` file.** Item files contain the gold answers — opening one destroys your blinding for those rows. Work ONLY from your sheet's `claim` + `evidence_text` columns. If you open one by accident, tell Atik immediately and those rows get reassigned.
 
 ## Steps
 
 1. Get your sheet (already in the repo — no bundle needed for raters). Confirm the filename and row count before starting.
    - SciClaimBench: `benchmark/private/calibration/sheets/rater1.csv` (**Prottoy**) or `rater2.csv` (**Salman**). Expect 216 data rows + 1 header line (24 items × 9 claims). Count rows in Excel with `=COUNTA(A:A)-1` and expect 216 — do not trust line counts (multiline cells lie).
    - Verifier audit: `experiments/verifier_audit/private/scifact/sheets/rater1.csv` (**Prottoy**) or `rater2.csv` (**Salman**). Expect 180 data rows + 1 header line.
-2. Confirm blinding: your sheet must have **no** `gold_verdict`, `verifier_label`, or arm column. If you see one, stop and tell P3.
+2. Confirm blinding: your sheet must have **no** `gold_verdict`, `verifier_label`, or arm column. If you see one, stop and tell Atik.
 3. Label row by row, top to bottom, in one or two sittings per batch. For each row fill exactly three columns: verdict, confidence (0–1), notes.
    - SciClaimBench labels: `support` · `contradict` · `neutral` (exact lowercase).
    - Verifier labels: `supported` · `contradicted` · `unverifiable` (exact lowercase — different words on purpose).
@@ -43,17 +43,17 @@ Claim: "Drug X reduced systolic blood pressure by 12 mmHg versus placebo."
 
 - **Flag (low confidence + note, still label):** ambiguous wording, two passages in tension, unit/negation doubt, locator won't resolve, same-name trials you can't tell apart (e.g. WOMAN vs WOMAN-2 — judge the cited passage only, never Google it). Example note: "e2 seems to refute; conf 0.4; needs adjudication." A flagged row stays in your sheet — the notes column IS the escalation path; nothing goes anywhere else.
 - **Never guess silently.** A low-confidence label with a clear note is correct behavior; a silent guess is a defect risk.
-- **Stop and escalate (do not label):** sheet contains gold/verifier labels, row count mismatch, passages missing entirely, you recognize an item you verified, suspected PII. Tell P3.
+- **Stop and escalate (do not label):** sheet contains gold/verifier labels, row count mismatch, passages missing entirely, you recognize an item you verified, suspected PII. Tell Atik.
 
 ## Inputs → outputs
 
-- In: your blind `rater1.csv`/`rater2.csv` (in the repo) + codebook (`benchmark/README.md` §§4–5; verifier codebook arrives with the verifier round — P3 gives it to you, do not start it yet).
-- Out: `rater1_<initials>.csv` / `rater2_<initials>.csv` (every row labelled — save a COPY with your initials, never overwrite the original) + `effort.csv` rows + `submission_<initials>.md` checklist → the shared private folder P3 points you to (ask P3 for the upload location on day 1; never commit, never email).
+- In: your blind `rater1.csv`/`rater2.csv` (in the repo) + codebook (`benchmark/README.md` §§4–5; verifier codebook arrives with the verifier round — Atik gives it to you, do not start it yet).
+- Out: `rater1_<initials>.csv` / `rater2_<initials>.csv` (every row labelled — save a COPY with your initials, never overwrite the original) + `effort.csv` rows + `submission_<initials>.md` checklist → the shared private folder Atik points you to (ask Atik for the upload location on day 1; never commit, never email).
 
 ## Hour budget (honest numbers)
 
 - SciClaimBench sheet (216 rows): 5–7 h practiced (2 min/row); 8–10 h on your first sheet — normal, still inside the gate.
-- Verifier 180-pair sheet: another 5–6 h. Do calibration first; P3 starts the verifier round after calibration sheets are in (Prottoy and Salman each label both — same skill, no blinding conflict across datasets).
+- Verifier 180-pair sheet: another 5–6 h. Do calibration first; Atik starts the verifier round after calibration sheets are in (Prottoy and Salman each label both — same skill, no blinding conflict across datasets).
 - Pace: 2–4 min/row once practiced; your first ~10 rows will be slower. Errors rise at the end, so slow down for the final 30 rows instead of rushing them.
 - You do NOT need statistics: never compute anything. Judge words against words — "lower than" in the passage beats "reduces" in the claim; a rate ratio with CI crossing 1.0 and p > 0.05 means "no clear effect", not support. If numbers confuse you, flag the row (low confidence + note) and move on.
 - Excel survival: open your sheet ONLY by its exact filename; count rows with `=COUNTA(A:A)-1` and expect 216 (multiline cells make plain line counts lie); never add comment lines above the header; always Save As a new `raterN_<initials>.csv`, never Save over the original.
@@ -68,4 +68,4 @@ Claim: "Drug X reduced systolic blood pressure by 12 mmHg versus placebo."
 
 ## Escalation
 
-Batch/blinding/submission → P3. Codebook ambiguity → Atik (copy P3). Adjudication question → Rakib + Limu. PII/private-data concern → Atik privately, never a public issue.
+Batch/blinding/submission → Atik. Codebook ambiguity → Atik. Adjudication question → Rakib + Limu. PII/private-data concern → Atik privately, never a public issue.

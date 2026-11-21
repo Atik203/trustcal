@@ -12,21 +12,21 @@
 
 **No prior annotation experience is needed.** Every label is defined below and in the two codebooks. The first two days are for reading and a short practice batch. Start with Section 3 — or with the role task packs in Section 0 if you already know your role.
 
-> **Note on Member 1.** Member 1 (Atik) runs the experiments, the Python pipeline, the GPU runs, the item drafting with AI agents, the analysis, and the manuscript integration. His work is not assigned in this guide. The tasks below are only the **human-judgment work that cannot be delegated to an agent** without changing the study. If a task can be automated, Member 1 or an agent does it; it is not listed here.
+> **Note on Atik.** Atik runs the experiments, the Python pipeline, the GPU runs, the item drafting with AI agents, the analysis, and the manuscript integration. His work is not assigned in this guide. The tasks below are only the **human-judgment work that cannot be delegated to an agent** without changing the study. If a task can be automated, Atik or an agent does it; it is not listed here.
 
 ## 0. Task packs and current work
 
-Role task packs with exact commands, paths, budgets, and done-criteria live in [`benchmark/tasks/`](member/tasks/):
+Role task packs with exact commands, paths, budgets, and done-criteria live in [`benchmark/tasks/`](../benchmark/tasks/00_OVERVIEW.md):
 
-- [`00_OVERVIEW.md`](member/tasks/00_OVERVIEW.md) — pipeline map 24→180→300, gates, file map, glossary. Read first.
-- [`01_RATER.md`](member/tasks/01_RATER.md) — label blind sheets (Members 4, 5; verifier audit: Members 2, 4).
-- [`02_ADJUDICATOR.md`](member/tasks/02_ADJUDICATOR.md) — resolve disagreements, defect review (Member 6; Member 3 for defects).
-- [`03_AUTHOR.md`](member/tasks/03_AUTHOR.md) — draft/verify items (Members 2, 3 verify; Member 1 drafts).
-- [`04_AGENT_PILOT.md`](member/tasks/04_AGENT_PILOT.md) — copy-paste agent prompts; agents draft, humans decide every gold verdict.
+- [`00_OVERVIEW.md`](../benchmark/tasks/00_OVERVIEW.md) — pipeline map 24→180→300, gates, file map, glossary. Read first.
+- [`01_RATER.md`](../benchmark/tasks/01_RATER.md) - label blind sheets (Prottoy = rater 1, Salman = rater 2).
+- [`02_ADJUDICATOR.md`](../benchmark/tasks/02_ADJUDICATOR.md) - resolve disagreements, defect review (Rakib + Limu, paired).
+- [`03_AUTHOR.md`](../benchmark/tasks/03_AUTHOR.md) - verify the 24 drafts (Yousuf).
+- [`04_AGENT_PILOT.md`](../benchmark/tasks/04_AGENT_PILOT.md) - copy-paste agent prompts; agents draft, humans decide every gold verdict (Atik, LAST).
 
 **Current work (Nov 2026): verify the 24-item calibration first** — drafts at `benchmark/private/items/cal-001..024.json`, blind sheets at `benchmark/private/calibration/sheets/`, validator `benchmark/validate_items.py`, score command in `benchmark/status.json` under `next_command`. The 180-item freeze and 300-item target start only after the κ ≥ 0.75 / defect ≤ 15% / H ≤ 2.0 h gate passes. The 4/6-week plan in Section 10 is unchanged.
 
-> **Note on Member 1.** Member 1 (Atik) runs the experiments, the Python pipeline, the GPU runs, the item drafting with AI agents, the analysis, and the manuscript integration. His work is not assigned in this guide. The tasks below are only the **human-judgment work that cannot be delegated to an agent** without changing the study. If a task can be automated, Member 1 or an agent does it; it is not listed here.
+> **Note on Atik.** Atik runs the experiments, the Python pipeline, the GPU runs, the item drafting with AI agents, the analysis, and the manuscript integration. His work is not assigned in this guide. The tasks below are only the **human-judgment work that cannot be delegated to an agent** without changing the study. If a task can be automated, Atik or an agent does it; it is not listed here.
 
 ---
 
@@ -45,43 +45,45 @@ The project has two human-labeling gates. They are small in count but central to
 
 Both gates are currently blocked on human work:
 
-- SciClaimBench: **0 of 24 items authored**, 0 claims, 0 human labels.
+- SciClaimBench: **24 of 24 drafted, 0 human labels yet** — verification starts now.
 - Verifier audit: **180 real pairs ready**, 0 human labels.
 
 You are not being asked to run models, write code, build the literature review, or check the paper. You are being asked to read evidence carefully, apply a short codebook, and record a label with confidence and a note.
 
 ---
 
-## 2. What the five members will do
+## 2. Who does what (5 members + Atik, hardest first)
+
+Atik runs experiments, GPU, drafting agents, analysis, and manuscripts — and pilots the annotation agents LAST, after all human sheets are in. He is not assigned annotation work. The five members below do the human-judgment work only, hardest first: Rakib (with Limu) → Yousuf → Prottoy → Salman → Limu (with Rakib).
 
 | Member | Role | The human work only you can do | Main deliverables |
 | --- | --- | --- | --- |
-| **Member 2 — Rakibul** | **Annotation lead** | Run the rater calibration, protect blinding, co-verify 12 SciClaimBench items, rate the verifier audit, sign the agreement report | Calibration notes, 12 item checklists, verifier rater sheet, agreement report |
-| **Member 3 — Salman** | **SciClaimBench item lead** | Verify 12 items, cross-review the other 12, QA the verifier-audit sheets, run the defect review | 12 item checklists, cross-review log, verifier QA note, defect log |
-| **Member 4 — Pratay** | **SciClaimBench rater 1; verifier rater 2** | Label every SciClaimBench claim and all 180 verifier pairs | Two completed rater sheets |
-| **Member 5 — Yousuf** | **SciClaimBench rater 2** | Label every SciClaimBench claim as the second independent rater | One completed rater sheet |
-| **Member 6 — Limu** | **Adjudicator** | Adjudicate both audits and sign the privacy/licence check | Adjudicated SciClaimBench and verifier workbooks, privacy checklist |
+| **Rakib + Limu (pair)** | **Adjudicators** | Settle every disagreement, run defect review, sign licence check | Adjudicated workbooks, defect log |
+| **Yousuf** | **Item verifier** | Check all 24 drafts against the codebook | 24 checklists + problem list |
+| **Prottoy** | **Rater 1** | Label all 216 SciClaimBench claims + all 180 verifier pairs | Two completed rater sheets |
+| **Salman** | **Rater 2** | Same sheets, independently (never peek at rater 1) | Two completed rater sheets (own copies) |
+| **Atik** | **Agent pilot, LAST** | Drafting helpers, sheet builds, validation runs, scoring | Score JSON, verification logs |
 
 ### Who rates what
 
 | Audit | Raters | Adjudicator | Independent review |
 | --- | --- | --- | --- |
-| SciClaimBench 24-item | Member 4, Member 5 | Member 6 | Members 2 and 3 cross-review items they did not author |
-| Verifier audit 180 | Member 2, Member 4 | Member 6 | Member 3 checks sheet integrity and blinding |
+| SciClaimBench 24-item | Prottoy, Salman | Rakib + Limu | Yousuf verifies all 24 against the codebook (he rates nothing) |
+| Verifier audit 180 | Prottoy, Salman | Rakib + Limu | Atik checks sheet integrity and blinding |
 
 ### Workload
 
 | Member | Total | 6-week pace | 4-week pace |
 | --- | ---: | ---: | ---: |
-| Member 2 | 18–22 h | 3–4 h/week | 4.5–5.5 h/week |
-| Member 3 | 18–22 h | 3–4 h/week | 4.5–5.5 h/week |
-| Member 4 | 16–20 h | 2.5–3.5 h/week | 4–5 h/week |
-| Member 5 | 8–12 h | 1.5–2 h/week | 2–3 h/week |
-| Member 6 | 12–16 h | 2–3 h/week | 3–4 h/week |
+| Yousuf | 12–16 h | 2–3 h/week | 3–4 h/week |
+| Prottoy | 11–13 h | 2–2.5 h/week | 3–3.5 h/week |
+| Salman | 11–13 h | 2–2.5 h/week | 3–3.5 h/week |
+| Rakib + Limu (pair) | 8–11 h shared | 1.5–2 h/week each | 2–3 h/week each |
+| Atik (agents, last) | 2–4 h | at the end | at the end |
 
-These are planning estimates, not ledger numbers. Member 1's item drafting and experiment time are separate.
+These are planning estimates, not ledger numbers. Atik's agent piloting and experiment time are separate (he works last).
 
-**No member is assigned paper support, number checking, citation checking, literature search, code, or experiments.** Member 1 covers those with agents. The only exception is a privacy/licence sign-off for Member 6, because private data and licences require a named human owner.
+**No member is assigned paper support, number checking, citation checking, literature search, code, or experiments.** Atik covers those with agents. The only exception is a privacy/licence sign-off for Rakib + Limu, because private data and licences require named human owners.
 
 ---
 
@@ -100,7 +102,7 @@ These are planning estimates, not ledger numbers. Member 1's item drafting and e
 | 7 | [`docs/GLOSSARY.md`](GLOSSARY.md) | Terms and metric names |
 | 8 | This guide | Your role, examples, deadlines, and submission rules |
 
-You do **not** need to read the full literature review, the entire 70-page report, or the Python code. The eight documents above are enough to start. If a term is missing, check the glossary before asking.
+You do **not** need to read the full literature review, the entire 75-page report, or the Python code. If you already know your role from `benchmark/README.md`, read your ONE role pack first and use the eight documents above as reference only. If a term is missing, check the glossary before asking.
 
 ### Direct links
 
@@ -126,20 +128,20 @@ Use these links directly. Do not search the repository for the files.
 | Claims audit (report) | <https://github.com/Atik203/trustcal/blob/main/FYDP_Report/CLAIMS_AUDIT.md> |
 | Defence Q&A | <https://github.com/Atik203/trustcal/blob/main/docs/FYDP1_defence_Q&A.md> |
 | Compute and cost model | <https://github.com/Atik203/trustcal/blob/main/docs/agent/08_COMPUTE_COST.md> |
-| Private annotation folder | Member 1 posts the link in the team channel before Day 1. It is not in this public repository. |
+| Private annotation folder | Atik posts the link in the team channel before Day 1. It is not in this public repository. |
 
 ### How to use these links
 
 1. Click the link and read it in the browser.
 2. For a CSV, click **Raw** or **Download**, then save a copy in the private folder.
-3. Do not click **Fork**, **Pull request**, or **Commit** unless Member 1 asks.
-4. If a link is broken, tell Member 1 in the team channel. Do not search for a replacement alone; the wrong version of a protocol is worse than a delay.
+3. Do not click **Fork**, **Pull request**, or **Commit** unless Atik asks.
+4. If a link is broken, tell Atik in the team channel. Do not search for a replacement alone; the wrong version of a protocol is worse than a delay.
 5. Do not paste private sheets, raw SciFact text, or model outputs into a public issue or an external AI tool.
 
 ### Access checklist
 
 - [ ] GitHub account (the repository is public, so read access is enough).
-- [ ] Access to the shared private folder for annotation sheets. Member 1 will post the link.
+- [ ] Access to the shared private folder for annotation sheets. Atik will post the link.
 - [ ] Google Sheets or Excel, and a PDF reader.
 - [ ] The team communication channel and the weekly meeting invite.
 - [ ] Agreement not to copy private data, PII, or model outputs into public tools.
@@ -156,354 +158,107 @@ Do not start a real batch until the practice rows are discussed. The first batch
 
 ---
 
-## 4. Member 2 — Rakibul
+## 4. Rakib + Limu — adjudicators (pair)
 
-### Your role
+**Role:** paired adjudicators for both audits — you settle every disagreement and run defect review. Hardest judgment call on the team.
 
-You are the **annotation lead**. You own the human side of the two audits: rater calibration, batch preparation, blinding, the verifier rater sheet, and the agreement report. You also co-verify 12 SciClaimBench items with Member 3.
+**Pack:** [`02_ADJUDICATOR.md`](../benchmark/tasks/02_ADJUDICATOR.md) — exact columns, defect taxonomy, done-criteria. This section is only a pointer.
 
-You do not run models, write code, compute the final statistics, or check the paper. Member 1 and the agents do that.
+**Only you two do:**
 
-### What you will do
+1. Adjudicate every disagreement (SciClaimBench `adjudication.csv`, verifier `audit_sheet.csv`): copy agreement rows verbatim, decide disagreements from the codebook with a one-line rationale each.
+2. Run defect review on the frozen triples: fill `defect_flag` + `defect_type`. Pre-freeze corrections are rework, not defects.
+3. Sign the privacy/licence check (named human owners): private-folder handling, SciFact CC BY-NC terms, no gated text, no PII.
+4. Open the adjudication workbook only after BOTH rater sheets are submitted.
 
-1. **Run the rater calibration session.** This is human rater calibration, not model training. The models are frozen and inference-only. Member 1 or an agent may prepare the deck, examples, and practice rows; you facilitate the 30–60 minute session, answer codebook questions, protect blinding, and sign the notes.
-2. **Prepare the batches.** Check the row count, confirm that no gold/verifier/arm label is present, confirm the order is shuffled, and share the sheets privately.
-3. **Co-verify 12 SciClaimBench items.** Use the item checklist. Cross-review the 12 items Member 3 verified; do not edit the item source yourself.
-4. **Rate the verifier audit as rater 1.** Label all 180 pairs independently. Do not open the other sheet, the gold label, or the verifier label.
-5. **Sign the agreement report.** After Member 1 computes κ and balanced accuracy, write a one-page interpretation: what passed, what failed, which labels disagreed, and whether the codebook needs a revision.
+**Time:** **8–11 h shared** (adjudication 5–7 h + defect review 3–4 h; licence sign-off inside that envelope).
 
-### Step by step
+**What not to do:**
 
-**Step 1 — Calibration session (Week 1).**
-
-1. Open [`calibration_notes.md`](member/templates/calibration_notes.md).
-2. Walk through the five SciClaimBench practice rows in Section 9.3 and the five verifier practice rows in Section 9.4.
-3. Ask each rater to label the practice rows alone, then compare.
-4. Record every disagreement and the decision in the notes.
-5. Confirm the blinding rules and the exact label strings.
-6. Send the signed notes to Member 1 and the team channel.
-
-**Step 2 — SciClaimBench item co-verification (Weeks 1–2).**
-
-1. Open your 12 items from the private batch and [`item_verification_checklist.md`](member/templates/item_verification_checklist.md).
-2. Check the question, options, gold answer, three positions, 3–6 atomic claims per position, evidence locators, licence block, and no gated text.
-3. Return a written problem list to Member 1. Do not edit the item file.
-4. Cross-review Member 3's 12 items and record your name and date.
-
-**Step 3 — Verifier audit rater 1 (Weeks 1–2).**
-
-1. Open `experiments/verifier_audit/private/scifact/sheets/rater1.csv` from the private folder.
-2. Fill only `label`, `confidence`, and `notes`.
-3. Use `supported`, `contradicted`, or `unverifiable`.
-4. Do not open `pairs.jsonl`, `audit_sheet.csv`, `verifier_predictions.csv`, or the other rater sheet.
-5. Submit before the deadline and post the row count.
-
-**Step 4 — Batch preparation and blinding (Weeks 2–3).**
-
-1. For SciClaimBench, confirm the sheets generated by Member 1 have no `gold_verdict` column.
-2. Confirm the row count equals the number of claims, not the number of items.
-3. Confirm the order is shuffled and the item IDs do not reveal the stratum.
-4. Send the correct sheet to Member 4 and Member 5 with a deadline and a filename.
-5. Do not send the adjudication workbook to a rater.
-
-**Step 5 — Agreement report (Week 3 or 4).**
-
-1. Member 1 sends you the score output: κ, defect rate, `H_attempt`, unresolved rate.
-2. Write one page: the gate result, the main disagreement pattern, the codebook ambiguity, and the recommendation (pass, revise and rerun, or stop).
-3. Do not relabel rows to raise κ. A failed calibration is a finding.
-
-### What you submit
-
-| Deliverable | Template or path | Deadline |
-| --- | --- | --- |
-| Calibration notes | [`calibration_notes.md`](member/templates/calibration_notes.md) | Day 2 |
-| 12 item verification checklists | [`item_verification_checklist.md`](member/templates/item_verification_checklist.md) | End of Week 2 |
-| Verifier rater 1 sheet | `rater1_<initials>.csv` | End of Week 2 |
-| Agreement report | One-page memo to Member 1 | End of Week 3 |
-| Weekly check-in | [`weekly_checkin.md`](member/templates/weekly_checkin.md) | Every Friday |
-
-### Time commitment
-
-Roughly **18–22 hours** across six weeks:
-
-- calibration and onboarding: 2–3 h
-- 12 item verifications: 6–8 h
-- verifier rater sheet: 5–6 h
-- batch preparation and blinding: 2–3 h
-- agreement report: 2–3 h
-- meetings: 2–3 h
-
-### What not to do
-
-- Do not label an item you authored or verified.
-- Do not open the other rater's sheet or the gold/verifier label.
-- Do not use an LLM to generate labels.
-- Do not discuss individual rows before both sheets are submitted.
-- Do not edit the item source or the original batch.
+- Never open the gold verdict or verifier label while adjudicating.
+- Never relabel an agreement row to raise κ; never delete an unresolved row — mark `unresolved` and report it (over 5% blocks the freeze).
+- Never change the codebook unilaterally; never label rater rows yourselves.
 
 ---
 
-## 5. Member 3 — Salman
+## 5. Yousuf — sole verifier of all 24 drafts
 
-### Your role
+**Role:** the only person who checks the 24 calibration drafts against the codebook — verification confers gold.
 
-You are the **SciClaimBench item lead**. You own the quality of the 24 items: atomicity, evidence locators, gold-verdict logic, licence and provenance, and the defect review. You also QA the verifier-audit sheets for blinding and completeness.
+**Pack:** [`03_AUTHOR.md`](../benchmark/tasks/03_AUTHOR.md); one [`item_verification_checklist.md`](../benchmark/templates/item_verification_checklist.md) per item.
 
-You do not write code, run models, or compute the final statistics.
+**Only you do:**
 
-### What you will do
+1. Verify all 24 drafts (`benchmark/private/items/cal-001..024`): answerable question, 3 positions × 3–6 atomic claims, every claim with cited evidence + resolvable locator, contradict-first verdict order, complete licence block, no gated text.
+2. File one checklist per item plus a written problem list. Never edit the item source — Atik fixes, you re-check.
+3. Stay off the rater sheets entirely: you rate nothing, so your verification cannot leak into κ.
 
-1. **Own the item verification plan.** Split the 24 items 12/12 with Member 2. You verify 12, Member 2 verifies 12.
-2. **Verify every claim and evidence link.** Use the checklist. Return a written problem list to Member 1.
-3. **Cross-review Member 2's 12 items.** Check the same fields independently.
-4. **QA the verifier-audit sheets.** Confirm row counts, no blank labels, no gold/verifier columns, and no blinding leak.
-5. **Run the defect review after adjudication.** Review the frozen triples you did not author; fill `defect_flag` and `defect_type`.
+**Time:** **12–16 h** (about 30–40 min per item).
 
-### Step by step
+**What not to do:**
 
-**Step 1 — Item verification (Weeks 1–2).**
-
-1. Open your 12 items from the private batch and [`item_verification_checklist.md`](member/templates/item_verification_checklist.md).
-2. Check the question is answerable, the gold answer is one of the options, and there are exactly three positions.
-3. Check every position has 3–6 atomic claims and every claim has at least one evidence passage with a resolvable locator.
-4. Check the gold verdict order: contradiction first, then support, otherwise neutral.
-5. Check numbers after unit conversion, negation, compound claims, and topical overlap.
-6. Check `source.kind`, citation, locator, licence, and no gated text.
-7. Return the checklist plus a written problem list to Member 1.
-
-**Step 2 — Cross-review (Week 2).**
-
-1. Open Member 2's 12 items.
-2. Check the same fields without looking at Member 2's verdict.
-3. Record a short note for every disagreement.
-4. Send the cross-review log to Member 1.
-
-**Step 3 — Verifier audit QA (Week 3).**
-
-1. Confirm `rater1.csv` and `rater2.csv` have 180 rows each.
-2. Confirm every row has a label, confidence, and note where needed.
-3. Confirm neither sheet contains `gold_label`, `verifier_label`, or `arm`.
-4. Confirm the two raters did not label in the same order or share notes.
-5. Write a short QA note: row counts, blank cells, blinding, and any anomaly.
-
-**Step 4 — Defect review (Week 4).**
-
-1. After Member 6 finishes adjudication, open the frozen triples you did not author.
-2. Check every triple against its passages.
-3. Fill `defect_flag` and `defect_type`.
-4. A wrong or unsupported triple is a defect. Pre-freeze corrections are rework, not defects.
-5. Send the defect count and examples to Member 1.
-
-### What you submit
-
-| Deliverable | Template or path | Deadline |
-| --- | --- | --- |
-| 12 item verification checklists | [`item_verification_checklist.md`](member/templates/item_verification_checklist.md) | End of Week 2 |
-| Cross-review log | One-page memo to Member 1 | End of Week 2 |
-| Verifier QA note | One-page memo to Member 1 | End of Week 3 |
-| Defect log | `adjudication.csv` defect columns + memo | End of Week 4 |
-| Weekly check-in | [`weekly_checkin.md`](member/templates/weekly_checkin.md) | Every Friday |
-
-### Time commitment
-
-Roughly **18–22 hours** across six weeks:
-
-- onboarding: 1–2 h
-- 12 item verifications: 8–10 h
-- cross-review: 3–4 h
-- verifier QA: 2–3 h
-- defect review: 3–4 h
-- meetings: 2–3 h
-
-### What not to do
-
-- Do not edit the item source. Return a problem list to Member 1.
-- Do not label an item you authored or verified.
-- Do not change a gold verdict to make the statistics look better.
-- Do not use an LLM to generate a verdict.
-- Do not paste private item text into a public issue or an external AI tool.
+- Never label a rater or adjudication row; never peek at blind sheets.
+- Never invent a passage, DOI, or verdict to fill a slot; never use an LLM to generate a verdict.
 
 ---
 
-## 6. Member 4 — Pratay
+## 6. Prottoy — rater 1
 
-### Your role
+**Role:** independent rater 1 for both audits — your sheet plus Salman's is the κ gate.
 
-You are **SciClaimBench rater 1** and **verifier-audit rater 2**. You are one of the two independent human labels for each audit. Your value is independence, not speed.
+**Pack:** [`01_RATER.md`](../benchmark/tasks/01_RATER.md); sign [`annotation_submission_checklist.md`](../benchmark/templates/annotation_submission_checklist.md) for each sheet.
 
-### What you will do
+**Only you do:**
 
-1. **Label every SciClaimBench claim.** Use `support`, `contradict`, or `neutral`. Record confidence and a note for hard rows.
-2. **Label all 180 verifier pairs.** Use `supported`, `contradicted`, or `unverifiable`. Do not open the gold or verifier label.
-3. **Complete the submission checklist.** Confirm row counts, no blank labels, and no blinding leak.
+1. Label all 216 SciClaimBench rows (`support` / `contradict` / `neutral`) in your blind `rater1.csv` — claim + cited passages only.
+2. Label all 180 verifier pairs (`supported` / `contradicted` / `unverifiable`) in your verifier `rater1.csv`.
+3. Log effort per item (`effort.csv`, phase `rater1`); submit a copy as `rater1_<initials>.csv` and post filename + row count.
 
-### Step by step
+**Time:** **11–13 h** (SciClaimBench 5–7 h + verifier 5–6 h).
 
-**Step 1 — SciClaimBench rater 1 (Weeks 2–3).**
+**What not to do:**
 
-1. Open `rater1_<initials>.csv` from the private folder.
-2. Fill every row: `verdict`, `confidence`, `notes`.
-3. Use `support`, `contradict`, or `neutral`.
-4. Judge only the claim and the cited passages. Do not use outside knowledge.
-5. Do not discuss rows with Member 5 before both sheets are submitted.
-6. Submit before the deadline and post the row count.
-
-**Step 2 — Verifier audit rater 2 (Weeks 1–2).**
-
-1. Open `rater2_<initials>.csv` from the private folder.
-2. Fill every row: `label`, `confidence`, `notes`.
-3. Use `supported`, `contradicted`, or `unverifiable`.
-4. Do not open `pairs.jsonl`, `audit_sheet.csv`, `verifier_predictions.csv`, or Member 2's sheet.
-5. Submit before the deadline and post the row count.
-
-**Step 3 — Submission checklist.**
-
-Complete [`annotation_submission_checklist.md`](member/templates/annotation_submission_checklist.md) for each sheet.
-
-### What you submit
-
-| Deliverable | Path | Deadline |
-| --- | --- | --- |
-| SciClaimBench rater 1 sheet | `rater1_<initials>.csv` | End of Week 3 |
-| Verifier audit rater 2 sheet | `rater2_<initials>.csv` | End of Week 2 |
-| Submission checklist | [`annotation_submission_checklist.md`](member/templates/annotation_submission_checklist.md) | With each sheet |
-| Weekly check-in | [`weekly_checkin.md`](member/templates/weekly_checkin.md) | Every Friday |
-
-### Time commitment
-
-Roughly **16–20 hours** across six weeks:
-
-- onboarding: 1–2 h
-- SciClaimBench labels: 8–10 h
-- verifier labels: 5–6 h
-- meetings: 2–3 h
-
-### What not to do
-
-- Do not open the other rater's sheet.
-- Do not open the gold verdict, verifier label, or arm map.
-- Do not use an LLM to generate labels.
-- Do not use outside knowledge; judge only the passages.
-- Do not relabel a row after seeing another label.
-- Do not guess to avoid an abstention; use the neutral label with low confidence.
+- Never open `benchmark/private/items/` (gold answers live there), Salman's sheet, or any gold/verifier label.
+- Never discuss rows with Salman before both sheets are in; never use an LLM for labels; never use outside knowledge.
 
 ---
 
-## 7. Member 5 — Yousuf
+## 7. Salman — rater 2
 
-### Your role
+**Role:** independent rater 2 for both audits — same sheets as Prottoy, labelled independently. Never peek at his.
 
-You are **SciClaimBench rater 2**. You are the second independent human label for the 24-item calibration. Your sheet is compared with Member 4's sheet; the agreement is the gate.
+**Pack:** [`01_RATER.md`](../benchmark/tasks/01_RATER.md); sign [`annotation_submission_checklist.md`](../benchmark/templates/annotation_submission_checklist.md) for each sheet.
 
-You do not label the verifier audit unless Member 2 asks you to cover for an unavailable rater.
+**Only you do:**
 
-### What you will do
+1. Label all 216 SciClaimBench rows (`support` / `contradict` / `neutral`) in your blind `rater2.csv` — claim + cited passages only.
+2. Label all 180 verifier pairs (`supported` / `contradicted` / `unverifiable`) in your verifier `rater2.csv`.
+3. Log effort per item (`effort.csv`, phase `rater2`); submit a copy as `rater2_<initials>.csv` and post filename + row count.
 
-1. **Label every SciClaimBench claim.** Use `support`, `contradict`, or `neutral`.
-2. **Record confidence and notes** for every hard row.
-3. **Submit on time** with the row count.
+**Time:** **11–13 h** (SciClaimBench 5–7 h + verifier 5–6 h).
 
-### Step by step
+**What not to do:**
 
-1. Open `rater2_<initials>.csv` from the private folder.
-2. Fill every row: `verdict`, `confidence`, `notes`.
-3. Use `support`, `contradict`, or `neutral`.
-4. Judge only the claim and the cited passages. Do not use outside knowledge.
-5. Do not discuss rows with Member 4 before both sheets are submitted.
-6. Submit before the deadline and post the row count.
-
-### What you submit
-
-| Deliverable | Path | Deadline |
-| --- | --- | --- |
-| SciClaimBench rater 2 sheet | `rater2_<initials>.csv` | End of Week 3 |
-| Submission checklist | [`annotation_submission_checklist.md`](member/templates/annotation_submission_checklist.md) | With the sheet |
-| Weekly check-in | [`weekly_checkin.md`](member/templates/weekly_checkin.md) | Every Friday |
-
-### Time commitment
-
-Roughly **8–12 hours** across six weeks:
-
-- onboarding: 1–2 h
-- SciClaimBench labels: 5–7 h
-- meetings: 1–2 h
-
-### What not to do
-
-- Do not open Member 4's sheet.
-- Do not open the gold verdict, verifier label, or arm map.
-- Do not use an LLM to generate labels.
-- Do not use outside knowledge.
-- Do not relabel a row after seeing another label.
+- Never open `benchmark/private/items/` (gold answers live there), Prottoy's sheet, or any gold/verifier label.
+- Never discuss rows with Prottoy before both sheets are in; never use an LLM for labels; never use outside knowledge.
 
 ---
 
-## 8. Member 6 — Limu
+## 8. Atik — agent pilot + scoring, LAST
 
-### Your role
+**Role:** runs the experiments, the Python pipeline, the GPU runs, the analysis, and the manuscript integration — and pilots annotation agents only after all human sheets are in.
 
-You are the **adjudicator** for both audits and the named owner of the privacy/licence check. You see both rater sheets and the evidence, but not the gold verdict or verifier label.
+**Pack:** [`04_AGENT_PILOT.md`](../benchmark/tasks/04_AGENT_PILOT.md) — copy-paste prompts for mechanical work only.
 
-### What you will do
+**Only he does, after every human sheet is submitted:**
 
-1. **Adjudicate SciClaimBench.** Fill `adjudicated_verdict`, `adjudication_notes`, and the defect columns in `adjudication.csv`.
-2. **Adjudicate the verifier audit.** Fill `human_label`, `confidence`, and `notes` in `audit_sheet.csv`.
-3. **Sign the privacy/licence check.** Confirm private-folder handling, SciFact's CC BY-NC terms, gated-dataset rules, and no PII.
-4. **Keep the adjudication log.** Every disagreement needs a label and a one-line reason.
+1. Blind-sheet builds, validator runs, and results assembly.
+2. The score command from `benchmark/status.json` (`next_command`); posts κ / defect / `H_attempt` / unresolved + exit code.
+3. Item-source fixes from Yousuf's and the adjudicators' problem lists; regenerates sheets if claim text changes.
 
-### Step by step
+**Time:** agent piloting happens at the end (experiment, GPU, and manuscript time is separate and not bounded here).
 
-**Step 1 — SciClaimBench adjudication (Week 4).**
-
-1. Open `adjudication.csv`.
-2. For every row, read the claim, the passages, and both rater labels.
-3. Apply the codebook: contradiction first, then support, otherwise neutral.
-4. Fill `adjudicated_verdict` and `adjudication_notes`.
-5. If you cannot defend a verdict, write `unresolved`.
-6. More than 5% unresolved blocks the freeze.
-
-**Step 2 — Verifier audit adjudication (Week 3).**
-
-1. Open `audit_sheet.csv`.
-2. For agreement rows, copy the agreed label into `human_label`.
-3. For disagreements, read the claim and passages, apply the codebook, and fill `human_label`, `confidence`, and `notes`.
-4. If a row cannot be defended, write `unresolved`; it is excluded from accuracy and reported separately.
-5. Do not copy the verifier label or the source gold.
-
-**Step 3 — Privacy and licence check (Weeks 4–5).**
-
-1. Confirm every filled item, passage, and label is in the private folder, not GitHub.
-2. Confirm SciFact is treated as CC BY-NC 2.0 and is not redistributed.
-3. Confirm GPQA and HLE item text is not committed; MMLU-Pro test text is not redistributed.
-4. Confirm original SciClaimBench items use CC BY 4.0 and adapted items record citation, locator, licence, and changes.
-5. Report any PII or suspected leak privately to Member 1.
-
-### What you submit
-
-| Deliverable | Path | Deadline |
-| --- | --- | --- |
-| SciClaimBench adjudication | `adjudication.csv` | End of Week 4 |
-| Verifier adjudication | `audit_sheet.csv` | End of Week 3 |
-| Privacy/licence checklist | One-page memo to Member 1 | End of Week 5 |
-| Weekly check-in | [`weekly_checkin.md`](member/templates/weekly_checkin.md) | Every Friday |
-
-### Time commitment
-
-Roughly **12–16 hours** across six weeks:
-
-- onboarding: 1–2 h
-- SciClaimBench adjudication: 5–7 h
-- verifier adjudication: 2–3 h
-- privacy/licence check: 2–3 h
-- meetings: 2 h
-
-### What not to do
-
-- Do not open the gold verdict or verifier label while adjudicating.
-- Do not relabel rows to raise κ.
-- Do not delete an unresolved row; report it.
-- Do not put private text in a public issue.
-- Do not change the codebook without Member 2 and Member 1.
+**Rule for everyone:** no agent output becomes a verdict or label without a named human checking it. Agents never adjudicate and never set gold.
 
 ---
 
@@ -548,13 +303,14 @@ Do not mix them. The wording is different on purpose.
 
 - Do not discuss individual rows with the other rater before both sheets are submitted.
 - Do not open the other rater's sheet, the gold verdict, the verifier label, or the arm map.
-- If you recognize an item from another batch, tell Member 2 before labeling it.
+- If you recognize an item from another batch, tell Atik before labeling it.
 - The adjudicator may see both sheets, but not the gold or verifier label.
 
 ### 9.6 Human labels only
 
 - Do not use an LLM to generate labels, annotations, or citations.
-- Member 1 may use an LLM to draft SciClaimBench item text, but a human must verify every claim, evidence link, and gold verdict. Set `draft_assisted: true`.
+- Items carry no AI markings: do NOT set `draft_assisted` (deprecated 21 Nov 2026, see `benchmark/schema.md`). Provenance lives only in batch manifests; gold = verified + adjudicated, nothing else.
+- Atik may use an LLM to draft SciClaimBench item text, but a human (Yousuf) must verify every claim, evidence link, and gold verdict before it counts.
 - Do not paste private data or model outputs into an external AI tool.
 
 ### 9.7 Files and submission
@@ -564,11 +320,11 @@ Do not mix them. The wording is different on purpose.
 - Use the exact label strings. A blank cell is not a label.
 - Put a short note on every hard row; a low-confidence label with a clear note is better than a silent guess.
 - Upload to the private folder and post the filename and row count in the team channel.
-- Member 1 copies the per-person sheets to the canonical names before scoring.
+- Atik copies the per-person sheets to the canonical names before scoring.
 
 ### 9.8 When to ask
 
-Ask Member 2 for batch, blinding, or submission questions. Ask Member 1 for protocol or codebook questions that cannot wait. Ask Member 6 for adjudication questions. A question is cheaper than a bad label.
+Ask Atik for batch, blinding, submission, or protocol questions that cannot wait. Ask Rakib + Limu for adjudication questions. A question is cheaper than a bad label.
 
 ---
 
@@ -576,24 +332,24 @@ Ask Member 2 for batch, blinding, or submission questions. Ask Member 1 for prot
 
 ### Recommended: 6 weeks
 
-The six-week plan has five active weeks and one buffer week. The verifier audit starts immediately because the 180 pairs are built. The SciClaimBench track waits for Member 1's drafts.
+The six-week plan has five active weeks and one buffer week. The verifier audit starts immediately because the 180 pairs are built. The SciClaimBench track waits for Atik's drafts.
 
-| Week | Member 2 | Member 3 | Member 4 | Member 5 | Member 6 |
-| --- | --- | --- | --- | --- | --- |
-| **1** | Calibration session; verifier labels | Read docs; item verification starts | Onboarding; verifier labels | Onboarding | Onboarding; set up adjudication log |
-| **2** | Item verification; verifier labels finish | Item verification; cross-review | Verifier labels finish | Read docs | Prepare adjudication workbook |
-| **3** | Batch prep; agreement report starts | Verifier QA; SciClaimBench cross-review | SciClaimBench labels | SciClaimBench labels | Verifier adjudication |
-| **4** | Batch prep; agreement report | Defect review starts | SciClaimBench labels finish | SciClaimBench labels finish | SciClaimBench adjudication |
-| **5** | Agreement report; final checks | Defect review; final checks | Final checks | Final checks | Privacy/licence check |
-| **6** | Buffer | Buffer | Buffer | Buffer | Buffer |
+| Week | Yousuf (verifier) | Prottoy (rater 1) | Salman (rater 2) | Rakib + Limu (adjudicators) |
+| --- | --- | --- | --- | --- |
+| **1** | Read docs; verification starts | Onboarding; verifier labels start | Onboarding; verifier labels start | Onboarding; set up adjudication log |
+| **2** | Verification finishes; problem list to Atik | Verifier labels finish; SciClaimBench labels start | Verifier labels finish; SciClaimBench labels start | Prepare adjudication workbook |
+| **3** | Rechecks after Atik's fixes | SciClaimBench labels | SciClaimBench labels | Verifier adjudication |
+| **4** | Final checks | SciClaimBench labels finish | SciClaimBench labels finish | SciClaimBench adjudication; defect review starts |
+| **5** | Final checks | Final checks | Final checks | Defect review finish; privacy/licence check |
+| **6** | Buffer | Buffer | Buffer | Buffer |
 
-Member 1's deliverables are dependencies, not rows in this table: draft items by Day 5, blind sheets by end of Week 2, score output after both sheets are complete.
+Atik's deliverables are dependencies, not rows in this table: draft items by Day 5, blind sheets by end of Week 2, score output after both sheets are complete.
 
 ### Compressed: 4 weeks
 
 Only choose this if **all** of the following are true:
 
-- Member 1 delivers the 24 draft items by **Day 5**.
+- Atik delivers the 24 draft items by **Day 5**.
 - Every member can commit **4–5 hours per week**.
 - The verifier audit starts in Week 1, in parallel with item verification.
 - No one travels or has an exam during the four weeks.
@@ -614,11 +370,11 @@ Only choose this if **all** of the following are true:
 
 | Member | Done when |
 | --- | --- |
-| Member 2 | Calibration notes signed; 12 item checklists complete; verifier rater 1 sheet complete; agreement report delivered |
-| Member 3 | 12 item checklists complete; cross-review log delivered; verifier QA note delivered; defect log complete |
-| Member 4 | SciClaimBench rater 1 sheet and verifier rater 2 sheet complete; submission checklists signed |
-| Member 5 | SciClaimBench rater 2 sheet complete; submission checklist signed |
-| Member 6 | Both adjudication workbooks complete; unresolved rows listed; privacy/licence checklist signed |
+| Yousuf | 24 item verification checklists + problem list delivered |
+| Prottoy | SciClaimBench rater 1 sheet + verifier rater 1 sheet complete; submission checklists signed |
+| Salman | SciClaimBench rater 2 sheet + verifier rater 2 sheet complete; submission checklists signed |
+| Rakib + Limu | Both adjudication workbooks complete; unresolved rows listed; defect log + privacy/licence checklist signed |
+| Atik (LAST) | Blind sheets built; score JSON posted — only after every human sheet is in |
 
 A failed κ or balanced-accuracy gate is a **finding**, not a failure of the team. Keep the batch, report the number, revise the codebook, and run a fresh batch. Do not relabel the same rows to make the number pass.
 
@@ -648,18 +404,18 @@ A failed κ or balanced-accuracy gate is a **finding**, not a failure of the tea
 
 ## 13. Ready-to-send message
 
-> We are finishing the human-labeling part of the TrustCal FYDP. Member 1 handles the experiments, code, item drafting, analysis, and paper integration with agents. Your work is only the human-judgment part: verifying the 24 SciClaimBench calibration items, labeling claims against evidence, auditing the verifier, and adjudicating disagreements.
+> We are finishing the human-labeling part of the TrustCal FYDP. Atik handles the experiments, code, item drafting, analysis, and paper integration with agents. Your work is only the human-judgment part: verifying the 24 SciClaimBench calibration items, labeling claims against evidence, auditing the verifier, and adjudicating disagreements.
 >
 > Please read `docs/MEMBER_GUIDE.md` and the eight documents in Section 3 before our first meeting. You do not need to know the domain in advance. We will do a short practice batch together. The recommended sprint is six weeks, with a four-week compressed option if the draft items are ready by Day 5.
 >
 > Guide: https://github.com/Atik203/trustcal/blob/main/docs/MEMBER_GUIDE.md
 > Templates: https://github.com/Atik203/trustcal/tree/main/benchmark/templates
 >
-> Member 2: annotation lead, verifier rater 1, SciClaimBench item co-verifier.
-> Member 3: SciClaimBench item lead, cross-review, verifier QA, defect review.
-> Member 4: SciClaimBench rater 1, verifier rater 2.
-> Member 5: SciClaimBench rater 2.
-> Member 6: adjudicator, privacy/licence sign-off.
+> Rakib + Limu: adjudicators — settle every disagreement, defect review, licence sign-off (both audits).
+> Yousuf: sole verifier of all 24 calibration drafts.
+> Prottoy: rater 1 — 216 SciClaimBench rows + 180 verifier rows.
+> Salman: rater 2 — same sheets, independently.
+> Atik: agent pilot + scoring, LAST after all sheets are in.
 
 ---
 

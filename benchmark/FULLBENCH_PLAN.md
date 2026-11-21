@@ -1,6 +1,6 @@
 # SciClaimBench 180-freeze + 300-target production plan
 
-**Gate:** Phase N3 (roadmap §4). **Owner:** P3 + annotators.
+**Gate:** Phase N3 (roadmap §4). **Owner:** Atik (P3) + annotators.
 **Status (21 Nov 2026): production system built; zero human labels exist.**
 All 180 freeze drafts and 300 full-target drafts are machine-drafted originals
 with `status=drafted`. No κ, defect rate, or calibration result exists yet.
