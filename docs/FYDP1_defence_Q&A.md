@@ -497,7 +497,7 @@ Config: `trustcal/configs/datasets.yaml`; blueprint §8; journal `Papev:260-270`
 **Serving:** one 96 GB on-demand RTX PRO 6000, 8 concurrent rows, CUDA graphs; **$1.50/GPU-h all-in**; measured **172.7 debates/h** versus 52.2/h for the 2-way eager baseline.
 
 - **Core + Full:** 13,200 debates = **76.43 GPU-h = $114.66** all-in. Core alone is 8,000 debates ≈ 46.3 GPU-h; remaining Core rows after `core3` ≈ **$62**.
-- **Remaining programme (36-row Full alternate):** 23,000 debates = **134.51 GPU-h = $202.33**; cap **$220**, so $202.33 committed plus **$10 headroom** = $212.33.
+- **Remaining programme (36-row Full alternate):** 23,000 debates = **134.51 GPU-h = $202.33**; $202.33 projected plus **$10 headroom** = $212.33 committed against the **$220** cap.
 - Stage-by-stage costs, storage/bandwidth and rental rules live in `roadmap.md` §13 and `AGENTS.md` — cite them, do not re-derive them.
 - **Feasibility:** inference-only, no training. The FP8 variant of the same card served N1b (done) and is reserved for the precision replication (not run). If GPUs are short, shrink the pilot — never the gate criteria.
 
