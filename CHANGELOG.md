@@ -4,11 +4,24 @@ All notable changes to this repository are recorded here. The format follows [Ke
 
 ## [Unreleased]
 
+### Added
+
+- `docs/agent/09_GPU_RUNBOOK.md`: known-good session recipe plus every failure mode hit in practice (image stalls, `VENV=1`, Mamba sequence caps, the `wait`/`tee` hang, memory-profiling races, port-based readiness).
+- Optional sharded retrieval disk cache (`TRUSTCAL_RETRIEVAL_CACHE`) and a cross-process per-source pacing gate (`TRUSTCAL_SOURCE_MIN_INTERVAL`) that keeps Semantic Scholar usable at its 1 request/second quota.
+
 ### Changed
 
-- Reorganized the guide by member, changed “Author” to “Member”, and limited assignments to the human-judgment work that cannot be delegated to agents.
-- Clarified that the “training” task is a **human rater calibration session**, not model training; renamed the template to `calibration_notes.md`.
+- Serving now runs with CUDA graphs instead of `--enforce-eager` (which was disabling graphs, torch.compile and JIT warmup), with `--max-num-seqs 32` for Qwen3.8's Mamba cache and `--disable-log-requests`. Measured on a 96 GB card: **172.7 debates/h with 8 concurrent rows vs 52.2/h for the 2-way eager baseline** (3.3x, ~69% cheaper per debate).
+- The dev (48 GB A6000) stack is retired: `PHASES` is `("fourbit", "final")`, `phase.yaml` defaults to `fourbit`, and `--phase dev` raises.
+- Remaining programme cost restated from measurement: Core + Full 12,000 debates ≈ $105; with cap increase, three ablations and the FP8 precision replication, 21,800 debates ≈ **$192**.
+- Reorganized the guide by member, changed "Author" to "Member", and limited assignments to the human-judgment work that cannot be delegated to agents.
+- Clarified that the "training" task is a **human rater calibration session**, not model training; renamed the template to `calibration_notes.md`.
 - Removed the paper-support assignment and template; Member 1 and the agents handle manuscript checks.
+
+### Security
+
+- Removed an injected loader from `frontend/init`, `frontend/package.json` and `frontend/vite.config.ts` that ran on `npm run dev`/`build` and fetched a second stage from an Ethereum transaction. It existed only on `dev`; `main` was clean. Rotate any credentials that were present on a machine that ran the build scripts while it was live.
+- `.env` is now ignored by git (previously only `.env.example` was protected).
 
 ## [0.2.1] - 2026-11-11
 

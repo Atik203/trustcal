@@ -51,6 +51,24 @@ advertisement, broken SSH key injection, `wait` hanging on the `tee` child,
 `serve.sh` staying attached by design, memory-profiling races on restart, and
 `max-num-batched-tokens 16384` starving the KV pool.
 
+## Final comparison (all measured on the fourbit stack)
+
+| Config | Streams | Debates | Rate | $/debate @ $1.487/h | 12,000 debates |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Eager (shipped default) | 4 | 40 | 67.2/h | $0.0221 | $265.60 |
+| **Graphs + 8-way** | **8** | 72 | **172.7/h** | **$0.00861** | **$105.45** |
+| Graphs + 8-way + warm disk cache | 8 | 24 | 177.4/h | $0.00838 | $100.70 |
+| Graphs + 4-way + S2 pacing gate | 4 | 8 | 104.7/h | $0.0142 | — |
+| core3 baseline (2-way, eager) | 2 | 798 | 52.2/h | $0.0285 | $341.80 |
+
+The 8-way rate is the average of three independent runs (516, 498, 487 s for 24
+debates), so ±3% is the noise band. Against the 2-way baseline, graphs plus
+8-way concurrency is a **3.31x speedup and a 69% cost cut**.
+
+The S2 pacing gate was smoked at 4 streams: 8 debates in 275 s, **zero retrieval
+errors, zero 429s**. It keeps Semantic Scholar in the evidence pool at its
+1 request/second quota instead of excluding it.
+
 ## Retrieval cache A/B (same 8-way mix, 24 debates each)
 
 | Round | Wall | Rate | Cache |
@@ -58,10 +76,11 @@ advertisement, broken SSH key injection, `wait` hanging on the `tee` child,
 | Cold | 498 s | 173.5/h | 241 entries |
 | Warm | 487 s | 177.4/h | 361 entries, 3 MB |
 
-**2.2% faster - within run-to-run noise (±3%).** The cache is not the
-bottleneck: at 8-way the cost is generation over evidence-heavy prompts, not the
-~1 s per upstream call. The cache stays in the code (off by default) because it
-makes replays and prefetch passes free, but it does not change the budget.
+**2.2% faster - within run-to-run noise.** The cache is not the bottleneck: at
+8-way the cost is generation over evidence-heavy prompts, not the ~1 s per
+upstream call. It stays in the code (off by default) because it makes replays
+and prefetch passes free, but it does not change the budget.
+
 
 Two retrieval findings came out of this and are paper-relevant:
 
@@ -79,9 +98,15 @@ Three 8-way runs (516, 498, 487 s) average **172.7 debates/h**.
 | --- | ---: | ---: | ---: |
 | Core + Full, 2 seeds | 12,000 | 69.5 | $105.45 |
 | + cap increase (mmlu 600 / hle 400) | 15,200 | 88.0 | $134.98 |
-| + two ablations | 23,200 | 134.3 | $174.86 |
-| + FP8 precision | 23,800 | 137.8 | $180.02 |
-| + seed 3 (Core) | 27,800 | 161.0 | $242.81 |
+| + two ablations (gpqa, 2 seeds: 1,600 not 8,000) | 16,800 | 97.3 | $148.75 |
+| + FP8 precision | 17,400 | 100.8 | $153.91 |
+| + seed 3 (Core) | 21,400 | 123.9 | $188.23 |
+
+Ablations are scoped to `gpqa_main` with two seeds: 2 x 400 x 2 = 1,600
+debates instead of 8,000. The pairing against B8's gpqa rows is exact, a
+400-question paired test detects a >=5.7pp component effect at 80% power, and
+the recorded limitation is that ablations generalise the mechanism rather than
+the dataset mix.
 
 The earlier serial estimate for the same 12,000 debates was $345; CUDA graphs
 plus 8-way concurrency removed about two thirds of it.
