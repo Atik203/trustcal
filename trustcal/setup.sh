@@ -30,10 +30,11 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 
-PHASE="${PHASE:-dev}"
+PHASE="${PHASE:-fourbit}"
 case "$PHASE" in
-  dev|fourbit|final) ;;
-  *) echo "ERROR: PHASE must be 'dev', 'fourbit' or 'final' (got '$PHASE')" >&2; exit 1 ;;
+  fourbit|final) ;;
+  dev) echo "ERROR: the dev stack is retired; use PHASE=fourbit or PHASE=final" >&2; exit 1 ;;
+  *) echo "ERROR: PHASE must be 'fourbit' or 'final' (got '$PHASE')" >&2; exit 1 ;;
 esac
 export PHASE
 export TRUSTCAL_PHASE="$PHASE"
