@@ -158,6 +158,29 @@ Do not run a 96 GB pilot ($37–45), the FP8 precision replication ($25–40), C
 - Budget the 20% overhead for interruptions and retries.
 - On-demand is only for a time-critical smoke, not the matrix.
 
+### Host acceptance and concurrency
+
+An idle or stalling host bills at the full GPU rate, so prove the offer before any
+paid work. Three checks, each with an abort:
+
+1. **SSH within 60 s of `running`.** A `Permission denied (publickey)` that
+   survives one reboot is a broken host: destroy it.
+2. **45 s real download.** Below 10 MB/s (600 MB/min) the advertised `inet_down`
+   is not what the host delivers. Measured spread on the same 96 GB class is two
+   orders of magnitude — one host delivered 2 MB/s, another 446 MB/s — so the
+   measurement is the only usable signal.
+3. **Image and install.** `vastai/base-image` plus the pinned `install_vllm.sh`
+   avoids framework-image layer stalls; on Debian-managed images pass `VENV=1`
+   or system pip fails with `Cannot uninstall pip ... RECORD file not found`.
+
+`run_matrix.py` executes rows sequentially, so a matrix started as-is pays about
+twice the parallel cost. For concurrent rows, launch one `run_experiment.py` per
+condition with its own `--out`; each process resumes independently from its own
+JSONL, and a failed stream costs one row, not the session. The four-bit stack's
+utilization split (Qwen 0.33 / Gemma 0.29 / Mistral 0.28) exists for this: Qwen
+carries the largest weights, so an equal split leaves it too little KV cache to
+hold four concurrent sequences and vLLM preempts instead of failing loudly.
+
 ---
 
 ## 5. What would blow the budget

@@ -160,6 +160,34 @@ check every field below and record the chosen offer in the run notes.
   720`; `run_cost = hours * all-in/h + download_GB * inet_down_cost`. Never
   compare two hosts on `dph_total` alone.
 
+### Host acceptance (three checks, each with an abort)
+
+Rent nothing you have not proven. An idle or stalling host bills at the full
+GPU rate, so a bad offer costs more than a slow one.
+
+1. **SSH within 60 s of `running`.** `ssh -o ConnectTimeout=25 <host> "echo ok"`.
+   A `Permission denied (publickey)` that survives one reboot is a broken host:
+   destroy it, do not debug it on the clock.
+2. **45 s download gate.** Run a real `hf download` for 45 s and measure the
+   cache growth. Below 10 MB/s (600 MB/min), the advertised `inet_down` is not
+   what the host delivers: destroy and take another offer. Advertised bandwidth
+   is a claim; the 45 s measurement is the fact.
+3. **Image and install.** Prefer `vastai/base-image` plus our pinned
+   `install_vllm.sh` over a large framework image: individual image layers stall
+   on individual hosts, and the stall bills GPU time. On any Debian-managed
+   image pass `VENV=1`, or pip fails with `Cannot uninstall pip ... RECORD file
+   not found`.
+
+Marginal disk is priced apart from the headline `dph_total` and is often near
+$1/GB/month, so 120 GB adds ~$0.17/h. Size the disk for weights + venv +
+results, not the host maximum. When the budget is thin, destroy instead of stop:
+a stopped instance still bills disk.
+
+Every failure mode seen so far - image stalls, `VENV=1`, Mamba block caps,
+the `wait`/`tee` hang, memory-profiling races, cost traps - is catalogued with
+its fix in [`docs/agent/09_GPU_RUNBOOK.md`](docs/agent/09_GPU_RUNBOOK.md). Read
+it before a session; add to it after a new failure.
+
 ## Cache discipline (why this file is structured this way)
 
 To maximize prompt-cache hits across agent tools and models (DeepSeek V4, MiniMax M3, Kimi K2.7, Claude Code), this file is the **single canonical instruction block**:

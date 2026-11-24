@@ -7,6 +7,7 @@ from the agent config. Pure text generation — no GPU, no network, no vLLM impo
 from __future__ import annotations
 
 import argparse
+import os
 import shlex
 import sys
 from pathlib import Path
@@ -25,6 +26,11 @@ def main() -> None:
     cfg = load_models(args.config)
     agents = agents_for_phase(cfg, args.phase)
     phase_max_len = max_model_len_for_phase(cfg, args.phase)
+    # --enforce-eager is a memory guard, not a default: it disables CUDA graphs,
+    # torch.compile and JIT warmup (~20-35% of decode throughput). The four-bit
+    # and FP8 stacks keep the graphs; VLLM_EAGER=1 forces eager back on if a
+    # phase ever OOMs during capture.
+    eager = os.getenv("VLLM_EAGER", "").strip() == "1"
 
     for agent in agents:
         cmd = [
@@ -33,8 +39,8 @@ def main() -> None:
             "--max-model-len", str(agent.max_model_len or phase_max_len),
             "--gpu-memory-utilization",
             str(agent.gpu_memory_utilization or cfg.gpu_memory_utilization or 0.30),
-            "--enforce-eager",
         ]
+        cmd.append("--enforce-eager" if eager else "--disable-log-requests")
         if agent.quant and agent.quant.lower() not in {"auto", "none", ""}:
             cmd += ["--quantization", agent.quant]
         if agent.revision:

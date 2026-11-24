@@ -1,13 +1,7 @@
-# The ONLY file that changes between the Dev (48GB), Four-bit (80GB) and
-# Final (96GB) serving phases.
-#
-# Dev stack runs on an RTX A6000 48GB (Ampere, sm_86). Checkpoints verified
-# 2026-09-16 against the serving requirements of each architecture:
-#   agent1  QuantTrio/Qwen3.5-9B-AWQ               ~7GB   4-bit AWQ (mirrors Qwen3.5-9B)
-#   agent2  google/gemma-4-12B-it-qat-w4a16-ct     ~9.6GB official QAT 4-bit (compressed-tensors)
-#   agent3  cyankiwi/Ministral-3-14B-Instruct-2512-AWQ-4bit  ~8GB  AWQ 4-bit
-#           (the official mistralai FP8 checkpoint cannot run on Ampere: vLLM's
-#            W8A8 sm80 kernel fails with cutlass_scaled_mm_sm80_epilogue)
+# The ONLY file that changes between the Four-bit (80/96GB) and Final (96GB)
+# serving phases. The dev (48GB A6000) stack is retired: its 9-14B checkpoints
+# were only for interface checks on the university slice, and both runnable
+# phases are now tested.
 #
 # `model` is what vLLM serves AND what the OpenAI client sends — do not rename it
 # on the server (`--served-model-name` caused 404s in the first serve.sh draft).
@@ -15,38 +9,8 @@
 # so flags can never drift from this config again.
 
 rounds: 3
-max_model_len: 4096           # Phase 0 debates are short; raise only with KV headroom
-gpu_memory_utilization: 0.90  # sum of the three instances (real card = ~45GB on Vast)
-
-agents:
-  - role: "agent1"
-    model: "QuantTrio/Qwen3.5-9B-AWQ"
-    port: 8000
-    quant: "awq_marlin"
-    gpu_memory_utilization: 0.28
-    max_model_len: 4096
-    extra_args:
-      - "--reasoning-parser"
-      - "qwen3"
-      - "--default-chat-template-kwargs"
-      - '{"enable_thinking": false}'
-      - "--language-model-only"   # text-only Phase 0: drop the vision tower
-  - role: "agent2"
-    model: "google/gemma-4-12B-it-qat-w4a16-ct"
-    port: 8001
-    quant: "compressed-tensors"
-    gpu_memory_utilization: 0.26
-    max_model_len: 4096
-    extra_args:
-      - "--limit-mm-per-prompt"
-      - '{"image": 0, "audio": 0}'   # text-only Phase 0: skip MM profiling
-  - role: "agent3"
-    model: "cyankiwi/Ministral-3-14B-Instruct-2512-AWQ-4bit"
-    port: 8002
-    quant: "auto"                     # AWQ/compressed-tensors: vLLM detects it; no flag
-    gpu_memory_utilization: 0.36
-    max_model_len: 4096
-    extra_args: []                    # standard HF-format repo; no mistral-format flags
+max_model_len: 4096           # fallback for a phase that does not set its own
+gpu_memory_utilization: 0.90  # sum of the three instances
 
 # Four-bit phase (Ph 2b-3) runs on an 80GB card (A100/H100 class). Checkpoints
 # and revisions pinned 2026-11-09 from the HF API. Repo totals are 21.04GB
@@ -54,6 +18,13 @@ agents:
 # are 21.0 + 17.2 + 15.06 = 53.26GB, so 80GB x 0.90 leaves ~18.7GB for KV
 # cache and activations. scripts/check_stack.py --phase fourbit enforces the
 # 80GB card budget.
+#
+# Per-instance utilization is deliberately asymmetric (0.33 / 0.29 / 0.28, sum
+# 0.90). An equal 0.30 split leaves Qwen only ~3GB of KV because it carries the
+# largest weights; that caps the panel at ~3 concurrent sequences and blocks
+# 4-way concurrent rows. Shifting 2.4 points from Gemma/Mistral to Qwen raises
+# Qwen's KV to ~5.4GB on 80GB (~11GB on 96GB) without changing the weight
+# total or the 0.90 ceiling.
 fourbit_phase:
   max_model_len: 8192
   gpu_memory_utilization: 0.90
@@ -64,7 +35,7 @@ fourbit_phase:
       port: 8000
       quant: "compressed-tensors"
       weights_gb: 21.0
-      gpu_memory_utilization: 0.30
+      gpu_memory_utilization: 0.33
       max_model_len: 8192
       extra_args:
         - "--language-model-only"   # text-only debates: drop the vision tower
@@ -78,7 +49,7 @@ fourbit_phase:
       port: 8001
       quant: "compressed-tensors"
       weights_gb: 17.2
-      gpu_memory_utilization: 0.30
+      gpu_memory_utilization: 0.29
       max_model_len: 8192
       extra_args:
         - "--limit-mm-per-prompt"
@@ -92,7 +63,7 @@ fourbit_phase:
       # detection miss cannot kill a paid startup.
       quant: "compressed-tensors"
       weights_gb: 15.06
-      gpu_memory_utilization: 0.30
+      gpu_memory_utilization: 0.28
       max_model_len: 8192
       extra_args:
         - "--limit-mm-per-prompt"

@@ -10,7 +10,7 @@ import yaml
 
 ENV_PATH = Path(__file__).resolve().parents[2] / ".env"
 PHASE_PATH = Path(__file__).resolve().parents[2] / "configs" / "phase.yaml"
-PHASES = ("dev", "fourbit", "final")
+PHASES = ("fourbit", "final")
 
 
 def load_env(path: Path | None = None) -> bool:
@@ -79,7 +79,7 @@ def load_models(path: Path | str) -> ModelConfig:
         rounds=raw.get("rounds", 3),
         max_model_len=raw.get("max_model_len", 4096),
         gpu_memory_utilization=raw.get("gpu_memory_utilization"),
-        agents=[AgentConfig(**a) for a in raw["agents"]],
+        agents=[AgentConfig(**a) for a in raw.get("agents", [])],
         fourbit_agents=[AgentConfig(**a) for a in fourbit.get("agents", [])],
         fourbit_rounds=fourbit.get("rounds"),
         fourbit_max_model_len=fourbit.get("max_model_len"),
@@ -90,27 +90,30 @@ def load_models(path: Path | str) -> ModelConfig:
 
 
 def default_phase() -> str:
-    """Phase for scripts: ``TRUSTCAL_PHASE`` env > configs/phase.yaml > dev.
+    """Phase for scripts: ``TRUSTCAL_PHASE`` env > configs/phase.yaml > fourbit.
 
-    The two runnable branches (`Phase-1-dev`, `Phase-1-main`) differ only in
-    this one config value; no code is duplicated.
+    The dev (48GB A6000) stack is retired: the four-bit stack is the main run
+    and the FP8 stack covers the precision replication. A ``dev`` request now
+    fails loudly instead of serving a third, untested stack.
     """
     env = os.getenv("TRUSTCAL_PHASE", "").strip().lower()
     if env in PHASES:
         return env
     if PHASE_PATH.is_file():
         raw = yaml.safe_load(PHASE_PATH.read_text()) or {}
-        value = str(raw.get("default_phase", "dev")).strip().lower()
+        value = str(raw.get("default_phase", "fourbit")).strip().lower()
         if value in PHASES:
             return value
-    return "dev"
+    return "fourbit"
 
 
 def agents_for_phase(cfg: ModelConfig, phase: str | None = None) -> list[AgentConfig]:
-    """The agent list for ``phase``; raises rather than silently using Dev."""
+    """The agent list for ``phase``; raises rather than silently using a default."""
     name = (phase or default_phase()).strip().lower()
     if name == "dev":
-        return cfg.agents
+        raise ValueError(
+            "the dev stack is retired; use 'fourbit' (main matrix) or 'final' (FP8 precision)"
+        )
     if name == "fourbit":
         if not cfg.fourbit_agents:
             raise ValueError("config has no fourbit_phase.agents; cannot run the Four-bit stack")

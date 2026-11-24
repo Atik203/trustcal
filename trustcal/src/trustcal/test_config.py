@@ -18,15 +18,14 @@ def test_base_url_uses_ipv4_loopback() -> None:
     assert agent.base_url == "http://127.0.0.1:8000/v1"
 
 
-def test_dev_and_final_stacks_are_distinct() -> None:
+def test_dev_stack_is_retired_and_final_differs() -> None:
     cfg = load_models(CONFIG)
-    dev = agents_for_phase(cfg, "dev")
+    with pytest.raises(ValueError, match="dev stack is retired"):
+        agents_for_phase(cfg, "dev")
     fourbit = agents_for_phase(cfg, "fourbit")
     final = agents_for_phase(cfg, "final")
-    assert dev[0].model.startswith("QuantTrio/Qwen3.5")
     assert fourbit[0].model.startswith("cyankiwi/Qwen3.8")
     assert final[0].model.startswith("Qwen/Qwen3.8")
-    assert [a.port for a in dev] == [8000, 8001, 8002]
     assert [a.port for a in fourbit] == [8000, 8001, 8002]
     assert [a.port for a in final] == [8000, 8001, 8002]
 

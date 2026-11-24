@@ -64,8 +64,8 @@ def _plan(path: Path) -> list[tuple[dict, object]]:
     return run_matrix._build_plan(matrix, Path("results") / "test")
 
 
-def test_phase_tuple_recognizes_fourbit() -> None:
-    assert PHASES == ("dev", "fourbit", "final")
+def test_phase_tuple_lists_the_two_runnable_stacks() -> None:
+    assert PHASES == ("fourbit", "final")
 
 
 def test_fourbit_block_declares_the_80gb_stack() -> None:
@@ -79,19 +79,23 @@ def test_fourbit_block_declares_the_80gb_stack() -> None:
 def test_fourbit_agents_are_pinned_to_the_expected_checkpoints() -> None:
     agents = agents_for_phase(load_models(CONFIG), "fourbit")
     assert {a.role: (a.model, a.revision) for a in agents} == FOURBIT_STACK
+    # KV-balanced split: Qwen carries the largest weights, so an equal split
+    # leaves it too little KV cache to hold four concurrent sequences. The sum
+    # stays at the 0.90 ceiling; only the distribution changed.
+    expected_util = {"agent1": 0.33, "agent2": 0.29, "agent3": 0.28}
+    assert sum(expected_util.values()) == pytest.approx(0.90)
     for agent in agents:
         assert agent.max_model_len == 8192
-        assert agent.gpu_memory_utilization == pytest.approx(0.30)
+        assert agent.gpu_memory_utilization == pytest.approx(expected_util[agent.role])
         assert agent.weights_gb is not None
     cfg = load_models(CONFIG)
     assert max_model_len_for_phase(cfg, "fourbit") == 8192
     assert rounds_for_phase(cfg, "fourbit") == cfg.rounds
 
 
-def test_dev_budget_check_still_passes_without_weight_claims() -> None:
-    ok, lines = check_stack.check("dev")
-    assert ok, "\n".join(lines)
-    assert "total weights = 0.00GB" in "\n".join(lines)
+def test_retired_dev_phase_is_rejected() -> None:
+    with pytest.raises(ValueError, match="dev stack is retired"):
+        check_stack.check("dev")
 
 
 def test_fourbit_agent_flags_match_their_architectures() -> None:
