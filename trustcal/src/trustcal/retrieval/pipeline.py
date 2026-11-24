@@ -19,8 +19,14 @@ and the target volume are identical in both conditions.
 
 from __future__ import annotations
 
+import hashlib
+import json
+import os
+import tempfile
 import threading
+import time
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Callable, Iterable
 
 from . import sources
@@ -62,6 +68,83 @@ def _lexical_scorer(claim: str, passages: list[str]) -> list[float]:
     return [lexical_score(claim, passage) for passage in passages]
 
 
+class _SourceGate:
+    """Cross-process minimum interval for one upstream source.
+
+    Semantic Scholar allows 1 request/second cumulatively across all endpoints,
+    so eight concurrent runner processes cannot each call it freely. A plain
+    in-process lock is not enough (there are eight of them), and a blocking
+    global lock would stall debates. This gate serializes across processes with
+    an atomic directory create, enforces the interval, and gives up after
+    ``timeout_s`` so a claim falls through to its next source instead of waiting.
+
+    State is one file per source in the system temp directory, so it is shared by
+    every process on the host without a server or a dependency.
+    """
+
+    def __init__(self, source: str, interval_s: float, state_dir: Path | None = None) -> None:
+        self.interval_s = interval_s
+        base = state_dir or Path(tempfile.gettempdir())
+        self._gate = base / f"trustcal_gate_{source}.lock"
+        self._stamp = base / f"trustcal_gate_{source}.ts"
+        self._thread_lock = threading.Lock()
+
+    def acquire(self, timeout_s: float = 3.0) -> bool:
+        if self.interval_s <= 0:
+            return True
+        deadline = time.monotonic() + timeout_s
+        with self._thread_lock:
+            while True:
+                remaining = deadline - time.monotonic()
+                if remaining <= 0:
+                    return False
+                try:
+                    self._gate.mkdir()
+                except FileExistsError:
+                    if time.monotonic() >= deadline:
+                        return False
+                    time.sleep(0.02)
+                    continue
+                except OSError:
+                    return True  # unwritable temp dir: never block a run
+                try:
+                    last = 0.0
+                    try:
+                        last = float(self._stamp.read_text().strip() or 0)
+                    except (OSError, ValueError):
+                        last = 0.0
+                    wait = self.interval_s - (time.time() - last)
+                    if wait > 0:
+                        # Refuse rather than return early: returning after a
+                        # partial sleep would let callers exceed the quota
+                        # while believing they waited their turn.
+                        if wait > max(deadline - time.monotonic(), 0.0):
+                            return False
+                        time.sleep(wait)
+                    self._stamp.write_text(f"{time.time():.6f}")
+                finally:
+                    try:
+                        self._gate.rmdir()
+                    except OSError:
+                        pass
+                return True
+
+
+def _source_gates() -> dict[str, _SourceGate]:
+    """Parse TRUSTCAL_SOURCE_MIN_INTERVAL, e.g. 'semantic_scholar=1.0'."""
+    raw = os.getenv("TRUSTCAL_SOURCE_MIN_INTERVAL", "").strip()
+    gates: dict[str, _SourceGate] = {}
+    for part in raw.split(","):
+        if "=" not in part:
+            continue
+        name, _, value = part.partition("=")
+        try:
+            gates[name.strip()] = _SourceGate(name.strip(), float(value))
+        except ValueError:
+            continue
+    return gates
+
+
 def select_evidence(passages: Iterable[str], k: int) -> list[str]:
     """De-duplicate passages by normalized text, then take the first ``k``.
 
@@ -101,10 +184,53 @@ class Retriever:
     # do not compete for one quota. Serializing per source keeps the evidence
     # intact while PubMed/arXiv/S2/OpenAlex still fetch in parallel.
     _lock: threading.Lock = field(default_factory=threading.Lock, repr=False, compare=False)
+    _cache_dir: Path | None = field(default=None, repr=False, compare=False)
+    _excluded: frozenset[str] = field(default_factory=frozenset, repr=False, compare=False)
+    _gates: dict[str, _SourceGate] = field(default_factory=dict, repr=False, compare=False)
 
     def __post_init__(self) -> None:
         if self.search_fn is None:
             self.search_fn = sources.search
+        raw = os.getenv("TRUSTCAL_RETRIEVAL_CACHE", "").strip()
+        self._cache_dir = Path(raw) if raw else None
+        if self._cache_dir is not None:
+            self._cache_dir.mkdir(parents=True, exist_ok=True)
+        # Comma-separated source names to drop after routing. Set it to
+        # semantic_scholar for any concurrent run: that API allows 1 request per
+        # second cumulatively, so a 12-24 request burst can only 429.
+        excluded = os.getenv("TRUSTCAL_EXCLUDE_SOURCES", "").strip()
+        self._excluded = frozenset(s.strip() for s in excluded.split(",") if s.strip())
+        self._gates = _source_gates()
+
+    def _disk_path(self, key: tuple[str, str, int]) -> Path | None:
+        if self._cache_dir is None:
+            return None
+        digest = hashlib.sha256(
+            "\x00".join((key[0], key[1], str(key[2]))).encode("utf-8")
+        ).hexdigest()[:32]
+        # Shard by the first byte: a full programme writes ~200k entries, and
+        # one flat directory that large makes lookups and listings slow.
+        shard = self._cache_dir / digest[:2]
+        shard.mkdir(parents=True, exist_ok=True)
+        return shard / f"{digest}.json"
+
+    def _read_disk(self, path: Path) -> list[sources.SearchResult] | None:
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+            return [sources.SearchResult(**row) for row in payload]
+        except Exception:  # missing, truncated, or schema drift: refetch
+            return None
+
+    def _write_disk(self, path: Path, results: list[sources.SearchResult]) -> None:
+        try:
+            tmp = path.with_suffix(".tmp")
+            tmp.write_text(
+                json.dumps([r.as_dict() for r in results], ensure_ascii=False),
+                encoding="utf-8",
+            )
+            os.replace(tmp, path)
+        except Exception:  # a cache write must never fail a run
+            pass
 
     def route(self, claim: str, domain: str | None = None) -> sources.ClaimRoute:
         """Routing decision for a claim, cached and logged once per distinct call."""
@@ -125,13 +251,20 @@ class Retriever:
         Without a claim the legacy all-source order is returned. Partitioning
         only rotates the routed candidates; it never adds or removes a domain's
         sources, so evidence volume cannot differ by condition.
+
+        ``excluded`` is applied after routing so every arm drops the same
+        sources. It exists for a quota that cannot serve a concurrent run:
+        Semantic Scholar allows 1 request/second cumulatively, which a
+        12-24-request burst always exceeds, so those calls only produce 429s.
         """
         if not claim:
-            return sources.SOURCES
-        routed = self.route(claim).sources
-        if not self.config.partition:
-            return routed
-        return _rotate(routed, agent_index)
+            candidates = sources.SOURCES
+        else:
+            routed = self.route(claim).sources
+            candidates = routed if not self.config.partition else _rotate(routed, agent_index)
+        if self._excluded:
+            candidates = tuple(s for s in candidates if s not in self._excluded)
+        return candidates
 
     def _source_lock(self, source: str) -> threading.Lock:
         """Per-source fetch lock, created on first use under the global lock."""
@@ -149,6 +282,16 @@ class Retriever:
         hit = self._cache.get(key)
         if hit is not None:
             return hit
+        # Disk cache: a claim's evidence is deterministic for a given
+        # (source, query, top_k), so a prefetch pass makes every later run free
+        # and removes the API wait from the debate loop entirely.
+        disk_path = self._disk_path(key)
+        if disk_path is not None and disk_path.is_file():
+            stored = self._read_disk(disk_path)
+            if stored is not None:
+                with self._lock:
+                    self._cache.setdefault(key, stored)
+                    return self._cache[key]
         # One in-flight fetch per source: the APIs rate-limit per source, so a
         # burst of same-source calls loses passages. Different sources run in
         # parallel because their quotas are independent.
@@ -157,6 +300,11 @@ class Retriever:
             if hit is not None:
                 return hit
             if source in self._dead_sources:
+                return []
+            # Paced source: spend a token or fall through to the next source.
+            # A skip is not a failure, so it never marks the source dead.
+            gate = self._gates.get(source)
+            if gate is not None and not gate.acquire():
                 return []
             try:
                 results = list(self.search_fn(source, query, top_k=top_k))
@@ -179,7 +327,12 @@ class Retriever:
                 # Idempotent insert (failure empties are cached too, as serial
                 # code did): a tied thread may have stored the same bytes first.
                 self._cache.setdefault(key, results)
-                return self._cache[key]
+                stored = self._cache[key]
+            # Persist successes only: a transient failure must not poison the
+            # cache used by later runs.
+            if failed is None and disk_path is not None:
+                self._write_disk(disk_path, stored)
+            return stored
 
     def depth(self, round_number: int) -> int:
         """Progressive retrieval: half depth in rounds 1-2, full depth later."""

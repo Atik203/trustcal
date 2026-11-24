@@ -38,6 +38,22 @@ Three checks with an abort, in order (details in the root `AGENTS.md`):
 | `No available memory for the cache blocks` | `--max-num-batched-tokens 16384` inflates the activation buffer and starves KV | Keep the default 8192; raise memory utilization or lower `max_model_len` instead |
 | `Error in memory profiling. Initial free memory ... current free memory ...` | Another server released memory while this one profiled (restart race) | `pkill -f "vllm serve"`, wait 30-35 s, then start; never start two sets |
 | Startup is slow but not stuck | Without `--enforce-eager`, vLLM runs torch.compile and captures CUDA graphs | Budget 5-10 min for three servers; it is the price of the 20-35% decode gain |
+| Only some ports listen after `Startup pass complete`, experiments then fail on one agent | `serve.sh` starts three servers sequentially and one died; the script does not abort the others | Read `results/logs/vllm-<port>.log` for the dead one, fix, and restart **that** command (`gen_serve_cmds.py --phase fourbit \| head -1`) instead of re-serving all three. Readiness means 3/3 ports, never "the script ended" |
+
+## Retrieval quotas and the disk cache
+
+| Symptom | Cause | Fix |
+| --- | --- | --- |
+| Semantic Scholar returns 429 in every run, then the source goes dead | S2 allows **1 request/second cumulatively across all endpoints**; a 12-24 request burst always exceeds it | Exclude it for concurrent runs: `TRUSTCAL_EXCLUDE_SOURCES=semantic_scholar`. Ask S2 for the higher research tier if coverage is needed |
+| Is the S2 key invalid? | Compare responses: **429 = key accepted but throttled**, **403 = invalid key**, 429 with no key = anonymous limit | Do not reapply for a key that returns 429; request a limit increase instead |
+| Retrieval dominates a question's wall time | ~1 s per upstream call x ~50 calls per question | Prefetch once into `TRUSTCAL_RETRIEVAL_CACHE`; a warm run reads disk in ~20 ms per call |
+| The cache does not speed up a fresh run | Failures are never cached, and `_dead_sources` resets every run, so each run re-pays the 429 discovery | Fix or exclude the failing source first; the cache only removes *successful* waits |
+| Cache directory gets slow with many entries | A full programme writes ~200k small files | Already sharded into 256 subdirectories by hash prefix; ~1-1.5 GB for 2,000 questions |
+
+`verify_env` prints `OK   server :8000` on success and `FAIL server :8000` on
+failure. Grepping for `"server OK"` never matches, which silently hangs a health
+gate. Gate on the ports instead:
+`ss -tln | grep -cE ':(8000|8001|8002) '` must return 3.
 
 `--enforce-eager` disables CUDA graphs **and** torch.compile **and** JIT kernel
 warmup. It is a 48 GB dev-stack guard only; the 80/96 GB phases should run with

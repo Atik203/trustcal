@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import time
+
 import pytest
 
 from .pipeline import RetrievalConfig, Retriever, StaticRetriever, evidence_block, select_evidence
@@ -120,6 +122,42 @@ def test_cache_prevents_duplicate_requests() -> None:
     retriever.retrieve(0, MATH_CLAIM)
     retriever.retrieve(0, MATH_CLAIM)
     assert calls == [MATH_CLAIM]  # first source alone supplies top_k
+
+
+def test_source_gate_enforces_interval_across_instances(tmp_path) -> None:
+    from trustcal.retrieval.pipeline import _SourceGate
+
+    first = _SourceGate("unit_test_source", 0.3, state_dir=tmp_path)
+    second = _SourceGate("unit_test_source", 0.3, state_dir=tmp_path)
+
+    assert first.acquire(timeout_s=1.0) is True
+    # Immediately after, the same source has no token: a caller with a short
+    # patience skips rather than stalling the debate.
+    assert second.acquire(timeout_s=0.05) is False
+    # With patience it gets one, but only after most of the interval elapsed.
+    started = time.monotonic()
+    assert second.acquire(timeout_s=1.0) is True
+    assert time.monotonic() - started >= 0.2
+
+
+def test_disk_cache_serves_a_fresh_retriever(tmp_path, monkeypatch) -> None:
+    monkeypatch.setenv("TRUSTCAL_RETRIEVAL_CACHE", str(tmp_path))
+    calls = []
+
+    def fake_search(source, query, top_k):
+        calls.append((source, query))
+        return [_result(source, f"{source} {i}") for i in range(5)]
+
+    first = Retriever(search_fn=fake_search)
+    first.search(0, MATH_CLAIM, 1)
+    fetched = len(calls)
+    assert fetched >= 1 and list(tmp_path.rglob("*.json"))  # sharded subdirs
+
+    # A separate Retriever models a later process (or a later run): every
+    # request must be served from disk, with no new API call.
+    second = Retriever(search_fn=fake_search)
+    second.search(0, MATH_CLAIM, 1)
+    assert len(calls) == fetched
 
 
 def test_default_rerank_is_lexical_not_cross_encoder(monkeypatch) -> None:

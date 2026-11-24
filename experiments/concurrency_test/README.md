@@ -51,15 +51,38 @@ advertisement, broken SSH key injection, `wait` hanging on the `tee` child,
 `serve.sh` staying attached by design, memory-profiling races on restart, and
 `max-num-batched-tokens 16384` starving the KV pool.
 
-## Cost projection at the measured rate
+## Retrieval cache A/B (same 8-way mix, 24 debates each)
 
-| Programme | Debates | Hours | Cost at $1.50/h |
+| Round | Wall | Rate | Cache |
+| --- | ---: | ---: | --- |
+| Cold | 498 s | 173.5/h | 241 entries |
+| Warm | 487 s | 177.4/h | 361 entries, 3 MB |
+
+**2.2% faster - within run-to-run noise (±3%).** The cache is not the
+bottleneck: at 8-way the cost is generation over evidence-heavy prompts, not the
+~1 s per upstream call. The cache stays in the code (off by default) because it
+makes replays and prefetch passes free, but it does not change the budget.
+
+Two retrieval findings came out of this and are paper-relevant:
+
+- Semantic Scholar allows **1 request/second cumulatively**, so eight concurrent
+  streams can only 429. A cross-process pacing gate (`TRUSTCAL_SOURCE_MIN_INTERVAL`,
+  skip-on-timeout) keeps it in the evidence pool without stalling debates.
+- A valid key returns **429**; an invalid one returns **403**. Seeing 429 means
+  "throttled", not "reapply".
+
+## Final rate and remaining cost
+
+Three 8-way runs (516, 498, 487 s) average **172.7 debates/h**.
+
+| Component | Debates | Hours | Cost at $1.487/h |
 | --- | ---: | ---: | ---: |
-| Core + Full, 2 seeds | 12,000 | 72 | $108 |
-| + two ablations | 20,000 | 120 | $180 |
-| + FP8 precision (96 GB) | 20,600 | 123 | $185 |
+| Core + Full, 2 seeds | 12,000 | 69.5 | $105.45 |
+| + cap increase (mmlu 600 / hle 400) | 15,200 | 88.0 | $134.98 |
+| + two ablations | 23,200 | 134.3 | $174.86 |
+| + FP8 precision | 23,800 | 137.8 | $180.02 |
+| + seed 3 (Core) | 27,800 | 161.0 | $242.81 |
 
 The earlier serial estimate for the same 12,000 debates was $345; CUDA graphs
-plus 8-way concurrency removed about two thirds of it. The remaining untested
-lever is an offline retrieval cache: if it lifts the rate to 220-250/h, the full
-27,800-debate menu falls to ~$155-175.
+plus 8-way concurrency removed about two thirds of it.
+
