@@ -912,7 +912,7 @@ study. Scaling ablations at <em>N</em> &isin; &#123;2, 3, 5&#125; are planned
           <strong>B8-oracle</strong> (gold evidence), pending WP-18. The primary
           Full matrix is 32 rows with the gold-evidence oracle on SciClaimBench; the
           36-row alternate uses gold-answer trust (10,800 debates). Core + Full
-          are 12,000 remaining debates ≈ 69.49 GPU-h ≈ $104.23 at the measured
+          are 13,200 remaining debates (36-row Full) ≈ 76.43 GPU-h ≈ $114.66 at the measured
           172.7 debates/h and $1.50/GPU-h all-in. WP-13 is
           the landed B8-no-trust prompt split, not the placebo/oracle slice.
         </p>
@@ -1032,7 +1032,7 @@ corpus); (A4) adaptive confidence gating disabled (debate runs on every
               <td style={tdStyle}>Single 96 GB RTX PRO 6000 compute ceiling</td>
               <td style={tdStyle}>Medium</td>
               <td style={tdStyle}>Moderate</td>
-              <td style={tdStyle}>4-bit 24–27B main stack (~53.3 GB) on one 96 GB RTX PRO 6000; Core is 24 runs / 8,000 debates; Full primary is 32 rows / 9,600 debates (36-row alternate / 10,800); Core + Full ≈ 69.49 GPU-h ≈ $104.23 at 172.7 debates/h and $1.50/GPU-h all-in</td>
+              <td style={tdStyle}>4-bit 24–27B main stack (~53.3 GB) on one 96 GB RTX PRO 6000; Core is 24 runs / 8,000 debates; Full primary is 32 rows / 9,600 debates (36-row alternate / 10,800); Core + Full ≈ 76.43 GPU-h ≈ $114.66 at 172.7 debates/h and $1.50/GPU-h all-in</td>
             </tr>
             <tr>
               <td style={tdStyle}>Dataset mismatch (proof-only benchmarks)</td>
@@ -1078,8 +1078,8 @@ corpus); (A4) adaptive confidence gating disabled (debate runs on every
           audit precede the G2 pilot in Dec 2026. The remaining G3 Core rows follow in Jan 2027, and the G4/G5
           Full run plus the benchmark ladder in Feb 2027. Core and Full are
           separate matrices on the same 4-bit main stack; do not assume Core
-          cells are reusable. The remaining 21,800-debate programme is 126.2
-          GPU-h ≈ $191.92 at $1.50/GPU-h all-in, with the $600 hard stop
+          cells are reusable. The remaining 23,000-debate programme is 134.51
+          GPU-h ≈ $202.33 at $1.50/GPU-h all-in, with the $600 hard stop
           unchanged; the 96 GB FP8 stack is limited to the N1 smoke and a small
           GPQA precision replication. Human evaluation
           and the SDT analysis follow in Mar,
@@ -1125,7 +1125,7 @@ corpus); (A4) adaptive confidence gating disabled (debate runs on every
             <tr>
               <td style={tdStyle}>Feb 2027</td>
               <td style={tdStyle}>Full run + benchmark</td>
-              <td style={tdStyle}>G4/G5: 32 rows at 300 items/dataset with the gold-evidence oracle on SciClaimBench (9,600 debates); WP-18 adds B8-placebo/B8-oracle. The 36-row gold-answer alternate is 10,800 debates. Core + Full ≈ 69.49 GPU-h ≈ $104.23 at $1.50/GPU-h all-in; SciClaimBench v1.2 freezes at 180 items</td>
+              <td style={tdStyle}>G4/G5: 32 rows at 300 items/dataset with the gold-evidence oracle on SciClaimBench (9,600 debates); WP-18 adds B8-placebo/B8-oracle. The 36-row gold-answer alternate is 10,800 debates. Core + Full ≈ 76.43 GPU-h ≈ $114.66 at $1.50/GPU-h all-in; SciClaimBench v1.2 freezes at 180 items</td>
               <td style={tdStyle}>Full run + benchmark ladder: 180 floor, 300 target, 600 stretch, 800 no-go</td>
             </tr>
             <tr>

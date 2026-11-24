@@ -6,7 +6,8 @@ column before debugging; the fix is usually one flag or one line.
 ## Known-good session (copy this, do not improvise)
 
 Verified 24 Nov 2026 on a 96 GB RTX PRO 6000: **172.7 debates/h** at 8 concurrent
-rows, zero server failures, zero retrieval errors.
+rows, zero server failures, zero retrieval errors. That rate prices the remaining
+23,000-debate programme at **134.51 GPU-h = $202.33** ($220 cap, $10 headroom).
 
 ```bash
 # host: 96GB class, 120 GB disk, vastai/base-image, ~$1.49/h all-in

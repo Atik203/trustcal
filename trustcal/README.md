@@ -46,7 +46,7 @@ python scripts/check_stack.py --phase final
 | `fourbit` | 96 GB class (a single 80 GB A100 also fits the 53.26 GB stack) | Qwen3.8-27B-AWQ-INT4, Gemma 4 26B-A4B AWQ, Mistral 24B AWQ | **53.26 GB** |
 | `final` | RTX PRO 6000 96 GB | Qwen3.8-27B-FP8, Gemma 4 26B-A4B FP8, Mistral 24B AWQ | **73.68 GB** |
 
-`fourbit` is the main causal matrix stack; at 8 concurrent rows with CUDA graphs it measured **172.7 debates/h** at **$1.50/GPU-h all-in**. `final` is limited to the N1 smoke and the small GPQA precision replication.
+`fourbit` is the main causal matrix stack; at 8 concurrent rows with CUDA graphs it measured **172.7 debates/h** at **$1.50/GPU-h all-in**. The remaining 23,000-debate programme (36-row Full, cap increase, three ablations, FP8 precision) is 134.51 GPU-h = **$202.33**, under a $220 cap with $10 headroom. `final` is limited to the N1 smoke and the small GPQA precision replication.
 
 ## GPU serving
 
@@ -69,11 +69,11 @@ python scripts/mock_vllm.py --ports 8000,8001,8002 --mode divergent
 ## Order of work
 
 1. Free 18 GB test gate: one 8–9B AWQ model (or one Q4_K_M model with llama.cpp) plus two mocks; no cloud spend.
-2. 4-bit 80 GB 5-question smoke
+2. 4-bit 96 GB 5-question smoke (N1a)
 3. pilot
-4. 24-row Core matrix
-5. 96 GB FP8 5-question smoke, then the 3-row precision replication
-6. 32-row Full matrix
+4. 24-row Core matrix (8,000 debates)
+5. 96 GB FP8 5-question smoke (N1b), then the 3-row precision replication
+6. Full matrix: 36-row gold-answer alternate (10,800 debates)
 
 Never run a matrix before the pilot. The 96 GB smoke is not a gate for the 4-bit Full matrix; it is required before any FP8 precision claim. The execution plan and costs are in [`../roadmap.md`](../roadmap.md); serving and instance rules are in [`AGENTS.md`](AGENTS.md); per-component status is in [`IMPLEMENTATION_STATUS.md`](IMPLEMENTATION_STATUS.md).
 

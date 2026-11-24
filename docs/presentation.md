@@ -250,7 +250,7 @@ Thank you for your attention. We are happy to take your questions.
 - **Q: What are the generation settings?**
   **A:** Temperature zero point seven, one thousand and twenty-four output tokens, four thousand and ninety-six context on dev, and three retries per agent.
 - **Q: How much compute does this need?**
-  **A:** About one thousand sixty-seven GPU-hours planned, with a one thousand two hundred eighty cap for the Core matrix. Core is budgeted at one hundred seventy-five to two hundred ten dollars; the Full run is two hundred ten dollars in the 32-row gold-evidence default, or two hundred thirty-five dollars for the 36-row gold-answer alternate. The total plan is five to six hundred dollars, with a six hundred dollar hard stop.
+  **A:** At the measured hundred and seventy-two point seven debates per hour and a dollar fifty per GPU-hour all-in, the remaining twenty-three thousand debates, including the 36-row Full, the cap increase, three ablations and the FP8 precision replication, cost two hundred two dollars and thirty-three cents: about a hundred and thirty-four and a half GPU-hours. We hold ten dollars of headroom, so the remaining-spend cap is two hundred and twenty dollars. The preregistered programme hard stop is still six hundred dollars.
 
 ### M5 — Md. Salman Rohoman Nayeem · Slides 10–11
 

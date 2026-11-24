@@ -12,7 +12,7 @@
 > - Do **not** run the Core matrix before the pilot passes G2.
 > - **Core v1.0:** 4 conditions (B3, B4-matched, B8-no-trust, B8) × 3 datasets (`gpqa_main`, `mmlu_pro`, `hle`) × 2 seeds = **24 runs**, 8,000 debates. SciClaimBench is **not** in Core v1.0.
 > - **Full default:** 32 rows with a gold-evidence oracle on SciClaimBench; 36 rows is the gold-answer alternate. WP-18 freezes it, and Full is blocked until `sciclaim_180` has a loader entry and a frozen dataset.
-> - **Remaining programme:** 21,800 debates = 126.2 GPU-h = **$189.36** GPU + **$2.56** setup = **$191.92**, inside the **$220** remaining-spend cap with **$20** headroom. Price table: `08_COMPUTE_COST.md`.
+> - **Remaining programme:** 23,000 debates = 133.18 GPU-h = **$199.77** GPU + **$2.56** setup = **$202.33**, inside the **$220** remaining-spend cap with **$20** headroom. Price table: `08_COMPUTE_COST.md`.
 > - The **verification ceiling** is a derived hypothesis, not a proved theorem. **BrokenMath/BrokenArXiv are appendix-only** (proof-only splits, 0% answer-type retention); Core v1.0 uses **GPQA-Main + MMLU-Pro STEM + HLE**, with **SciClaimBench 180** joining at the v1.2 freeze.
 
 ## 1. The project in one paragraph
@@ -35,7 +35,7 @@ Use `docs/GLOSSARY.md` everywhere. The current names are **Core run** and **Full
 | **Full run (G4/G5)** | 32 rows with a gold-evidence oracle on SciClaimBench (default) or 36 rows with gold-answer trust (alternate). Frozen by WP-18. |
 | **Law-testing (N9)** | q/ρ sweeps, granularity, shared-error floor, robustness. Outside the remaining programme; separate approval. |
 
-**Caps:** the remaining-programme cap is **$220** ($20 headroom); the preregistered programme hard stop is **$600**. The 96 GB on-demand RTX PRO 6000 at **$1.50/GPU-h all-in** (8 concurrent rows, CUDA graphs) is the measured serving path; the 80 GB A100 at $0.136/GPU-h and the FP8 $0.336/GPU-h are retired planning rates. Dev (A6000) is retired; only `fourbit` and `final` phases exist. **SciClaimBench ladder:** 24 calibration → 180 v1.2 floor → 300 Full target → 600 stretch → 800 no-go.
+**Caps:** the remaining-programme cap is **$220** ($10 headroom); the preregistered programme hard stop is **$600**. The 96 GB on-demand RTX PRO 6000 at **$1.50/GPU-h all-in** (8 concurrent rows, CUDA graphs) is the measured serving path; the 80 GB A100 at $0.136/GPU-h and the FP8 $0.336/GPU-h are retired planning rates. Dev (A6000) is retired; only `fourbit` and `final` phases exist. **SciClaimBench ladder:** 24 calibration → 180 v1.2 floor → 300 Full target → 600 stretch → 800 no-go.
 
 ## 3. What is actually strong
 

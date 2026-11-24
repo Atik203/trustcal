@@ -16,7 +16,7 @@ were adopted, not re-run.
 | ARR | 0.657 | 0.702 |
 | CCR-e | 0.102 | 0.150 |
 | Trust AUROC / Brier | 0.518 / 0.292 | — |
-| Cost | 15.3 GPU-h; row spend ~$17–19; mean pair 138 s | — |
+| Cost | 15.3 GPU-h; Vast invoice $32 for the row and its warm host; mean pair 138 s | - |
 
 Host `61635389` (96 GB S, $1.59/h) is STOPPED, not destroyed (warm fallback,
 ~$0.71/day); credit left $2.67. Counts as 2 of 24 Core rows ≈ 800/8,000

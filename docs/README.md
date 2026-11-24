@@ -3,17 +3,12 @@
 | File | Purpose |
 | --- | --- |
 | [`blueprint.md`](blueprint.md) | Research blueprint: problem, mechanism, evaluation design, and project phases |
-| [`project_structure.md`](project_structure.md) | Module map and the responsibility of each package |
 | [`GLOSSARY.md`](GLOSSARY.md) | Terms, metrics, arms, and stack names used across the project |
 | [`DECISIONS.md`](DECISIONS.md) | Approved hardware, driver, CUDA, and environment decisions |
 | [`MEMBER_GUIDE.md`](../benchmark/MEMBER_GUIDE.md) | Member onboarding, annotation roles, worked examples, and the 4/6-week plan (moved to `benchmark/`) |
 | [`benchmark/templates/`](../benchmark/templates/) | Submission templates for item verification, annotation, rater calibration, and weekly check-ins |
 | [`FYDP1_defence_Q&A.md`](FYDP1_defence_Q&A.md) | Defence preparation, runbook, and likely questions |
-| [`title_rationale.md`](title_rationale.md) | Why the report uses its exact title |
-| [`literature_review_guide.md`](literature_review_guide.md) | Review template and verification protocol |
 | [`presentation.md`](presentation.md) | Presentation notes and team roles |
-| [`prompt.md`](prompt.md) | Writing rules used for the manuscripts |
-| [`image_prompt.md`](image_prompt.md) | Figure and image briefs |
 | [`agent/`](agent/) | Execution plans, current-state notes, cost model, and agent checklists |
 | [`figures-src/`](figures-src/) | Editable figure sources and rendering notes |
 

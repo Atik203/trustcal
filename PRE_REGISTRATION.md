@@ -647,7 +647,7 @@ main run.
 | **Total** | **500–600** | planning envelope |
 | **Hard stop** | **600** | no spend beyond without a new signed amendment |
 
-> **Budget status (measured 24 Nov 2026).** The GPU-hour and USD rows above are the 9 November spot snapshot. Measured on a 96 GB card: **172.7 debates/h** with 8 concurrent rows + CUDA graphs at **$1.50/GPU-h all-in**, so Core + Full (12,000 debates) ≈ **69.5 GPU-h ≈ $104** and the full 21,800-debate programme ≈ **$192**. The 1,280 GPU-h figure remains the frozen gate cap (gate check 13); it is a ceiling, not a forecast. Re-costing this budget requires a signed amendment; the $600 hard stop is unchanged.
+> **Budget status (measured 24 Nov 2026).** The GPU-hour and USD rows above are the 9 November spot snapshot. Measured on a 96 GB card: **172.7 debates/h** with 8 concurrent rows + CUDA graphs at **$1.50/GPU-h all-in**, so Core + Full (12,000 debates) ≈ **69.5 GPU-h ≈ $104** and the full 23,000-debate programme ≈ **$192**. The 1,280 GPU-h figure remains the frozen gate cap (gate check 13); it is a ceiling, not a forecast. Re-costing this budget requires a signed amendment; the $600 hard stop is unchanged.
 
 All amounts are planning envelopes in USD, not invoices. The total covers the
 pilot, Core, either Full variant (32-row $210 or 36-row $235), the precision
