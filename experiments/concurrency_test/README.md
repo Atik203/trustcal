@@ -94,32 +94,29 @@ Two retrieval findings came out of this and are paper-relevant:
 
 Three 8-way runs (516, 498, 487 s) average **172.7 debates/h**.
 
-| Component | Debates | Hours | Cost at $1.487/h |
-| --- | ---: | ---: | ---: |
-| Core + Full, 2 seeds | 12,000 | 69.5 | $105.45 |
-| + cap increase (mmlu 600 / hle 400) | 15,200 | 88.0 | $134.98 |
-| + two ablations (gpqa, 2 seeds: 1,600 not 8,000) | 16,800 | 97.3 | $148.75 |
-| + FP8 precision | 17,400 | 100.8 | $153.91 |
-| + seed 3 (Core) | 21,400 | 123.9 | $188.23 |
-
 Ablations are scoped to `gpqa_main` and `mmlu_pro` with two seeds: 2 x (400 + 600)
 x 2 = 4,000 debates for two ablations, 6,000 for three. The pairing against B8's
 rows is exact, a 400-question paired test detects a >=5.7pp component effect at
 80% power, and the recorded limitation is that ablations generalise the mechanism
 rather than the dataset mix.
 
-**Remaining-programme budget: $220 hard limit, $20 headroom, on-demand only**
+**Remaining-programme budget: $220 hard limit, $10 headroom, on-demand only**
 (team decision, 24 Nov 2026). Planned spend:
 
 | Plan | Debates | GPU-h | Cost |
 | --- | ---: | ---: | ---: |
-| Core + Full (2 seeds) | 12,000 | 69.49 | $104.23 |
+| Core + Full (36-row alternate), 2 seeds | 13,200 | 76.43 | $114.66 |
 | Cap increase (mmlu 600 / hle 400) | 3,200 | 18.53 | $27.79 |
 | Three ablations (gpqa 400 + mmlu 600, 2 seeds) | 6,000 | 34.74 | $52.11 |
 | FP8 precision | 600 | 3.47 | $5.21 |
 | Setup + ingress | - | 1.33 | $2.56 |
-| **Total planned** | **21,800** | **127.6** | **$191.92** |
-| **+ $20 headroom** | - | - | **$211.92** |
+| **Total planned (all-in)** | **23,000** | **134.51** | **$202.33** |
+| **+ $10 headroom** | - | - | **$212.33** |
+
+The 36-row alternate is chosen over the 32-row default because its gold-answer
+oracle also runs on gpqa and mmlu, bounding the trust-aggregation ceiling on
+every dataset rather than only on SciClaimBench (4 extra rows, 1,200 debates,
+$10.42).
 
 On-demand is deliberate: spot eviction would cost more in rebuilds than the
 premium. The $1.50/GPU-h rate already includes disk and ingress.

@@ -13,7 +13,7 @@ All notable changes to this repository are recorded here. The format follows [Ke
 
 - Serving now runs with CUDA graphs instead of `--enforce-eager` (which was disabling graphs, torch.compile and JIT warmup), with `--max-num-seqs 32` for Qwen3.8's Mamba cache and `--disable-log-requests`. Measured on a 96 GB card: **172.7 debates/h with 8 concurrent rows vs 52.2/h for the 2-way eager baseline** (3.3x, ~69% cheaper per debate).
 - The dev (48 GB A6000) stack is retired: `PHASES` is `("fourbit", "final")`, `phase.yaml` defaults to `fourbit`, and `--phase dev` raises.
-- Remaining programme cost restated from measurement: Core + Full 12,000 debates ≈ $105; with cap increase, three ablations and the FP8 precision replication, 21,800 debates ≈ **$192**.
+- Remaining programme cost restated from measurement: Core + Full (36-row alternate, 13,200 debates) = $114.66; with the cap increase, three ablations, the FP8 precision replication and setup, 23,000 debates = **$202.33** at 172.7 debates/h and $1.50/GPU-h all-in, under a $220 cap with $10 headroom.
 - Reorganized the guide by member, changed "Author" to "Member", and limited assignments to the human-judgment work that cannot be delegated to agents.
 - Clarified that the "training" task is a **human rater calibration session**, not model training; renamed the template to `calibration_notes.md`.
 - Removed the paper-support assignment and template; Member 1 and the agents handle manuscript checks.

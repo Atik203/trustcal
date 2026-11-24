@@ -158,7 +158,7 @@ const monthPlan: MonthPlan[] = [
     phase: 'Full run + benchmark',
     hours: '~20 hr/wk',
     learn: 'Benchmark annotation and verifier-audit protocol; no new ML theory.',
-    build: 'WP-18 adds B8-placebo/B8-oracle; G4/G5 Full primary is 32 rows at 300 items/dataset with the gold-evidence oracle on SciClaimBench (9,600 debates); the 36-row gold-answer alternate is 10,800 debates. Core + Full ≈ 69.49 GPU-h ≈ $104.23 at $1.50/GPU-h all-in. SciClaimBench: 180 floor, 300 target, 600 stretch, 800 no-go.',
+    build: 'WP-18 adds B8-placebo/B8-oracle; G4/G5 Full primary is 32 rows at 300 items/dataset with the gold-evidence oracle on SciClaimBench (9,600 debates); the 36-row gold-answer alternate is 10,800 debates. Core + Full ≈ 76.43 GPU-h ≈ $114.66 at $1.50/GPU-h all-in. SciClaimBench: 180 floor, 300 target, 600 stretch, 800 no-go.',
     links: [],
   },
   {
@@ -281,8 +281,8 @@ export function RoadmapPage() {
             in Jun; defence in Jun/Jul; paper after the defence (Aug–Dec 2027).
             Gates mark explicit go/no-go decisions. Core and Full are separate
             matrices on the same 4-bit main stack; do not assume Core cells are
-            reusable. The remaining 21,800-debate programme is 126.2 GPU-h
-            ≈ $191.92 at $1.50/GPU-h all-in, with the $600 hard stop unchanged;
+            reusable. The remaining 23,000-debate programme is 134.51 GPU-h
+            ≈ $202.33 at $1.50/GPU-h all-in, with the $600 hard stop unchanged;
             the main matrix runs the 4-bit 24–27B stack (~53.3 GB) on one 96 GB
             RTX PRO 6000, and the FP8 stack is limited to the N1 smoke and
             a small GPQA precision replication.
@@ -309,7 +309,7 @@ export function RoadmapPage() {
               { step: 8, title: 'Baselines B1–B4', desc: 'Built and mock-verified; B3 and B4-matched are in the executable matrix.' },
               { step: 9, title: 'Baselines B5–B6 (Self-Consistency, MoA)', desc: 'Independent of core mechanism. Can build in parallel with step 10.' },
               { step: 10, title: 'Baseline B9 (iMAD reimplementation)', desc: 'Highest difficulty (~10 days). Sequenced last.' },
-              { step: 11, title: 'Core run → Full run', desc: 'G3 Core: 24 runs / 8,000 debates (≈46 GPU-h at 172.7 debates/h); row 2/24 (GPQA-Main seed 1) complete Nov 2026: 798 debates, McNemar p=0.086 (n.s.). G4/G5 Full primary: 32 rows at 300 items/dataset with the gold-evidence oracle on SciClaimBench (9,600 debates); the 36-row gold-answer alternate is 10,800 debates. Core + Full ≈ 69.49 GPU-h ≈ $104.23. B8-placebo/B8-oracle are WP-18.' },
+              { step: 11, title: 'Core run → Full run', desc: 'G3 Core: 24 runs / 8,000 debates (≈46 GPU-h at 172.7 debates/h); row 2/24 (GPQA-Main seed 1) complete Nov 2026: 798 debates, McNemar p=0.086 (n.s.). G4/G5 Full primary: 32 rows at 300 items/dataset with the gold-evidence oracle on SciClaimBench (9,600 debates); the 36-row gold-answer alternate is 10,800 debates. Core + Full ≈ 76.43 GPU-h ≈ $114.66. B8-placebo/B8-oracle are WP-18.' },
               { step: 12, title: 'Human evaluation + failure analysis', desc: 'Last — requires completed experimental results to annotate against.' },
             ].map(({ step, title, desc }) => (
               <div key={step} className="flex gap-3 items-start bg-[#f0f2f7] dark:bg-[#1a1d35] border border-[#e2e8f0] dark:border-[rgba(255,255,255,0.1)] rounded-md p-3 sm:p-4 hover:border-[#3b5bdb] dark:hover:border-[#3b5bdb] transition-colors">

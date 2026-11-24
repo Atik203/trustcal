@@ -12,7 +12,7 @@ import { cn } from "@/lib/utils";
  * Core is 24 runs / 8,000 debates. Full is 32 rows / 9,600 debates at
  * 300 items/dataset with the gold-evidence oracle on SciClaimBench; the
  * 36-row gold-answer alternate is 10,800 debates. The remaining
- * 21,800-debate programme is 126.2 GPU-h ≈ $191.92; hard stop $600.
+ * 23,000-debate programme is 134.51 GPU-h ≈ $202.33; hard stop $600.
  */
 
 interface Stage {
@@ -28,10 +28,10 @@ interface Stage {
 const STAGES: Stage[] = [
   {
     name: "Core + Full",
-    scope: "12,000 not-yet-run debates · 4-bit main stack · 2 seeds",
+    scope: "13,200 not-yet-run debates · 4-bit main stack · 2 seeds",
     when: "Dec 2026–Jan 2027",
-    hours: "69.49",
-    cost: "$104.23",
+    hours: "76.43",
+    cost: "$114.66",
     color: "#7c3aed",
     bg: "rgba(124,58,237,0.08)",
   },
@@ -141,12 +141,12 @@ export function CostTable() {
                 Total
               </td>
               <td className="p-2.5 font-semibold text-[#475569] dark:text-[#cbd5e1]">
-                All stages · 21,800 debates · hard stop $600
+                All stages · 23,000 debates · hard stop $600
               </td>
               <td className="p-2.5 font-semibold whitespace-nowrap">—</td>
-              <td className="p-2.5 font-mono whitespace-nowrap">126.2</td>
+              <td className="p-2.5 font-mono whitespace-nowrap">134.51</td>
               <td className="p-2.5 font-mono font-extrabold whitespace-nowrap text-[#1e2d3d] dark:text-[#e2e8f0]">
-                $191.92
+                $202.33
               </td>
             </tr>
           </tbody>
@@ -155,13 +155,13 @@ export function CostTable() {
 
       <p className="text-[10px] text-[#64748b] dark:text-[#94a3b8] leading-relaxed">
         <strong>Core</strong> is the 4-bit main matrix: 24 runs / 8,000
-        debates. <strong>Full</strong> is the 32-row matrix (9,600 debates) with
-        the gold-evidence oracle on SciClaimBench; the 36-row gold-answer
-        alternate is 10,800 debates. Core + Full counts the 12,000 not-yet-run
+        debates. <strong>Full</strong> is planned as the 36-row gold-answer alternate
+        (10,800 debates), so the oracle also runs on gpqa and mmlu; the
+        32-row gold-evidence default (9,600) is the preregistered fallback. Core + Full counts the 13,200 not-yet-run
         debates: completed Core rows and reusable Core→Full cells are excluded.
         The 96 GB FP8 stack is not the main Full
         matrix: it covers the N1 smoke plus the 600-debate GPQA precision
-        replication. The remaining programme is 126.2 GPU-h ≈ $191.92 at
+        replication. The remaining programme is 134.51 GPU-h ≈ $202.33 at
         $1.50/GPU-h all-in; hard stop $600. Post-FYDP scaling-law testing is
         outside this budget.
       </p>
@@ -259,8 +259,8 @@ export function CostTable() {
         the old 2-way eager baseline: 3.3× faster and ~69% cheaper per debate.
         Core is 24 runs /
         8,000 debates (~46 GPU-h); Full is 32 rows / 9,600 debates; the 36-row
-        alternate is 10,800. The remaining 21,800-debate programme is 126.2
-        GPU-h ≈ $191.92; hard stop $600. Prices are volatile — re-run the
+        alternate is 10,800. The remaining 23,000-debate programme is 134.51
+        GPU-h ≈ $202.33; hard stop $600. Prices are volatile — re-run the
         market query before renting.
       </p>
 

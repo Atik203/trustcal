@@ -292,7 +292,7 @@ Then run `configs/experiments_precision.yaml`.
 
 **Status (21 Nov 2026): first Core dataset-seed COMPLETE** — `gpqa_main` seed 1, B8 + B8-no-trust arms (`experiments/core3/`): 399+399 debates (q27 quarantined), 798 total, both runners clean. Final: B8 acc 0.6241 (249/399, CI 0.576–0.672) vs control 0.5865 (234/399, CI 0.536–0.634); paired 208/41/26/124; exact McNemar p=0.086. Counts as 2 of 24 Core rows ≈ 800/8,000 debates (10%). Full remains blocked on the v1.5 amendment + `sciclaim_180` loader (§9, §14.3).
 
-**Cost (measured 24 Nov 2026):** 172.7 debates/h at $1.50/GPU-h all-in (on-demand), so the remaining 7,200 Core debates are **41.7 GPU-h ≈ $62**; Core + Full together (12,000) is **69.5 GPU-h ≈ $104**. The full remaining programme (Core + Full + cap increase + three ablations + FP8 precision = 21,800 debates) is **$191.92**, committed as **~$212 with $20 headroom** under a $220 limit. The old 1,280 GPU-h / $175–210 figure assumed a serial eager run and is superseded. Concurrency plan and measurements: `experiments/concurrency_test/`.
+**Cost (measured 24 Nov 2026):** 172.7 debates/h at $1.50/GPU-h all-in (on-demand), so the remaining 7,200 Core debates are **41.7 GPU-h ≈ $62**; Core + Full together (36-row alternate, 13,200) is **76.43 GPU-h ≈ $114.66**. The full remaining programme (Core + Full + cap increase + three ablations + FP8 precision = 23,000 debates) is **$202.33**, committed as **~$212.33 with $10 headroom** under a $220 limit. The old 1,280 GPU-h / $175–210 figure assumed a serial eager run and is superseded. Concurrency plan and measurements: `experiments/concurrency_test/`.
 
 **Owner:** P2 + P4.
 
@@ -390,15 +390,13 @@ Then run `configs/experiments_precision.yaml`.
 
 | Item | GPU-h | Cash |
 |---|---:|---:|
-| 18 GB dev validation | — | **$0** |
-| 4-bit 80 GB smoke | 4–8 | **$1–2** |
-| N5/G2 calibration pilot (optional; replaced by the Core prefix) | ~112 | **$15–20** |
-| Core | 1,280 cap (planned ~1,067) | **$175–210** |
-| Full 32-row default | 1,280 | **$210** |
-| Full 36-row alternate | 1,440 | **$235** |
-| 96 GB FP8 5-question smoke | 1.5–3 | **$2–8** |
-| FP8 precision replication | 60–100 | **$25–40** |
-| Storage and bandwidth | — | **$40–80** |
+| Core remaining (7,200 debates) | 41.69 | **$62.54** |
+| Full 36-row (6,000 new debates) | 34.74 | **$52.12** |
+| Cap increase (3,200 debates) | 18.53 | **$27.79** |
+| Three ablations (6,000 debates) | 34.74 | **$52.11** |
+| FP8 precision (600 debates) | 3.47 | **$5.21** |
+| Setup + ingress | 1.33 | **$2.56** |
+| **Total (all-in)** | **134.51** | **$202.33** |
 | **Total plan** | — | **$500–600** |
 | **Hard stop** | — | **$600** |
 

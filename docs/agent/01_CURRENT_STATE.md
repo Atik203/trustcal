@@ -68,7 +68,7 @@ Experiment-ready means:
 3. The verifier is validated against human labels. — **Pending (N4).**
 4. The trust operator satisfies its stated bound. — **True.**
 5. The baseline comparisons are matched (same retrieval, prompts, compute). — **True** for B8 vs B8-no-trust and B4-matched.
-6. The matrix fits the time budget. — **True:** 24 Core rows, 1,280 GPU-h cap.
+6. The matrix fits the time budget. — **True:** 24 Core rows; 1,280 GPU-h is the frozen gate cap. Measured budget: the remaining 23,000-debate programme (36-row Full, cap increase, three ablations, FP8 precision) is 134.51 GPU-h = **$202.33**, under a $220 cap with $10 headroom.
 7. A pilot has passed a pre-registered behavioral gate. — **Pending.** The $15–20 N5/G2 run is replaced by the Core-prefix gate (first 25–50 Core B8/B8-no-trust questions, `--stop-after`); the 25-item Month-1 file is not authored. The 25+25 prefix ran clean 20 Nov 2026 as a feasibility/timing gate only — it is not a G2 pass.
 
 **Status: 1/2/4/5/6 true; 3 and 7 pending.** P0 released the engineering; the 25+25 prefix proved feasibility/timing only, not the pilot gate or the human audit.

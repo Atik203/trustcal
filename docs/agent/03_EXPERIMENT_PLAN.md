@@ -248,15 +248,15 @@ Two-proportion test, α=0.05 two-sided, power=0.80. Baseline CCR \(b_0\); relati
 | 96 GB 5-question smoke (N1b) | 3 | 5 questions | 1 | 5 | — |
 | FP8 precision replication | 3 | GPQA subset | 1 | 150–200 | 600 |
 
-**Remaining programme** (21,800 debates = 126.2 GPU-h ≈ $189.36 GPU, plus ~$2.56 setup/ingress ≈ **$191.92** total; counts not-yet-run debates, so completed Core rows and reusable Core→Full rows are excluded):
+**Remaining programme** (23,000 debates = 133.18 GPU-h ≈ $199.77 GPU, plus ~$2.56 setup/ingress ≈ **$202.33** total; counts not-yet-run debates, so completed Core rows and reusable Core→Full rows are excluded):
 
 | Component | Debates | GPU-h | GPU $ |
 |---|---:|---:|---:|
-| Core + Full, 2 seeds | 12,000 | 69.49 | $104.23 |
+| Core + Full (36-row alternate), 2 seeds | 13,200 | 76.43 | $114.66 |
 | Cap increase | 3,200 | 18.53 | $27.79 |
 | Three ablations | 6,000 | 34.74 | $52.11 |
 | FP8 precision | 600 | 3.47 | $5.21 |
-| **Total** | **21,800** | **126.2** | **$189.36 + ~$2.56 ≈ $191.92** |
+| **Total (all-in)** | **23,000** | **134.51** | **$199.77 + ~$2.56 ≈ $202.33** |
 
 The N5 pilot runs as a Core prefix (`--limit 400 --stop-after N`), so it adds no separate GPU spend.
 

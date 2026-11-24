@@ -1,6 +1,6 @@
 # trustcal — implementation status
 
-Status map for the Python pipeline in `trustcal/`. **P0 is released**: gate **13/13**, **615 tests**, tags `p0-gate` = `055a244` and `p0-release` = `7f2c11f`, with `main` and `dev` at the `v0.2.1` release. No efficacy results are claimed. Paid GPU work since P0: Gate 0 (vanilla MAD, 10 GPQA debates × 3 rounds on the Dev stack), the N1a 4-bit smoke, the 25+25 Core prefix, the N1b FP8 serving smoke, the first `core3` Core row (B8 vs B8-no-trust, 399+399 debates), and the 24 Nov concurrency test (**172.7 debates/h at $1.50/GPU-h all-in**). The remaining 23 Core rows have **not** been run. WP-18 is implemented; the 32-row gold-evidence Full config exists.
+Status map for the Python pipeline in `trustcal/`. **P0 is released**: gate **13/13**, **663 tests**, tags `p0-gate` = `055a244` and `p0-release` = `7f2c11f`, with `main` and `dev` at the `v0.2.1` release. No efficacy results are claimed. Paid GPU work since P0: Gate 0 (vanilla MAD, 10 GPQA debates × 3 rounds on the Dev stack), the N1a 4-bit smoke, the 25+25 Core prefix, the N1b FP8 serving smoke, the first `core3` Core row (B8 vs B8-no-trust, 399+399 debates), and the 24 Nov concurrency test (**172.7 debates/h at $1.50/GPU-h all-in**). The remaining 23 Core rows have **not** been run. WP-18 is implemented; the 32-row gold-evidence Full config exists.
 
 | Area | Files | Status | Notes |
 | --- | --- | --- | --- |

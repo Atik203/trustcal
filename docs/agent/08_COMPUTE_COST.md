@@ -32,18 +32,22 @@ is rejected because eviction costs more in rebuilds than the premium).
 
 | Component | Debates | GPU-h | Cost |
 | --- | ---: | ---: | ---: |
-| Core + Full, 2 seeds | 12,000 | 69.49 | $104.23 |
+| Core + Full (36-row alternate), 2 seeds | 13,200 | 76.43 | $114.66 |
 | Cap increase (mmlu 600 / hle 400) | 3,200 | 18.53 | $27.79 |
 | Three ablations (gpqa 400 + mmlu 600, 2 seeds) | 6,000 | 34.74 | $52.11 |
 | FP8 precision replication | 600 | 3.47 | $5.21 |
 | Setup + ingress (4 sessions) | - | 1.33 | $2.56 |
-| **Planned total** | **21,800** | **127.6** | **$191.92** |
+| **Planned total (all-in)** | **23,000** | **134.51** | **$202.33** |
 
-**Remaining-spend cap: $220 with $20 headroom**, so the committed figure is
-**~$212** and the absolute margin is ~$8. This cap is separate from the
-preregistered programme hard stop of **$600** in `PRE_REGISTRATION.md`; that
-document's GPU-hour arithmetic is retained as the frozen gate cap, not as a
-forecast.
+**Remaining-spend cap: $220 with $10 headroom**, so the committed figure is
+**~$212.33.33** and the absolute margin is ~$7.67. The 36-row alternate is chosen
+over the 32-row default: its gold-answer oracle runs on gpqa and mmlu as well,
+which bounds the trust-aggregation ceiling on every dataset rather than only on
+SciClaimBench (4 extra rows = 1,200 debates = $10.42).
+
+This cap is separate from the preregistered programme hard stop of **$600** in
+`PRE_REGISTRATION.md`; that document's GPU-hour arithmetic is retained as the
+frozen gate cap, not as a forecast.
 
 Completed work is excluded from the table: the 798-debate `gpqa_main` seed-1 row
 (~$19) is already spent.
