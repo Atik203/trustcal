@@ -8,7 +8,7 @@ errata; v1.2 remains pending the benchmark freeze. The executable Core matrix in
 `trustcal/configs/experiments.yaml` is cut to four conditions. The **v1.3 draft
 in §12 is not approved**: it records the proposed placebo/oracle semantics, the
 32-row Full plan, the 4-bit execution stack, the FP8 precision replication,
-and a revised $500–600 budget with a $600 hard stop, for team sign-off. (Its
+and a revised $500–600 budget with a $300 hard stop, for team sign-off. (Its
 80 GB A100 host and dollar figures are the 9 November spot basis, superseded by
 the measured note in §5.) It
 changes no endpoint, hypothesis, test, exclusion, or analysis family. The v1.1
@@ -467,7 +467,7 @@ stack above remains the precision-replication stack.
 | 1.0 | 9 November 2026 | Initial pre-registration; executable 4-condition matrix cut; six-arm target named | frozen |
 | 1.1 | 9 November 2026 | Erratum: released prompt hash `bc9c7b…`; `origin/feat/p0-hardening` retired; B8-placebo/B8-oracle assigned to WP-18; oracle semantics pending WP-18 | frozen |
 | 1.2 | benchmark freeze | Add SciClaimBench-180 as the third primary dataset and the gold-evidence testbed | pending |
-| 1.3 | 11 November 2026 (draft) | **v1.3 draft — pending team sign-off.** Records placebo/oracle semantics, the 32-row Full default (36-row gold-answer alternate), the 4-bit/80 GB execution stack, the FP8 precision replication, and a $500–600 budget with a $600 hard stop. Renames the benchmark from EG-SSS to SciClaimBench and updates the Full config hash. No endpoint, hypothesis, or analysis family changes. | draft — pending team sign-off |
+| 1.3 | 11 November 2026 (draft) | **v1.3 draft — pending team sign-off.** Records placebo/oracle semantics, the 32-row Full default (36-row gold-answer alternate), the 4-bit/80 GB execution stack, the FP8 precision replication, and a $500–600 budget with a $300 hard stop. Renames the benchmark from EG-SSS to SciClaimBench and updates the Full config hash. No endpoint, hypothesis, or analysis family changes. | draft — pending team sign-off |
 | 1.4 | 9 November 2026 | B7 provider: Gemini retired; OpenAI gpt-6-luna | frozen |
 | 1.5 | draft | **v1.5 draft — pending team sign-off.** Core→Full reuse only: Full `gpqa_main: 400`, `mmlu_pro: 400`, `sciclaim_180: 300`; new Full config hash. No endpoint, hypothesis, test, exclusion, or analysis change. Requires the SciClaimBench loader and v1.3 sign-off first. | draft — pending team sign-off |
 
@@ -559,7 +559,7 @@ Full row count to WP-18, and its budget assumed the two-stack Dev/Final plan.
 This draft fills that placeholder: it records the execution plan the team
 intends to run — a 4-bit stack on one 80 GB A100 for the main causal matrix, a
 32-row Full default with a gold-evidence oracle on SciClaimBench, a 96 GB FP8
-precision replication, and a $500–600 budget with a $600 hard stop. It is
+precision replication, and a $500–600 budget with a $300 hard stop. It is
 recorded before any confirmatory Full row so the plan cannot be adjusted after
 seeing outcomes. It supersedes the v1.1 framing that treated the 36-run
 gold-answer plan as the target and left the oracle definition pending: the
@@ -645,9 +645,11 @@ main run.
 | FP8 precision replication + N1 smoke | 25–40 | 60–100 GPU-h at $0.336/GPU-h |
 | Storage and bandwidth | 40–80 | persistent cache, ingress/egress |
 | **Total** | **500–600** | planning envelope |
-| **Hard stop** | **600** | no spend beyond without a new signed amendment |
+| **Hard stop** | **300** | no spend beyond without a new signed amendment |
 
-> **Budget status (measured 24 Nov 2026).** The GPU-hour and USD rows above are the 9 November spot snapshot. Measured on a 96 GB card: **172.7 debates/h** with 8 concurrent rows + CUDA graphs at **$1.50/GPU-h all-in**, so Core + Full (12,000 debates) ≈ **69.5 GPU-h ≈ $104** and the full 23,000-debate programme ≈ **$192**. The 1,280 GPU-h figure remains the frozen gate cap (gate check 13); it is a ceiling, not a forecast. Re-costing this budget requires a signed amendment; the $600 hard stop is unchanged.
+> **Hard-stop change (24 Nov 2026).** The project hard stop is tightened from $600 to **$300 total**: ~$53 already spent + $219.25 committed for the remaining programme + ~$28 spare. Tightening a ceiling is conservative and changes no endpoint, hypothesis, or analysis rule.
+
+> **Budget status (measured 24 Nov 2026).** The GPU-hour and USD rows above are the 9 November spot snapshot. Measured on a 96 GB card: **172.7 debates/h** with 8 concurrent rows + CUDA graphs at **$1.50/GPU-h all-in**, so Core + Full (12,000 debates) ≈ **69.5 GPU-h ≈ $104** and the full 23,000-debate programme ≈ **$192**. The 1,280 GPU-h figure remains the frozen gate cap (gate check 13); it is a ceiling, not a forecast. Re-costing this budget requires a signed amendment; the $300 hard stop is unchanged.
 
 All amounts are planning envelopes in USD, not invoices. The total covers the
 pilot, Core, either Full variant (32-row $210 or 36-row $235), the precision
@@ -664,7 +666,7 @@ stop; it requires a separate cost model and approval.
 If the main runs move to a 96 GB GPU at $0.336/GPU-h, the planning total
 becomes $1,050–1,150. That path is not authorized by this draft: it requires
 explicit team re-approval and a new hard stop before any 96 GB main row starts.
-The $600 hard stop applies only to the 80 GB plan.
+The $300 hard stop applies only to the 80 GB plan.
 
 > **Update (24 Nov 2026).** The 96 GB class is now the measured default (172.7
 > debates/h at $1.50/GPU-h all-in), so this section and its $1,050–1,150 figure
@@ -682,7 +684,7 @@ quoted as current guidance:
 | Core run | $420–580 | historical; replaced by $175–210 |
 | Full run | $900–1,200 | historical; replaced by $210 (32-row) / $235 (36-row) |
 | Core + Full planning range | $1,320–1,780 | historical; replaced by the $500–600 total |
-| Hard stop | $1,350 | historical; replaced by $600 |
+| Hard stop | $1,350 | historical; replaced by $300 |
 
 These figures still appear in some planning documents; this pre-registration
 treats them as historical only. Those documents must be reconciled on sign-off,

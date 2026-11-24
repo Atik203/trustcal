@@ -115,9 +115,9 @@ A 300-item set with clean gold is better than a 600-item set with bad gold.
 | Full run, 36-row gold-answer alternate | **≈ $42 incremental** ($235 retired) |
 | Storage and bandwidth | $40–80 |
 | **Core + Full plan** | **≈ $104 / 69.5 GPU-h** |
-| **Hard stop** | **$600** |
+| **Hard stop** | **$300** |
 
-**Hard stop: $600.** The Full default and alternate are alternatives; the total counts one Full run. Main matrix on one **96 GB class card** at the measured **$1.50/GPU-h all-in** (172.7 debates/h, 8 concurrent rows + CUDA graphs; `experiments/concurrency_test/`). The 80 GB A100 at **$0.136/GPU-h** and the 96 GB FP8 rate of **$0.336/GPU-h** are the retired 9 November spot snapshot; re-cost the precision replication (60–100 GPU-h) at $1.50/h before running it. Placebo is cross-agent round-pool. Persist the cache; batch sessions; copy results; destroy instances.
+**Hard stop: $300** (project total, ~$53 already spent). The Full default and alternate are alternatives; the total counts one Full run. Main matrix on one **96 GB class card** at the measured **$1.50/GPU-h all-in** (172.7 debates/h, 8 concurrent rows + CUDA graphs; `experiments/concurrency_test/`). The 80 GB A100 at **$0.136/GPU-h** and the 96 GB FP8 rate of **$0.336/GPU-h** are the retired 9 November spot snapshot; re-cost the precision replication (60–100 GPU-h) at $1.50/h before running it. Placebo is cross-agent round-pool. Persist the cache; batch sessions; copy results; destroy instances.
 
 ---
 

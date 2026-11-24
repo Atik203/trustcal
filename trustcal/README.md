@@ -46,7 +46,7 @@ python scripts/check_stack.py --phase final
 | `fourbit` | 96 GB class (a single 80 GB A100 also fits the 53.26 GB stack) | Qwen3.8-27B-AWQ-INT4, Gemma 4 26B-A4B AWQ, Mistral 24B AWQ | **53.26 GB** |
 | `final` | RTX PRO 6000 96 GB | Qwen3.8-27B-FP8, Gemma 4 26B-A4B FP8, Mistral 24B AWQ | **73.68 GB** |
 
-`fourbit` is the main causal matrix stack; at 8 concurrent rows with CUDA graphs it measured **172.7 debates/h** at **$1.50/GPU-h all-in**. The remaining 23,000-debate programme (36-row Full, cap increase, three ablations, FP8 precision) is 134.51 GPU-h = **$202.33**, under a $220 cap with $10 headroom. `final` is limited to the N1 smoke and the small GPQA precision replication.
+`fourbit` is the main causal matrix stack; at 8 concurrent rows with CUDA graphs it measured **172.7 debates/h** at **$1.50/GPU-h all-in**. The remaining 23,798-debate programme (36-row Full, cap increase, three ablations, FP8 precision) is 137.80 GPU-h = **$209.26**, under a $220 cap with $10 headroom. `final` is limited to the N1 smoke and the small GPQA precision replication.
 
 ## GPU serving
 

@@ -496,8 +496,8 @@ Config: `trustcal/configs/datasets.yaml`; blueprint §8; journal `Papev:260-270`
 
 **Serving:** one 96 GB on-demand RTX PRO 6000, 8 concurrent rows, CUDA graphs; **$1.50/GPU-h all-in**; measured **172.7 debates/h** versus 52.2/h for the 2-way eager baseline.
 
-- **Core + Full:** 13,200 debates = **76.43 GPU-h = $114.66** all-in. Core alone is 8,000 debates ≈ 46.3 GPU-h; remaining Core rows after `core3` ≈ **$62**.
-- **Remaining programme (36-row Full alternate):** 23,000 debates = **134.51 GPU-h = $202.33**; $202.33 projected plus **$10 headroom** = $212.33 committed against the **$220** cap.
+- **Core + Full:** 14,000 debates = **81.06 GPU-h = $121.59** all-in. Core alone is 8,000 debates ≈ 46.3 GPU-h; remaining Core rows after `core3` ≈ **$62**.
+- **Remaining programme (36-row Full alternate):** 23,798 debates = **137.80 GPU-h = $209.26**; $209.26 projected plus **$10 headroom** = $219.26 committed against the **$220** cap.
 - Stage-by-stage costs, storage/bandwidth and rental rules live in `roadmap.md` §13 and `AGENTS.md` — cite them, do not re-derive them.
 - **Feasibility:** inference-only, no training. The FP8 variant of the same card served N1b (done) and is reserved for the precision replication (not run). If GPUs are short, shrink the pilot — never the gate criteria.
 
@@ -511,11 +511,11 @@ Config: `trustcal/configs/datasets.yaml`; blueprint §8; journal `Papev:260-270`
 | FP8 precision replication | 60–100 GPU-h; ≈$90–150 at $1.50/h — **NOT RUN** | `roadmap.md` §3 |
 | Pilot | curated Core prefix; ~$15–20 for the full calibration | `roadmap.md` §7 |
 | Core (8,000 debates) | 46.3 GPU-h; ≈$62 remaining after `core3` | measured 24 Nov 2026 |
-| **Core + Full** (32-row default) | **13,200 debates; 76.43 GPU-h / $114.66** | measured 24 Nov 2026 |
-| Remaining programme, 36-row alternate | 23,000 debates; 134.51 GPU-h; $202.33 | measured 24 Nov 2026 |
-| **Cap** | **$220**, $10 headroom ($212.33 committed) | `roadmap.md` §13 |
+| **Core + Full** (32-row default) | **14,000 debates; 81.06 GPU-h / $121.59** | measured 24 Nov 2026 |
+| Remaining programme, 36-row alternate | 23,798 debates; 137.80 GPU-h; $209.26 | measured 24 Nov 2026 |
+| **Cap** | **$220**, $10 headroom ($219.26 committed) | `roadmap.md` §13 |
 
-**Honest line:** "The old deck and report figures are historical. Measured, the stack runs 172.7 debates per hour at a dollar fifty per GPU-hour all-in: Core plus Full is 76.43 GPU-hours and $114.66, the 36-row programme is 134.51 GPU-hours and $202.33 against a $220 cap with ten dollars of headroom."
+**Honest line:** "The old deck and report figures are historical. Measured, the stack runs 172.7 debates per hour at a dollar fifty per GPU-hour all-in: Core plus Full is 81.06 GPU-hours and $121.59, the 36-row programme is 137.80 GPU-hours and $209.26 against a $220 cap with ten dollars of headroom."
 
 **Cost Q&A:** **Q: What dominates cost?** Nine generations per question (3 agents × 3 rounds) at 1024 tokens, plus retrieval. · **Q: Can the budget be cut?** Fewer seeds hurt precision, fewer questions hurt power; shrink the pilot first. · **Q: What does a surprise look like?** GPU price spikes or retrieval limits forcing paid tiers (`3.design.tex:143-151`).
 
@@ -538,7 +538,7 @@ Config: `trustcal/configs/datasets.yaml`; blueprint §8; journal `Papev:260-270`
 | Placebo/oracle arms have not run | "WP-18 implements both flags; the arms execute in Full. The pre-registration lists the six-arm target and the four-arm executable subset." |
 | `--rounds` ignored with real clients | "Rounds come from the config file; the flag is legacy for mocks. Queued for cleanup." (`runner.py:161-166`) |
 | Registry vs matrix | "B1–B10 are the registry; Core is exactly B3, B4-matched, B8-no-trust and B8. Full adds placebo and oracle." |
-| Costs are split by stage | "Core + Full is 13,200 debates, 76.43 GPU-h, $114.66. The 36-row programme is 134.51 GPU-h, $202.33, against a $220 cap." |
+| Costs are split by stage | "Core + Full is 14,000 debates, 81.06 GPU-h, $121.59. The 36-row programme is 137.80 GPU-h, $209.26, against a $220 cap." |
 | α/β grid not yet run | "Defaults 0.5/0.3; a Phase-3b sweep is scheduled with a planned sensitivity check." (blueprint §9) |
 | Confidence gate not invoked | "The prompt exists; wiring it is a later phase, and misclassification only costs throughput." |
 
@@ -631,7 +631,7 @@ Config: `trustcal/configs/datasets.yaml`; blueprint §8; journal `Papev:260-270`
 - **If asked "what did you personally do?":** answer from §19.
 - **If asked "what are you most confident about?":** the loop runs end to end (Gate 0: 10/10, 90/90) and the trust math is bounded and tested; the rest is the paid matrix and the verifier audit.
 - **If asked "what is the weakest part?":** retrieval coverage; unverifiable claims are excluded, so sparse fields weaken the signal. Say it before they do.
-- **If asked a budget question:** "Core plus Full is 13,200 debates — 76.43 GPU-hours, $114.66 at the measured $1.50 per GPU-hour all-in. The 36-row programme is 23,000 debates, 134.51 GPU-hours, $202.33 against a $220 cap with ten dollars of headroom. The stack is 4-bit 24–27B on a 96 GB on-demand RTX PRO 6000, 8 rows, 172.7 debates per hour; the 2-way eager baseline was 52.2. The 18 GB gate is free and already passed."
+- **If asked a budget question:** "Core plus Full is 14,000 debates — 81.06 GPU-hours, $121.59 at the measured $1.50 per GPU-hour all-in. The 36-row programme is 23,798 debates, 137.80 GPU-hours, $209.26 against a $220 cap with ten dollars of headroom. The stack is 4-bit 24–27B on a 96 GB on-demand RTX PRO 6000, 8 rows, 172.7 debates per hour; the 2-way eager baseline was 52.2. The 18 GB gate is free and already passed."
 - **If asked "why should this project continue?"** Three reasons: the failure is documented (over 20% ignored-correct cases; 41–86.7% MAS failure rates), the fix is bounded and testable, and the harness is reusable across evidence domains.
 - **If a judge requests a specific file:** show `trust/update.py` (math), `orchestrator/injection.py` (stress test), `eval/metrics.py` (CCR/MPR), `experiments/gate0/` (evidence).
 - **If the demo laptop fails:** switch to the deck; the code map in §11 is on every member's copy, and the mock path runs anywhere.
