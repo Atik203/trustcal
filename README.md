@@ -12,7 +12,7 @@ FYDP II research project by **Group 6 · Team Phantom Devs**, Department of Comp
 
 TrustCal studies a failure mode in multi-agent LLM debate: a confident wrong majority can pressure a correct minority agent into abandoning its answer. The project re-weights each agent's influence _during_ the debate using an evidence-grounded trust score derived from retrieved external evidence, rather than a majority vote. The repository contains the implementation, the pre-registered evaluation plan, the controlled-benchmark design, the full thesis report, the journal manuscript, and the presentation site.
 
-> **No efficacy results are claimed.** P0 is engineering readiness. The 24-row Core matrix and the 32-row Full matrix have not been run.
+> **No efficacy results are claimed.** P0 is engineering readiness. The Full matrix and 23 of the 24 Core rows have not been run; the first `core3` row (B8 vs B8-no-trust) is complete and is reported as feasibility/timing.
 
 ## Research question
 
@@ -107,7 +107,7 @@ python scripts/verify_env.py --check-servers
 python scripts/smoke_test.py --phase fourbit --limit 5
 ```
 
-Read [`trustcal/AGENTS.md`](trustcal/AGENTS.md) before launching a paid instance. The 4-bit matrix stack is 53.26 GB on an 80 GB A100; the FP8 precision stack is 73.68 GB on a 96 GB card. Never expose the vLLM ports publicly without authentication and a tunnel or firewall.
+Read [`trustcal/AGENTS.md`](trustcal/AGENTS.md) before launching a paid instance. The 4-bit matrix stack is 53.26 GB and the FP8 precision stack is 73.68 GB; both run on one 96 GB card at a **$1.50/GPU-h all-in** planning rate, with 8 concurrent rows + CUDA graphs (measured 172.7 debates/h). Never expose the vLLM ports publicly without authentication and a tunnel or firewall.
 
 ### Report and journal
 

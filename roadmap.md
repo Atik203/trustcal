@@ -292,7 +292,7 @@ Then run `configs/experiments_precision.yaml`.
 
 **Status (21 Nov 2026): first Core dataset-seed COMPLETE** — `gpqa_main` seed 1, B8 + B8-no-trust arms (`experiments/core3/`): 399+399 debates (q27 quarantined), 798 total, both runners clean. Final: B8 acc 0.6241 (249/399, CI 0.576–0.672) vs control 0.5865 (234/399, CI 0.536–0.634); paired 208/41/26/124; exact McNemar p=0.086. Counts as 2 of 24 Core rows ≈ 800/8,000 debates (10%). Full remains blocked on the v1.5 amendment + `sciclaim_180` loader (§9, §14.3).
 
-**Cost (measured 24 Nov 2026):** 172.7 debates/h at $1.49/GPU-h all-in, so the remaining 7,200 Core debates are **41.7 GPU-h ≈ $62**; Core + Full together (12,000) is **69.5 GPU-h ≈ $105**. The old 1,280 GPU-h / $175–210 figure assumed a serial eager run and is superseded. Concurrency plan and measurements: `experiments/concurrency_test/`.
+**Cost (measured 24 Nov 2026):** 172.7 debates/h at $1.50/GPU-h all-in (on-demand), so the remaining 7,200 Core debates are **41.7 GPU-h ≈ $62**; Core + Full together (12,000) is **69.5 GPU-h ≈ $104**. The full remaining programme (Core + Full + cap increase + three ablations + FP8 precision = 21,800 debates) is **$191.92**, committed as **~$212 with $20 headroom** under a $220 limit. The old 1,280 GPU-h / $175–210 figure assumed a serial eager run and is superseded. Concurrency plan and measurements: `experiments/concurrency_test/`.
 
 **Owner:** P2 + P4.
 
@@ -312,7 +312,7 @@ Then run `configs/experiments_precision.yaml`.
 - Reusable rows: **16** (4 core arms × 2 datasets × 2 seeds), **only if** Full `gpqa_main` and `mmlu_pro` caps are **400**, with the same model revisions, prompts, dataset revisions, seeds, flags, and `limit`.
 - **A 300-item Full sample is not a subset of the 400-item Core sample.** `stratified_sample` uses different per-stratum allocations and independent draws, `question_id` indexes shift, and the manifest includes `limit`; the runner refuses to resume across caps. Reuse is an exact-row identity, not a subset extraction.
 - New Full work: 8 SciClaimBench core rows (300) + 6 placebo (300) + 2 oracle (300) = **16 rows / 4,800 debates / 640 GPU-h**.
-- Full incremental cost: **~$104** instead of $210; saving **~$106**.
+- Full incremental cost at the measured 172.7 debates/h and $1.50/GPU-h: **~$42** for the new Full rows, because the four Core arms are reused. The $210/$235 figures are the retired spot-rate plan.
 - Must be pre-registered in a **new v1.5** before unblinding, with the new config hash. The current v1.3 draft uses 300/dataset and says it does not assume reuse. If v1.5 is not signed, Full is a full 32-row run at $210.
 
 **G4/G5 pass:** placebo does not match B8; oracle separates; the sign reversal appears at the predicted q/ρ boundary; one external-validity check replicates the sign.

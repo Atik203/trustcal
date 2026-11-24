@@ -76,7 +76,7 @@
 - `eval/metrics.py:109-131` (`MetricSummary` fields).
 - `runner.py:287-302` (summary payload).
 - `scripts/run_matrix.py:307-319` (matrix table).
-- `docs/blueprint.md:412` lists accuracy as required.
+- `docs/blueprint.md` (evaluation plan) lists accuracy as required.
 
 **Change:**
 1. Add `final_answer`, `final_answer_correct`, `final_answer_source` (majority/weighted) to every record.

@@ -63,7 +63,7 @@ The manuscript is now honest and internally consistent, but it is **not a result
 | 9 | B8 vs B4 confounded | ✅ B8-no-trust is the primary matched control; B4-matched uses same partition |
 | 10 | Baselines approximate | 🟡 B9/B10 still labeled approximations; do not claim “+X% over iMAD” |
 | 11 | Datasets did not fit the method | ✅ BrokenMath/BrokenArXiv appendix-only; GPQA + MMLU-Pro + SciClaimBench primary |
-| 12 | Matrix too big | ✅ Core matrix 24 rows / 1,280 GPU-h; pre-registration v1.0 |
+| 12 | Matrix too big | ✅ Core matrix 24 rows; 1,280 GPU-h gate cap; pre-registration v1.0 |
 | 13 | Cost ignored bandwidth/storage | ✅ Vast.ai spot model with bandwidth/storage/spot interruptions |
 | 14 | Paper overclaimed | ✅ claims audit and report chapters updated; no efficacy claims |
 
@@ -75,7 +75,7 @@ The manuscript is now honest and internally consistent, but it is **not a result
 |---|---|---|
 | **Nov 2026** | N1a 4-bit smoke (PASS 20 Nov); 25+25 Core-prefix gate (COMPLETE 20 Nov, feasibility/timing); FP8 smoke (PASS 20 Nov, serving only); WP-18 placebo/oracle; 24-item calibration; verifier audit start | smoke PASS; prefix timings; 6-arm support; calibration report |
 | **Dec 2026** | Pilot run 100–150 questions; injection κ | **G2** |
-| **Jan 2027** | Core run: 4 arms, GPQA 400 + MMLU-Pro 400 + HLE 200, 2 seeds; 1,280 GPU-h cap; SciClaimBench-180 freeze (v1.2) | **G3** |
+| **Jan 2027** | Core run: 4 arms, GPQA 400 + MMLU-Pro 400 + HLE 200, 2 seeds; 1,280 GPU-h gate cap (~46 GPU-h at the measured 172.7 debates/h); SciClaimBench-180 freeze (v1.2) | **G3** |
 | **Feb 2027** | Full run: 6 arms; 300 benchmark; human eval start | **G4/G5** |
 | **Mar 2027** | Human eval 150–200; SDT; expert ceiling | analysis freeze |
 | **Apr 2027** | q/ρ sweeps, granularity, shared-error floor, ablations | results freeze |
@@ -106,17 +106,18 @@ A 300-item set with clean gold is better than a 600-item set with bad gold.
 | Path | Cost |
 |---|---:|
 | 18 GB test gate | $0 |
-| 4-bit 80 GB smoke | $1–2 |
-| 96 GB 5-question FP8 smoke | $2–8 |
-| FP8 precision replication | $25–40 |
-| Pilot | $15–20 |
-| Core run | **$175–210** |
-| Full run, 32-row gold-evidence default | **$210** |
-| Full run, 36-row gold-answer alternate | **$235** |
+| 4-bit smoke (N1a) | $1–2 |
+| FP8 5-question smoke | $2–8 at the retired $0.336/h |
+| FP8 precision replication | $25–40 at the retired $0.336/h; ≈ $90–150 re-costed at $1.50/h |
+| Pilot | curated Core prefix at the measured rate; ~$15–20 only for the full 112 GPU-h calibration |
+| Core run | **≈ $62 remaining** at 172.7 debates/h / $1.50 per GPU-h ($175–210 is the retired spot estimate) |
+| Full run, 32-row gold-evidence default | **≈ $42 incremental** ($210 retired) |
+| Full run, 36-row gold-answer alternate | **≈ $42 incremental** ($235 retired) |
 | Storage and bandwidth | $40–80 |
-| **Total plan** | **$500–600** |
+| **Core + Full plan** | **≈ $104 / 69.5 GPU-h** |
+| **Hard stop** | **$600** |
 
-**Hard stop: $600.** The Full default and alternate are alternatives; the total counts one Full run. Main matrix on one **80 GB A100 PCIe** spot at **$0.136/GPU-h** (4-bit 24–27B final families). The **96 GB FP8 stack** at **$0.336/GPU-h** is only the N1 smoke plus the GPQA precision replication (60–100 GPU-h, $25–40). If the A100 spot is unavailable and the main runs use 96 GB, the plan is **$1,050–1,150** and needs re-approval; it is not the default. Placebo is cross-agent round-pool. Persist the cache; batch sessions; copy results; destroy instances.
+**Hard stop: $600.** The Full default and alternate are alternatives; the total counts one Full run. Main matrix on one **96 GB class card** at the measured **$1.50/GPU-h all-in** (172.7 debates/h, 8 concurrent rows + CUDA graphs; `experiments/concurrency_test/`). The 80 GB A100 at **$0.136/GPU-h** and the 96 GB FP8 rate of **$0.336/GPU-h** are the retired 9 November spot snapshot; re-cost the precision replication (60–100 GPU-h) at $1.50/h before running it. Placebo is cross-agent round-pool. Persist the cache; batch sessions; copy results; destroy instances.
 
 ---
 

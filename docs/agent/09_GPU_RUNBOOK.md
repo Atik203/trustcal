@@ -74,7 +74,7 @@ Three checks with an abort, in order (details in the root `AGENTS.md`):
 
 | Symptom | Cause | Fix |
 | --- | --- | --- |
-| Semantic Scholar returns 429 in every run, then the source goes dead | S2 allows **1 request/second cumulatively across all endpoints**; a 12-24 request burst always exceeds it | Exclude it for concurrent runs: `TRUSTCAL_EXCLUDE_SOURCES=semantic_scholar`. Ask S2 for the higher research tier if coverage is needed |
+| Semantic Scholar returns 429 in every run, then the source goes dead | S2 allows **1 request/second cumulatively across all endpoints**; a 12-24 request burst always exceeds it | Pace it: `TRUSTCAL_SOURCE_MIN_INTERVAL=semantic_scholar=1.0` (cross-process gate, skip-on-timeout). Do not exclude it unless you also document the coverage change for every arm |
 | Is the S2 key invalid? | Compare responses: **429 = key accepted but throttled**, **403 = invalid key**, 429 with no key = anonymous limit | Do not reapply for a key that returns 429; request a limit increase instead |
 | Retrieval dominates a question's wall time | ~1 s per upstream call x ~50 calls per question | Prefetch once into `TRUSTCAL_RETRIEVAL_CACHE`; a warm run reads disk in ~20 ms per call |
 | The cache does not speed up a fresh run | Failures are never cached, and `_dead_sources` resets every run, so each run re-pays the 429 discovery | Fix or exclude the failing source first; the cache only removes *successful* waits |

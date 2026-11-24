@@ -45,7 +45,7 @@ Line numbers are the current lines after editing. Old text is quoted in short fo
 | 22 | `5.sic.tex:292` | "still within an incremental level of innovation" | "The contribution is the combination of claim-level external evidence with a bounded in-debate trust state and a controlled wrong-majority protocol... not a patentable or breakthrough innovation." | Removed the self-deprecating "incremental" label; states the contribution and its scope. | narrowed |
 | 23 | `5.sic.tex:296` | "300 GPU-hours... energy usage remains very-low" | "1,067--1,280 GPU-h... Energy use was not metered, so no quantitative energy claim is made." | No energy measurement; 300 hours was stale. | removed |
 | 24 | `5.sic.tex:330` | "six program outcomes... all of which are addressed in FYDP I" | "six of the twelve program outcomes: PO1, PO2, PO4, PO10, PO11, and PO12... remaining six are scheduled for FYDP II and III..." | Reconciles the table and the text. | verified |
-| 25 | `5.sic.tex:68` | 300 GPU-h, USD 340--820, phase split of hours | 1,067--1,280 GPU-h; Core run USD 175--210; Full target USD 210 (36-row alternate USD 235); N1 smoke + precision replication USD 25--40. | Superseded by the v1.3 4-bit/80 GB plan; the old phase split was not measured. | verified |
+| 25 | `5.sic.tex:68` | 300 GPU-h, USD 340--820, phase split of hours | 1,067--1,280 GPU-h; Core run USD 175--210; Full target USD 210 (36-row alternate USD 235); N1 smoke + precision replication USD 25--40. | Superseded by the v1.3 4-bit plan; the old phase split was not measured. The replacement budget was itself superseded on 24 Nov 2026 by the measured 172.7 debates/h at $1.50/GPU-h all-in (Core + Full ≈ 69.5 GPU-h ≈ $104). | verified |
 | 26 | `5.sic.tex:15` | "Python 3.11 was chosen..." | "The Gate 0 environment used Python 3.12.3; the repository requires Python 3.10 or newer." | Gate 0 actually used 3.12.3; the old text conflicted with the run record. | verified |
 | 27 | `5.sic.tex:22` | "FP8 support from PagedAttention" | "PagedAttention manages KV-cache memory... the Blackwell FP8 path supplies throughput..." | FP8 is a GPU/vLLM capability, not a PagedAttention feature. | verified |
 | 28 | `5.sic.tex:24` | "BM25... like sentence-transformer, it only uses surface features..." | "BM25 scores lexical overlap rather than semantic relevance; the cross-encoder is an optional reranker..." | The original conflated lexical and semantic scoring. | verified |
@@ -79,11 +79,11 @@ Line numbers are the current lines after editing. Old text is quoted in short fo
 | Claim routing: bio → PubMed + S2; math → arXiv + S2 | P0 gate check 11 output | verified |
 | Manifest/resume: mismatch refused, identical accepted | P0 gate check 12; `manifest.py` | verified |
 | Runner record adapter carries `manifest_hash`, `final_answer`, and trust-field copies | `trustcal/src/trustcal/runner.py`; `experiments/p0/WP-04.md` | verified (wired in P0 release) |
-| Final stack not smoke-tested | `trustcal/IMPLEMENTATION_STATUS.md`; `models.yaml` comments | verified status |
+| Final stack serving smoke passed 20 Nov 2026; FP8 precision replication not run | `trustcal/IMPLEMENTATION_STATUS.md`; `experiments/core_prefix/README.md` | verified status (supersedes the earlier "not smoke-tested" row) |
 | Verifier human audit not done; lexical default | `trustcal/IMPLEMENTATION_STATUS.md` | verified status |
 | Live retrieval APIs not exercised by tests | `trustcal/IMPLEMENTATION_STATUS.md` | verified status |
 | Code MIT licence | `LICENSE` at the repository root (MIT, Copyright 2026 Team Phantom Devs) | verified |
-| Core run USD 175--210; Full target USD 210 (36-row alternate USD 235); N1 smoke + precision replication USD 25--40; total USD 500--600; hard stop USD 600 | `docs/agent/08_COMPUTE_COST.md`; `docs/agent/03_EXPERIMENT_PLAN.md` | verified planning values |
+| Core run USD 175--210; Full target USD 210 (36-row alternate USD 235); N1 smoke + precision replication USD 25--40; total USD 500--600; hard stop USD 600 | `docs/agent/08_COMPUTE_COST.md`; `docs/agent/03_EXPERIMENT_PLAN.md` | planning values at the retired 9 Nov spot rates; **superseded 24 Nov 2026** by the measured 172.7 debates/h at $1.50/GPU-h all-in (Core + Full ≈ 69.5 GPU-h ≈ $104) |
 | A100 80GB at USD 1.78/hour | Earlier report text only; not re-verified | placeholder — author estimate |
 | "about 77 billion parameters" for the final trio | Approximate from model names (27 + 26 + 24) | placeholder — approximate, not independently verified |
 

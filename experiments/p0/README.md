@@ -2,7 +2,7 @@
 
 > **Historical record — 9 November 2026.** P0 is released. `main` and `dev` are both at `2ae56a3`; tags are `p0-gate` = `055a244` and `p0-release` = `7f2c11f`. The temporary `feat/p0-hardening` integration branch and the `p0/wp-*` slices are retired and deleted, and no extra worktrees remain. This page records how P0 was built; it is not a live landing checklist.
 
-Release state: **13/13 gate checks**, **514 tests**, **P0 released 9 November 2026**. No efficacy result exists — the 24-row Core matrix is planned, not run, and the six-arm Full target is pending WP-18. The executable Core matrix is 4 conditions × 3 datasets × 2 seeds = 24 rows; the gate cap is 1,280 GPU-h. The Final-stack config is pinned and offline-checked; the 96 GB hardware smoke has not been run.
+Release state: **13/13 gate checks**, **514 tests**, **P0 released 9 November 2026**. No efficacy result exists — the 24-row Core matrix was planned at P0 (its first `core3` row has since completed, 21 Nov 2026), and the six-arm Full target was pending WP-18 (now implemented). The executable Core matrix is 4 conditions × 3 datasets × 2 seeds = 24 rows; the gate cap is 1,280 GPU-h. The Final-stack config is pinned and offline-checked; the 96 GB serving smoke **passed 20 Nov 2026**, and the FP8 precision replication has **not** run.
 
 Contract: `docs/agent/09_P0_INTERFACES.md`. Gate: `scripts/p0_gate.py` (13 checks) before any pilot or matrix run.
 

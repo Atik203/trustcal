@@ -79,7 +79,7 @@ A full 3×3×3 is too large. Use the **Core 4-arm design** plus the **Full 6-arm
 | **B8-no-trust** | retrieved, same as B8 | majority (`use_trust=False`) | **Primary control:** same everything except trust |
 | **B8** | retrieved | trust-weighted | Treatment |
 
-**Core matrix:** 4 conditions × 3 datasets (`gpqa_main`, `mmlu_pro`, `hle`) × 2 seeds = **24 runs**. GPQA 400 + MMLU-Pro 400 + HLE 200 = 8,000 debates ≈ **1,067 GPU-h planned**; conservative gate cap **1,280 GPU-h**. SciClaimBench is **not** in Core v1.0.
+**Core matrix:** 4 conditions × 3 datasets (`gpqa_main`, `mmlu_pro`, `hle`) × 2 seeds = **24 runs**. GPQA 400 + MMLU-Pro 400 + HLE 200 = 8,000 debates, costed at the measured **172.7 debates/h** planning rate (§6). SciClaimBench is **not** in Core v1.0.
 
 ### 3.3 Full run — target pending WP-18
 
@@ -90,7 +90,7 @@ The Full target adds B8-placebo and B8-oracle:
 | **B8-placebo** | retrieved, labels/verdicts **cross-agent round-pooled** | trust-weighted | Tests whether evidence calibration matters vs any reweighting |
 | **B8-oracle** | gold evidence on SciClaimBench (default) or gold-answer trust (alternate) | trust-weighted | Upper bound; tests whether the verifier is the bottleneck |
 
-**Full count:** the default is **32 rows** with **gold-evidence oracle on SciClaimBench** (1,280 GPU-h, **$210**); the alternate is **36 rows** with **gold-answer trust** at 300 items/dataset (1,440 GPU-h, **$235**). **B8-placebo is a cross-agent round-pool.** **WP-18 freezes the definition and the row count.** Do not assert either count as final before WP-18.
+**Full count:** the default is **32 rows** with **gold-evidence oracle on SciClaimBench**; the alternate is **36 rows** with **gold-answer trust** at 300 items/dataset. **B8-placebo is a cross-agent round-pool.** **WP-18 freezes the definition and the row count.** Do not assert either count as final before WP-18.
 
 ### 3.4 Targeted additions (subset; not Core v1.0)
 
@@ -126,7 +126,7 @@ If B8 ≈ B8-placebo, the "evidence-grounded" claim fails. If B8 ≈ B8-no-trust
 | **HLE** | Ceiling/abstention control | 200 | Google-proof; expect high `unverifiable`; **not** a powered primary |
 | **SciClaimBench** | Benchmark artifact, **not in Core v1.0** | 180 at v1.2 freeze | Joins at benchmark freeze under v1.2; 300 is the Full target |
 
-**Core totals:** 4 arms × (400 + 400 + 200) × 2 seeds = **8,000 debates**, ≈ **1,067 GPU-h** at 8 min/debate. The **1,280 GPU-h** cap is the conservative gate number (it assumes up to 400/cell across all three datasets).
+**Core totals:** 4 arms × (400 + 400 + 200) × 2 seeds = **8,000 debates**, costed at the measured **172.7 debates/h** planning rate (§6).
 
 ### 4.2 Supporting and appendix datasets
 
@@ -234,27 +234,37 @@ Two-proportion test, α=0.05 two-sided, power=0.80. Baseline CCR \(b_0\); relati
 
 ## 6. Matrix size and cost
 
-Assumptions: 6.2 min/debate at Gate 0 (no retrieval); 8 min with retrieval/trust.
+**Measured throughput:** 172.7 debates/h with 8 concurrent rows + CUDA graphs on one 96 GB RTX PRO 6000, versus 52.2 debates/h for the old 2-way eager baseline (3.3× faster, ~69% cheaper per debate). **Planning rate:** $1.50/GPU-h all-in (disk + ingress included), so Core + Full (12,000 debates) is **~69.5 GPU-h ≈ $104**. Serving config: CUDA graphs (no `--enforce-eager`), `--max-num-seqs 32`, `--disable-log-requests`, utilization 0.33/0.29/0.28.
 
-| Plan | Arms | Datasets | Seeds | Items | Debates | GPU-h | Cash |
-|---|---:|---:|---:|---:|---:|---:|---:|
-| Old blueprint (do not run) | 15 | 5 | 3 | 1,000 | 225,000 | ~30,000 | $8,000+ |
-| **Core v1.0** | 4 | GPQA 400 + MMLU-Pro 400 + HLE 200 | 2 | 1,000/cell | **8,000** | **~1,067 planned; 1,280 cap** | **$175–210** |
-| **Full default** (B8-oracle = gold-evidence on SciClaimBench) | 6 | 300/dataset; oracle on SciClaimBench | 2 | 900/cell | **9,600** (32 rows) | **1,280** | **$210** |
-| **Full alternate** (B8-oracle = gold-answer trust) | 6 | 300/dataset | 2 | 900/cell | **10,800** (36 rows) | **1,440** | **$235** |
-| Pilot (N5) | 3–4 | pilot subset | 1–2 | 100–150 | — | ~112 | $15–20 |
-| 18 GB test gate (N1.0) | 1 real + 2 mocks | 8–9B AWQ / Q4_K_M | 1 | 1–5 | — | 0 (university) | **$0** |
-| 4-bit 80 GB smoke (N1a) | 3 | 5 questions | 1 | 5 | — | 4–8 | **$1–2** |
-| 96 GB 5-question smoke (N1b) | 3 | 5 questions | 1 | 5 | — | 1.5–3 | **$2–8** |
-| FP8 precision replication | 3 | GPQA subset | 1 | 150–200 | — | 60–100 | $25–40 |
-| Storage and bandwidth | — | — | — | — | — | — | $40–80 |
-| **Total plan** | — | — | — | — | — | — | **$500–600** |
+| Plan | Arms | Datasets | Seeds | Items | Debates |
+|---|---:|---:|---:|---:|
+| Old blueprint (do not run) | 15 | 5 | 3 | 1,000 | 225,000 |
+| **Core v1.0** | 4 | GPQA 400 + MMLU-Pro 400 + HLE 200 | 2 | 1,000/cell | **8,000** |
+| **Full default** (B8-oracle = gold-evidence on SciClaimBench) | 6 | 300/dataset; oracle on SciClaimBench | 2 | 900/cell | **9,600** (32 rows) |
+| **Full alternate** (B8-oracle = gold-answer trust) | 6 | 300/dataset | 2 | 900/cell | **10,800** (36 rows) |
+| Pilot (N5) → Core prefix | 3–4 | first Core questions | 1–2 | 100–150 | part of Core |
+| 18 GB test gate (N1.0) | 1 real + 2 mocks | 8–9B AWQ / Q4_K_M | 1 | 1–5 | — |
+| 4-bit smoke (N1a) | 3 | 5 questions | 1 | 5 | — |
+| 96 GB 5-question smoke (N1b) | 3 | 5 questions | 1 | 5 | — |
+| FP8 precision replication | 3 | GPQA subset | 1 | 150–200 | 600 |
 
-**Budget rules:** The main matrix runs on one **80 GB A100 PCIe** spot at **$0.136/GPU-h** with the **4-bit 24–27B final families**. Core and Full use the same stack, so cells are reusable only where model revisions, prompts, and configs match. The free 18 GB gate runs first (8–9B AWQ with vLLM; Q4_K_M main templates with llama.cpp; one model at a time). Then the 4-bit 80 GB smoke, pilot, and Core. The **96 GB FP8 stack** at **$0.336/GPU-h** is only a 5-question smoke plus the GPQA precision replication (B3/B8-no-trust/B8, 150–200 questions, 1 seed), and it follows the 4-bit pilot/Core. Its 5-question smoke is **$2–8**; the precision replication is **$25–40**. The Full default is 32 rows (gold-evidence oracle on SciClaimBench); 36 rows is the gold-answer alternate. **Hard stop: $600.** If the 80 GB A100 spot is unavailable and the main runs use 96 GB at $0.336/h, the plan is **$1,050–1,150** and requires re-approval; that fallback is not the default. Law-testing is outside this envelope. The exact Full caps are **not frozen** until WP-18.
+**Remaining programme** (21,800 debates = 126.2 GPU-h ≈ $189.36 GPU, plus ~$2.56 setup/ingress ≈ **$191.92** total; counts not-yet-run debates, so completed Core rows and reusable Core→Full rows are excluded):
 
-**$50 tranche:** 18 GB tests ($0) + 4-bit 80 GB smoke ($1–2) + pilot ($15–20), with $20–30 held for retries/bandwidth. A 96 GB 5-question smoke ($2–8) is optional only after a stable pilot. Do not run a 96 GB pilot ($37–45) or the precision replication ($25–40) from this tranche.
+| Component | Debates | GPU-h | GPU $ |
+|---|---:|---:|---:|
+| Core + Full, 2 seeds | 12,000 | 69.49 | $104.23 |
+| Cap increase | 3,200 | 18.53 | $27.79 |
+| Three ablations | 6,000 | 34.74 | $52.11 |
+| FP8 precision | 600 | 3.47 | $5.21 |
+| **Total** | **21,800** | **126.2** | **$189.36 + ~$2.56 ≈ $191.92** |
 
-Full price table and formulas: [`08_COMPUTE_COST.md`](08_COMPUTE_COST.md).
+The N5 pilot runs as a Core prefix (`--limit 400 --stop-after N`), so it adds no separate GPU spend.
+
+**Budget rules:** The main matrix runs on one **96 GB RTX PRO 6000** at the measured **$1.50/GPU-h all-in** with the **4-bit 24–27B final families**; the old 80 GB A100 at $0.136/GPU-h is retired. Core and Full use the same stack, so cells are reusable only where model revisions, prompts, and configs match. The free 18 GB gate runs first (8–9B AWQ with vLLM; Q4_K_M main templates with llama.cpp; one model at a time). Then the 4-bit smoke, the Core prefix, and Core. The **FP8 stack** is only a 5-question smoke plus the GPQA precision replication (B3/B8-no-trust/B8, 150–200 questions, 1 seed; 600 debates / 3.47 GPU-h / $5.21), and it follows the 4-bit Core. The Full default is 32 rows (gold-evidence oracle on SciClaimBench); 36 rows is the gold-answer alternate. **Hard stop: $600.** Law-testing is outside this envelope. The exact Full caps are **not frozen** until WP-18.
+
+**$50 tranche:** 18 GB tests ($0) + the 4-bit smoke + the Core prefix, with the remainder held for retries/bandwidth. A 96 GB 5-question smoke is optional only after a stable Core prefix.
+
+Full price table and formulas: [`08_COMPUTE_COST.md`](08_COMPUTE_COST.md). Measurements: [`experiments/concurrency_test/README.md`](../../experiments/concurrency_test/README.md).
 
 ---
 
@@ -310,7 +320,7 @@ Full price table and formulas: [`08_COMPUTE_COST.md`](08_COMPUTE_COST.md).
 
 **Kill criterion:** if N4 and G2 both fail, stop the trust-mechanism work. Write the negative/boundary paper from the harness and pilot. That is still publishable; continuing is not.
 
-**Do not reorder:** 18 GB test gate (N1.0) → 4-bit 80 GB smoke (N1a) → v1.3/WP-18 → benchmark calibration/verifier audit → pilot → Core → FP8 96 GB smoke (N1b) → Full. The pilot and Core are gates, not warm-ups. N1b is not a gate for the 4-bit Full matrix.
+**Do not reorder:** 18 GB test gate (N1.0) → 4-bit smoke (N1a) → v1.3/WP-18 → benchmark calibration/verifier audit → pilot → Core → FP8 96 GB smoke (N1b) → Full. The pilot and Core are gates, not warm-ups. N1b is not a gate for the 4-bit Full matrix.
 
 ---
 
@@ -369,7 +379,7 @@ ACL/EMNLP main remains a stretch, not the planning target.
 
 ## 12. What not to run
 
-- Do not run 15 conditions × 5 datasets × 3 seeds × 1,000 questions (~30,000 GPU-h).
+- Do not run 15 conditions × 5 datasets × 3 seeds × 1,000 questions (225,000 debates).
 - Do not put SciClaimBench in Core v1.0; it joins at the v1.2 benchmark freeze.
 - Do not describe a 400-per-dataset Core matrix over SciClaimBench; the Core datasets are GPQA/MMLU-Pro/HLE.
 - Do not assert a 36-run or 32-run Full matrix as final before WP-18 freezes it.

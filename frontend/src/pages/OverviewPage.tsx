@@ -23,9 +23,9 @@ const idea = ideaMetadata[0];
 const p0Kpis: KpiCard[] = [
   { value: "514", label: "Tests passing", variant: "green" },
   { value: "13/13", label: "P0 gate checks", variant: "green" },
-  { value: "24", label: "Core runs · 1,280 GPU-h", variant: "default" },
+  { value: "24", label: "Core runs · 8,000 debates", variant: "default" },
   { value: "300", label: "Benchmark target · 180 floor", variant: "sky" },
-  { value: "~53.3 GB", label: "4-bit main stack · 80 GB A100", variant: "rose" },
+  { value: "~53.3 GB", label: "4-bit main stack · 96 GB GPU", variant: "rose" },
 ];
 
 export function OverviewPage() {

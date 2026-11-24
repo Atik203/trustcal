@@ -102,11 +102,27 @@ Three 8-way runs (516, 498, 487 s) average **172.7 debates/h**.
 | + FP8 precision | 17,400 | 100.8 | $153.91 |
 | + seed 3 (Core) | 21,400 | 123.9 | $188.23 |
 
-Ablations are scoped to `gpqa_main` with two seeds: 2 x 400 x 2 = 1,600
-debates instead of 8,000. The pairing against B8's gpqa rows is exact, a
-400-question paired test detects a >=5.7pp component effect at 80% power, and
-the recorded limitation is that ablations generalise the mechanism rather than
-the dataset mix.
+Ablations are scoped to `gpqa_main` and `mmlu_pro` with two seeds: 2 x (400 + 600)
+x 2 = 4,000 debates for two ablations, 6,000 for three. The pairing against B8's
+rows is exact, a 400-question paired test detects a >=5.7pp component effect at
+80% power, and the recorded limitation is that ablations generalise the mechanism
+rather than the dataset mix.
+
+**Remaining-programme budget: $220 hard limit, $20 headroom, on-demand only**
+(team decision, 24 Nov 2026). Planned spend:
+
+| Plan | Debates | GPU-h | Cost |
+| --- | ---: | ---: | ---: |
+| Core + Full (2 seeds) | 12,000 | 69.49 | $104.23 |
+| Cap increase (mmlu 600 / hle 400) | 3,200 | 18.53 | $27.79 |
+| Three ablations (gpqa 400 + mmlu 600, 2 seeds) | 6,000 | 34.74 | $52.11 |
+| FP8 precision | 600 | 3.47 | $5.21 |
+| Setup + ingress | - | 1.33 | $2.56 |
+| **Total planned** | **21,800** | **127.6** | **$191.92** |
+| **+ $20 headroom** | - | - | **$211.92** |
+
+On-demand is deliberate: spot eviction would cost more in rebuilds than the
+premium. The $1.50/GPU-h rate already includes disk and ingress.
 
 The earlier serial estimate for the same 12,000 debates was $345; CUDA graphs
 plus 8-way concurrency removed about two thirds of it.

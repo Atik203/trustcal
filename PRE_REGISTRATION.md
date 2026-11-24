@@ -7,8 +7,10 @@
 errata; v1.2 remains pending the benchmark freeze. The executable Core matrix in
 `trustcal/configs/experiments.yaml` is cut to four conditions. The **v1.3 draft
 in §12 is not approved**: it records the proposed placebo/oracle semantics, the
-32-row Full plan, the 4-bit/80 GB execution stack, the FP8 precision replication,
-and a revised $500–600 budget with a $600 hard stop, for team sign-off. It
+32-row Full plan, the 4-bit execution stack, the FP8 precision replication,
+and a revised $500–600 budget with a $600 hard stop, for team sign-off. (Its
+80 GB A100 host and dollar figures are the 9 November spot basis, superseded by
+the measured note in §5.) It
 changes no endpoint, hypothesis, test, exclusion, or analysis family. The v1.1
 erratum records the released prompt hash and branch retirement and assigns the
 six-arm completion to WP-18; the v1.4 erratum records the B7 provider.
@@ -645,11 +647,14 @@ main run.
 | **Total** | **500–600** | planning envelope |
 | **Hard stop** | **600** | no spend beyond without a new signed amendment |
 
+> **Budget status (measured 24 Nov 2026).** The GPU-hour and USD rows above are the 9 November spot snapshot. Measured on a 96 GB card: **172.7 debates/h** with 8 concurrent rows + CUDA graphs at **$1.50/GPU-h all-in**, so Core + Full (12,000 debates) ≈ **69.5 GPU-h ≈ $104** and the full 21,800-debate programme ≈ **$192**. The 1,280 GPU-h figure remains the frozen gate cap (gate check 13); it is a ceiling, not a forecast. Re-costing this budget requires a signed amendment; the $600 hard stop is unchanged.
+
 All amounts are planning envelopes in USD, not invoices. The total covers the
 pilot, Core, either Full variant (32-row $210 or 36-row $235), the precision
 replication, and storage/bandwidth, with contingency. The hard stop is a
-ceiling, not a target. The main matrix is budgeted at $0.136/GPU-h; the
-precision path at $0.336/GPU-h. The Full envelope is costed as a full 32-row
+ceiling, not a target. The main matrix is budgeted at $0.136/GPU-h (the retired
+9 November spot rate; measured $1.50/GPU-h all-in); the
+precision path at $0.336/GPU-h (also retired). The Full envelope is costed as a full 32-row
 run; any cell reuse where the stack and revisions match can only reduce actual
 spend, not raise it. Law-testing is outside this envelope and the $600 hard
 stop; it requires a separate cost model and approval.
@@ -660,6 +665,10 @@ If the main runs move to a 96 GB GPU at $0.336/GPU-h, the planning total
 becomes $1,050–1,150. That path is not authorized by this draft: it requires
 explicit team re-approval and a new hard stop before any 96 GB main row starts.
 The $600 hard stop applies only to the 80 GB plan.
+
+> **Update (24 Nov 2026).** The 96 GB class is now the measured default (172.7
+> debates/h at $1.50/GPU-h all-in), so this section and its $1,050–1,150 figure
+> are retained as historical spot-rate arithmetic only, not as a live fallback.
 
 **7. Superseded figures (historical).**
 
@@ -678,6 +687,11 @@ quoted as current guidance:
 These figures still appear in some planning documents; this pre-registration
 treats them as historical only. Those documents must be reconciled on sign-off,
 not by editing this record.
+
+> **Note (24 Nov 2026).** The replacement values in the Status column (Core
+> $175–210, Full $210/$235, total $500–600) were themselves superseded by the
+> measured rate: 172.7 debates/h at $1.50/GPU-h all-in gives Core + Full ≈
+> 69.5 GPU-h ≈ $104. See `experiments/concurrency_test/README.md`.
 
 **8. What does not change.**
 

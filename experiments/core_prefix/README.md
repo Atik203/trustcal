@@ -25,7 +25,13 @@ No duplicates, no torn lines.
 
 ## Timing implication
 
-Mean ~4.1 min (B8) / ~3.1 min (control) per debate puts the full 2-seed Core at ~470 GPU-hours, ~$400–460 on an $0.80–0.86/h A100 80 GB on-demand, inside the $600 hard stop.
+Mean ~4.1 min (B8) / ~3.1 min (control) per debate put the full 2-seed Core at ~470 GPU-hours, ~$400–460 on an $0.80–0.86/h A100 80 GB on-demand, inside the $600 hard stop. (This serial estimate is superseded by the note below.)
+
+> **Superseded (24 Nov 2026).** After CUDA graphs and 8-way concurrency the
+> measured rate is **172.7 debates/h** at **$1.50/GPU-h all-in**, so the full
+> 2-seed Core is ~46 GPU-h ≈ **$62**, not ~470 GPU-h. See
+> `../concurrency_test/README.md`. The per-debate timings above remain the
+> serial baseline.
 
 ## What this proves
 
@@ -38,7 +44,7 @@ Mean ~4.1 min (B8) / ~3.1 min (control) per debate puts the full 2-seed Core at 
 - No efficacy claim. The +0.08 prefix delta at n=25 is noise.
 - No pressure behavior: CCR is 0.0 on 0 exposed cases, expected with no pressure arms in this prefix.
 - No precision result: the FP8 smoke is in progress with no result yet; do not cite one.
-- No 80 GB A100 serving proof: the prefix ran on 96 GB spot hosts and the A100 run is still ahead.
+- No 80 GB A100 serving proof: the prefix ran on 96 GB spot hosts, which the measured concurrency runs now treat as the default host class; a 53.26 GB stack fits 80 GB but has not been smoke-tested there.
 
 ## Local snapshot and next
 

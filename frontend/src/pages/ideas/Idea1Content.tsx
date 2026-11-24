@@ -663,37 +663,36 @@ export function Idea1Content() {
           </table>
         </div>
 
-        <h4 className="text-sm font-bold mb-3">Agents 1–3 — Debate Agents (Two-Phase Strategy)</h4>
+        <h4 className="text-sm font-bold mb-3">Agents 1–3 — Debate Agents (Final Stack; Dev Retired)</h4>
         <TwoCol>
           <ColBox>
             <h4 className="text-sm font-semibold mb-1">
-              Dev: <a className="underline decoration-dotted underline-offset-2" href="https://huggingface.co/Qwen/Qwen3.5-9B" target="_blank" rel="noopener noreferrer">Qwen3.5-9B</a> → Final:{" "}
+              Dev (retired): <a className="underline decoration-dotted underline-offset-2" href="https://huggingface.co/Qwen/Qwen3.5-9B" target="_blank" rel="noopener noreferrer">Qwen3.5-9B</a> → Final:{" "}
               <a className="underline decoration-dotted underline-offset-2" href="https://huggingface.co/Qwen/Qwen3.8-27B" target="_blank" rel="noopener noreferrer">Qwen3.8-27B-AWQ-INT4</a>
             </h4>
             <p className="text-xs text-[#64748b] dark:text-[#94a3b8] mb-0">
-              Dev: cheap iterative testing on RTX A6000 48GB. Final: 27B dense,
+              Dev stack retired (48 GB A6000). Final: 27B dense,
               262K context, caps prior 397B MoE flagship in coding. Apache 2.0.
             </p>
           </ColBox>
           <ColBox>
             <h4 className="text-sm font-semibold mb-1">
-              Dev: <a className="underline decoration-dotted underline-offset-2" href="https://huggingface.co/google/gemma-4-12B" target="_blank" rel="noopener noreferrer">Gemma 4 12B</a> → Final:{" "}
+              Dev (retired): <a className="underline decoration-dotted underline-offset-2" href="https://huggingface.co/google/gemma-4-12B" target="_blank" rel="noopener noreferrer">Gemma 4 12B</a> → Final:{" "}
               <a className="underline decoration-dotted underline-offset-2" href="https://huggingface.co/google/gemma-4-26B-A4B" target="_blank" rel="noopener noreferrer">Gemma 4 26B A4B</a>
             </h4>
             <p className="text-xs text-[#64748b] dark:text-[#94a3b8] mb-0">
-              Dev: encoder-free 12B proxy. Final: MoE (3.8B active),
+              Dev stack retired. Final: MoE (3.8B active),
               256K context, matches 31B quality at fraction of compute.
             </p>
           </ColBox>
           <ColBox>
             <h4 className="text-sm font-semibold mb-1">
-              Dev: <a className="underline decoration-dotted underline-offset-2" href="https://huggingface.co/mistralai/Ministral-3-14B-Instruct-2512" target="_blank" rel="noopener noreferrer">Ministral-3-14B-Instruct</a> → Final:{" "}
+              Dev (retired): <a className="underline decoration-dotted underline-offset-2" href="https://huggingface.co/mistralai/Ministral-3-14B-Instruct-2512" target="_blank" rel="noopener noreferrer">Ministral-3-14B-Instruct</a> → Final:{" "}
               <a className="underline decoration-dotted underline-offset-2" href="https://huggingface.co/mistralai/Mistral-Small-3.2-24B-Instruct-2506" target="_blank" rel="noopener noreferrer">Mistral Small 3.2 24B</a>
             </h4>
             <p className="text-xs text-[#64748b] dark:text-[#94a3b8] mb-0">
-              Dev: Mistral-family 14B, served as AWQ 4-bit (~8GB) — the official
-              FP8 checkpoint cannot run on Ampere, so the same model is used in
-              4-bit AWQ. Final: Mistral adds third distinct family (non-Qwen,
+              Dev stack retired (Mistral-family 14B on the 48 GB A6000).
+              Final: Mistral adds third distinct family (non-Qwen,
               non-Gemma) for true heterogeneity.
             </p>
           </ColBox>
@@ -846,16 +845,17 @@ export function Idea1Content() {
 
         <h4 className="text-sm font-bold mt-5 mb-3">GPU &amp; Storage Budget</h4>
         <p className="text-xs text-[#64748b] dark:text-[#94a3b8] mb-3">
-          Two-phase strategy: develop on an RTX A6000 48GB with the smaller
-          models, then run the main causal matrix
-          on one 80 GB A100 ($0.136/GPU-h) with the 24–27B stack served 4-bit
+          The dev stack (RTX A6000 48GB) is retired. Only the <code>fourbit</code>
+          main stack and the <code>final</code> FP8 precision stack are runnable.
+          The main causal matrix runs on one 96 GB RTX PRO 6000 at $1.50/GPU-h
+          all-in with the 24–27B stack served 4-bit
           (Qwen3.8-27B-AWQ-INT4 ~21.0 GB / Gemma-4-26B-A4B AWQ ~17.2 GB /
           Mistral-24B-AWQ 15.06 GB; ~53.3 GB total). The pinned 73.68 GB
           FP8 stack (Qwen3.8-27B-FP8 29.95 GB / Gemma FP8 28.67 GB / Mistral
-          AWQ 15.06 GB) on a 96 GB card is only for the N1 smoke and a small GPQA
-          precision replication, not the main Full matrix. The plan totals
-          $500–600 with a $600 hard stop; if no 80 GB A100 is available, the
-          $1,050–1,150 fallback requires re-approval and is not the default. The
+          AWQ 15.06 GB) on the same 96 GB card is only for the N1 smoke and a
+          small GPQA precision replication, not the main Full matrix. The
+          remaining 21,800-debate programme is 126.2 GPU-h ≈ $191.92, with the
+          $600 hard stop unchanged. The
           offline check passes, but the hardware smoke has not been run. Use the
           table below to review the budget.
         </p>
@@ -985,16 +985,19 @@ export function Idea1Content() {
         <p className="text-xs text-[#64748b] dark:text-[#94a3b8] mt-3">
           <strong>Scale:</strong> 24-item calibration first; then the Core matrix
           is 4 arms × GPQA-Main 400 / MMLU-Pro STEM 400 / HLE 200 × 2 seeds =
-          24 runs, 1,280 GPU-h. B8-oracle is not a Core arm; SciClaimBench is not in
+          24 runs, 8,000 debates (≈46 GPU-h at 172.7 debates/h). B8-oracle is
+          not a Core arm; SciClaimBench is not in
           Core v1.0. The primary Full matrix is 32 rows at 300 items/dataset
-          with the gold-evidence oracle on SciClaimBench (1,280 GPU-h); the 36-row
-          gold-answer alternate is 1,440 GPU-h. Benchmark ladder: 180 floor,
+          with the gold-evidence oracle on SciClaimBench (9,600 debates); the 36-row
+          gold-answer alternate is 10,800 debates. Core + Full ≈ 69.49 GPU-h
+          ≈ $104.23 at $1.50/GPU-h all-in. Benchmark ladder: 180 floor,
           300 target, 600 stretch, 800 no-go.
           <br />
           <strong>Fallback:</strong> If HLE access is delayed, it stays an
           abstention control and is not replaced by a primary set. If the
-          BrokenArXiv snapshot discontinues, freeze the last snapshot. If
-          Semantic Scholar degrades, use OpenAlex.
+          BrokenArXiv snapshot discontinues, freeze the last snapshot. Semantic
+          Scholar runs behind a 1 req/s cumulative pacing gate; if it degrades,
+          use OpenAlex.
         </p>
       </Section>
 
@@ -1109,13 +1112,15 @@ export function Idea1Content() {
         <p className="text-xs text-[#64748b] dark:text-[#94a3b8] mb-4">
           <strong>Executable now:</strong> B3, B4-matched, B8-no-trust, and B8
           (4 arms × GPQA 400 / MMLU-Pro 400 / HLE 200 × 2 seeds = 24 runs,
-          1,280 GPU-h). Row 2/24 (GPQA-Main seed 1, B8 vs B8-no-trust) is
+          8,000 debates, ≈46 GPU-h at 172.7 debates/h). Row 2/24 (GPQA-Main
+          seed 1, B8 vs B8-no-trust) is
           complete: 798 debates (399/arm, q27 quarantined), accuracy 62.4% vs
           58.7%, exact McNemar p&nbsp;=&nbsp;0.086 (n.s.) — feasibility + timing,
           no efficacy claim. The 6-arm target adds B8-placebo and B8-oracle through
           WP-18; the pre-registration records both the target and the executable
-          subset. The primary Full matrix is 32 rows with the gold-evidence
-          oracle on SciClaimBench; the 36-row alternate uses gold-answer trust.
+          subset. The primary Full matrix is 32 rows (9,600 debates) with the
+          gold-evidence oracle on SciClaimBench; the 36-row alternate uses
+          gold-answer trust (10,800 debates).
         </p>
 
         <Callout
@@ -1310,7 +1315,7 @@ export function Idea1Content() {
             {
               step: 4,
               title: "N1 smoke + FP8 precision check, calibration, verifier audit, then pilot (Nov–Dec 2026)",
-              desc: "Highest-risk assumption (Section 0). Run the N1 96 GB smoke + FP8 precision replication ($25–40), WP-18 placebo/oracle, the 24-item calibration, and the verifier audit (150–200 pairs; lexical baseline 0.58 balanced accuracy; target ≥0.75, κ ≥0.60) before the 50-question Month-1 pilot and 100–150-question G2 pilot.",
+              desc: "Highest-risk assumption (Section 0). Run the N1 96 GB smoke + FP8 precision replication (600 debates, $5.21), WP-18 placebo/oracle, the 24-item calibration, and the verifier audit (150–200 pairs; lexical baseline 0.58 balanced accuracy; target ≥0.75, κ ≥0.60) before the 50-question Month-1 pilot and 100–150-question G2 pilot.",
             },
             {
               step: 5,
@@ -1345,12 +1350,12 @@ export function Idea1Content() {
             {
               step: 11,
               title: "N1 96 GB smoke + FP8 precision check (two-phase gate)",
-              desc: "Costs $25–40. Run 20 questions across the FP8 check stack — verify claim tags parse, injection works, trust math runs, LangGraph completes K=3. The offline check passes; the 96 GB hardware smoke has not yet been run. Fix any model-specific issues before the matrix.",
+              desc: "The FP8 precision replication is 600 debates / $5.21 at $1.50/GPU-h all-in. Run 20 questions across the FP8 check stack — verify claim tags parse, injection works, trust math runs, LangGraph completes K=3. The offline check passes; the 96 GB hardware smoke has not yet been run. Fix any model-specific issues before the matrix.",
             },
             {
               step: 12,
               title: "Core run (24 runs) then Full run target",
-              desc: "G3 Core: 4 arms × GPQA 400 / MMLU-Pro 400 / HLE 200 × 2 seeds = 24 runs at 1,280 GPU-h. Row 2/24 (GPQA-Main seed 1, B8 vs B8-no-trust) complete Nov 2026: 798 debates, McNemar p=0.086 (n.s.). G4/G5 Full primary: 32 rows at 300 items/dataset with the gold-evidence oracle on SciClaimBench (1,280 GPU-h); the 36-row gold-answer alternate is 1,440 GPU-h. B8-placebo/B8-oracle are WP-18.",
+              desc: "G3 Core: 4 arms × GPQA 400 / MMLU-Pro 400 / HLE 200 × 2 seeds = 24 runs, 8,000 debates (≈46 GPU-h at 172.7 debates/h). Row 2/24 (GPQA-Main seed 1, B8 vs B8-no-trust) complete Nov 2026: 798 debates, McNemar p=0.086 (n.s.). G4/G5 Full primary: 32 rows at 300 items/dataset with the gold-evidence oracle on SciClaimBench (9,600 debates); the 36-row gold-answer alternate is 10,800 debates. Core + Full ≈ 69.49 GPU-h ≈ $104.23. B8-placebo/B8-oracle are WP-18.",
             },
             {
               step: 13,
@@ -1394,8 +1399,8 @@ export function Idea1Content() {
               calibration + pilot (step 4) confirms the core assumption.
             </li>
             <li>
-              Never skip the N1 smoke + FP8 precision check (step 11) — a $25–40
-              check prevents discovering model-specific issues at full scale.
+              Never skip the N1 smoke + FP8 precision check (step 11) — a $5.21
+              precision replication prevents discovering model-specific issues at full scale.
             </li>
           </ul>
         </Callout>

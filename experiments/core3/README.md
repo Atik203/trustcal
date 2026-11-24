@@ -73,9 +73,7 @@ still has no record.
 
 ## Operational notes
 
-- **`serve.sh` defaults to the dev stack.** Without `PHASE=fourbit` it serves
-  9–14B models and the run would be invalid. Always pass `PHASE=fourbit` after a
-  restart and check `verify_env --check-servers` shows the 24–27B checkpoints.
+- **`serve.sh` defaults to the `fourbit` phase now** (`phase.yaml`); `--phase dev` raises. Still pass `PHASE=fourbit` after a restart and check `verify_env --check-servers` shows the 24–27B checkpoints, in case an old snapshot or exported `PHASE` points elsewhere.
 - vLLM processes do **not** survive a Vast stop/start; the model cache does.
 - A code change under a live row requires
   `--accept-provenance-change "<reason>" --operator "<name>"`; the reason is

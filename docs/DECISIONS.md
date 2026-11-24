@@ -57,9 +57,11 @@ Approved architecture, hardware, and environment decisions. Add an entry before 
 
 **Bandwidth:** download Q4_K_M test files on the university host, one at a time, and keep the project under 200 GB. Do not download them on a cloud host. The cloud host downloads only the final AWQ/FP8 stack.
 
-**$50 tranche:** spend on the 80 GB 4-bit smoke (~$1–2) and pilot (~$15–20) first. Optionally add one 96 GB 5-question smoke (~$2–8) after the pilot is stable. Keep $20–30 for retries and bandwidth. Do not run a 96 GB pilot (~$37–45), the FP8 precision replication (~$25–40), Core ($175–210), or Full ($210, or ~$104 with reuse) from this tranche.
+**$50 tranche:** spend on the 4-bit smoke (~$1–2) and pilot (~$15–20) first. Optionally add one 96 GB 5-question smoke (~$2–8) after the pilot is stable. Keep $20–30 for retries and bandwidth. Do not run a 96 GB pilot (~$37–45 at the retired rate), the FP8 precision replication (~$25–40 at $0.336/h; ≈ $90–150 at the measured $1.50/h), or the Core/Full matrices (Core ≈ $62 remaining; Core + Full ≈ $104) from this tranche.
 
-**Why:** the 18 GB tests are free and prevent paid cloud debugging; the 96 GB path is a secondary precision check, not the main 4-bit result. The first $50 should buy a clean 4-bit smoke and pilot, not a 96 GB pilot.
+> **Update (24 Nov 2026):** the rate basis is now the measured **$1.50/GPU-h all-in** at 172.7 debates/h on a 96 GB card. The $0.136/$0.336 spot figures and the $175–235 Core/Full estimates in this entry are the retired 9 November basis; the $50 tranche itself is unchanged.
+
+**Why:** the 18 GB tests are free and prevent paid cloud debugging; the 96 GB FP8 path is a secondary precision check, not the main 4-bit result (the 4-bit matrix now runs on the same 96 GB class card). The first $50 should buy a clean 4-bit smoke and pilot, not a dedicated precision host.
 
 ## 2026-11-14 — Dev-slice validation before cloud runs
 
@@ -71,7 +73,7 @@ Approved architecture, hardware, and environment decisions. Add an entry before 
 
 **What it cannot validate:** three real models at once, KV-cache pressure on the final stack, FP8 serving, final-model behavior, or the cloud hardware-smoke gate.
 
-**Expected effect:** the matrix GPU-hours do not change; the free slice reduces avoidable cloud debugging and retry overhead. Planning offset is **$20–50 direct**, with additional risk avoidance if it prevents a failed Core/Full rerun. The **$500–600** planning range and **$600** hard stop remain unchanged until actual invoices replace the estimate.
+**Expected effect:** the matrix GPU-hours do not change; the free slice reduces avoidable cloud debugging and retry overhead. Planning offset is **$20–50 direct**, with additional risk avoidance if it prevents a failed Core/Full rerun. The **$600** hard stop remains; the old **$500–600** planning range is superseded by the measured **≈ $104** Core + Full (172.7 debates/h at $1.50/GPU-h all-in, 24 Nov 2026).
 
 ## 2026-11-14 — University H200 MIG access
 
@@ -94,7 +96,7 @@ Approved architecture, hardware, and environment decisions. Add an entry before 
 | Single Gemma 4 26B-A4B AWQ | 17.2 GB | No practical headroom for KV cache |
 | Single Mistral 24B AWQ | 15.06 GB | One server only; not the three-agent design |
 
-**Consequences:** the planned Core/Full and precision runs still require the approved 80 GB A100 and 96 GB FP8 paths in `docs/agent/08_COMPUTE_COST.md`. The university slice does not change the budget, the matrix, or the hardware-smoke gate.
+**Consequences:** the planned Core/Full and precision runs still require the approved rental paths in `docs/agent/08_COMPUTE_COST.md`. The measured default is now a 96 GB class card at $1.50/GPU-h all-in (172.7 debates/h); the 80 GB A100 at $0.136/GPU-h in that file is the retired 9 November spot basis. The university slice does not change the budget, the matrix, or the hardware-smoke gate.
 
 **Rules:** no changes to clocks, power limits, MIG settings, the SSH daemon, host keys, the account name, the login method, or other users' `authorized_keys`; no system-wide packages or `sudo` without administrator approval; keep storage under 200 GB; use `tmux` or `screen`; stop idle jobs; never commit a server address, hostname, username, account ID, password, SSH key, or host fingerprint.
 

@@ -1376,7 +1376,7 @@ function CeActivityOneSlide() {
           <ul className="flex flex-col justify-center h-full">
             <Bullet>
               Three model family sources, four literature APIs, six team members
-              and a rented 80 GB A100.
+              and a rented 96 GB RTX PRO 6000.
             </Bullet>
             <Bullet>
               Chapter 3 assigns each task to a specific member with weeks and
@@ -1482,8 +1482,8 @@ function CeActivityTwoSlide() {
             </Bullet>
             <Bullet>
               Environmental cost stays bounded: the pre-registered Core run
-              (24 runs, Jan 2027) is 1,280 GPU-hours, standard configurations,
-              no fine-tuning.
+              (24 runs, Jan 2027) is 8,000 debates (~46 GPU-h at the measured
+              172.7 debates/h), standard configurations, no fine-tuning.
             </Bullet>
             <Bullet>
               The prototype shows a pathway to safer AI-assisted research;

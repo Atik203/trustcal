@@ -2,7 +2,7 @@
 
 The Python implementation of evidence-grounded trust in multi-agent scientific debate. The pipeline runs three heterogeneous agents for three rounds behind an OpenAI-compatible interface, decomposes each response into claims, retrieves evidence, assigns verdicts, updates a bounded trust vector, and returns a trust-weighted answer.
 
-This directory is the experimental engine. The thesis report and journal live in the repository root. No efficacy results are claimed: the Core and Full matrices have not been run.
+This directory is the experimental engine. The thesis report and journal live in the repository root. No efficacy results are claimed: the first `core3` Core row is complete (B8 vs B8-no-trust, 399+399 debates), the remaining Core rows and the Full matrix have not been run.
 
 ## Layout
 
@@ -42,11 +42,11 @@ python scripts/check_stack.py --phase final
 
 | Phase | Card | Models | Weights |
 | --- | --- | --- | --- |
-| `dev` | RTX A6000 48 GB | Qwen3.5-9B, Gemma 4 12B, Ministral 3 14B | quantized development stack |
-| `fourbit` | A100 80 GB | Qwen3.8-27B-AWQ-INT4, Gemma 4 26B-A4B AWQ, Mistral 24B AWQ | **53.26 GB** |
+| `dev` | retired | — | `--phase dev` raises; the dev block is removed |
+| `fourbit` | 96 GB class (a single 80 GB A100 also fits the 53.26 GB stack) | Qwen3.8-27B-AWQ-INT4, Gemma 4 26B-A4B AWQ, Mistral 24B AWQ | **53.26 GB** |
 | `final` | RTX PRO 6000 96 GB | Qwen3.8-27B-FP8, Gemma 4 26B-A4B FP8, Mistral 24B AWQ | **73.68 GB** |
 
-`fourbit` is the main causal matrix stack. `final` is limited to the N1 smoke and the small GPQA precision replication.
+`fourbit` is the main causal matrix stack; at 8 concurrent rows with CUDA graphs it measured **172.7 debates/h** at **$1.50/GPU-h all-in**. `final` is limited to the N1 smoke and the small GPQA precision replication.
 
 ## GPU serving
 

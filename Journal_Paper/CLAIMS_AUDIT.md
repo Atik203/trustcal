@@ -27,7 +27,7 @@ The P0 facts used in the text are:
 - Gate 0: 10/10 debates, 3/3 rounds each, 90/90 non-empty positions, 370.8 s mean, 3,708.1 s total.
 - Tests: 615 current; 514 at the P0 release. The audit was written against 478; `experiments/p0/WAVE2.md` at `f777852` records 465.
 - P0 gate: 13 passed, 0 failed, 0 pending at the P0 release (11 passed and 2 pending when this audit was written).
-- Matrix: 24 rows (4 arms x 3 datasets x 2 seeds), 1,280 GPU-h conservative gate, `PRE_REGISTRATION.md` v1.0.
+- Matrix: 24 rows (4 arms x 3 datasets x 2 seeds), 1,280 GPU-h conservative gate, `PRE_REGISTRATION.md` v1.0. Measured throughput (24 Nov 2026) is 172.7 debates/h at $1.50/GPU-h all-in, so Core + Full is ~69.5 GPU-h ≈ $104; the 1,280 GPU-h figure is a frozen gate cap, not a forecast.
 - Not yet: verifier human audit, SciClaimBench, 24-item calibration batch, the 18 GB test gate, the 4-bit 80 GB smoke, the FP8 96 GB smoke/precision, and the paid Core-run matrix. WP-18 is implemented; v1.3 sign-off is pending.
 
 ## Old -> new table

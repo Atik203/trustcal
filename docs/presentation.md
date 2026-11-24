@@ -50,7 +50,7 @@ This is the level-one data flow: seven processes, four entities, three data stor
 
 ### Slide 9 — Experimental Setup
 
-To run this, we use a free 18 GB university slice for test-only code and template checks, a four-bit 24–27B final-family stack on one 80 GB A100 for the main matrix, and an FP8 96 GB stack only for a five-question smoke and a small precision replication. The 18 GB tests use one 8–9B AWQ or Q4_K_M model at a time plus mocks. Each debate runs three rounds; the matrix uses two seeds. The stress test injects a fake expert consensus between rounds one and two; baselines B1 to B4 skip it. We validate with annotation agreement and bootstrap confidence intervals. Total compute: about two thousand five hundred GPU-hours across the Core and Full plans. Salman will present the results and the engineering check.
+To run this, we use a free 18 GB university slice for test-only code and template checks, a four-bit 24–27B final-family stack on one 96 GB card for the main matrix, and an FP8 stack on the same card class only for a five-question smoke and a small precision replication. The 18 GB tests use one 8–9B AWQ or Q4_K_M model at a time plus mocks. Each debate runs three rounds; the matrix uses two seeds. The stress test injects a fake expert consensus between rounds one and two; baselines B1 to B4 skip it. We validate with annotation agreement and bootstrap confidence intervals. Total compute: about seventy GPU-hours at a dollar fifty per hour — roughly a hundred and four dollars — across the Core and Full plans. Salman will present the results and the engineering check.
 
 ### Slide 10 — Project Results
 
@@ -175,7 +175,7 @@ Thank you for your attention. We are happy to take your questions.
 - **Q: What does ConsensAgent do?**
   **A:** It detects stalling or copy-paste behaviour and rewrites the prompt. The final choice still comes from self-reported confidence.
 - **Q: Are all B1 to B10 arms running today?**
-  **A:** All B1 to B10 arms are implemented and mock-tested; B9 and B10 are labelled approximations. The paid matrix has not run.
+  **A:** All B1 to B10 arms are implemented and mock-tested; B9 and B10 are labelled approximations. Only the first Core row and the engineering smokes have run; the paid matrix is not complete.
 - **Q: What is the gap in one line?**
   **A:** No existing method ties an agent's influence to external evidence while the debate is running.
 
@@ -236,9 +236,9 @@ Thank you for your attention. We are happy to take your questions.
 **Slide 9 — Experimental Setup**
 
 - **Q: Why three compute paths?**
-  **A:** The free 18 GB university slice is test-only: one 8–9B AWQ or Q4_K_M model plus mocks. The main causal matrix runs 4-bit 24–27B final-family models on one 80 GB A100. The 96 GB FP8 stack is only a five-question smoke plus a small GPQA precision replication, after the 4-bit pilot/Core. The code path is identical — only the config changes.
+  **A:** The free 18 GB university slice is test-only: one 8–9B AWQ or Q4_K_M model plus mocks. The main causal matrix runs 4-bit 24–27B final-family models on one 96 GB card. The FP8 variant of that card is only a five-question smoke plus a small GPQA precision replication, after the 4-bit pilot/Core. The code path is identical — only the config changes.
 - **Q: Why four-bit for the main matrix and FP8 for the check?**
-  **A:** Four-bit 24–27B fits on an 80 GB A100 at one hundred thirty-six thousandths of a dollar per GPU-hour, which keeps the matrix inside the budget. The FP8 96 GB stack proves the pinned full-precision checkpoints load and gives a small precision check.
+  **A:** Four-bit 24–27B fits on a 96 GB card at a dollar fifty per GPU-hour all-in — measured at a hundred and seventy-two point seven debates per hour — which keeps Core and Full together near a hundred and four dollars. The FP8 stack proves the pinned full-precision checkpoints load and gives a small precision check.
 - **Q: Why three rounds and two seeds?**
   **A:** Three rounds give the trust score time to update. Two seeds give a replication check; the unit of analysis is the question, not the seed.
 - **Q: What exactly is injected?**
@@ -293,7 +293,7 @@ Thank you for your attention. We are happy to take your questions.
 - **Q: Why is A3 not covered?**
   **A:** A3 is innovation. We combine existing concepts — debate, retrieval and trust weighting — so the step is incremental and not patentable.
 - **Q: Why is A4 covered?**
-  **A:** We assessed the social and environmental consequences. The harm we target is real, and energy use stays low because the plan is inference-only on rented spot GPUs — about two thousand five hundred GPU-hours across Core and Full.
+  **A:** We assessed the social and environmental consequences. The harm we target is real, and energy use stays low because the plan is inference-only on rented spot GPUs — about seventy GPU-hours across Core and Full.
 - **Q: What are the coverage numbers?**
   **A:** Six of seven P attributes, all eight K areas, four of five A activities, and six of twelve programme outcomes.
 - **Q: For P1, which K areas are needed?**
@@ -346,7 +346,7 @@ Thank you for your attention. We are happy to take your questions.
 - **Q: What about ethics and bias?**
   **A:** Answers carry citations a reader can check. The adversarial sets test manipulation, and the human study will follow consent rules.
 - **Q: How much does the full study cost?**
-  **A:** About two thousand five hundred GPU-hours across the Core and Full plans. Core costs one hundred seventy-five to two hundred ten dollars; Full is two hundred ten dollars for the 32-row default or two hundred thirty-five for the 36-row alternate. The total is five to six hundred dollars, with a six hundred dollar hard stop.
+  **A:** About seventy GPU-hours across Core and Full — roughly a hundred and four dollars at the measured dollar-fifty per GPU-hour all-in, with a six hundred dollar hard stop. The old two-thousand-five-hundred-hour, hundred-and-seventy-five-to-two-hundred-and-thirty-five-dollar figures were the superseded spot-rate estimate.
 - **Q: What is the most important measured result so far?**
   **A:** Gate 0: the three-model debate loop runs end to end — ten of ten debates, ninety of ninety positions, about three hundred seventy seconds per debate.
 

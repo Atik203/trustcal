@@ -20,7 +20,7 @@ Reconciles the preprint with the P0 implementation. The paper is a design and im
 | Tests | 615 current (514 at the P0 release) | `pytest`; `experiments/p0/WAVE2.md` |
 | P0 gate | 13 passed, 0 failed, 0 pending | `p0_gate.py` strict run, 2026-11-09 |
 | Matrix | 24 rows, 4 arms x 3 datasets x 2 seeds | `trustcal/configs/experiments.yaml` |
-| Budget | 1,280 GPU-h conservative gate (9,600 debates x 8 min) | `PRE_REGISTRATION.md`, gate check 13 |
+| Budget | 1,280 GPU-h conservative gate (9,600 debates x 8 min; measured 172.7 debates/h at $1.50/GPU-h all-in gives Core + Full ≈ 69.5 GPU-h ≈ $104) | `PRE_REGISTRATION.md`, gate check 13 |
 | Pre-registration | v1.0, dated 9 November 2026 | `PRE_REGISTRATION.md` |
 
 ## What changed
