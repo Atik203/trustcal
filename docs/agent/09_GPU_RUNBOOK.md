@@ -3,6 +3,36 @@
 Every entry below cost real money or real time at least once. Read the symptom
 column before debugging; the fix is usually one flag or one line.
 
+## Known-good session (copy this, do not improvise)
+
+Verified 24 Nov 2026 on a 96 GB RTX PRO 6000: **172.7 debates/h** at 8 concurrent
+rows, zero server failures, zero retrieval errors.
+
+```bash
+# host: 96GB class, 120 GB disk, vastai/base-image, ~$1.49/h all-in
+git clone --depth 1 https://github.com/Atik203/trustcal.git && cd trustcal/trustcal
+export PHASE=fourbit VENV=1
+export TRUSTCAL_RETRIEVAL_CACHE=/root/retrcache                    # optional
+export TRUSTCAL_SOURCE_MIN_INTERVAL="semantic_scholar=1.0"        # keeps S2 usable
+bash setup.sh > setup.log 2>&1 &                                   # ends in `wait`: run it backgrounded
+
+# readiness: exactly three listeners, never "the script finished"
+until [ "$(ss -tln | grep -cE ':(8000|8001|8002) ')" -ge 3 ]; do sleep 10; done
+
+# 8 rows = 4 conditions x 2 seeds; collect PIDs, never bare `wait`
+pids=(); for s in 1 2; do for c in B3 B4 B8 B8NT; do
+  arm=$c; extra=""; [ "$c" = B8NT ] && { arm=B8; extra=--no-trust; }
+  .venv/bin/python scripts/run_experiment.py --arm "$arm" $extra --dataset gpqa_main \
+    --limit 400 --seed "$s" --phase fourbit --out "results/core/$c$s" \
+    --questions-file /root/q400.json > "/root/logs/$c$s.log" 2>&1 &
+  pids+=($!)
+done; done; wait "${pids[@]}"
+```
+
+Serving flags are generated from `configs/models.yaml` by `gen_serve_cmds.py`:
+CUDA graphs (no `--enforce-eager`), `--disable-log-requests`, `--max-num-seqs 32`,
+`--gpu-memory-utilization 0.33 / 0.29 / 0.28`. `VLLM_EAGER=1` forces eager back.
+
 ## Before you rent
 
 Three checks with an abort, in order (details in the root `AGENTS.md`):
@@ -54,6 +84,11 @@ Three checks with an abort, in order (details in the root `AGENTS.md`):
 failure. Grepping for `"server OK"` never matches, which silently hangs a health
 gate. Gate on the ports instead:
 `ss -tln | grep -cE ':(8000|8001|8002) '` must return 3.
+
+**Measured with the gate on** (4 streams, `TRUSTCAL_SOURCE_MIN_INTERVAL=semantic_scholar=1.0`):
+8 debates in 275 s, zero retrieval errors, zero 429s. The gate keeps S2 in the
+evidence pool at its quota instead of excluding it. Scaling reference on the same
+stack: 4 streams ≈ 105 debates/h, 8 streams ≈ 173 debates/h.
 
 `--enforce-eager` disables CUDA graphs **and** torch.compile **and** JIT kernel
 warmup. It is a 48 GB dev-stack guard only; the 80/96 GB phases should run with

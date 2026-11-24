@@ -65,9 +65,16 @@ The **six-arm target** adds `B8-placebo` (cross-agent round-pool verdict shuffle
 
 **Core → Full reuse is not executable yet.** A run row can be reused only when `dataset`, `limit`, `seed`, `phase`, every trust/retrieval flag, and the sample seed are identical (they are all in the manifest hash). Core uses `gpqa_main` 400 / `mmlu_pro` 400 / `hle` 200; Full uses `gpqa_main` 300 / `mmlu_pro` 300 / `sciclaim_180` 300. Nothing matches. A 300-item Full sample is not a subset of the 400-item Core sample: stratified allocations differ, question ids shift, and the manifest includes `limit`. Reuse requires a signed **v1.5** amendment setting Full `gpqa_main: 400`, `mmlu_pro: 400`, `sciclaim_180: 300`, plus the SciClaimBench loader and a new config hash. (v1.4 is already the frozen B7-provider erratum.) The current v1.3 draft says 300/dataset and does not assume reuse; do not budget the saving before v1.5.
 
-## Dev stack (RTX A6000 48GB)
+## Dev stack (RTX A6000 48GB) — retired
 
-Quantized checkpoints pinned in `models.yaml` — the model names stay the roadmap's, the artifacts are 4-bit AWQ (Qwen), QAT w4a16 (Gemma), AWQ 4-bit (Ministral; the official FP8 checkpoint cannot run on Ampere). Pinned vLLM 0.34.0 is the default (`VLLM_NIGHTLY=1` is the fallback); `install_vllm.sh` auto-detects the wheel index from the driver (≥580 → cu130, else cu129).
+The 9-14B dev checks were for interface work on the small slice; both runnable
+phases are now tested, so `models.yaml` no longer carries a dev block and
+`PHASES` is `("fourbit", "final")`. `--phase dev` raises a clear error rather than
+serving a third, untested stack. Historical checkpoint notes: the official
+Ministral FP8 checkpoint cannot run on Ampere (W8A8 sm80 kernel fails), so the
+dev tier used 4-bit AWQ/QAT artifacts. Pinned vLLM 0.34.0 is the default
+(`VLLM_NIGHTLY=1` is the fallback); `install_vllm.sh` auto-detects the wheel index
+from the driver (≥580 → cu130, else cu129).
 
 ## 4-bit matrix stack (RTX A100 80GB)
 
@@ -128,7 +135,7 @@ No FP8 precision replication is trusted until that hardware smoke passes and its
 | `python scripts/annotate.py make --records <records.jsonl>` | κ annotation sheets (then `score --rater1/--rater2`, exit 2 if κ < 0.75) |
 | `bash scripts/serve.sh` | (re)start servers; logs in `results/logs/vllm-<port>.log` |
 | `pytest` | GPU-free tests (trust math, parser, runner, injection, mock end-to-end) |
-| `python scripts/gen_serve_cmds.py --phase dev` | inspect generated serve commands |
+| `python scripts/gen_serve_cmds.py --phase fourbit` | inspect generated serve commands |
 
 **Local rule:** clients talk to `127.0.0.1`, never `localhost`. Before any paid session, prove the flow locally: start `mock_vllm.py` and run the arm you plan to run on the pod.
 

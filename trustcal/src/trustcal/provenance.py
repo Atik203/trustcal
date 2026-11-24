@@ -208,12 +208,16 @@ def _git_state() -> tuple[bool, str]:
             ["git", "status", "--porcelain", "--untracked-files=no"],
             capture_output=True,
             text=True,
+            encoding="utf-8",
+            errors="replace",
             timeout=10,
         )
         diff = subprocess.run(
             ["git", "diff", "HEAD"],
             capture_output=True,
             text=True,
+            encoding="utf-8",
+            errors="replace",
             timeout=20,
         )
     except (OSError, subprocess.SubprocessError):

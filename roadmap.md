@@ -114,15 +114,16 @@ Run **one model at a time** with llama.cpp, `--ctx-size 4096`, q8 KV cache, and 
 
 ### 2.2 4-bit cloud path
 
-- **GPU:** one 80 GB A100 PCIe spot.
-- **Rate:** $0.136/GPU-h planning rate; re-query before renting.
-- **Stack:** 53.26 GB, three models.
+- **GPU:** one 96 GB RTX PRO 6000 class card (a single 80 GB A100 also fits the 53.26 GB stack, but measured throughput is lower).
+- **Rate:** **$1.49/GPU-h all-in measured** (on-demand, including disk and ingress); the old $0.136/GPU-h spot figure is retired.
+- **Stack:** 53.26 GB, three models, 8 concurrent rows with CUDA graphs.
+- **Measured throughput:** **172.7 debates/h** (three runs, ±3%) versus 52.2/h for the 2-way eager baseline.
 - **Jobs:** N1a smoke, pilot, Core, Full.
 - **Why:** the main matrix needs three models concurrently; 18 GB cannot hold them.
 
 ### 2.3 FP8 96 GB path
 
-- **GPU:** 96 GB class, $0.336/GPU-h.
+- **GPU:** 96 GB class, **$1.49/GPU-h all-in measured**.
 - **Stack:** 73.68 GB, three models.
 - **Jobs:** N1b smoke and the 3-row GPQA precision replication.
 - **Why:** FP8 is a precision check, not the main matrix. The 96 GB path is not a fallback for the 4-bit matrix unless re-approved.
@@ -283,7 +284,7 @@ Then run `configs/experiments_precision.yaml`.
 
 **Arms:** B3, B4-matched, B8-no-trust, B8.
 
-**Design:** GPQA-Main + MMLU-Pro + HLE; 400 + 400 + 200 items; 2 seeds; **24 runs, 8,000 planned debates / ~1,067 GPU-h**; **1,280 GPU-h conservative gate cap**; SciClaimBench-180 freezes under v1.2, outside this matrix. Runs on the **4-bit 24–27B stack on one 80 GB A100 PCIe**.
+**Design:** GPQA-Main + MMLU-Pro + HLE; 400 + 400 + 200 items; 2 seeds; **24 runs, 8,000 debates**; SciClaimBench-180 freezes under v1.2, outside this matrix. Runs on the **4-bit 24–27B stack on one 96 GB card** with 8 concurrent rows.
 
 **Primary endpoint:** final-answer accuracy on pressure-eligible items, paired B8 vs B8-no-trust. **Co-primary:** CMR. Secondary: ARR, trust AUROC/Brier, verifier balanced accuracy, citation faithfulness.
 
@@ -291,7 +292,7 @@ Then run `configs/experiments_precision.yaml`.
 
 **Status (21 Nov 2026): first Core dataset-seed COMPLETE** — `gpqa_main` seed 1, B8 + B8-no-trust arms (`experiments/core3/`): 399+399 debates (q27 quarantined), 798 total, both runners clean. Final: B8 acc 0.6241 (249/399, CI 0.576–0.672) vs control 0.5865 (234/399, CI 0.536–0.634); paired 208/41/26/124; exact McNemar p=0.086. Counts as 2 of 24 Core rows ≈ 800/8,000 debates (10%). Full remains blocked on the v1.5 amendment + `sciclaim_180` loader (§9, §14.3).
 
-**Cost:** 1,280 GPU-h conservative cap (planned ~1,067 GPU-h), **$175–210**. Not runnable from the current $50 tranche.
+**Cost (measured 24 Nov 2026):** 172.7 debates/h at $1.49/GPU-h all-in, so the remaining 7,200 Core debates are **41.7 GPU-h ≈ $62**; Core + Full together (12,000) is **69.5 GPU-h ≈ $105**. The old 1,280 GPU-h / $175–210 figure assumed a serial eager run and is superseded. Concurrency plan and measurements: `experiments/concurrency_test/`.
 
 **Owner:** P2 + P4.
 

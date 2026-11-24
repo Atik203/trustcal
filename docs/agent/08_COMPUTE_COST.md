@@ -181,6 +181,21 @@ utilization split (Qwen 0.33 / Gemma 0.29 / Mistral 0.28) exists for this: Qwen
 carries the largest weights, so an equal split leaves it too little KV cache to
 hold four concurrent sequences and vLLM preempts instead of failing loudly.
 
+### Measured throughput (96 GB RTX PRO 6000, fourbit stack)
+
+| Config | Debates/h | $/debate @ $1.487/h |
+| --- | ---: | ---: |
+| 2-way, `--enforce-eager` (the old default) | 52.2 | $0.0285 |
+| 4-way, eager | 67.2 | $0.0221 |
+| **8-way, CUDA graphs** | **172.7** | **$0.0086** |
+| 8-way + warm retrieval cache | 177.4 | $0.0084 |
+
+Three independent 8-way runs (516, 498, 487 s for 24 debates) put the noise band
+at ±3%. Dropping `--enforce-eager` matters more than concurrency: it disabled
+CUDA graphs, torch.compile and JIT warmup at once. Budget the 12,000-debate
+Core+Full programme at **~70 GPU-hours (~$105)**, not the 230 hours a serial
+eager run costs.
+
 ---
 
 ## 5. What would blow the budget

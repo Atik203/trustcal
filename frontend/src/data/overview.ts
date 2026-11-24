@@ -150,13 +150,13 @@ export const milestones: TimelineItem[] = [
   {
     milestone: 'Core run',
     date: 'Jan 2027',
-    description: 'G3 Core run: 4 executable arms × GPQA-Main 400 / MMLU-Pro 400 / HLE 200 × 2 seeds = 24 runs, budgeted at 1,280 GPU-h. Row 2/24 (GPQA-Main seed 1, B8 vs B8-no-trust) complete Nov 2026: 798 debates (399/arm, q27 quarantined), accuracy 62.4% vs 58.7%, exact McNemar p = 0.086 (n.s.) — feasibility + timing demonstrated, no efficacy claim. B8-oracle is not a Core arm, and SciClaimBench is not in Core v1.0.',
+    description: 'G3 Core run: 4 executable arms × GPQA-Main 400 / MMLU-Pro 400 / HLE 200 × 2 seeds = 24 runs. Row 2/24 (GPQA-Main seed 1, B8 vs B8-no-trust) complete Nov 2026: 798 debates (399/arm, q27 quarantined), accuracy 62.4% vs 58.7%, exact McNemar p = 0.086 (n.s.) — feasibility + timing demonstrated, no efficacy claim. Serving was then tuned to 8 concurrent rows with CUDA graphs: measured 172.7 debates/h on a 96 GB RTX PRO 6000 (3.3× the eager baseline), which puts the remaining programme at ~130 GPU-h. B8-oracle is not a Core arm, and SciClaimBench is not in Core v1.0.',
     deliverable: 'G3 Core matrix + pre-registered causal contrast (B8 vs B8-no-trust) — row 2/24 done',
   },
   {
     milestone: 'Full run + benchmark',
     date: 'Feb 2027',
-    description: 'G4/G5 Full: 32 rows at 300 items/dataset with the gold-evidence oracle on SciClaimBench (1,280 GPU-h), adding B8-placebo/B8-oracle through WP-18; the 36-row gold-answer alternate is 1,440 GPU-h. SciClaimBench benchmark freeze at 180 items (v1.2); ladder 180 floor, 300 target, 600 stretch, 800 no-go.',
+    description: 'G4/G5 Full: 32 rows at 300 items/dataset with the gold-evidence oracle on SciClaimBench, adding B8-placebo/B8-oracle through WP-18; the 36-row gold-answer alternate is 1,440 GPU-h at the old serial budget. With 8-way concurrency and CUDA graphs the combined Core + Full + ablation programme is ~130 GPU-h (~$192 at $1.49/h). SciClaimBench benchmark freeze at 180 items (v1.2); ladder 180 floor, 300 target, 600 stretch, 800 no-go.',
     deliverable: 'Full-run matrix + SciClaimBench v1.2',
   },
   {
@@ -225,12 +225,12 @@ export interface CostRow {
 }
 
 export const costEstimates: CostRow[] = [
-  { phase: 'N1 smoke + FP8 precision replication (Nov 2026)', models: 'FP8 check stack (73.68 GB pinned)', gpu: 'RTX PRO 6000 Blackwell 96GB', rate: '$0.336/GPU-h', estHours: '60–100', totalRange: '$25–40' },
-  { phase: 'Pilot run (Dec 2026)', models: '4-bit main stack (~53.3 GB)', gpu: '80 GB A100', rate: '$0.136/GPU-h', estHours: '~112', totalRange: '$15–20' },
-  { phase: 'Core run (Jan 2027)', models: '4-bit main stack (~53.3 GB)', gpu: '80 GB A100', rate: '$0.136/GPU-h', estHours: '1,067 · 1,280 cap', totalRange: '$175–210' },
-  { phase: 'Full run (Feb 2027)', models: '4-bit main stack (~53.3 GB)', gpu: '80 GB A100', rate: '$0.136/GPU-h', estHours: '1,280 · 1,440 alt', totalRange: '$210 · $235 alt' },
-  { phase: 'Storage + bandwidth (all stages)', models: 'Persistent volumes, checkpoints, logs', gpu: '—', rate: '—', estHours: '—', totalRange: '$40–80' },
-  { phase: 'Total (hard stop $600)', models: '80 GB A100 default; $1,050–1,150 fallback requires re-approval', gpu: '—', rate: '—', estHours: '—', totalRange: '$500–600' },
+  { phase: 'Serving + concurrency tuning (Nov 2026, done)', models: '4-bit main stack (~53.3 GB)', gpu: 'RTX PRO 6000 96GB', rate: '$1.49/GPU-h all-in', estHours: '3.5', totalRange: '$5.60 measured' },
+  { phase: 'Core + Full runs (Dec 2026–Jan 2027)', models: '4-bit main stack (~53.3 GB)', gpu: 'RTX PRO 6000 96GB', rate: '$1.49/GPU-h all-in', estHours: '69.5', totalRange: '$104' },
+  { phase: 'Ablations + cap increase (Jan 2027)', models: '4-bit main stack; gpqa 400 / mmlu 600 / hle 400', gpu: 'RTX PRO 6000 96GB', rate: '$1.49/GPU-h all-in', estHours: '53.3', totalRange: '$79' },
+  { phase: 'FP8 precision replication (Feb 2027)', models: 'FP8 check stack (73.68 GB pinned)', gpu: 'RTX PRO 6000 96GB', rate: '$1.49/GPU-h all-in', estHours: '3.5', totalRange: '$5' },
+  { phase: 'Storage + bandwidth (all stages)', models: 'Persistent volumes, checkpoints, logs', gpu: '—', rate: '—', estHours: '—', totalRange: '~$3' },
+  { phase: 'Total (measured 172.7 debates/h)', models: '96GB class, 8 concurrent rows, CUDA graphs', gpu: '—', rate: '—', estHours: '~130', totalRange: '~$192' },
 ];
 
 // Blueprint §11 — Risk Assessment
@@ -240,7 +240,7 @@ export const risks: RiskRow[] = [
   { risk: 'Reviewers see as incremental over MoA/iMAD', likelihood: 'Low-Medium', likelihoodVariant: 'amber', impact: 'Moderate', impactVariant: 'amber', mitigation: 'B6/B9 direct comparisons; pre-register the comparison; no headline effect size before the run' },
   { risk: 'Timeline overload (matrix + benchmark)', likelihood: 'High', likelihoodVariant: 'rose', impact: 'High', impactVariant: 'rose', mitigation: 'Core run first (24 runs); Full run and 300-item benchmark only after Core run lands' },
   { risk: 'iMAD reimplementation fidelity', likelihood: 'Medium', likelihoodVariant: 'amber', impact: 'Moderate', impactVariant: 'amber', mitigation: '~10-day dedicated budget; explicit divergence documentation' },
-  { risk: 'Single 80 GB A100 compute ceiling', likelihood: 'Medium', likelihoodVariant: 'amber', impact: 'Moderate', impactVariant: 'amber', mitigation: '4-bit 24–27B main stack (~53.3 GB) on one 80 GB A100; Core is 24 runs / 1,280 GPU-h; Full primary is 32 rows / 1,280 GPU-h (36-row alternate / 1,440 GPU-h)' },
+  { risk: 'Single-card compute ceiling', likelihood: 'Low', likelihoodVariant: 'green', impact: 'Moderate', impactVariant: 'amber', mitigation: '4-bit 24–27B main stack (~53.3 GB) on one 96 GB card; measured 172.7 debates/h with 8 concurrent rows and CUDA graphs, so Core + Full + ablations is ~130 GPU-h (~$192). Concurrency, not a second GPU, is the lever' },
   { risk: 'Dataset mismatch (proof-only benchmarks)', likelihood: 'High', likelihoodVariant: 'rose', impact: 'Moderate', impactVariant: 'amber', mitigation: 'BrokenMath/BrokenArXiv appendix-only; GPQA-Main + MMLU-Pro STEM primary; HLE abstention control; SciClaimBench controlled set' },
 ];
 
