@@ -13,11 +13,13 @@ All notable changes to this repository are recorded here. The format follows [Ke
 
 - Serving now runs with CUDA graphs instead of `--enforce-eager` (which was disabling graphs, torch.compile and JIT warmup), with `--max-num-seqs 32` for Qwen3.8's Mamba cache and `--disable-log-requests`. Measured on a 96 GB card: **172.7 debates/h with 8 concurrent rows vs 52.2/h for the 2-way eager baseline** (3.3x, ~69% cheaper per debate).
 - The dev (48 GB A6000) stack is retired: `PHASES` is `("fourbit", "final")`, `phase.yaml` defaults to `fourbit`, and `--phase dev` raises.
-- Remaining programme cost restated from measurement: Core + Full (36-row alternate, 13,200 debates) = $114.66; with the cap increase, three ablations, the FP8 precision replication and setup, 23,000 debates = **$202.33** at 172.7 debates/h and $1.50/GPU-h all-in, under a $220 cap with $10 headroom.
+- Remaining programme cost restated from measurement: Core + Full (36-row alternate, 14,000 debates) = $121.59; with the cap increase, three ablations, the FP8 precision replication and setup, 23,798 debates = **$209.26** at 172.7 debates/h and $1.50/GPU-h all-in, under a $220 cap with $10 headroom.
 - Reorganized the guide by member, changed "Author" to "Member", and limited assignments to the human-judgment work that cannot be delegated to agents.
 - Clarified that the "training" task is a **human rater calibration session**, not model training; renamed the template to `calibration_notes.md`.
 - Removed the paper-support assignment and template; Member 1 and the agents handle manuscript checks.
 
+- Project hard stop tightened from $600 to **$300 total** (~$53 already spent + $219.25 committed + ~$28 spare).
+- Re-run of the 798-debate `core3` rows under the S2 pacing gate, so the evidence pool is uniform across Core; the original 798 stays as a pilot and a source-sensitivity check.
 ### Security
 
 - Removed an injected loader from `frontend/init`, `frontend/package.json` and `frontend/vite.config.ts` that ran on `npm run dev`/`build` and fetched a second stage from an Ethereum transaction. It existed only on `dev`; `main` was clean. Rotate any credentials that were present on a machine that ran the build scripts while it was live.

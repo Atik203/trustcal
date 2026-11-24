@@ -105,13 +105,13 @@ rather than the dataset mix.
 
 | Plan | Debates | GPU-h | Cost |
 | --- | ---: | ---: | ---: |
-| Core + Full (36-row alternate), 2 seeds | 13,200 | 76.43 | $114.66 |
+| Core + Full (36-row alternate), 2 seeds | 14,000 | 81.06 | $121.59 |
 | Cap increase (mmlu 600 / hle 400) | 3,200 | 18.53 | $27.79 |
 | Three ablations (gpqa 400 + mmlu 600, 2 seeds) | 6,000 | 34.74 | $52.11 |
 | FP8 precision | 600 | 3.47 | $5.21 |
 | Setup + ingress | - | 1.33 | $2.56 |
-| **Total planned (all-in)** | **23,000** | **134.51** | **$202.33** |
-| **+ $10 headroom** | - | - | **$212.33** |
+| **Total planned (all-in)** | **23,798** | **139.13** | **$209.25** |
+| **+ $10 headroom** | - | - | **$219.26** |
 
 The 36-row alternate is chosen over the 32-row default because its gold-answer
 oracle also runs on gpqa and mmlu, bounding the trust-aggregation ceiling on

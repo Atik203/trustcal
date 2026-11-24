@@ -854,8 +854,8 @@ export function Idea1Content() {
           FP8 stack (Qwen3.8-27B-FP8 29.95 GB / Gemma FP8 28.67 GB / Mistral
           AWQ 15.06 GB) on the same 96 GB card is only for the N1 smoke and a
           small GPQA precision replication, not the main Full matrix. The
-          remaining 23,000-debate programme is 134.51 GPU-h ≈ $202.33, with the
-          $600 hard stop unchanged. The
+          remaining 23,798-debate programme is 137.80 GPU-h ≈ $209.26, with the
+          $300 hard stop unchanged. The
           offline check passes, but the hardware smoke has not been run. Use the
           table below to review the budget.
         </p>
@@ -989,8 +989,8 @@ export function Idea1Content() {
           not a Core arm; SciClaimBench is not in
           Core v1.0. The primary Full matrix is 32 rows at 300 items/dataset
           with the gold-evidence oracle on SciClaimBench (9,600 debates); the 36-row
-          gold-answer alternate is 10,800 debates. Core + Full ≈ 76.43 GPU-h
-          ≈ $114.66 at $1.50/GPU-h all-in. Benchmark ladder: 180 floor,
+          gold-answer alternate is 10,800 debates. Core + Full ≈ 81.06 GPU-h
+          ≈ $121.59 at $1.50/GPU-h all-in. Benchmark ladder: 180 floor,
           300 target, 600 stretch, 800 no-go.
           <br />
           <strong>Fallback:</strong> If HLE access is delayed, it stays an
@@ -1355,7 +1355,7 @@ export function Idea1Content() {
             {
               step: 12,
               title: "Core run (24 runs) then Full run target",
-              desc: "G3 Core: 4 arms × GPQA 400 / MMLU-Pro 400 / HLE 200 × 2 seeds = 24 runs, 8,000 debates (≈46 GPU-h at 172.7 debates/h). Row 2/24 (GPQA-Main seed 1, B8 vs B8-no-trust) complete Nov 2026: 798 debates, McNemar p=0.086 (n.s.). G4/G5 Full primary: 32 rows at 300 items/dataset with the gold-evidence oracle on SciClaimBench (9,600 debates); the 36-row gold-answer alternate is 10,800 debates. Core + Full ≈ 76.43 GPU-h ≈ $114.66. B8-placebo/B8-oracle are WP-18.",
+              desc: "G3 Core: 4 arms × GPQA 400 / MMLU-Pro 400 / HLE 200 × 2 seeds = 24 runs, 8,000 debates (≈46 GPU-h at 172.7 debates/h). Row 2/24 (GPQA-Main seed 1, B8 vs B8-no-trust) complete Nov 2026: 798 debates, McNemar p=0.086 (n.s.). G4/G5 Full primary: 32 rows at 300 items/dataset with the gold-evidence oracle on SciClaimBench (9,600 debates); the 36-row gold-answer alternate is 10,800 debates. Core + Full ≈ 81.06 GPU-h ≈ $121.59. B8-placebo/B8-oracle are WP-18.",
             },
             {
               step: 13,

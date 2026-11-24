@@ -292,7 +292,7 @@ Then run `configs/experiments_precision.yaml`.
 
 **Status (21 Nov 2026): first Core dataset-seed COMPLETE** — `gpqa_main` seed 1, B8 + B8-no-trust arms (`experiments/core3/`): 399+399 debates (q27 quarantined), 798 total, both runners clean. Final: B8 acc 0.6241 (249/399, CI 0.576–0.672) vs control 0.5865 (234/399, CI 0.536–0.634); paired 208/41/26/124; exact McNemar p=0.086. Counts as 2 of 24 Core rows ≈ 800/8,000 debates (10%). Full remains blocked on the v1.5 amendment + `sciclaim_180` loader (§9, §14.3).
 
-**Cost (measured 24 Nov 2026):** 172.7 debates/h at $1.50/GPU-h all-in (on-demand), so the remaining 7,200 Core debates are **41.7 GPU-h ≈ $62**; Core + Full together (36-row alternate, 13,200) is **76.43 GPU-h ≈ $114.66**. The full remaining programme (Core + Full + cap increase + three ablations + FP8 precision = 23,000 debates) is **$202.33**, committed as **~$212.33 with $10 headroom** under a $220 limit. The old 1,280 GPU-h / $175–210 figure assumed a serial eager run and is superseded. Concurrency plan and measurements: `experiments/concurrency_test/`.
+**Cost (measured 24 Nov 2026):** 172.7 debates/h at 1.50 USD/GPU-h all-in (on-demand). All 24 Core rows (8,000 debates, including the 798-debate re-run that brings the evidence pool in line with the S2 pacing gate) are **46.32 GPU-h = 69.48 USD**; Core + Full (36-row alternate, 14,000 debates) is **81.06 GPU-h = 121.59 USD**. The full remaining programme (Core + Full + cap increase + three ablations + FP8 precision = 23,798 debates) is **209.25 USD all-in**, committed at **219.25 USD with 10 USD headroom** under a 220 USD limit. The old 1,280 GPU-h / 175-210 USD figure assumed a serial eager run and is superseded. Concurrency plan and measurements: experiments/concurrency_test/.
 
 **Owner:** P2 + P4.
 
@@ -335,7 +335,7 @@ Then run `configs/experiments_precision.yaml`.
 
 **Scope:** q sweep, ρ measurement/manipulation, granularity (claim vs document vs shuffled), shared-error floor, N/K/α/β robustness, natural-divergence subset.
 
-**Rule:** run only if Core/Full show a real effect. R6 remains a **derived law** until an independent proof check signs it. This phase is **outside the $500–600 compute envelope and the $600 hard stop**; no spend without a separate cost model and approval.
+**Rule:** run only if Core/Full show a real effect. R6 remains a **derived law** until an independent proof check signs it. This phase is **outside the $500–600 compute envelope and the $300 hard stop**; no spend without a separate cost model and approval.
 
 **Acceptance:** pre-registered contrasts; CIs; negative results reported. Results freeze at the end of April.
 
@@ -375,9 +375,9 @@ Then run `configs/experiments_precision.yaml`.
 
 **Pilot replacement.** The old **$15–20 / ~112 GPU-h pilot** was a 100–150-question calibration run, not the 25-item Month-1 criterion. It duplicated questions Core will run anyway. Replace it with the **Core-prefix gate**: run the first 25–50 questions of the actual Core `B8` and `B8-no-trust` rows with `--limit 400 --stop-after N`, compare paired winners, and resume the same rows only if trust changes the outcome in the correct direction. The prefix is part of Core, so the gate adds no separate GPU spend. The Month-1 25-item toy pilot remains a v1.0 requirement, but its questions file is not authored; if the team wants it, it costs <$1, not $15–20.
 
-**Core-prefix result (20 Nov 2026).** `gpqa_main` seed 1, 25 debates per arm on the same 4-bit stack: B8 (trust-weighted) 25/25 unique records, accuracy 0.64 (16/25, 95% CI 0.44–0.84), MPR 0.790, MPR-weighted 0.64, ARR 0.722 (n=18), CCR 0.0 (0 exposed cases — expected, no pressure arms), CCR-e 0.133 (2/15), trust AUROC 0.568 (n=11), Brier 0.278, mean 245.5 s/debate (median 257.2); B8-no-trust (majority) 25/25 unique, accuracy 0.56 (14/25, CI 0.36–0.76), MPR 0.75, ARR 0.714, mean 185.5 s/debate. No duplicates, no torn lines. The +0.08 prefix delta at n=25 is noise — record as feasibility/timing, NOT efficacy. Mean ~4.1 min (B8) / ~3.1 min (control) per debate puts the full 2-seed Core at ~470 GPU-hours, ~$400–460 on an $0.80–0.86/h A100 80 GB on-demand, inside the $600 hard stop. Local mirror: `trustcal/results/n1a/` (gitignored). Full record: `experiments/core_prefix/README.md`.
+**Core-prefix result (20 Nov 2026).** `gpqa_main` seed 1, 25 debates per arm on the same 4-bit stack: B8 (trust-weighted) 25/25 unique records, accuracy 0.64 (16/25, 95% CI 0.44–0.84), MPR 0.790, MPR-weighted 0.64, ARR 0.722 (n=18), CCR 0.0 (0 exposed cases — expected, no pressure arms), CCR-e 0.133 (2/15), trust AUROC 0.568 (n=11), Brier 0.278, mean 245.5 s/debate (median 257.2); B8-no-trust (majority) 25/25 unique, accuracy 0.56 (14/25, CI 0.36–0.76), MPR 0.75, ARR 0.714, mean 185.5 s/debate. No duplicates, no torn lines. The +0.08 prefix delta at n=25 is noise — record as feasibility/timing, NOT efficacy. Mean ~4.1 min (B8) / ~3.1 min (control) per debate puts the full 2-seed Core at ~470 GPU-hours, ~$400–460 on an $0.80–0.86/h A100 80 GB on-demand, inside the $300 hard stop. Local mirror: `trustcal/results/n1a/` (gitignored). Full record: `experiments/core_prefix/README.md`.
 
-**Next gates.** Parallel-code verification (order-preserving threaded calls; `TRUSTCAL_SERIAL=1` restores the serial loop), then Core tranche 1 on the next top-up. Funding arrives in ~$30 top-ups; the $600 hard stop stands. Host rental rules live in `AGENTS.md` ("Cloud GPU rental"); the host ledger is `docs/agent/08_COMPUTE_COST.md` Appendix B.
+**Next gates.** Parallel-code verification (order-preserving threaded calls; `TRUSTCAL_SERIAL=1` restores the serial loop), then Core tranche 1 on the next top-up. Funding arrives in ~$30 top-ups; the $300 hard stop stands. Host rental rules live in `AGENTS.md` ("Cloud GPU rental"); the host ledger is `docs/agent/08_COMPUTE_COST.md` Appendix B.
 
 **Do not run with $50:**
 
@@ -390,14 +390,14 @@ Then run `configs/experiments_precision.yaml`.
 
 | Item | GPU-h | Cash |
 |---|---:|---:|
-| Core remaining (7,200 debates) | 41.69 | **$62.54** |
+| Core, all 24 rows (8,000 debates, incl. the 798 re-run) | 46.32 | **$69.48** |
 | Full 36-row (6,000 new debates) | 34.74 | **$52.12** |
 | Cap increase (3,200 debates) | 18.53 | **$27.79** |
 | Three ablations (6,000 debates) | 34.74 | **$52.11** |
 | FP8 precision (600 debates) | 3.47 | **$5.21** |
 | Setup + ingress | 1.33 | **$2.56** |
-| **Total (all-in)** | **134.51** | **$202.33** |
-| **Total plan** | — | **$500–600** |
+| **Total (all-in)** | **139.13** | **$209.25** |
+| **+ 10 USD headroom** | - | **219.25 USD** under the **220 USD** cap |
 | **Hard stop** | — | **$600** |
 
 ### 14.3 Efficient path
@@ -427,7 +427,7 @@ Under $400 is possible with Core at the low end, storage around $40–60, and th
 - Persist the cloud cache; batch pilot/Core/Full into long sessions; copy `results/` before destroying the instance.
 - Storage/bandwidth stays **$40–80** until actual invoices replace the estimate.
 
-**Hard stop: $600.** The two Full rows are alternatives; the total counts one Full run. The 96 GB fallback for the main matrix is **$1,050–1,150** and requires re-approval.
+**Hard stop: $300** (project total, ~$53 already spent). The two Full rows are alternatives; the total counts one Full run. The 96 GB fallback for the main matrix is **$1,050–1,150** and requires re-approval.
 
 ---
 

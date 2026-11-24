@@ -150,7 +150,7 @@ The §4 flow is the data flow. Three intermediates must be logged because the ev
 
 **Serving facts (measured 2026-11-24).** The 4-bit trio totals ~53.3 GB and runs on **one 96 GB on-demand card** at **$1.50/GPU-h all-in**. With **8 concurrent rows and CUDA graphs** the pipeline sustains **172.7 debates/h**, against 52.2/h for the old 2-way eager baseline.
 
-**Budget.** Core + Full (36-row alternate) 13,200 debates = **$114.66**. Programme total 23,000 debates = **$202.33** against a **$220 cap**, leaving about **$20** of headroom. No paid run starts without approval, and the chosen offer and cost go in the run notes.
+**Budget.** Core + Full (36-row alternate) 14,000 debates = **$121.59**. Programme total 23,798 debates = **$209.26** against a **$220 cap**, leaving about **$20** of headroom. No paid run starts without approval, and the chosen offer and cost go in the run notes.
 
 **Precision replication.** The FP8 variant (Qwen3.8-27B-FP8 29.95 GB, Gemma-4-26B-A4B-FP8 28.67 GB, Mistral-24B-AWQ 15.06 GB; 73.68 GB at 0.90 utilisation) runs on the same 96 GB class card as a 5-question smoke plus a small GPQA replication, after the 4-bit Core. It is not the matrix host, and the hardware smoke has not run — only the offline size check passes.
 
@@ -222,7 +222,7 @@ ECR is deprecated. **Ablations.** Four conditions isolate which component drives
 | Novelty erosion after ConsensAgent (Findings of ACL 2025) | medium | moderate | sharpen the mechanism line: evidence-grounded, numeric, bounded, injection-tested; add B10 comparison |
 | Propositions 2–3 fail empirically | medium | moderate | already framed as design properties, not theorems — honest framing absorbs the result |
 | Retrieval noise degrades evidence quality | medium | moderate | reranker + citation floor + contested category |
-| Compute ceiling under matrix × datasets × seeds | medium | moderate | 96 GB on-demand path at $1.50/GPU-h all-in; $114.66 Core+Full, $202.33 remaining, $220 cap |
+| Compute ceiling under matrix × datasets × seeds | medium | moderate | 96 GB on-demand path at $1.50/GPU-h all-in; $121.59 Core+Full, $209.26 remaining, $220 cap |
 | Timeline overload before the pilot | **high** | high | keep the gate order; WP-18 is the only pre-run design addition |
 
 ---

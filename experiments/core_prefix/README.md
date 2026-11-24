@@ -8,7 +8,7 @@ Run the first 25 questions of the actual Core B8 (trust-weighted) and B8-no-trus
 
 ## Hosts and stack
 
-RTX PRO 6000 96 GB spot hosts, vLLM 0.34.0, three 24–27B 4-bit models (53.26 GB stack). The run survived host restarts with disk intact and records checkpoint per question, so a stop costs time, not data. Host identities and rental lessons live in `docs/agent/08_COMPUTE_COST.md` Appendix B; rental rules live in `AGENTS.md` ("Cloud GPU rental"). Funding arrives in ~$30 top-ups; the $600 hard stop stands.
+RTX PRO 6000 96 GB spot hosts, vLLM 0.34.0, three 24–27B 4-bit models (53.26 GB stack). The run survived host restarts with disk intact and records checkpoint per question, so a stop costs time, not data. Host identities and rental lessons live in `docs/agent/08_COMPUTE_COST.md` Appendix B; rental rules live in `AGENTS.md` ("Cloud GPU rental"). Funding arrives in ~$30 top-ups; the $300 hard stop stands.
 
 ## N1a smoke (precondition, same stack)
 
@@ -25,7 +25,7 @@ No duplicates, no torn lines.
 
 ## Timing implication
 
-Mean ~4.1 min (B8) / ~3.1 min (control) per debate put the full 2-seed Core at ~470 GPU-hours, ~$400–460 on an $0.80–0.86/h A100 80 GB on-demand, inside the $600 hard stop. (This serial estimate is superseded by the note below.)
+Mean ~4.1 min (B8) / ~3.1 min (control) per debate put the full 2-seed Core at ~470 GPU-hours, ~$400–460 on an $0.80–0.86/h A100 80 GB on-demand, inside the $300 hard stop. (This serial estimate is superseded by the note below.)
 
 > **Superseded (24 Nov 2026).** After CUDA graphs and 8-way concurrency the
 > measured rate is **172.7 debates/h** at **$1.50/GPU-h all-in**, so the full

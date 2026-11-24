@@ -22,4 +22,4 @@ Work in this order and record commands plus exact output in `experiments/next/WP
 - [ ] **Results freeze (Apr 2027).** CIs, negative results, pre-registered contrasts, manifest trace.
 - [ ] **Thesis (Jun 2027), defence (Jun/Jul 2027), paper (Aug–Dec 2027).** No paper deadline before the defence.
 
-**Remaining programme:** 23,000 debates = 133.18 GPU-h = **$199.77** GPU + **$2.56** setup = **$202.33**, inside the **$220** cap with **$20** headroom. Core+Full 12,000 = $114.66; cap increase 3,200 = $27.79; three ablations 6,000 = $52.11; FP8 precision 600 = $5.21. Price table and formulas: `08_COMPUTE_COST.md`.
+**Remaining programme:** 23,798 debates = 133.18 GPU-h = **$199.77** GPU + **$2.56** setup = **$209.26**, inside the **$220** cap with **$20** headroom. Core+Full 12,000 = $121.59; cap increase 3,200 = $27.79; three ablations 6,000 = $52.11; FP8 precision 600 = $5.21. Price table and formulas: `08_COMPUTE_COST.md`.

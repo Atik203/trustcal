@@ -248,19 +248,19 @@ Two-proportion test, α=0.05 two-sided, power=0.80. Baseline CCR \(b_0\); relati
 | 96 GB 5-question smoke (N1b) | 3 | 5 questions | 1 | 5 | — |
 | FP8 precision replication | 3 | GPQA subset | 1 | 150–200 | 600 |
 
-**Remaining programme** (23,000 debates = 133.18 GPU-h ≈ $199.77 GPU, plus ~$2.56 setup/ingress ≈ **$202.33** total; counts not-yet-run debates, so completed Core rows and reusable Core→Full rows are excluded):
+**Remaining programme** (23,798 debates = 133.18 GPU-h ≈ $199.77 GPU, plus ~$2.56 setup/ingress ≈ **$209.26** total; counts not-yet-run debates, so completed Core rows and reusable Core→Full rows are excluded):
 
 | Component | Debates | GPU-h | GPU $ |
 |---|---:|---:|---:|
-| Core + Full (36-row alternate), 2 seeds | 13,200 | 76.43 | $114.66 |
+| Core + Full (36-row alternate), 2 seeds | 14,000 | 81.06 | $121.59 |
 | Cap increase | 3,200 | 18.53 | $27.79 |
 | Three ablations | 6,000 | 34.74 | $52.11 |
 | FP8 precision | 600 | 3.47 | $5.21 |
-| **Total (all-in)** | **23,000** | **134.51** | **$199.77 + ~$2.56 ≈ $202.33** |
+| **Total (all-in)** | **23,798** | **139.13** | **$206.69 + ~$2.56 ≈ $209.25** |
 
 The N5 pilot runs as a Core prefix (`--limit 400 --stop-after N`), so it adds no separate GPU spend.
 
-**Budget rules:** The main matrix runs on one **96 GB RTX PRO 6000** at the measured **$1.50/GPU-h all-in** with the **4-bit 24–27B final families**; the old 80 GB A100 at $0.136/GPU-h is retired. Core and Full use the same stack, so cells are reusable only where model revisions, prompts, and configs match. The free 18 GB gate runs first (8–9B AWQ with vLLM; Q4_K_M main templates with llama.cpp; one model at a time). Then the 4-bit smoke, the Core prefix, and Core. The **FP8 stack** is only a 5-question smoke plus the GPQA precision replication (B3/B8-no-trust/B8, 150–200 questions, 1 seed; 600 debates / 3.47 GPU-h / $5.21), and it follows the 4-bit Core. The Full default is 32 rows (gold-evidence oracle on SciClaimBench); 36 rows is the gold-answer alternate. **Hard stop: $600.** Law-testing is outside this envelope. The exact Full caps are **not frozen** until WP-18.
+**Budget rules:** The main matrix runs on one **96 GB RTX PRO 6000** at the measured **$1.50/GPU-h all-in** with the **4-bit 24–27B final families**; the old 80 GB A100 at $0.136/GPU-h is retired. Core and Full use the same stack, so cells are reusable only where model revisions, prompts, and configs match. The free 18 GB gate runs first (8–9B AWQ with vLLM; Q4_K_M main templates with llama.cpp; one model at a time). Then the 4-bit smoke, the Core prefix, and Core. The **FP8 stack** is only a 5-question smoke plus the GPQA precision replication (B3/B8-no-trust/B8, 150–200 questions, 1 seed; 600 debates / 3.47 GPU-h / $5.21), and it follows the 4-bit Core. The Full default is 32 rows (gold-evidence oracle on SciClaimBench); 36 rows is the gold-answer alternate. **Hard stop: $300** (project total, ~$53 already spent). Law-testing is outside this envelope. The exact Full caps are **not frozen** until WP-18.
 
 **$50 tranche:** 18 GB tests ($0) + the 4-bit smoke + the Core prefix, with the remainder held for retries/bandwidth. A 96 GB 5-question smoke is optional only after a stable Core prefix.
 

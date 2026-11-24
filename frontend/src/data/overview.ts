@@ -119,7 +119,7 @@ export const ganttPhases: GanttPhase[] = [
   { name: 'Ph 1: P0 Engineering', duration: 'Oct–Nov 2026', deliverables: 'Core wired: options in prompts, parser/scorer, trust simplex projection, verifier interface, claim-domain routing, endpoints, manifest/resume. 514 tests; P0 gate 13/13 passed.', progress: 100, barVariant: 'default' },
   { name: 'Ph 2: Pilot run', duration: 'Dec 2026', deliverables: 'N1 96 GB smoke + FP8 precision replication (600 debates, $5.21) → WP-18 placebo/oracle → 24-item calibration → verifier audit (150–200 pairs; lexical 0.58 balanced accuracy; target ≥0.75, κ ≥0.60) → 50-question Month-1 pilot → 100–150-question G2 pilot. 3 seeds for the pilot; 2 for the main matrix. G2 decides whether the Core run proceeds.', progress: 0, barVariant: 'amber' },
   { name: 'Ph 3: Core run', duration: 'Jan 2027', deliverables: 'G3 Core run: 4 executable arms (B3, B4-matched, B8-no-trust, B8) × GPQA-Main 400 / MMLU-Pro 400 / HLE 200 × 2 seeds = 24 runs, 8,000 debates (≈46 GPU-h at 172.7 debates/h). Row 2/24 (GPQA-Main seed 1, B8 vs B8-no-trust) complete Nov 2026: 798 debates, McNemar p=0.086 (n.s.). B8-oracle is not a Core arm; SciClaimBench is not in Core v1.0 (180 items at the v1.2 benchmark freeze). PRE_REGISTRATION.md v1.0.', progress: 8, barVariant: 'rose' },
-  { name: 'Ph 4: Full run + benchmark', duration: 'Feb 2027', deliverables: 'G4/G5 Full: planned as the 36-row gold-answer alternate (10,800 debates), with the 32-row gold-evidence default (9,600) as the preregistered fallback; Core + Full ≈ 76.43 GPU-h ≈ $114.66 at $1.50/GPU-h all-in. Adds B8-placebo/B8-oracle via WP-18. SciClaimBench ladder: 180 floor, 300 target, 600 stretch, 800 no-go.', progress: 0, barVariant: 'rose' },
+  { name: 'Ph 4: Full run + benchmark', duration: 'Feb 2027', deliverables: 'G4/G5 Full: planned as the 36-row gold-answer alternate (10,800 debates), with the 32-row gold-evidence default (9,600) as the preregistered fallback; Core + Full ≈ 81.06 GPU-h ≈ $121.59 at $1.50/GPU-h all-in. Adds B8-placebo/B8-oracle via WP-18. SciClaimBench ladder: 180 floor, 300 target, 600 stretch, 800 no-go.', progress: 0, barVariant: 'rose' },
   { name: 'Ph 5: Human Eval + SDT', duration: 'Mar 2027', deliverables: 'Human evaluation / SDT, benchmark annotation, and verifier-audit follow-up.', progress: 0, barVariant: 'default' },
   { name: 'Ph 6: Results Freeze', duration: 'Apr 2027', deliverables: 'Freeze results, CIs, and effect sizes. No new runs or arm changes after the freeze.', progress: 0, barVariant: 'amber' },
   { name: 'Ph 7: Thesis Chapters', duration: 'May 2027', deliverables: 'Write the thesis chapters against the frozen results.', progress: 0, barVariant: 'teal' },
@@ -150,13 +150,13 @@ export const milestones: TimelineItem[] = [
   {
     milestone: 'Core run',
     date: 'Jan 2027',
-    description: 'G3 Core run: 4 executable arms × GPQA-Main 400 / MMLU-Pro 400 / HLE 200 × 2 seeds = 24 runs. Row 2/24 (GPQA-Main seed 1, B8 vs B8-no-trust) complete Nov 2026: 798 debates (399/arm, q27 quarantined), accuracy 62.4% vs 58.7%, exact McNemar p = 0.086 (n.s.) — feasibility + timing demonstrated, no efficacy claim. Serving was then tuned to 8 concurrent rows with CUDA graphs: measured 172.7 debates/h on a 96 GB RTX PRO 6000 (3.3× the eager baseline), which puts the remaining programme at 134.51 GPU-h (≈ $202.33 at $1.50/GPU-h all-in). B8-oracle is not a Core arm, and SciClaimBench is not in Core v1.0.',
+    description: 'G3 Core run: 4 executable arms × GPQA-Main 400 / MMLU-Pro 400 / HLE 200 × 2 seeds = 24 runs. Row 2/24 (GPQA-Main seed 1, B8 vs B8-no-trust) complete Nov 2026: 798 debates (399/arm, q27 quarantined), accuracy 62.4% vs 58.7%, exact McNemar p = 0.086 (n.s.) — feasibility + timing demonstrated, no efficacy claim. Serving was then tuned to 8 concurrent rows with CUDA graphs: measured 172.7 debates/h on a 96 GB RTX PRO 6000 (3.3× the eager baseline), which puts the remaining programme at 137.80 GPU-h (≈ $209.26 at $1.50/GPU-h all-in). B8-oracle is not a Core arm, and SciClaimBench is not in Core v1.0.',
     deliverable: 'G3 Core matrix + pre-registered causal contrast (B8 vs B8-no-trust) — row 2/24 done',
   },
   {
     milestone: 'Full run + benchmark',
     date: 'Feb 2027',
-    description: 'G4/G5 Full: planned as the 36-row gold-answer alternate (10,800 debates), so the oracle also runs on gpqa and mmlu; the 32-row gold-evidence default (9,600) is the preregistered fallback. Adds B8-placebo/B8-oracle through WP-18. At the measured 172.7 debates/h and $1.50/GPU-h all-in, the remaining 23,000-debate programme is 134.51 GPU-h ≈ $202.33. SciClaimBench benchmark freeze at 180 items (v1.2); ladder 180 floor, 300 target, 600 stretch, 800 no-go.',
+    description: 'G4/G5 Full: planned as the 36-row gold-answer alternate (10,800 debates), so the oracle also runs on gpqa and mmlu; the 32-row gold-evidence default (9,600) is the preregistered fallback. Adds B8-placebo/B8-oracle through WP-18. At the measured 172.7 debates/h and $1.50/GPU-h all-in, the remaining 23,798-debate programme is 137.80 GPU-h ≈ $209.26. SciClaimBench benchmark freeze at 180 items (v1.2); ladder 180 floor, 300 target, 600 stretch, 800 no-go.',
     deliverable: 'Full-run matrix + SciClaimBench v1.2',
   },
   {
@@ -226,12 +226,12 @@ export interface CostRow {
 
 export const costEstimates: CostRow[] = [
   { phase: 'Serving + concurrency tuning (Nov 2026, done — already spent)', models: '4-bit main stack (~53.3 GB)', gpu: 'RTX PRO 6000 96GB', rate: '$1.50/GPU-h all-in', estHours: '3.5', totalRange: '$5.60 measured' },
-  { phase: 'Core + Full runs (13,200 remaining, 36-row); Dec 2026–Jan 2027)', models: '4-bit main stack (~53.3 GB)', gpu: 'RTX PRO 6000 96GB', rate: '$1.50/GPU-h all-in', estHours: '76.43', totalRange: '$114.66' },
+  { phase: 'Core + Full runs (14,000 remaining, 36-row); Dec 2026–Jan 2027)', models: '4-bit main stack (~53.3 GB)', gpu: 'RTX PRO 6000 96GB', rate: '$1.50/GPU-h all-in', estHours: '81.06', totalRange: '$121.59' },
   { phase: 'Cap increase (Jan 2027)', models: '4-bit main stack; gpqa 400 / mmlu 600 / hle 400; 3,200 debates', gpu: 'RTX PRO 6000 96GB', rate: '$1.50/GPU-h all-in', estHours: '18.53', totalRange: '$27.79' },
   { phase: 'Three ablations (Jan–Feb 2027)', models: '4-bit main stack; 6,000 debates', gpu: 'RTX PRO 6000 96GB', rate: '$1.50/GPU-h all-in', estHours: '34.74', totalRange: '$52.11' },
   { phase: 'FP8 precision replication (Feb 2027)', models: 'FP8 check stack (73.68 GB pinned); 600 debates', gpu: 'RTX PRO 6000 96GB', rate: '$1.50/GPU-h all-in', estHours: '3.47', totalRange: '$5.21' },
   { phase: 'Setup + ingress (all stages)', models: 'Persistent volumes, checkpoints, logs', gpu: '—', rate: '—', estHours: '—', totalRange: '$2.56' },
-  { phase: 'Remaining programme (23,000 debates)', models: '96GB class, 8 concurrent rows, CUDA graphs', gpu: '—', rate: '—', estHours: '134.51', totalRange: '$202.33' },
+  { phase: 'Remaining programme (23,798 debates)', models: '96GB class, 8 concurrent rows, CUDA graphs', gpu: '—', rate: '—', estHours: '137.80', totalRange: '$209.26' },
 ];
 
 // Blueprint §11 — Risk Assessment
@@ -241,7 +241,7 @@ export const risks: RiskRow[] = [
   { risk: 'Reviewers see as incremental over MoA/iMAD', likelihood: 'Low-Medium', likelihoodVariant: 'amber', impact: 'Moderate', impactVariant: 'amber', mitigation: 'B6/B9 direct comparisons; pre-register the comparison; no headline effect size before the run' },
   { risk: 'Timeline overload (matrix + benchmark)', likelihood: 'High', likelihoodVariant: 'rose', impact: 'High', impactVariant: 'rose', mitigation: 'Core run first (24 runs); Full run and 300-item benchmark only after Core run lands' },
   { risk: 'iMAD reimplementation fidelity', likelihood: 'Medium', likelihoodVariant: 'amber', impact: 'Moderate', impactVariant: 'amber', mitigation: '~10-day dedicated budget; explicit divergence documentation' },
-  { risk: 'Single-card compute ceiling', likelihood: 'Low', likelihoodVariant: 'green', impact: 'Moderate', impactVariant: 'amber', mitigation: '4-bit 24–27B main stack (~53.3 GB) on one 96 GB RTX PRO 6000; measured 172.7 debates/h with 8 concurrent rows and CUDA graphs, so the remaining 23,000-debate programme is 134.51 GPU-h (~$202.33 at $1.50/GPU-h all-in). Concurrency, not a second GPU, is the lever' },
+  { risk: 'Single-card compute ceiling', likelihood: 'Low', likelihoodVariant: 'green', impact: 'Moderate', impactVariant: 'amber', mitigation: '4-bit 24–27B main stack (~53.3 GB) on one 96 GB RTX PRO 6000; measured 172.7 debates/h with 8 concurrent rows and CUDA graphs, so the remaining 23,798-debate programme is 137.80 GPU-h (~$209.26 at $1.50/GPU-h all-in). Concurrency, not a second GPU, is the lever' },
   { risk: 'Dataset mismatch (proof-only benchmarks)', likelihood: 'High', likelihoodVariant: 'rose', impact: 'Moderate', impactVariant: 'amber', mitigation: 'BrokenMath/BrokenArXiv appendix-only; GPQA-Main + MMLU-Pro STEM primary; HLE abstention control; SciClaimBench controlled set' },
 ];
 
