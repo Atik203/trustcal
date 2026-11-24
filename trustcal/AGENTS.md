@@ -179,3 +179,5 @@ Vast storage rules that decide the workflow: container disk is **billed while st
 
 Failure modes and their fixes - image stalls, `VENV=1`, the Mamba block cap, the `wait`/`tee` hang, memory-profiling races, cost traps - are catalogued in [`../docs/agent/09_GPU_RUNBOOK.md`](../docs/agent/09_GPU_RUNBOOK.md). Check it before a session and extend it after a new failure.
 
+**Retrieval quotas.** Semantic Scholar allows 1 request/second cumulatively across all its endpoints, which a 12-24 request burst always exceeds, so it can only 429. Set `TRUSTCAL_EXCLUDE_SOURCES=semantic_scholar` for concurrent matrix runs and record the exclusion; every arm drops the same source, so the between-arm contrast is unaffected. `TRUSTCAL_RETRIEVAL_CACHE=<dir>` turns on the sharded disk cache (a warm claim costs ~20 ms instead of ~1 s); it caches successes only, so a failing source must still be fixed or excluded.
+

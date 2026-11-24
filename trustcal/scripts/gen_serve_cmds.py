@@ -41,6 +41,11 @@ def main() -> None:
             str(agent.gpu_memory_utilization or cfg.gpu_memory_utilization or 0.30),
         ]
         cmd.append("--enforce-eager" if eager else "--disable-log-requests")
+        if not eager:
+            # Qwen3.8 keeps a Mamba hybrid cache: one block per decoding
+            # sequence, ~110 available at this utilization. vLLM's graph default
+            # of 1024 aborts startup ("exceeds available Mamba cache blocks").
+            cmd += ["--max-num-seqs", "32"]
         if agent.quant and agent.quant.lower() not in {"auto", "none", ""}:
             cmd += ["--quantization", agent.quant]
         if agent.revision:
