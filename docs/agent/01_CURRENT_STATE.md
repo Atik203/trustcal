@@ -1,6 +1,6 @@
 # 01 — Current State
 
-**Snapshot:** 21 November 2026. **Branches:** `main` = `v0.2.1` plus supervisor-report merges through PR #20 (`c55903b`); `dev` is ahead with pre-N1a hardening plus the N1a smoke and Core records. **Tags:** `p0-gate` = `055a244`; `p0-release` = `7f2c11f`. **P0 is released; N1a smoke PASS; N1b FP8 smoke PASS (serving); core3 first Core row COMPLETE 21 Nov 2026 (399+399 debates, B8 0.6241 vs control 0.5865, McNemar p=0.086); post-400 speed A/Bs READY; v1.5 + sciclaim_180 loader, then Full; host 61635389 STOPPED (warm fallback, ~$0.71/day), credit left $2.67; no other running host.**
+**Snapshot:** 21 November 2026, GPU facts updated 24 November 2026. **Branches:** `main` = `v0.2.1` plus supervisor-report merges through PR #20 (`c55903b`); `dev` is ahead with pre-N1a hardening plus the N1a smoke and Core records. **Tags:** `p0-gate` = `055a244`; `p0-release` = `7f2c11f`. **P0 is released; N1a smoke PASS; N1b FP8 smoke PASS (serving); core3 first Core row COMPLETE 21 Nov 2026 (399+399 debates, B8 0.6241 vs control 0.5865, McNemar p=0.086); post-400 speed A/Bs COMPLETE 24 Nov 2026 (172.7 debates/h at $1.50/GPU-h all-in); v1.5 + sciclaim_180 loader, then Full; host 61635389 STOPPED (warm fallback, ~$0.71/day), credit left $2.67; no other running host.**
 
 This file is the status source of truth. If code and this file disagree, **code wins**; update this file and report the discrepancy. The order of work is `roadmap.md`.
 
@@ -13,11 +13,12 @@ Legend: ✅ real / tested / released; 🟡 implemented but partially wired, unva
 | Area | Status | Evidence | What it means |
 |---|---|---|---|
 | Gate 0 vanilla MAD | ✅ | `experiments/gate0/README.md` | 10/10 debates, 90/90 positions, 370.8 s/debate on Dev |
-| vLLM serving (Dev) | ✅ | Gate 0 | Three quantized models on one A6000 48 GB |
+| vLLM serving (Dev) | 🚫 retired | Gate 0 | Three quantized models on one A6000 48 GB; `--phase dev` now raises (dev block removed) |
 | 4-bit main stack offline check | ✅ | `trustcal/scripts/check_stack.py --phase fourbit` | Qwen3.8-27B-AWQ-INT4 / Gemma-4-26B-A4B-AWQ / Mistral-24B-AWQ = **53.26 GB** pinned |
 | Final stack offline check | ✅ | `trustcal/scripts/check_stack.py --phase final` | Qwen3.8-27B-FP8 / Gemma-4-26B-A4B-FP8 / Mistral-24B-AWQ = **73.68 GB** pinned |
 | 18 GB test environment | ✅ | `experiments/n1_smoke/` | 8–9B vLLM trio + Q4_K_M main templates PASS with two mocks. 19 Nov revalidation on vLLM 0.34.0: exact 4-bit configs pass architecture/quant/flag/template checks; B3/B8/injection/placebo/oracle pass with one real model + mocks; Qwen3.8-27B Q4_K_M B8 62.3 s / 15,786 MiB; 633 tests + P0 13/13 |
 | 4-bit 80 GB smoke | ✅ | N1a PASS 20 Nov 2026 (`experiments/core_prefix/README.md`; mirror `trustcal/results/n1a/`) | B8/injection/placebo 5/5, oracle 4/4 valid (5th lost to a spot eviction) on 96 GB spot hosts, vLLM 0.34.0. |
+| Measured serving throughput | ✅ | `experiments/concurrency_test/README.md` (24 Nov 2026) | **172.7 debates/h** at 8 concurrent rows with CUDA graphs on a 96 GB card (52.2/h for the 2-way eager baseline); **$1.50/GPU-h all-in**, so Core + Full 12,000 debates ≈ **69.5 GPU-h ≈ $104**. Supersedes the 80 GB A100 / $0.136-per-hour / 1,280 GPU-h planning arithmetic (the 1,280 GPU-h figure survives as the frozen gate cap). |
 | Core prefix (`gpqa_main` seed 1, B8 vs B8-no-trust) | ✅ complete (feasibility/timing) | `experiments/core_prefix/README.md`; mirror `trustcal/results/n1a/` | 25+25 unique records, no duplicates or torn lines; B8 accuracy 0.64 vs control 0.56 (+0.08 at n=25 is noise, not efficacy); mean 245.5 / 185.5 s per debate. |
 | 4-bit exact-checkpoint validation | ✅ | `validate_stack.py`, 19 Nov | Qwen3.8/Gemma 4/Mistral 3 architectures, quant methods, flags, parsers, context, and chat templates pass vLLM 0.34.0 before any weight download |
 | Final-stack 96 GB smoke | ✅ | 73.68 GB stack served 3/3; B8 5/5 valid | **PASS 20 Nov 2026.** Gate **N1b** done; precision replication still ahead. |
@@ -31,7 +32,7 @@ Legend: ✅ real / tested / released; 🟡 implemented but partially wired, unva
 | ECR | 🚫 | `eval/metrics.py` | Deprecated; not a primary or secondary endpoint |
 | B1–B10 runner | ✅ | `runner.py`, `strategies.py` | Core arms executable; approximate baselines carry a fidelity label |
 | Datasets and routing | ✅ | `configs/datasets.yaml` | Revisions pinned; claim-domain routing; stratified sampling; eligible n reported |
-| Core matrix | ✅ | `configs/experiments.yaml`; `run_matrix.py --dry-run` | 4 conditions × 3 datasets (`gpqa_main`, `mmlu_pro`, `hle`) × 2 seeds = **24 rows**; 1,280 GPU-h cap |
+| Core matrix | ✅ | `configs/experiments.yaml`; `run_matrix.py --dry-run` | 4 conditions × 3 datasets (`gpqa_main`, `mmlu_pro`, `hle`) × 2 seeds = **24 rows**; 1,280 GPU-h gate cap (measured throughput puts the remaining rows at ~41.7 GPU-h) |
 | WP-18 placebo/oracle | ✅ | `configs/experiments_full.yaml`; tests | B8-placebo/B8-oracle implemented; v1.3 sign-off pending |
 | Human evaluation | 🟡 | `scripts/human_eval.py` | Tooling exists; no data; planned for March 2027 |
 | Statistics | ✅ | `eval/stats.py` | Bootstrap/d/McNemar/Holm implemented; analysis waits for data |

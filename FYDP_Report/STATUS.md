@@ -18,10 +18,10 @@
 
 - **615 passing tests** in the current suite; **514 at the P0 release** (`experiments/p0/WAVE2.md`).
 - **P0 gate: 13 of 13 passed, 0 failed, 0 pending** (`p0_gate.py` strict run, 2026-11-09).
-- **Matrix: 24 rows** (4 arms × 3 datasets × 2 seeds), **1,280 GPU-h** conservative / **1,067 GPU-h** per-dataset caps.
+- **Matrix: 24 rows** (4 arms × 3 datasets × 2 seeds), **1,280 GPU-h** conservative gate / **1,067 GPU-h** plan. Measured throughput (24 Nov 2026) is **172.7 debates/h at $1.50/GPU-h all-in**, so the 8,000 Core debates are ~46 GPU-h and Core + Full is ~69.5 GPU-h ≈ USD 104; the 1,280 GPU-h figure is a cap, not a forecast.
 - **Gate 0: 10/10 debates, 90/90 positions, 370.8 s mean**, 21.5 s stdev, approximately USD 4.29.
 - **4-bit matrix stack:** 53.3GB pinned weights (Qwen3.8 AWQ, Gemma AWQ, Mistral AWQ); 80GB A100 offline check passes.
-- **Final stack:** 73.68GB pinned weights (Qwen3.8 FP8, Gemma FP8, Mistral AWQ); not smoke-tested.
+- **Final stack:** 73.68GB pinned weights (Qwen3.8 FP8, Gemma FP8, Mistral AWQ); 96 GB serving smoke passed 20 Nov 2026; FP8 precision replication not run.
 - **B7:** optional appendix ceiling, three GPT-6 Luna samples per question; not in Core/Full.
 - **Report:** 70 pages, 80 cited works, 0 errors/undefined refs; 12 overfull and 118 underfull boxes.
 
@@ -48,7 +48,7 @@ Engine: pdfTeX 3.141592653-2.6-1.40.29 (TeX Live 2026). Each pdfLaTeX pass exite
 
 - `LICENSE` (MIT) is present at the repository root; the reproducibility section cites it.
 - The current suite records 615 passing tests (514 at the P0 release); re-run `pytest` only if the code changes.
-- **Historical note (retired):** the RTX A6000 USD 0.263/hour figure is superseded; current budget in `docs/agent/08_COMPUTE_COST.md` (80 GB A100 PCIe at USD 0.136/GPU-h).
+- **Historical note (retired):** the RTX A6000 USD 0.263/hour figure is superseded, as are the 80 GB A100 at USD 0.136/GPU-h and the 96 GB FP8 rate of USD 0.336/GPU-h. The measured path is a 96 GB card at **USD 1.50/GPU-h all-in** (172.7 debates/h), so Core + Full ≈ 69.5 GPU-h ≈ **USD 104**. `docs/agent/08_COMPUTE_COST.md` still carries the dated 9 Nov spot table, and `5.sic.tex` still carries the USD 175--210 / 210 / 500--600 figures; both need a reconciliation pass.
 - Run `smoke_test.py --phase final` on the 96GB stack.
 - Complete the 150--200-pair verifier human audit.
 - Complete the 24-item calibration batch and freeze the SciClaimBench 180-item Core floor / 300-item Full target.

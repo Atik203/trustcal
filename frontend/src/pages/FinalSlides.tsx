@@ -616,7 +616,7 @@ function FinalSetupSlide() {
         badgeBg="#e0e7ff"
         badgeColor={ACCENT}
         title="How the Experiments Run"
-        subtitle="One code path across dev, the 4-bit main stack, and a 96 GB precision check."
+        subtitle="One code path across the 4-bit main stack and a 96 GB FP8 precision check; the dev stack is retired."
       />
       <SlideTable
         head={["Stack", "Agents", "Hardware", "Precision"]}
@@ -624,15 +624,9 @@ function FinalSetupSlide() {
         accent={ACCENT}
         rows={[
           [
-            "Dev",
-            "Qwen3.5-9B · Gemma 4 12B · Ministral-3-14B",
-            "RTX A6000 48 GB",
-            "4-bit",
-          ],
-          [
             "Main",
             "Qwen3.8-27B · Gemma 4 26B A4B · Mistral-Small-3.2-24B",
-            "80 GB A100",
+            "96 GB RTX PRO 6000",
             "4-bit · ~53.3 GB",
           ],
           [
@@ -672,8 +666,9 @@ function FinalSetupSlide() {
         </Card>
       </div>
       <NoteStrip color={ACCENT}>
-        Main matrix: 4-bit stack (~53.3 GB) on one 80 GB A100 · FP8 check:
-        73.68 GB / 96 GB · Core run 24 runs / 1,280 GPU-h (Jan 2027).
+        Main matrix: 4-bit stack (~53.3 GB) on one 96 GB RTX PRO 6000 · 8
+        concurrent rows + CUDA graphs, 172.7 debates/h · FP8 check: 73.68 GB /
+        96 GB · Core 24 runs / 8,000 debates (≈46 GPU-h).
       </NoteStrip>
     </div>
   );
@@ -724,8 +719,8 @@ function FinalResultsSlide() {
               ],
               [
                 "Main stack",
-                "4-bit · 80 GB A100",
-                "24–27B; 4-bit ~53.3 GB / 80 GB; FP8 check 73.68 GB / 96 GB",
+                "4-bit · 96 GB RTX PRO 6000",
+                "24–27B; 4-bit ~53.3 GB / 96 GB; FP8 check 73.68 GB / 96 GB; 172.7 debates/h",
               ],
               [
                 "Benchmark",

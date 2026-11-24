@@ -1,6 +1,6 @@
 # Project Structure — Runtime Implementation
 
-Reference layout for the Python codebase that implements the debate pipeline described in `docs/blueprint.md`. The free university 18 GB slice is test-only: one 8–9B AWQ model with vLLM, or one Q4_K_M main template with llama.cpp, plus mocks. The main matrix runs on a rented 80 GB A100 PCIe; the 96 GB RTX PRO 6000 is only for the FP8 5-question smoke and precision replication, after the 4-bit pilot/Core. Execution order is in `roadmap.md`; per-component status is in `trustcal/IMPLEMENTATION_STATUS.md`.
+Reference layout for the Python codebase that implements the debate pipeline described in `docs/blueprint.md`. The free university 18 GB slice is test-only: one 8–9B AWQ model with vLLM, or one Q4_K_M main template with llama.cpp, plus mocks. The main matrix runs on a rented **96 GB class card** (measured 172.7 debates/h at $1.50/GPU-h all-in; a single 80 GB A100 also fits the 53.26 GB 4-bit stack); the FP8 variant of the 96 GB path is only for the 5-question smoke and precision replication, after the 4-bit pilot/Core. Execution order is in `roadmap.md`; per-component status is in `trustcal/IMPLEMENTATION_STATUS.md`.
 
 > **Status note (2026-11-09):** this is the reference layout, not a status report. The current implementation uses a plain-Python debate runner, claim-domain retrieval routing, and the P0 trust operator (logit accumulation → one softmax → floor/ceiling simplex projection). `trustcal/IMPLEMENTATION_STATUS.md` is the status source.
 
@@ -69,7 +69,7 @@ Quantized variants of the roadmap's model trio: the official Ministral FP8 check
 
 **`src/trustcal/eval/`** — the harness: dataset loaders (GPQA-Main, MMLU-Pro, HLE, plus appendix-only BrokenMath/BrokenArXiv), the accuracy/CMR/ARR/trust-AUROC/Brier endpoints (ECR is deprecated), and the B1–B10 baseline registry (B1–B4 trivial reuses, B5 self-consistency, B6 MoA, B7 optional 3-sample external-answer ceiling (GPT-6 Luna), B8/B8-no-trust, B9 iMAD, B10 ConsensAgent). B8-placebo and B8-oracle are pending WP-18. Each baseline is a runnable config, not a fork of the pipeline.
 
-**`scripts/serve.sh`** — launches three `vllm serve` processes, one per model in `models.yaml` (commands generated, never hand-edited), each on its own port with the per-instance `gpu_memory_utilization` from the config (current split 0.28/0.26/0.36, ~41GB of 45GB usable). Servers start **sequentially** with a readiness gate — concurrent startup makes vLLM's memory profiling race and report phantom OOM. `--enforce-eager` avoids memory spikes when sharing.
+**`scripts/serve.sh`** — launches three `vllm serve` processes, one per model in `models.yaml` (commands generated, never hand-edited), each on its own port with the per-instance `gpu_memory_utilization` from the config (current 4-bit split 0.33/0.29/0.28, sum 0.90). Servers start **sequentially** with a readiness gate — concurrent startup makes vLLM's memory profiling race and report phantom OOM. CUDA graphs stay on (no `--enforce-eager`); the old 0.28/0.26/0.36 split was the retired 48 GB dev trio.
 
 **`results/`** — per-run folder: `{experiment}/{dataset}/{seed}/` containing the debate transcript, per-claim verdicts, trust trajectories (JSON), and metric outputs. Gitignored; uploaded to GitHub only if you want them versioned (they can be large).
 
@@ -87,7 +87,7 @@ Quantized variants of the roadmap's model trio: the official Ministral FP8 check
 
 ## Pod workflow
 
-1. `setup.sh` on a fresh Vast.ai instance: `git clone` the repo, install pinned deps + vLLM, pre-download the three quantized checkpoints, then start `serve.sh` in the background. The FP8 check path is `PHASE=final bash setup.sh` on the 96 GB RTX PRO 6000; the main Core/Full matrix uses the 4-bit stack on the 80 GB A100.
+1. `setup.sh` on a fresh Vast.ai instance: `git clone` the repo, install pinned deps + vLLM, pre-download the three quantized checkpoints, then start `serve.sh` in the background. The FP8 check path is `PHASE=final bash setup.sh` on the 96 GB class card; the main Core/Full matrix uses the 4-bit stack on the same 96 GB class card.
 2. Vast.ai is the primary provider: work via SSH/VS Code Remote in `/workspace`; persist the repo, `HF_HOME` cache, and `results/` on a Vast.ai volume so a stop/start does not re-download weights.
 3. GitHub is the safety net (spot instances get reclaimed). Push code; copy `results/` out before destroying an instance. Run `check_stack.py`, `preflight.py`, and the smoke test before any paid matrix session.
 

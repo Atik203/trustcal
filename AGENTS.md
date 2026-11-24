@@ -122,7 +122,7 @@ The university GPU is the current approved compute path. Use it only for this pr
 
 The 18 GB slice cannot hold the 53.26 GB 4-bit matrix stack, the 73.68 GB FP8 stack, or the ~25 GB dev trio. Do not schedule the Core/Full matrices, the multi-model smoke, or the FP8 precision replication on it. Use it only for single-model interface, prompt, parser, or retrieval checks: 8–9B AWQ with vLLM, or Q4_K_M main models with llama.cpp at 4k context, one model at a time. Do not download Q4_K_M test files on a cloud host; download them on the university host and keep the project under 200 GB.
 
-Budget rule: run Core/Full matrix work on the 80 GB on-demand 4-bit path; reserve the 96 GB class for FP8-specific checks only after their smoke passes. Ask the user before any paid GPU run and record the chosen offer and cost in the run notes; keep a retry/bandwidth reserve.
+Budget rule: run Core/Full matrix work on one **96 GB on-demand** card with 8 concurrent rows and CUDA graphs (measured 172.7 debates/h at $1.50/GPU-h all-in). Ask the user before any paid GPU run and record the chosen offer and cost in the run notes; keep a retry/bandwidth reserve.
 
 ## Cloud GPU rental (Vast.ai and similar)
 
@@ -154,8 +154,9 @@ check every field below and record the chosen offer in the run notes.
   rebuild is cheap and fast (<=15 min, <=$0.5: low storage and bandwidth cost,
   >=1 Gbps) and reliability is >=0.98. Records checkpoint per question, so a
   stop costs time, not data; a 1-hour host still yields ~9-10 debates.
-- **Default hardware:** the 4-bit Core runs on an 80 GB A100 on-demand; the
-  96 GB class is for FP8 and for short spot tests when it is materially cheaper.
+- **Default hardware:** the 4-bit Core/Full runs on one 96 GB on-demand card
+  (8 concurrent rows, CUDA graphs, measured 172.7 debates/h at $1.50/GPU-h
+  all-in). The same class runs the FP8 precision replication.
 - **Compute the real number:** `all-in/h = dph_total + storage_cost * disk_GB /
   720`; `run_cost = hours * all-in/h + download_GB * inet_down_cost`. Never
   compare two hosts on `dph_total` alone.

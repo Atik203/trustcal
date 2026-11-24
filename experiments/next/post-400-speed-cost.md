@@ -7,6 +7,12 @@ condition stays frozen.
 Measured baseline: ~68 s per debate (137–155 s per B8+control pair), on a 96 GB
 RTX PRO 6000 at $1.59/h all-in.
 
+> **Outcome (24 Nov 2026).** The A/Bs ran: removing `--enforce-eager` and running
+> 8 concurrent rows measured **172.7 debates/h** at **$1.50/GPU-h all-in**,
+> versus 52.2/h for the 2-way eager baseline (`../concurrency_test/README.md`).
+> Items 1 and 3 below are superseded by that result; the plan text is kept as
+> the pre-run record.
+
 ## Safe updates (no method change)
 
 1. **CUDA graphs.** Remove `--enforce-eager` from the fourbit serve args in
