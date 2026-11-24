@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, Bot, Route, FileText, BookOpen, Menu, X, Sun, Moon } from 'lucide-react';
+import { LayoutDashboard, Bot, Route, Workflow, ChartColumn, Menu, X, Sun, Moon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useTheme } from '@/context/ThemeContext';
 
@@ -8,8 +8,8 @@ const navIconMap: Record<string, React.ReactNode> = {
   overview: <LayoutDashboard size={18} />,
   idea: <Bot size={18} />,
   roadmap: <Route size={18} />,
-  proposal: <FileText size={18} />,
-  papers: <BookOpen size={18} />,
+  methodology: <Workflow size={18} />,
+  results: <ChartColumn size={18} />,
 };
 
 interface NavItem {
@@ -22,8 +22,8 @@ const NAV_ITEMS: NavItem[] = [
   { to: '/', label: 'Overview', key: 'overview' },
   { to: '/idea/1', label: 'Blueprint', key: 'idea' },
   { to: '/roadmap', label: 'Roadmap', key: 'roadmap' },
-  { to: '/papers', label: 'Papers', key: 'papers' },
-  { to: '/proposal', label: 'Proposal', key: 'proposal' },
+  { to: '/methodology', label: 'Methodology', key: 'methodology' },
+  { to: '/results', label: 'Results', key: 'results' },
 ];
 
 export function SiteNav() {

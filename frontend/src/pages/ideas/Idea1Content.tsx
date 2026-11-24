@@ -1,27 +1,18 @@
+import type { ReactNode } from "react";
+import { Link } from "react-router-dom";
 import { Badge } from "@/components/shared/Badge";
 import { Callout } from "@/components/shared/Callout";
-import { GanttTable } from "@/components/shared/GanttTable";
-import { InfoGrid } from "@/components/shared/InfoGrid";
 import { RiskTable } from "@/components/shared/RiskTable";
 import { ArchitectureDiagram } from "@/components/shared/ArchitectureDiagram";
 import { TrustSimulator } from "@/components/shared/TrustSimulator";
 import { Walkthrough } from "@/components/shared/Walkthrough";
-import { CostTable } from "@/components/shared/CostTable";
 import {
   ColBox,
   Section,
   SectionTitle,
   TwoCol,
 } from "@/components/shared/Section";
-import { Timeline } from "@/components/shared/Timeline";
-import {
-  datasets,
-  failures,
-  ganttPhases,
-  milestones,
-  resources,
-  risks,
-} from "@/data/overview";
+import { datasets, failures, risks } from "@/data/overview";
 import {
   ArrowLeftRight,
   BarChart3,
@@ -44,6 +35,42 @@ import {
   Wrench,
 } from "lucide-react";
 
+/** Compact table used by the blueprint sections. */
+function DataTable({ head, rows }: { head: string[]; rows: ReactNode[][] }) {
+  return (
+    <div className="overflow-x-auto rounded-lg shadow-sm mb-4">
+      <table className="w-full border-collapse text-xs sm:text-sm">
+        <thead>
+          <tr>
+            {head.map((h) => (
+              <th
+                key={h}
+                className="p-2.5 text-left font-bold bg-[#f1f5f9] dark:bg-[rgba(255,255,255,0.06)] border-b-2 border-[#e2e8f0] dark:border-[rgba(255,255,255,0.15)]"
+              >
+                {h}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row, i) => (
+            <tr
+              key={i}
+              className="border-b border-[#e2e8f0] dark:border-[rgba(255,255,255,0.08)] last:border-0 hover:bg-[#dce4ff] dark:hover:bg-[rgba(59,91,219,0.12)] even:bg-[#f8fafc] dark:even:bg-[rgba(255,255,255,0.03)] transition-colors"
+            >
+              {row.map((cell, j) => (
+                <td key={j} className="p-2.5 align-top">
+                  {cell}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
 export const IDEA1_SECTIONS = [
   { id: "core-idea", label: "1. Core Idea" },
   { id: "design-decisions", label: "0. Research Design Decisions" },
@@ -57,7 +84,7 @@ export const IDEA1_SECTIONS = [
   { id: "evaluation-strategy", label: "9. Evaluation Strategy" },
   { id: "edge-cases", label: "10. Edge Cases & Failure Handling" },
   { id: "risk-assessment", label: "11. Risk Assessment" },
-  { id: "roadmap", label: "12. Month-by-Month Roadmap" },
+  { id: "roadmap", label: "12. Roadmap & Gates" },
   { id: "implementation-order", label: "13. Implementation Order" },
   { id: "publication-justification", label: "Q1. Publication Justification" },
   { id: "supervisor-explanation", label: "14. Supervisor Explanation" },
@@ -67,6 +94,28 @@ export const IDEA1_SECTIONS = [
   { id: "final-review", label: "18. Final Critical Review" },
 ] as const;
 
+const ROADMAP_LINK =
+  "font-semibold text-[#3b5bdb] dark:text-[#93c5fd] underline decoration-dotted underline-offset-2";
+
+type Tone = "blue" | "green" | "amber" | "rose";
+
+const badge = (label: string, tone: Tone = "blue") => (
+  <Badge variant={tone}>{label}</Badge>
+);
+const strong = (text: string) => <strong>{text}</strong>;
+const red = (text: string) => (
+  <span className="text-[#e03131]">{text}</span>
+);
+const muted = (text: string) => (
+  <span className="text-xs text-[#64748b] dark:text-[#94a3b8]">{text}</span>
+);
+const datasetRole = (role: string, primary: boolean) => (
+  <>
+    <Badge variant={primary ? "rose" : "blue"}>{role.split(" ")[0]}</Badge>{" "}
+    {role}
+  </>
+);
+
 export function Idea1Content() {
   return (
     <>
@@ -74,113 +123,100 @@ export function Idea1Content() {
       <Section id="core-idea" accent="blue" className="animate-fade-up">
         <SectionTitle icon={Lightbulb}>1. Core Idea</SectionTitle>
         <Callout variant="info" title="📌 P0 implementation status (Nov 2026)">
-          <p className="mb-2">
-            <strong>615 tests; P0 gate 13/13 passed and released (tags p0-gate, p0-release).</strong> The core is wired:
-            options in prompts, parser/scorer, trust simplex projection, verifier
-            interface, claim-domain routing, endpoints, and manifest/resume.
-            Current report evidence: 70-pp report, 19-pp journal, 0 undefined
-            references. This is engineering readiness, <strong>not an efficacy result</strong>.
-            Everything below is planned work unless it is explicitly dated as
-            done.
+          <p className="mb-0">
+            <strong>
+              615 tests; P0 gate 13/13 passed and released (tags p0-gate,
+              p0-release).
+            </strong>{" "}
+            Options in prompts, parser/scorer, trust simplex projection,
+            verifier interface, claim-domain routing, endpoints, and
+            manifest/resume are wired. Report evidence: 70-pp report, 19-pp
+            journal, 0 undefined references. This is engineering readiness,{" "}
+            <strong>not an efficacy result</strong>; everything below is planned
+            unless explicitly dated as done.
           </p>
         </Callout>
-        <Callout variant="success" title="✅ Completed Core row 2/24 — GPQA-Main seed 1 (Nov 2026)">
-          <p className="mb-2">
-            <strong>B8 (trust) vs B8-no-trust (majority): 798 debates (399/arm, q27 quarantined).</strong>{" "}
-            Accuracy 62.4% (249/399, 95% CI 57.6–67.2) vs 58.7% (234/399, CI 53.6–63.4);
-            paired outcomes 208 both / 41 B8-only / 26 control-only / 124 neither;
-            exact McNemar p&nbsp;=&nbsp;0.086 (<strong>not significant</strong>).
-            MPR 0.78/0.75, ARR 0.66/0.70, CCR-e 0.10/0.15, ~15.3 GPU-h, mean pair 138 s.
-            Milestones 100/150/200/250/300/350/400 (final) merged upstream. This demonstrates
-            <strong> feasibility + timing</strong>, not efficacy — no efficacy claim is made.
+        <Callout
+          variant="success"
+          title="✅ Completed Core row 2/24 — GPQA-Main seed 1 (Nov 2026)"
+        >
+          <p className="mb-0">
+            <strong>
+              B8 (trust) vs B8-no-trust (majority): 798 debates (399/arm, q27
+              quarantined).
+            </strong>{" "}
+            Accuracy 62.41% (249/399, 95% CI 57.6–67.2) vs 58.65% (234/399, CI
+            53.6–63.4); paired 208 both / 41 B8-only / 26 control-only / 124
+            neither; exact McNemar p&nbsp;=&nbsp;0.086 (<strong>not
+            significant</strong>). MPR 0.78/0.75, ARR 0.66/0.70, CCR-e
+            0.10/0.15, ~15.3 GPU-h, mean pair 138 s. Milestones
+            100/150/200/250/300/350/400 (final) merged upstream. This
+            demonstrates <strong>feasibility + timing</strong>, not efficacy.
           </p>
         </Callout>
         <p className="mb-3 text-sm sm:text-base">
           We propose a{" "}
           <strong>trust-calibrated multi-agent scientific deliberation</strong>{" "}
-          framework to mitigate <strong>sycophantic consensus collapse</strong>{" "}
-          in LLM reasoning. Agents whose claims are verified by retrieved
-          scientific literature accumulate higher trust weights, preventing
-          hallucinating majorities from suppressing correct minority agents.
+          framework to mitigate <strong>sycophantic consensus collapse</strong>:
+          agents whose claims are verified against retrieved scientific
+          literature accumulate influence, so a confidently wrong majority
+          cannot suppress a correct minority.
         </p>
         <Callout variant="success" title="🎯 Positioning & Contributions">
           <p className="mb-2">
-            Recent work has <em>diagnosed and measured</em> inter-agent
-            sycophancy (Yao et al., 2025) and the correct-minority-suppression
-            effect (He et al., 2026). Our contribution is the missing{" "}
-            <strong>mitigation</strong> side: an in-session, evidence-grounded
-            mechanism, plus an open evaluation harness.
+            Prior work <em>diagnosed and measured</em> inter-agent sycophancy
+            (Yao et al., 2025) and correct-minority suppression (He et al.,
+            2026). Our contribution is the missing <strong>mitigation</strong>:
+            an in-session, evidence-grounded mechanism plus an open evaluation
+            harness.
           </p>
           <ul className="list-disc list-inside text-sm space-y-1">
             <li>
               <strong>
-                C1 — Trust-Calibrated Evidence-Grounded Aggregation (primary).
+                C1 (primary) — Trust-Calibrated Evidence-Grounded Aggregation:
               </strong>{" "}
-              A bounded, dynamic, evidence-weighted trust rule that re-weights
-              agents during the debate.
+              a bounded, dynamic trust rule that re-weights agents during
+              debate.
             </li>
             <li>
               <strong>
-                C2 — Open Sycophancy-Stress Evaluation Harness (co-primary).
+                C2 (co-primary) — Open Sycophancy-Stress Evaluation Harness:
               </strong>{" "}
-              A pre-registered injection protocol + CCR / MPR / ECR metrics, a
-              4-arm executable matrix with a 6-arm target, three Core datasets
-              (GPQA, MMLU-Pro, HLE), and an SciClaimBench benchmark at 180 floor / 300
-              target.
+              pre-registered injection protocol, CCR/MPR/ECR metrics, a 4-arm
+              executable matrix (6-arm target), GPQA/MMLU-Pro/HLE, and
+              SciClaimBench at 180 floor / 300 target.
             </li>
             <li>
-              <strong>C3 — Supporting:</strong> Progressive, source-partitioned
-              retrieval for atomic-claim verification.
+              <strong>C3 (supporting) — Source-partitioned retrieval</strong>{" "}
+              for atomic-claim verification.
             </li>
           </ul>
         </Callout>
       </Section>
 
       {/* ───────────── 0. Research Design Decisions & Assumptions ───────────── */}
-      <Section id="design-decisions" accent="amber" className="animate-fade-up animate-delay-1">
+      <Section
+        id="design-decisions"
+        accent="amber"
+        className="animate-fade-up animate-delay-1"
+      >
         <SectionTitle icon={Settings}>
           0. Research Design Decisions &amp; Assumptions
         </SectionTitle>
 
-        <TwoCol>
-          <ColBox>
-            <h4 className="text-sm font-bold mb-2">Why this problem</h4>
-            <p className="text-sm leading-relaxed">
-              Multi-agent debate (MAD) improves LLM reasoning but has a
-              documented failure mode: agents abandon correct answers under
-              social pressure from a confident wrong majority. This is the
-              single biggest reason MAD's gains don't always materialize,
-              especially in scientific QA where a confidently wrong consensus is
-              worse than an honest "uncertain."
-            </p>
-          </ColBox>
-          <ColBox>
-            <h4 className="text-sm font-bold mb-2">Why it matters</h4>
-            <p className="text-sm leading-relaxed">
-              As LLMs get deployed as research assistants and decision-support
-              tools, false consensus among cooperating AI agents is a trust and
-              safety problem — it fails silently and confidently.
-            </p>
-          </ColBox>
-        </TwoCol>
-
-        <Callout
-          variant="gap"
-          title="🕳️ Verified Research Gap"
-          className="mt-4"
-        >
-          <p className="mb-2">
+        <Callout variant="gap" title="🕳️ Verified Research Gap">
+          <p className="mb-0">
             <strong>
               No existing framework provides numeric, evidence-grounded,
               in-session trust re-weighting with formal boundedness guarantees.
             </strong>{" "}
             Diagnosis exists (Yao et al. 2025), efficiency optimisation exists
             (iMAD, AAAI 2026), static aggregation exists (MoA, ICLR 2025
-            Poster), and recent mitigation attempts use prompt refinement
+            Poster), and mitigation attempts use prompt refinement
             (ConsensAgent, Findings of ACL 2025), uncertainty signals (DebUnc,
-            Findings of EMNLP 2025), or theoretical pruning interventions
-            (Estornell &amp; Liu, NeurIPS 2024 Main Track) — but nothing ties an
-            agent's influence to
+            Findings of EMNLP 2025), or theoretical pruning (Estornell &amp;
+            Liu, NeurIPS 2024 Main Track) — but none ties an agent's influence
+            to{" "}
             <em>
               real-time, externally verified evidence with a formally bounded
               numeric trust score
@@ -189,363 +225,251 @@ export function Idea1Content() {
           </p>
         </Callout>
 
-        <h4 className="text-sm font-bold mt-5 mb-3">
-          Why Multi-Agent Over Single LLM?
-        </h4>
         <p className="text-sm mb-4">
-          A single strong model still hallucinates confidently and has no
-          internal mechanism to be challenged. Multi-agent debate introduces
-          adversarial critique — but only if aggregation doesn't default to
-          majority vote, which is precisely the mechanism causing sycophantic
-          collapse. This motivates{" "}
+          A single strong model still hallucinates confidently and cannot be
+          internally challenged. Multi-agent debate adds adversarial critique
+          only if aggregation does not default to majority vote — the mechanism
+          that causes sycophantic collapse. This motivates{" "}
           <strong>heterogeneous, independently evidence-checked agents</strong>,
           not multiple instances of the same model.
         </p>
 
         <h4 className="text-sm font-bold mb-3">Core Research Assumptions</h4>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
-          {[
-            {
-              num: 1,
-              label: "Claim Decomposition",
-              text: "Claims during debate can be decomposed into checkable atomic propositions.",
-              risk: "moderate",
-              detail: "Some claims are compound or context-dependent.",
-            },
-            {
-              num: 2,
-              label: "Retrieval Reliability",
-              text: "PubMed/ArXiv/Semantic Scholar retrieval can support/contradict claims within the debate time budget.",
-              risk: "moderate",
-              detail: "Retrieval noise, sparse coverage on niche topics.",
-            },
-            {
-              num: 3,
-              label: "Behavioral Effectiveness",
-              text: "Trust weight changes actually alter final output, not just sit in context ignored.",
-              risk: "critical",
-              detail:
-                "The whole mechanism lives or dies on this — must be piloted in Dec 2026, before the matrix.",
-            },
-            {
-              num: 4,
-              label: "Heterogeneity Benefit",
-              text: "Different model families reduce, but don't eliminate, correlated hallucination.",
-              risk: "low",
-              detail: "Accepted as a named limitation.",
-            },
-            {
-              num: 5,
-              label: "Competitor Differentiation",
-              text: "Our method must measurably outperform ConsensAgent's prompt-refinement approach, not just iMAD/MoA.",
-              risk: "moderate",
-              detail:
-                "ConsensAgent (ACL Findings 2025) is the closest published mitigation — a written comparison paragraph is mandatory; full baseline reimplementation if Full-run capacity allows.",
-            },
-          ].map((a) => (
-            <div
-              key={a.num}
-              className="group relative overflow-hidden bg-white dark:bg-[#1a1d35] border border-[#e2e8f0] dark:border-[rgba(255,255,255,0.1)] rounded-md p-4 hover:shadow-md hover:border-[#3b5bdb] dark:hover:border-[#3b5bdb] transition-all duration-200"
-            >
-              <div
-                className={`absolute inset-0 opacity-[0.06] dark:opacity-[0.10] ${
-                  a.risk === "critical"
-                    ? "bg-[#e03131]"
-                    : a.risk === "moderate"
-                      ? "bg-[#f08c00]"
-                      : "bg-[#0ca678]"
-                }`}
-              />
-              <div className="relative">
-                <div className="flex items-center gap-2 mb-2">
-                  <span
-                    className={`inline-flex items-center justify-center w-7 h-7 rounded-full text-white font-bold text-xs ${
-                      a.risk === "critical"
-                        ? "bg-[#e03131]"
-                        : a.risk === "moderate"
-                          ? "bg-[#f08c00]"
-                          : "bg-[#0ca678]"
-                    }`}
-                  >
-                    {a.num}
-                  </span>
-                  <span
-                    className={`text-[0.68rem] font-bold uppercase tracking-[0.08em] px-1.5 py-0.5 rounded ${
-                      a.risk === "critical"
-                        ? "bg-[#ffe3e3] dark:bg-[rgba(224,49,49,0.2)] text-[#e03131] dark:text-[#fca5a5]"
-                        : a.risk === "moderate"
-                          ? "bg-[#fff3bf] dark:bg-[rgba(240,140,0,0.2)] text-[#f08c00] dark:text-[#fcd34d]"
-                          : "bg-[#d3f9d8] dark:bg-[rgba(12,166,120,0.2)] text-[#0ca678] dark:text-[#6ee7b7]"
-                    }`}
-                  >
-                    {a.risk === "critical"
-                      ? "🔴 Critical"
-                      : a.risk === "moderate"
-                        ? "🟡 Moderate"
-                        : "🟢 Low"}{" "}
-                    Risk
-                  </span>
-                </div>
-                <div className="font-semibold text-sm mb-1">{a.label}</div>
-                <p className="text-sm mb-1">{a.text}</p>
-                <p className="text-xs text-[#64748b] dark:text-[#94a3b8] mb-0">
-                  {a.detail}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
+        <DataTable
+          head={["#", "Assumption", "Risk", "Why it could fail"]}
+          rows={[
+            [
+              "1",
+              "Claim decomposition works",
+              badge("Moderate", "amber"),
+              "Claims can be decomposed into checkable atomic propositions; some are compound or context-dependent.",
+            ],
+            [
+              "2",
+              "Retrieval is reliable",
+              badge("Moderate", "amber"),
+              "PubMed/ArXiv/Semantic Scholar can support or contradict claims inside the debate budget; retrieval noise and sparse niche coverage remain.",
+            ],
+            [
+              "3",
+              "Trust changes behaviour",
+              badge("Critical", "rose"),
+              "Trust weights must change the final output, not sit in context ignored. Piloted Dec 2026 before the matrix; the whole mechanism depends on it.",
+            ],
+            [
+              "4",
+              "Heterogeneity helps",
+              badge("Low", "green"),
+              "Different model families reduce but do not eliminate correlated hallucination; accepted as a named limitation.",
+            ],
+            [
+              "5",
+              "Competitor differentiation",
+              badge("Moderate", "amber"),
+              "Must measurably beat ConsensAgent's prompt refinement, not just iMAD/MoA. A written comparison is mandatory; full reimplementation only if Full-run capacity allows.",
+            ],
+          ]}
+        />
 
         <h4 className="text-sm font-bold mb-3">
           Alternatives Considered &amp; Rejected
         </h4>
-        <TwoCol>
-          <ColBox>
-            <h4 className="text-sm font-semibold mb-1 text-[#e03131] dark:text-[#fca5a5]">
-              ✗ Post-hoc Classifier (Minority Sentinel-style)
-            </h4>
-            <p className="text-xs text-[#64748b] dark:text-[#94a3b8] mb-0">
-              Intervenes after debate ends, not during. Valid but separate
-              contribution space — we position against it, not duplicate it.
-            </p>
-          </ColBox>
-          <ColBox>
-            <h4 className="text-sm font-semibold mb-1 text-[#e03131] dark:text-[#fca5a5]">
-              ✗ Fine-tuning Agents
-            </h4>
-            <p className="text-xs text-[#64748b] dark:text-[#94a3b8] mb-0">
-              Rejected due to compute cost and lack of cross-model
-              generalization. Also conflates "sycophancy reduction" with
-              "evidence grounding" — different mechanisms.
-            </p>
-          </ColBox>
-          <ColBox>
-            <h4 className="text-sm font-semibold mb-1 text-[#e03131] dark:text-[#fca5a5]">
-              ✗ Confidence-Based Re-weighting (iMAD-style)
-            </h4>
-            <p className="text-xs text-[#64748b] dark:text-[#94a3b8] mb-0">
-              Confidence is self-reported from the same context that can be
-              manipulated by injected pressure — exactly the vulnerability we
-              target.
-            </p>
-          </ColBox>
-          <ColBox>
-            <h4 className="text-sm font-semibold mb-1 text-[#0ca678] dark:text-[#6ee7b7]">
-              ✓ Our Approach
-            </h4>
-            <p className="text-xs text-[#64748b] dark:text-[#94a3b8] mb-0">
-              Ties agent influence to something <em>external</em> and{" "}
-              <em>independent</em> of debate social dynamics — the lever needed
-              to break sycophantic collapse, not just detect it.
-            </p>
-          </ColBox>
-        </TwoCol>
+        <DataTable
+          head={["Alternative", "Decision", "Reason"]}
+          rows={[
+            [
+              "Post-hoc classifier (Minority Sentinel-style)",
+              badge("Rejected", "rose"),
+              "Intervenes after debate ends, not during. Valid but separate contribution space — we position against it, not duplicate it.",
+            ],
+            [
+              "Fine-tuning agents",
+              badge("Rejected", "rose"),
+              "Compute cost and no cross-model generalisation; also conflates sycophancy reduction with evidence grounding.",
+            ],
+            [
+              "Confidence-based re-weighting (iMAD-style)",
+              badge("Rejected", "rose"),
+              "Confidence is self-reported from the same context that injected pressure can manipulate — exactly the vulnerability we target.",
+            ],
+            [
+              "Evidence-grounded numeric trust (ours)",
+              badge("Chosen", "green"),
+              "Ties influence to something external and independent of debate social dynamics — the lever needed to break collapse, not just detect it.",
+            ],
+          ]}
+        />
       </Section>
 
       {/* ───────────── 2. Research Motivation ───────────── */}
-      <Section id="research-motivation" className="animate-fade-up animate-delay-2">
+      <Section
+        id="research-motivation"
+        className="animate-fade-up animate-delay-2"
+      >
         <SectionTitle icon={Microscope}>2. Research Motivation</SectionTitle>
-        <TwoCol>
-          <ColBox>
-            <h4 className="text-sm font-bold mb-2">Why this problem matters</h4>
-            <p className="text-sm leading-relaxed">
-              Sycophancy is cited as an open problem in 50+ peer-reviewed papers
-              since 2023. In multi-agent systems, it undermines the reason
-              multi-agent debate is used — if debate collapses to whichever
-              position sounds most confident rather than which is most correct,
-              it adds cost without adding reliability.
-            </p>
-          </ColBox>
-          <ColBox>
-            <h4 className="text-sm font-bold mb-2">The specific gap</h4>
-            <p className="text-sm leading-relaxed">
-              <strong>
-                No existing framework provides numeric, evidence-grounded,
-                in-session trust re-weighting.
-              </strong>{" "}
-              Prompt refinement (ConsensAgent, ACL Findings 2025), uncertainty
-              signals (DebUnc, EMNLP Findings 2025), and theoretical pruning
-              interventions (Estornell &amp; Liu, NeurIPS 2024) all address
-              related problems — but none ties agent influence to real-time
-              external evidence verification with a formally bounded trust
-              score. This is the exact, verified gap.
-            </p>
-          </ColBox>
-        </TwoCol>
-        <h4 className="text-sm font-bold mt-4 mb-2">
-          Existing limitations (verified against literature)
-        </h4>
-        <div className="overflow-x-auto rounded-lg shadow-sm">
-          <table className="w-full border-collapse text-xs sm:text-sm">
-            <thead>
-              <tr>
-                {["Work", "Year", "What it does", "What's missing"].map((h) => (
-                  <th
-                    key={h}
-                    className="p-3 text-left font-bold bg-[#f1f5f9] dark:bg-[rgba(255,255,255,0.06)] border-b-2 border-[#e2e8f0] dark:border-[rgba(255,255,255,0.15)] whitespace-nowrap"
-                  >
-                    {h}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {[
-                [
-                  "Yao et al. (Peacemaker)",
-                  "2025",
-                  "Diagnoses & measures inter-agent sycophancy",
-                  "No mitigation — diagnostic only",
-                ],
-                [
-                  "He et al. (Minority Sentinel)",
-                  "2026",
-                  "Post-hoc classifier on debate logs",
-                  "Intervenes after debate ends, not during",
-                ],
-                [
-                  "iMAD (Fan et al.)",
-                  "2026",
-                  "Decides when to debate (efficiency)",
-                  "Doesn't decide whom to trust once debating",
-                ],
-                [
-                  "MoA (Wang et al.)",
-                  "2025",
-                  "Static multi-model aggregation",
-                  "No evidence grounding or dynamic trust",
-                ],
-                [
-                  "ConsensAgent (Pitre et al.)",
-                  "2025",
-                  "Prompt-refinement sycophancy mitigation",
-                  "Static/textual intervention — not numeric trust; no external evidence retrieval",
-                ],
-                [
-                  "DebUnc (Yoffe et al.)",
-                  "2025",
-                  "Uncertainty-based in-loop weighting",
-                  "Self-reported uncertainty signals — not grounded in external evidence verification",
-                ],
-                [
-                  "Estornell & Liu",
-                  "2024",
-                  "Theoretical framework for majority convergence",
-                  "Theoretical only — proposes pruning interventions, not a deployable system",
-                ],
-              ].map(([work, yr, does, missing], i) => (
-                <tr
-                  key={i}
-                  className="border-b border-[#e2e8f0] dark:border-[rgba(255,255,255,0.08)] last:border-0 hover:bg-[#dce4ff] dark:hover:bg-[rgba(59,91,219,0.12)] even:bg-[#f8fafc] dark:even:bg-[rgba(255,255,255,0.03)] transition-colors"
-                >
-                  <td className="p-3 font-medium whitespace-nowrap">{work}</td>
-                  <td className="p-3 whitespace-nowrap">{yr}</td>
-                  <td className="p-3">{does}</td>
-                  <td className="p-3 text-[#e03131]">{missing}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <p className="text-sm mb-4">
+          Sycophancy is cited as an open problem in 50+ peer-reviewed papers
+          since 2023. In multi-agent systems it defeats the reason debate is
+          used: if the answer follows whichever position sounds most confident
+          rather than which is most correct, debate adds cost without adding
+          reliability. The gap is stated in §0; the table below is the
+          nearest-work evidence.
+        </p>
+        <DataTable
+          head={["Work", "Year", "What it does", "What's missing"]}
+          rows={[
+            [
+              "Yao et al. (Peacemaker)",
+              "2025",
+              "Diagnoses and measures inter-agent sycophancy",
+              red("No mitigation — diagnostic only"),
+            ],
+            [
+              "He et al. (Minority Sentinel)",
+              "2026",
+              "Post-hoc classifier on debate logs",
+              red("Intervenes after debate ends, not during"),
+            ],
+            [
+              "iMAD (Fan et al.)",
+              "2026",
+              "Decides when to debate (efficiency)",
+              red("Doesn't decide whom to trust once debating"),
+            ],
+            [
+              "MoA (Wang et al.)",
+              "2025",
+              "Static multi-model aggregation",
+              red("No evidence grounding or dynamic trust"),
+            ],
+            [
+              "ConsensAgent (Pitre et al.)",
+              "2025",
+              "Prompt-refinement sycophancy mitigation",
+              red(
+                "Static/textual intervention, not numeric trust; no external evidence retrieval",
+              ),
+            ],
+            [
+              "DebUnc (Yoffe et al.)",
+              "2025",
+              "Uncertainty-based in-loop weighting",
+              red(
+                "Self-reported uncertainty, not external evidence verification",
+              ),
+            ],
+            [
+              "Estornell & Liu",
+              "2024",
+              "Theoretical framework for majority convergence",
+              red(
+                "Theoretical only — pruning interventions, not a deployable system",
+              ),
+            ],
+          ]}
+        />
       </Section>
 
       {/* ───────────── 3. Problem Statement ───────────── */}
-      <Section id="problem-statement" accent="teal" className="animate-fade-up animate-delay-2">
+      <Section
+        id="problem-statement"
+        accent="teal"
+        className="animate-fade-up animate-delay-2"
+      >
         <SectionTitle icon={Target}>3. Problem Statement</SectionTitle>
         <p className="text-sm mb-4">
-          <strong>Research hypothesis:</strong> If agent influence in
+          <strong>Research hypothesis:</strong> if agent influence in
           aggregation is dynamically re-weighted during debate based on external
           evidence verification, sycophantic collapse will measurably decrease
-          compared to standard majority-vote debate, without requiring model
+          compared with standard majority-vote debate, without model
           fine-tuning.
         </p>
         <h4 className="text-sm font-bold mb-3">
           Four Engineering Challenges (Washington Accord Level)
         </h4>
-        <TwoCol>
-          <ColBox>
-            <h4 className="text-sm font-semibold mt-0 mb-2">
-              Challenge A — Real-time Verification
-            </h4>
-            <p className="text-sm text-[#64748b] dark:text-[#94a3b8] mb-0">
-              Decompose claims into atomic propositions; retrieve
-              supporting/contradicting evidence within &lt;10 s per turn.
-            </p>
-          </ColBox>
-          <ColBox>
-            <h4 className="text-sm font-semibold mt-0 mb-2">
-              Challenge B — Trust Stability
-            </h4>
-            <p className="text-sm text-[#64748b] dark:text-[#94a3b8] mb-0">
-              Design update rule avoiding degenerate equilibria (full collapse
-              or single-agent dominance).
-            </p>
-          </ColBox>
-          <ColBox>
-            <h4 className="text-sm font-semibold mt-0 mb-2">
-              Challenge C — Behavioral Effectiveness
-            </h4>
-            <p className="text-sm text-[#64748b] dark:text-[#94a3b8] mb-0">
-              Ensure trust weights change model outputs, not merely appear in
-              context and get ignored by attention.{" "}
-              <strong>Highest risk.</strong>
-            </p>
-          </ColBox>
-          <ColBox>
-            <h4 className="text-sm font-semibold mt-0 mb-2">
-              Challenge D — Heterogeneous Agents
-            </h4>
-            <p className="text-sm text-[#64748b] dark:text-[#94a3b8] mb-0">
-              Trust calibration must be model-agnostic across ~14–32B
-              open-weight models from different families.
-            </p>
-          </ColBox>
-        </TwoCol>
+        <DataTable
+          head={["Challenge", "Requirement", "Risk"]}
+          rows={[
+            [
+              "A — Real-time verification",
+              "Decompose claims into atomic propositions; retrieve supporting/contradicting evidence within <10 s per turn.",
+              badge("Moderate", "amber"),
+            ],
+            [
+              "B — Trust stability",
+              "Avoid degenerate equilibria: full collapse or single-agent dominance.",
+              badge("Moderate", "amber"),
+            ],
+            [
+              "C — Behavioural effectiveness",
+              "Trust weights must change model outputs, not merely appear in context and get ignored by attention.",
+              badge("Highest", "rose"),
+            ],
+            [
+              "D — Heterogeneous agents",
+              "Trust calibration must be model-agnostic across ~14–32B open-weight models from different families.",
+              badge("Moderate", "amber"),
+            ],
+          ]}
+        />
       </Section>
 
       {/* ───────────── 4. Complete System Architecture ───────────── */}
-      <Section id="system-architecture" className="animate-fade-up animate-delay-3">
+      <Section
+        id="system-architecture"
+        className="animate-fade-up animate-delay-3"
+      >
         <SectionTitle icon={Building2}>
           4. Complete System Architecture
         </SectionTitle>
-
-        <p className="text-sm mb-5">
-          The system processes each query through a confidence gate, then either
-          returns a direct answer or triggers the full evidence-grounded debate
-          pipeline shown below. Tap any stage to read what it does in plain
-          English.
+        <p className="text-sm mb-4">
+          Each query passes a confidence gate, then either returns a direct
+          answer or enters the evidence-grounded debate pipeline below. Tap any
+          stage in the diagram for a plain-English description.
         </p>
-
-        <div className="mb-5">
+        <div className="mb-4">
           <ArchitectureDiagram />
         </div>
-
-        <div className="flex items-center gap-2 text-xs text-[#64748b] dark:text-[#94a3b8] bg-[#f8fafc] dark:bg-[rgba(255,255,255,0.03)] rounded-lg p-3 border border-[#e2e8f0] dark:border-[rgba(255,255,255,0.08)] mb-5">
-          <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#f08c00] text-white text-[10px] font-bold flex-shrink-0">
-            ⚡
-          </span>
-          Over-triggering (confident queries entering debate) wastes compute but
-          poses no correctness risk.
-        </div>
-
+        <p className="text-xs text-[#64748b] dark:text-[#94a3b8] bg-[#f8fafc] dark:bg-[rgba(255,255,255,0.03)] rounded-lg p-3 border border-[#e2e8f0] dark:border-[rgba(255,255,255,0.08)] mb-4">
+          ⚡ <strong>4.1 Confidence Estimator:</strong> a lightweight
+          single-pass self-report or 3-sample agreement check avoids full debate
+          cost on easy questions. Over-triggering wastes compute but poses no
+          correctness risk; removing it means ~9 forward passes instead of ~1.
+          A hard-as-easy miss is acceptable because eval datasets are
+          pre-filtered to divergent cases, so no recovery is needed.
+        </p>
         <TwoCol>
-          <ColBox>
-            <h4 className="text-sm font-bold mb-2">4.1 Confidence Estimator</h4>
-            <p className="text-sm leading-relaxed mb-0">
-              Lightweight single-pass check using self-reported confidence or
-              3-sample agreement. Avoids full debate cost on easy questions.
-              Failure mode: over-triggering (wastes compute, no correctness
-              risk).
-            </p>
-          </ColBox>
           <ColBox>
             <h4 className="text-sm font-bold mb-2">4.2 Agent Pool (N=3)</h4>
             <p className="text-sm leading-relaxed mb-0">
-              <a className="underline decoration-dotted underline-offset-2" href="https://huggingface.co/Qwen/Qwen3.8-27B" target="_blank" rel="noopener noreferrer">Qwen3.8-27B-AWQ-INT4</a>,{" "}
-              <a className="underline decoration-dotted underline-offset-2" href="https://huggingface.co/google/gemma-4-26B-A4B" target="_blank" rel="noopener noreferrer">Gemma 4 26B A4B</a>,{" "}
-              <a className="underline decoration-dotted underline-offset-2" href="https://huggingface.co/mistralai/Mistral-Small-3.2-24B-Instruct-2506" target="_blank" rel="noopener noreferrer">Mistral Small 3.2 24B</a> — three
-              different families for genuine heterogeneity. Each tracks own
-              trust vector T ∈ ℝ³, initialized uniformly at 1/N.
+              <a
+                className="underline decoration-dotted underline-offset-2"
+                href="https://huggingface.co/Qwen/Qwen3.8-27B"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Qwen3.8-27B-AWQ-INT4
+              </a>
+              ,{" "}
+              <a
+                className="underline decoration-dotted underline-offset-2"
+                href="https://huggingface.co/google/gemma-4-26B-A4B"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Gemma 4 26B A4B
+              </a>
+              ,{" "}
+              <a
+                className="underline decoration-dotted underline-offset-2"
+                href="https://huggingface.co/mistralai/Mistral-Small-3.2-24B-Instruct-2506"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Mistral Small 3.2 24B
+              </a>{" "}
+              — three different families for genuine heterogeneity. Each agent
+              tracks its own trust vector T ∈ ℝ³, initialised uniformly at 1/N.
             </p>
           </ColBox>
           <ColBox>
@@ -553,9 +477,11 @@ export function Idea1Content() {
               4.3 Source-Partitioned RAG
             </h4>
             <p className="text-sm leading-relaxed mb-0">
-              Claims → atomic propositions → Agent A→PubMed, B→ArXiv, C→Semantic
-              Scholar. Prevents all agents retrieving from same narrow slice.
-              Cross-encoder reranker scores evidence per claim.
+              Claims → atomic propositions → claim-domain routing → Agent
+              A→PubMed, B→ArXiv, C→Semantic Scholar. Partitioning prevents all
+              agents retrieving from the same narrow slice; a cross-encoder
+              reranker scores evidence per claim, and the verifier returns
+              supported / contradicted / unverifiable.
             </p>
           </ColBox>
           <ColBox>
@@ -564,8 +490,8 @@ export function Idea1Content() {
               <code>Sᵢ ← log(max(Sᵢ, ε)) + α·Vᵢ/nᵢ − β·Hᵢ/nᵢ</code>, then one
               softmax, then a floor/ceiling simplex projection. Vᵢ and Hᵢ are
               supported/contradicted counts, normalised by claims checked (nᵢ).
-              Defaults α = 0.5, β = 0.3. Guarantees: min ≥ 0.1, Σ = 1,
-              max ≤ max(0.9, 1/N). Neutral evidence is an identity.
+              Defaults α = 0.5, β = 0.3. Guarantees: min ≥ 0.1, Σ = 1, max ≤
+              max(0.9, 1/N). Neutral evidence is an identity.
             </p>
           </ColBox>
           <ColBox>
@@ -573,9 +499,9 @@ export function Idea1Content() {
               4.5 Revision Rounds (K=3)
             </h4>
             <p className="text-sm leading-relaxed mb-0">
-              Agents see peer arguments + own trust standing. Simulates genuine
-              deliberation. Trust trajectory logged across rounds for ECR
-              analysis.
+              Agents see peer arguments plus their own trust standing, which
+              simulates genuine deliberation. The trust trajectory is logged
+              across rounds for ECR analysis.
             </p>
           </ColBox>
           <ColBox>
@@ -584,13 +510,11 @@ export function Idea1Content() {
             </h4>
             <p className="text-sm leading-relaxed mb-0">
               Final answer = argmax over Σ(Tᵢ × positionᵢ) at round K — not
-              majority vote. Correct minority with high trust can outweigh two
+              majority vote. A correct minority with high trust can outweigh two
               unsupported majority agents.
             </p>
           </ColBox>
         </TwoCol>
-
-        {/* Interactive trust-score simulator (screen only) */}
         <div className="print:hidden mt-6">
           <h4 className="text-sm font-bold mb-3">
             Try the Trust Update Yourself (§4.4)
@@ -604,233 +528,70 @@ export function Idea1Content() {
         <SectionTitle icon={Wrench}>
           5. Detailed Multi-Agent Pipeline
         </SectionTitle>
-
-        <h4 className="text-sm font-bold mb-3">
-          Agent 0 — Confidence Estimator (Gatekeeper)
-        </h4>
-        <div className="overflow-x-auto rounded-lg shadow-sm mb-5">
-          <table className="w-full border-collapse text-xs sm:text-sm">
-            <thead>
-              <tr>
-                {["Property", "Detail"].map((h) => (
-                  <th
-                    key={h}
-                    className="p-2.5 text-left font-bold bg-[#f1f5f9] dark:bg-[rgba(255,255,255,0.06)] border-b-2 border-[#e2e8f0] dark:border-[rgba(255,255,255,0.15)]"
-                  >
-                    {h}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {[
-                [
-                  "Purpose",
-                  "Avoid full debate cost on easy questions (all agents agree correctly)",
-                ],
-                [
-                  "Input → Output",
-                  "Raw question → binary gate (debate / no-debate) + direct answer if no-debate",
-                ],
-                [
-                  "Prompt strategy",
-                  "Simple CoT + explicit confidence self-report, or 3-sample agreement check",
-                ],
-                [
-                  "Failure mode",
-                  "Mis-classifies hard as easy → answered without debate (acceptable — eval datasets are pre-filtered to divergent cases)",
-                ],
-                [
-                  "Recovery",
-                  "None needed — failure is cost inefficiency, not a correctness bug",
-                ],
-                [
-                  "If removed",
-                  "Debate runs on every question. No correctness impact, only ~9 vs ~1 forward passes on easy questions",
-                ],
-              ].map(([prop, detail], i) => (
-                <tr
-                  key={i}
-                  className="border-b border-[#e2e8f0] dark:border-[rgba(255,255,255,0.08)] last:border-0 hover:bg-[#dce4ff] dark:hover:bg-[rgba(59,91,219,0.12)] even:bg-[#f8fafc] dark:even:bg-[rgba(255,255,255,0.03)] transition-colors"
-                >
-                  <td className="p-2.5 font-medium whitespace-nowrap">
-                    {prop}
-                  </td>
-                  <td className="p-2.5">{detail}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        <h4 className="text-sm font-bold mb-3">Agents 1–3 — Debate Agents (Final Stack; Dev Retired)</h4>
-        <TwoCol>
-          <ColBox>
-            <h4 className="text-sm font-semibold mb-1">
-              Dev (retired): <a className="underline decoration-dotted underline-offset-2" href="https://huggingface.co/Qwen/Qwen3.5-9B" target="_blank" rel="noopener noreferrer">Qwen3.5-9B</a> → Final:{" "}
-              <a className="underline decoration-dotted underline-offset-2" href="https://huggingface.co/Qwen/Qwen3.8-27B" target="_blank" rel="noopener noreferrer">Qwen3.8-27B-AWQ-INT4</a>
-            </h4>
-            <p className="text-xs text-[#64748b] dark:text-[#94a3b8] mb-0">
-              Dev stack retired (48 GB A6000). Final: 27B dense,
-              262K context, caps prior 397B MoE flagship in coding. Apache 2.0.
-            </p>
-          </ColBox>
-          <ColBox>
-            <h4 className="text-sm font-semibold mb-1">
-              Dev (retired): <a className="underline decoration-dotted underline-offset-2" href="https://huggingface.co/google/gemma-4-12B" target="_blank" rel="noopener noreferrer">Gemma 4 12B</a> → Final:{" "}
-              <a className="underline decoration-dotted underline-offset-2" href="https://huggingface.co/google/gemma-4-26B-A4B" target="_blank" rel="noopener noreferrer">Gemma 4 26B A4B</a>
-            </h4>
-            <p className="text-xs text-[#64748b] dark:text-[#94a3b8] mb-0">
-              Dev stack retired. Final: MoE (3.8B active),
-              256K context, matches 31B quality at fraction of compute.
-            </p>
-          </ColBox>
-          <ColBox>
-            <h4 className="text-sm font-semibold mb-1">
-              Dev (retired): <a className="underline decoration-dotted underline-offset-2" href="https://huggingface.co/mistralai/Ministral-3-14B-Instruct-2512" target="_blank" rel="noopener noreferrer">Ministral-3-14B-Instruct</a> → Final:{" "}
-              <a className="underline decoration-dotted underline-offset-2" href="https://huggingface.co/mistralai/Mistral-Small-3.2-24B-Instruct-2506" target="_blank" rel="noopener noreferrer">Mistral Small 3.2 24B</a>
-            </h4>
-            <p className="text-xs text-[#64748b] dark:text-[#94a3b8] mb-0">
-              Dev stack retired (Mistral-family 14B on the 48 GB A6000).
-              Final: Mistral adds third distinct family (non-Qwen,
-              non-Gemma) for true heterogeneity.
-            </p>
-          </ColBox>
-          <ColBox>
-            <h4 className="text-sm font-semibold mb-1">Recovery Mechanisms</h4>
-            <p className="text-xs text-[#64748b] dark:text-[#94a3b8] mb-0">
-              Unparseable output → fallback LLM extraction. Timeout → retry once
-              then mark INCONCLUSIVE for that round. Never blocks the whole
-              debate.
-            </p>
-          </ColBox>
-        </TwoCol>
-
-        <h4 className="text-sm font-bold mt-5 mb-3">
-          Retrieval Sub-System &amp; Orchestrator
-        </h4>
-        <TwoCol>
-          <ColBox>
-            <h4 className="text-sm font-semibold mb-1">Retrieval</h4>
-            <p className="text-xs text-[#64748b] dark:text-[#94a3b8] mb-0">
-              Source-partitioned: Agent A→PubMed, B→ArXiv, C→Semantic Scholar.
-              Cross-encoder reranks passages. Per-claim verdict: supported /
-              contradicted / unverifiable. If removed → system reduces to MoA
-              (baseline B6).
-            </p>
-          </ColBox>
-          <ColBox>
-            <h4 className="text-sm font-semibold mb-1">Orchestrator</h4>
-            <p className="text-xs text-[#64748b] dark:text-[#94a3b8] mb-0">
-              LangGraph state machine manages round sequencing, injection point
-              (t=1→2), trust updates, final aggregation. Hard round cap (K=3)
-              and retry cap (3) prevent runaway loops.
-            </p>
-          </ColBox>
-        </TwoCol>
+        <p className="text-sm mb-4">
+          Agents 1–3 are the final 24–27B stack from §7 (the 48 GB A6000 dev
+          stack is retired). Each produces an answer, a reasoning trace, and
+          tagged atomic claims; the orchestrator then runs the loop.
+        </p>
+        <DataTable
+          head={["Stage", "Detail"]}
+          rows={[
+            [
+              "Round 0 — positions",
+              "3× {agent_id, answer, reasoning_trace, initial_trust = ⅓}. Agents state independent positions with no peer context.",
+            ],
+            [
+              "Claim decomposition",
+              "Each reasoning trace → a list of atomic claims tagged to its source agent and domain, ready for verification.",
+            ],
+            [
+              "Source-partitioned retrieval",
+              "Per-claim {evidence_verdict, passage, relevance_score}. This is the first external signal in the system. Removing retrieval reduces the system to MoA (B6).",
+            ],
+            [
+              "Trust update",
+              "Vᵢ, Hᵢ, nᵢ from the verdicts → trust update (§4.4). Injection point for fabricated consensus is t=1→2.",
+            ],
+            [
+              "Revision rounds ×K",
+              "Repeat positions → claims → retrieval → trust for K=3. The full trajectory is required for Propositions 2–3 and ECR.",
+            ],
+            [
+              "Trust-weighted aggregation",
+              "Final answer = argmax Σ(Tᵢ × positionᵢ) at round K, not majority vote.",
+            ],
+            [
+              "Recovery",
+              "Unparseable output → fallback LLM extraction. Timeout → retry once, then mark the round INCONCLUSIVE. Never blocks the whole debate.",
+            ],
+            [
+              "Orchestrator",
+              "LangGraph state machine manages round sequencing, the t=1→2 injection point, trust updates, and final aggregation. Hard round cap K=3 and retry cap 3 prevent runaway loops.",
+            ],
+          ]}
+        />
       </Section>
 
       {/* ───────────── 6. Complete Data Flow ───────────── */}
       <Section id="data-flow" className="animate-fade-up animate-delay-5">
         <SectionTitle icon={ArrowLeftRight}>6. Complete Data Flow</SectionTitle>
         <p className="text-sm mb-4">
-          End-to-end data flow from question submission to final output. Every
-          intermediate result is logged for traceability, ECR calibration, and
-          verification of Propositions 2–3.
+          Question → confidence gate → round-0 positions → claim decomposition →
+          source-partitioned retrieval → trust update → K revision rounds →
+          trust-weighted aggregation → result package. Every intermediate result
+          is logged for traceability, ECR calibration, and verification of
+          Propositions 2–3.
         </p>
-
-        {/* Interactive step-by-step walkthrough (screen only) */}
-        <div className="print:hidden mb-5">
+        <div className="print:hidden mb-4">
           <h4 className="text-sm font-bold mb-3">
             Walk the Real Example, One Step at a Time
           </h4>
           <Walkthrough />
         </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
-          {[
-            {
-              step: "01",
-              title: "Question Input",
-              desc: "Raw question string + ground truth (hidden from agents). Submitted by user or eval harness.",
-              color: "from-[#1c7ed6] to-[#4dabf7]",
-            },
-            {
-              step: "02",
-              title: "Confidence Gate",
-              desc: "Debate=True/False decision. If False → skip to step 08 with direct answer.",
-              color: "from-[#f08c00] to-[#ffd43b]",
-            },
-            {
-              step: "03",
-              title: "Round 0 — Positions",
-              desc: "3× {agent_id, answer, reasoning_trace, initial_trust=⅓}. Agents state independent positions.",
-              color: "from-[#7c3aed] to-[#b197fc]",
-            },
-            {
-              step: "04",
-              title: "Claim Decomposition",
-              desc: "3× list of atomic claims, each tagged to its source agent. Ready for verification.",
-              color: "from-[#3b5bdb] to-[#748ffc]",
-            },
-            {
-              step: "05",
-              title: "Source-Partitioned Retrieval",
-              desc: "Per-claim {evidence_verdict, passage, relevance_score}. First external signal enters the system.",
-              color: "from-[#0ca678] to-[#69db7c]",
-            },
-            {
-              step: "06",
-              title: "Trust Update (R1)",
-              desc: "Updated Sᵢ, Tᵢ per agent. [Optional: Injection point for fabricated wrong consensus].",
-              color: "from-[#e03131] to-[#ff8787]",
-            },
-            {
-              step: "07",
-              title: "Revision Rounds ×K",
-              desc: "Repeat steps 03–06 for K=3. Full trust trajectory across rounds — required for Propositions 2–3.",
-              color: "from-[#7c3aed] to-[#b197fc]",
-            },
-            {
-              step: "08",
-              title: "Trust-Weighted Agg.",
-              desc: "Final answer = argmax over Σ(Tᵢ × positionᵢ) at round K. NOT majority vote.",
-              color: "from-[#3b5bdb] to-[#748ffc]",
-            },
-            {
-              step: "09",
-              title: "Result Package",
-              desc: "Answer + evidence citations + trust trajectory + per-agent reasoning traces.",
-              color: "from-[#0ca678] to-[#69db7c]",
-            },
-          ].map(({ step, title, desc, color }) => (
-            <div
-              key={step}
-              className="relative rounded-lg border border-[#e2e8f0] dark:border-[rgba(255,255,255,0.1)] bg-white dark:bg-[#1a1d35] p-4 transition-shadow hover:shadow-sm"
-            >
-              <div
-                className={`inline-flex items-center justify-center w-7 h-7 rounded-full bg-gradient-to-br ${color} text-white text-[11px] font-bold mb-2 shadow-sm`}
-              >
-                {step}
-              </div>
-              <h5 className="text-sm font-semibold mb-1 text-[#1e2d3d] dark:text-[#e2e8f0]">
-                {title}
-              </h5>
-              <p className="text-xs text-[#64748b] dark:text-[#94a3b8] leading-relaxed">
-                {desc}
-              </p>
-              {/* Connector arrow */}
-              <div className="hidden lg:block absolute -right-2 top-1/2 -translate-y-1/2 text-[#cbd5e1] dark:text-[rgba(255,255,255,0.15)] text-lg">
-                →
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <p className="text-xs text-[#64748b] dark:text-[#94a3b8] bg-[#f8fafc] dark:bg-[rgba(255,255,255,0.03)] rounded-lg p-3 border border-[#e2e8f0] dark:border-[rgba(255,255,255,0.08)]">
-          <strong>Note:</strong> Every intermediate output is logged — trust
-          trajectory (step 07) is required for Propositions 2–3; per-claim
-          evidence verdicts (step 05) are required for ECR calibration.
+        <p className="text-xs text-[#64748b] dark:text-[#94a3b8] bg-[#f8fafc] dark:bg-[rgba(255,255,255,0.03)] rounded-lg p-3 border border-[#e2e8f0] dark:border-[rgba(255,255,255,0.08)] mb-0">
+          <strong>Logged artifacts:</strong> the trust trajectory (needed for
+          Propositions 2–3), per-claim evidence verdicts (needed for ECR), and
+          per-agent reasoning traces (needed for human evaluation).
         </p>
       </Section>
 
@@ -838,98 +599,97 @@ export function Idea1Content() {
       <Section id="models-tools" accent="teal" className="animate-fade-up">
         <SectionTitle icon={Hammer}>7. Models &amp; Tools</SectionTitle>
         <p className="text-sm mb-4">
-          Full model stack per blueprint §7. All open-weight, inference-only,
-          served via vLLM.
+          All open-weight, inference-only, served via vLLM. The 48 GB A6000 dev
+          stack is retired; only the <code>fourbit</code> main stack and the{" "}
+          <code>final</code> FP8 check stack are runnable.
         </p>
-        <InfoGrid cards={resources} />
 
-        <h4 className="text-sm font-bold mt-5 mb-3">GPU &amp; Storage Budget</h4>
-        <p className="text-xs text-[#64748b] dark:text-[#94a3b8] mb-3">
-          The dev stack (RTX A6000 48GB) is retired. Only the <code>fourbit</code>
-          main stack and the <code>final</code> FP8 precision stack are runnable.
-          The main causal matrix runs on one 96 GB RTX PRO 6000 at $1.50/GPU-h
-          all-in with the 24–27B stack served 4-bit
-          (Qwen3.8-27B-AWQ-INT4 ~21.0 GB / Gemma-4-26B-A4B AWQ ~17.2 GB /
-          Mistral-24B-AWQ 15.06 GB; ~53.3 GB total). The pinned 73.68 GB
-          FP8 stack (Qwen3.8-27B-FP8 29.95 GB / Gemma FP8 28.67 GB / Mistral
-          AWQ 15.06 GB) on the same 96 GB card is only for the N1 smoke and a
-          small GPQA precision replication, not the main Full matrix. The
-          remaining 23,798-debate programme is 137.80 GPU-h ≈ $209.26, with the
-          $300 hard stop unchanged. The
-          offline check passes, but the hardware smoke has not been run. Use the
-          table below to review the budget.
+        <h4 className="text-sm font-bold mt-5 mb-3">
+          Model Stack — fourbit (main) and final (FP8 check)
+        </h4>
+        <DataTable
+          head={["Stack", "Models (pinned weights)", "Total", "Use"]}
+          rows={[
+            [
+              strong("fourbit"),
+              "Qwen3.8-27B-AWQ-INT4 21.0 GB · Gemma 4 26B-A4B AWQ 17.2 GB · Mistral 24B AWQ 15.06 GB",
+              "53.26 GB",
+              "Core and Full causal matrix on one 96 GB RTX PRO 6000",
+            ],
+            [
+              strong("final"),
+              "Qwen3.8-27B-FP8 29.95 GB · Gemma 4 26B A4B FP8 28.67 GB · Mistral 24B AWQ 15.06 GB",
+              "73.68 GB",
+              "N1 smoke + small GPQA precision replication only",
+            ],
+          ]}
+        />
+        <p className="text-xs text-[#64748b] dark:text-[#94a3b8] mb-4">
+          Qwen is dense with 262K context; Gemma is MoE with 3.8B active and
+          256K context; Mistral adds a third lineage (non-Qwen, non-Gemma). The
+          FP8 stack is not the main Full matrix. Dev stack (retired, 48 GB
+          A6000): Qwen3.5-9B, Gemma 4 12B, Ministral-3-14B.
         </p>
-        <CostTable />
+
+        <h4 className="text-sm font-bold mb-3">Tools</h4>
+        <DataTable
+          head={["Tool", "Role"]}
+          rows={[
+            ["Oracle (B7)", "GPT-6 Luna (OpenAI), 3 samples/question; mean single-call accuracy + CI + 3-sample majority; ~$3–9 per 1,000; optional external ceiling, not a Core arm."],
+            ["Reranker", "ms-marco-MiniLM cross-encoder; standard, fast, well-validated."],
+            ["Inference", "vLLM; free, fast, multi-model serving."],
+            ["Orchestration", "LangGraph; the state machine fits round-based debate."],
+            ["Retrieval APIs", "PubMed, ArXiv, Semantic Scholar; free academic APIs; Semantic Scholar paced at 1 req/s cumulatively."],
+          ]}
+        />
+
+        <h4 className="text-sm font-bold mb-3">Serving &amp; Budget</h4>
+        <p className="text-sm mb-3">
+          The programme runs on one <strong>96 GB RTX PRO 6000 on-demand</strong>{" "}
+          at <strong>$1.50/GPU-h all-in</strong> (disk and ingress included).
+          Eight concurrent rows with CUDA graphs measured{" "}
+          <strong>172.7 debates/h</strong> versus 52.2/h for the old 2-way eager
+          baseline (3.3× faster, ~69% cheaper per debate). Serving uses vLLM
+          utilisation 0.33/0.29/0.28 (sum 0.90), 8k context,
+          <code>--max-num-seqs 32</code>, and{" "}
+          <code>--disable-log-requests</code>. The offline check passes; the
+          96 GB hardware smoke has not been run.
+        </p>
+        <DataTable
+          head={["Stage", "Debates", "GPU-h", "All-in cost"]}
+          rows={[
+            ["Core + Full (36-row alternate)", "14,000", "81.06", "$121.59"],
+            ["Cap increase (MMLU-Pro 600 / HLE 400)", "3,200", "18.53", "$27.79"],
+            ["Three ablations (GPQA 400 / MMLU-Pro 600, 2 seeds)", "6,000", "34.74", "$52.11"],
+            ["FP8 precision replication", "600", "3.47", "$5.21"],
+            ["Setup + ingress", "—", "1.33", "$2.56"],
+            [
+              strong("Total remaining programme"),
+              strong("23,798"),
+              strong("139.13"),
+              strong("≈$209.25"),
+            ],
+          ]}
+        />
+        <p className="text-xs text-[#64748b] dark:text-[#94a3b8] mb-4">
+          23,798 debates = 139.13 GPU-h ≈ $209.25, committed at{" "}
+          <strong>$219.25 with $10 headroom</strong> under the $220 cap, inside
+          the <strong>$300 project hard stop</strong> (~$53 already spent).
+        </p>
 
         <h4 className="text-sm font-bold mt-5 mb-3">
           Implementation Difficulty Ranking (easiest → hardest)
         </h4>
-        <div className="overflow-x-auto rounded-lg shadow-sm">
-          <table className="w-full border-collapse text-xs sm:text-sm">
-            <thead>
-              <tr>
-                {["#", "Component", "Difficulty", "Why"].map((h) => (
-                  <th
-                    key={h}
-                    className="p-2.5 text-left font-bold bg-[#f1f5f9] dark:bg-[rgba(255,255,255,0.06)] border-b-2 border-[#e2e8f0] dark:border-[rgba(255,255,255,0.15)]"
-                  >
-                    {h}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {[
-                [
-                  1,
-                  "vLLM multi-model serving",
-                  "Low",
-                  "Well-documented, standard setup",
-                ],
-                [
-                  2,
-                  "Retrieval + reranking",
-                  "Moderate",
-                  "Mostly API/plumbing work",
-                ],
-                [
-                  3,
-                  "Claim decomposition + tagging",
-                  "Moderate",
-                  "Needs careful prompt engineering + fallback extraction",
-                ],
-                [
-                  4,
-                  "Trust update + LangGraph state machine",
-                  "Moderate–High",
-                  "Operator order: logit accumulation → softmax → floor/ceiling simplex projection. Clamp-then-renormalise is wrong (it can drop below the floor).",
-                ],
-                [
-                  5,
-                  "iMAD reimplementation (B9)",
-                  "Highest",
-                  "~10 working days; requires reconstructing method from paper description",
-                ],
-              ].map(([rank, component, difficulty, why], i) => (
-                <tr
-                  key={i}
-                  className="border-b border-[#e2e8f0] dark:border-[rgba(255,255,255,0.08)] last:border-0 hover:bg-[#dce4ff] dark:hover:bg-[rgba(59,91,219,0.12)] even:bg-[#f8fafc] dark:even:bg-[rgba(255,255,255,0.03)] transition-colors"
-                >
-                  <td className="p-2.5 font-bold">{rank}</td>
-                  <td className="p-2.5">{component}</td>
-                  <td className="p-2.5">
-                    <Badge
-                      variant={i === 4 ? "rose" : i >= 2 ? "amber" : "blue"}
-                    >
-                      {difficulty}
-                    </Badge>
-                  </td>
-                  <td className="p-2.5">{why}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <DataTable
+          head={["#", "Component", "Difficulty", "Why"]}
+          rows={[
+            ["1", "vLLM multi-model serving", badge("Low", "blue"), "Well-documented, standard setup"],
+            ["2", "Retrieval + reranking", badge("Moderate", "amber"), "Mostly API/plumbing work"],
+            ["3", "Claim decomposition + tagging", badge("Moderate", "amber"), "Needs careful prompt engineering plus fallback extraction"],
+            ["4", "Trust update + LangGraph state machine", badge("Moderate–High", "amber"), "Operator order: logit accumulation → softmax → floor/ceiling simplex projection. Clamp-then-renormalise is wrong."],
+            ["5", "iMAD reimplementation (B9)", badge("Highest", "rose"), "~10 working days; reconstruct the method from the paper description"],
+          ]}
+        />
       </Section>
 
       {/* ───────────── 8. Dataset Plan ───────────── */}
@@ -937,254 +697,137 @@ export function Idea1Content() {
         <SectionTitle icon={BarChart3}>8. Dataset Plan</SectionTitle>
         <p className="text-sm mb-4">
           Core datasets: GPQA-Main and MMLU-Pro STEM for evidence-grounded
-          accuracy, plus HLE as the abstention control. SciClaimBench is the controlled
-          gold-evidence benchmark, not a Core dataset: the v1.2 freeze is 180
-          items, with 300 as the ladder target. BrokenMath and BrokenArXiv are
-          appendix-only: both are proof-only with 0% answer-type retention, so
-          they are not usable for CCR.
+          accuracy, plus HLE as the abstention control. SciClaimBench is the
+          controlled gold-evidence benchmark, not a Core dataset: the v1.2
+          freeze is 180 items, with 300 as the ladder target. BrokenMath and
+          BrokenArXiv are appendix-only — both are proof-only with 0%
+          answer-type retention, so they are not usable for CCR.
         </p>
-        <div className="overflow-x-auto rounded-lg shadow-sm">
-          <table className="w-full border-collapse text-xs sm:text-sm">
-            <thead>
-              <tr>
-                {["Dataset", "Role", "Source", "Size", "Limitation"].map(
-                  (h) => (
-                    <th
-                      key={h}
-                      className="p-2.5 text-left font-bold bg-[#f1f5f9] dark:bg-[rgba(255,255,255,0.06)] border-b-2 border-[#e2e8f0] dark:border-[rgba(255,255,255,0.15)] whitespace-nowrap"
-                    >
-                      {h}
-                    </th>
-                  ),
-                )}
-              </tr>
-            </thead>
-            <tbody>
-              {datasets.map((ds, i) => (
-                <tr
-                  key={i}
-                  className="border-b border-[#e2e8f0] dark:border-[rgba(255,255,255,0.08)] last:border-0 hover:bg-[#dce4ff] dark:hover:bg-[rgba(59,91,219,0.12)] even:bg-[#f8fafc] dark:even:bg-[rgba(255,255,255,0.03)] transition-colors"
-                >
-                  <td className="p-2.5 font-medium">{ds.name}</td>
-                  <td className="p-2.5">
-                    <Badge variant={i < 2 ? "rose" : "blue"}>
-                      {ds.role.split(" ")[0]}
-                    </Badge>{" "}
-                    {ds.role}
-                  </td>
-                  <td className="p-2.5">{ds.source}</td>
-                  <td className="p-2.5 whitespace-nowrap">{ds.size}</td>
-                  <td className="p-2.5 text-xs text-[#64748b] dark:text-[#94a3b8]">
-                    {ds.limitation}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <p className="text-xs text-[#64748b] dark:text-[#94a3b8] mt-3">
-          <strong>Scale:</strong> 24-item calibration first; then the Core matrix
-          is 4 arms × GPQA-Main 400 / MMLU-Pro STEM 400 / HLE 200 × 2 seeds =
-          24 runs, 8,000 debates (≈46 GPU-h at 172.7 debates/h). B8-oracle is
-          not a Core arm; SciClaimBench is not in
-          Core v1.0. The primary Full matrix is 32 rows at 300 items/dataset
-          with the gold-evidence oracle on SciClaimBench (9,600 debates); the 36-row
-          gold-answer alternate is 10,800 debates. Core + Full ≈ 81.06 GPU-h
-          ≈ $121.59 at $1.50/GPU-h all-in. Benchmark ladder: 180 floor,
-          300 target, 600 stretch, 800 no-go.
+        <DataTable
+          head={["Dataset", "Role", "Source", "Size", "Limitation"]}
+          rows={datasets.map((ds, i) => [
+            strong(ds.name),
+            datasetRole(ds.role, i < 2),
+            ds.source,
+            ds.size,
+            muted(ds.limitation),
+          ])}
+        />
+        <p className="text-xs text-[#64748b] dark:text-[#94a3b8] mb-0">
+          <strong>Scale:</strong> 24-item calibration first; then Core is 4 arms
+          × GPQA-Main 400 / MMLU-Pro STEM 400 / HLE 200 × 2 seeds = 24 runs,
+          8,000 debates (~46 GPU-h at 172.7 debates/h). B8-oracle is not a Core
+          arm; SciClaimBench is not in Core v1.0. The primary Full matrix is 32
+          rows at 300 items/dataset with the gold-evidence oracle on
+          SciClaimBench (9,600 debates); the 36-row gold-answer alternate is
+          10,800 debates. Benchmark ladder: 180 floor, 300 target, 600 stretch,
+          800 no-go.
           <br />
-          <strong>Fallback:</strong> If HLE access is delayed, it stays an
-          abstention control and is not replaced by a primary set. If the
-          BrokenArXiv snapshot discontinues, freeze the last snapshot. Semantic
-          Scholar runs behind a 1 req/s cumulative pacing gate; if it degrades,
-          use OpenAlex.
+          <strong>Fallbacks:</strong> delayed HLE stays an abstention control
+          and is not replaced by a primary set; a discontinued BrokenArXiv
+          snapshot is frozen at the last available revision; Semantic Scholar
+          runs behind a 1 req/s cumulative pacing gate and falls back to
+          OpenAlex if it degrades.
         </p>
       </Section>
 
       {/* ───────────── 9. Evaluation Strategy ───────────── */}
-      <Section id="evaluation-strategy" accent="blue" className="animate-fade-up animate-delay-2">
+      <Section
+        id="evaluation-strategy"
+        accent="blue"
+        className="animate-fade-up animate-delay-2"
+      >
         <SectionTitle icon={Ruler}>9. Evaluation Strategy</SectionTitle>
         <h4 className="text-sm font-bold mb-3">
           Metrics &amp; Primary Hypotheses
         </h4>
-        <div className="overflow-x-auto rounded-lg shadow-sm mb-5">
-          <table className="w-full border-collapse text-xs sm:text-sm">
-            <thead>
-              <tr>
-                {["Metric", "Definition", "Primary Hypothesis"].map((h) => (
-                  <th
-                    key={h}
-                    className="p-2.5 text-left font-bold bg-[#f1f5f9] dark:bg-[rgba(255,255,255,0.06)] border-b-2 border-[#e2e8f0] dark:border-[rgba(255,255,255,0.15)]"
-                  >
-                    {h}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {[
-                [
-                  "CCR (Collapse Rate)",
-                  "% of correct agents who abandon under injected pressure",
-                  "H1 (pre-registered target): trust calibration reduces CCR by ≥20% vs MAD on injected GPQA-Main / MMLU-Pro STEM",
-                ],
+        <DataTable
+          head={["Metric", "Definition", "Primary hypothesis"]}
+          rows={[
+            [
+              strong("CCR (Collapse Rate)"),
+              "% of correct agents who abandon under injected pressure",
+              "H1: trust calibration reduces CCR by ≥20% vs MAD on injected GPQA-Main / MMLU-Pro STEM.",
+            ],
+            [
+              strong("MPR (Minority Preservation)"),
+              "% debates where the correct minority survives to the final output",
+              "H2: MPR improves by ≥15 pp vs plain MAD on GPQA-Main and MMLU-Pro STEM; SciClaimBench reported separately at the benchmark freeze.",
+            ],
+            [
+              strong("ECR (Evidence Calibration)"),
+              "Correlation between trust weight and empirical correctness",
+              "H3: ECR > 0.80 on GPQA-Main; the exact endpoint is frozen before the matrix.",
+            ],
+            [
+              strong("Task Accuracy"),
+              "Standard answer accuracy per benchmark",
+              "H4: no regression on stable splits; improvement under injected pressure is the primary test.",
+            ],
+          ]}
+        />
 
-                [
-                  "MPR (Minority Preservation)",
-                  "% debates where correct minority survives to final output",
-                  "H2 (pre-registered target): MPR improves by ≥15pp vs plain MAD on GPQA-Main and MMLU-Pro STEM, with SciClaimBench reported separately at the benchmark freeze",
-                ],
-                [
-                  "ECR (Evidence Calibration)",
-                  "Correlation between trust weight and empirical correctness",
-                  "H3 (pre-registered target): ECR > 0.80 on GPQA-Main; exact endpoint frozen before the matrix",
-                ],
-                [
-                  "Task Accuracy",
-                  "Standard answer accuracy per benchmark",
-                  "H4: no regression on stable splits; improvement under injected pressure is the primary test",
-                ],
-              ].map(([metric, defn, hyp], i) => (
-                <tr
-                  key={i}
-                  className="border-b border-[#e2e8f0] dark:border-[rgba(255,255,255,0.08)] last:border-0 hover:bg-[#dce4ff] dark:hover:bg-[rgba(59,91,219,0.12)] even:bg-[#f8fafc] dark:even:bg-[rgba(255,255,255,0.03)] transition-colors"
-                >
-                  <td className="p-2.5 font-medium">{metric}</td>
-                  <td className="p-2.5">{defn}</td>
-                  <td className="p-2.5 text-[#3b5bdb]">{hyp}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        <h4 className="text-sm font-bold mb-3">Baselines (B1–B10) and Executable Arms</h4>
-        <p className="text-xs text-[#64748b] dark:text-[#94a3b8] mb-2">
-          B1–B10 are comparison definitions. The Core matrix runs four arms
-          (B3, B4-matched, B8-no-trust, B8); the six-arm target adds
-          B8-placebo/B8-oracle through WP-18.
-        </p>
-        <div className="overflow-x-auto rounded-lg shadow-sm mb-4">
-          <table className="w-full border-collapse text-xs sm:text-sm">
-            <thead>
-              <tr>
-                {["ID", "Baseline", "What it measures"].map((h) => (
-                  <th
-                    key={h}
-                    className="p-2.5 text-left font-bold bg-[#f1f5f9] dark:bg-[rgba(255,255,255,0.06)] border-b-2 border-[#e2e8f0] dark:border-[rgba(255,255,255,0.15)]"
-                  >
-                    {h}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {[
-                ["B1", "Single-Agent CoT", "Floor: no debate at all"],
-                ["B2", "Single-Agent + RAG", "Single-agent with evidence"],
-                ["B3", "MAD (majority vote)", "Standard multi-agent debate"],
-                ["B4", "MAD + RAG", "Debate with evidence; B4-matched uses the B8 partition and prompts"],
-                ["B5", "Self-Consistency", "k samples, majority vote"],
-                ["B6", "MoA (equal-weight)", "Multi-model, static aggregation"],
-                ["B7", "Oracle (GPT-6 Luna, 3 samples)", "Optional external-answer ceiling; mean+CI+majority; not a Core arm"],
-                ["B8", "Ours (trust-weighted)", "Primary system"],
-                ["B8-no-trust", "Same evidence/prompts, majority", "Primary control — isolates the trust mechanism"],
-                ["B8-placebo / B8-oracle", "Six-arm target", "Pending WP-18; verdicts shuffled / gold evidence (oracle definition conditional)"],
-                ["B9", "iMAD", "Closest published efficiency competitor"],
-                [
-                  "B10",
-                  "ConsensAgent (if feasible)",
-                  "Prompt-refinement mitigation — closest to ours in goal, most different in mechanism",
-                ],
-              ].map(([id, bl, what], i) => (
-                <tr
-                  key={i}
-                  className="border-b border-[#e2e8f0] dark:border-[rgba(255,255,255,0.08)] last:border-0 hover:bg-[#dce4ff] dark:hover:bg-[rgba(59,91,219,0.12)] even:bg-[#f8fafc] dark:even:bg-[rgba(255,255,255,0.03)] transition-colors"
-                >
-                  <td className="p-2.5 font-bold whitespace-nowrap">{id}</td>
-                  <td className="p-2.5">{bl}</td>
-                  <td className="p-2.5">{what}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <h4 className="text-sm font-bold mb-3">
+          Baselines (B1–B10) and Executable Arms
+        </h4>
+        <DataTable
+          head={["ID", "Baseline", "What it measures"]}
+          rows={[
+            ["B1", "Single-Agent CoT", "Floor: no debate at all"],
+            ["B2", "Single-Agent + RAG", "Single agent with evidence"],
+            ["B3", "MAD (majority vote)", "Standard multi-agent debate"],
+            ["B4", "MAD + RAG", "Debate with evidence; B4-matched uses the B8 partition and prompts"],
+            ["B5", "Self-Consistency", "k samples, majority vote"],
+            ["B6", "MoA (equal-weight)", "Multi-model, static aggregation"],
+            ["B7", "Oracle (GPT-6 Luna, 3 samples)", "Optional external-answer ceiling; mean + CI + majority; not a Core arm"],
+            ["B8", "Ours (trust-weighted)", "Primary system"],
+            ["B8-no-trust", "Same evidence/prompts, majority", "Primary control — isolates the trust mechanism"],
+            ["B8-placebo / B8-oracle", "Six-arm target", "Pending WP-18; verdicts shuffled / gold evidence (oracle definition conditional)"],
+            ["B9", "iMAD", "Closest published efficiency competitor"],
+            ["B10", "ConsensAgent (if feasible)", "Prompt-refinement mitigation — closest to ours in goal, most different in mechanism"],
+          ]}
+        />
         <p className="text-xs text-[#64748b] dark:text-[#94a3b8] mb-4">
           <strong>Executable now:</strong> B3, B4-matched, B8-no-trust, and B8
           (4 arms × GPQA 400 / MMLU-Pro 400 / HLE 200 × 2 seeds = 24 runs,
-          8,000 debates, ≈46 GPU-h at 172.7 debates/h). Row 2/24 (GPQA-Main
-          seed 1, B8 vs B8-no-trust) is
-          complete: 798 debates (399/arm, q27 quarantined), accuracy 62.4% vs
-          58.7%, exact McNemar p&nbsp;=&nbsp;0.086 (n.s.) — feasibility + timing,
-          no efficacy claim. The 6-arm target adds B8-placebo and B8-oracle through
-          WP-18; the pre-registration records both the target and the executable
-          subset. The primary Full matrix is 32 rows (9,600 debates) with the
-          gold-evidence oracle on SciClaimBench; the 36-row alternate uses
-          gold-answer trust (10,800 debates).
+          8,000 debates, ≈46 GPU-h at 172.7 debates/h). Row 2/24 is complete
+          (see §1). The 6-arm target adds B8-placebo and B8-oracle through
+          WP-18. <strong>B10:</strong> ConsensAgent is the closest published
+          mitigation — state-of-the-art on six reasoning datasets — but it
+          refines prompts rather than scoring evidence against external sources.
+          A written mechanism comparison is mandatory; full reimplementation is
+          ~1 week and only if Full-run capacity allows.
         </p>
-
-        <Callout
-          variant="warning"
-          title="🧪 Baseline B10 — ConsensAgent (Pitre et al., Findings of ACL 2025)"
-        >
-          <p className="text-sm mb-1">
-            <strong>Why included:</strong> ConsensAgent is the closest published
-            mitigation to our work — it also targets sycophancy in multi-agent
-            debate, but via <strong>static/dynamic prompt refinement</strong>,
-            not evidence-grounded numeric trust. This is the sharpest
-            differentiation line in our related-work section.
-          </p>
-          <p className="text-sm mb-0">
-            <strong>Implementation plan:</strong> Full reimplementation if
-            Full-run capacity allows (~1 week). Minimum: compare against published
-            results (state-of-the-art on six reasoning datasets), with explicit
-            mechanism differentiation in the paper. If excluded, a written
-            comparison paragraph explaining why (mechanism difference:
-            prompt-tuning vs. evidence-scoring) is mandatory.
-          </p>
-        </Callout>
 
         <h4 className="text-sm font-bold mb-3">Ablation Studies</h4>
-        <p className="text-sm mb-3">
-          Four ablations isolate each component's contribution:
-        </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
-          {[
-            [
-              "No trust calibration",
-              "Falls back to equal-weight aggregation → isolates trust mechanism effect",
-            ],
-            [
-              "No progressive retrieval",
-              "Single-shot retrieval only → isolates progressive refinement effect",
-            ],
-            [
-              "No source partitioning",
-              "All agents retrieve from same corpus → isolates partitioning effect",
-            ],
-            [
-              "No adaptive triggering",
-              "Debate runs on every question → isolates confidence gate effect",
-            ],
-          ].map(([name, effect], i) => (
-            <div
-              key={i}
-              className="bg-[#f0f2f7] dark:bg-[#1a1d35] border border-[#e2e8f0] dark:border-[rgba(255,255,255,0.1)] rounded-md p-3"
-            >
-              <div className="font-semibold text-xs mb-1">{name}</div>
-              <div className="text-xs text-[#64748b] dark:text-[#94a3b8]">
-                {effect}
-              </div>
-            </div>
-          ))}
-        </div>
-
+        <DataTable
+          head={["Ablation", "What it isolates"]}
+          rows={[
+            ["No trust calibration", "Falls back to equal-weight aggregation → isolates the trust mechanism"],
+            ["No progressive retrieval", "Single-shot retrieval only → isolates progressive refinement"],
+            ["No source partitioning", "All agents retrieve from the same corpus → isolates partitioning"],
+            ["No adaptive triggering", "Debate runs on every question → isolates the confidence gate"],
+          ]}
+        />
         <Callout variant="info" title="📊 Statistical Validation">
           2 random seeds for the main matrix (3 for the pilot) + 95% confidence
           intervals + paired bootstrap + Cohen's d across all comparisons.
           Preempts the common reviewer criticism of single-run comparisons in
           MAD literature.
         </Callout>
+
+        <h4 className="text-sm font-bold mb-3">Threats to Validity</h4>
+        <DataTable
+          head={["Threat", "Status / mitigation"]}
+          rows={[
+            ["Retrieval noise and sparse coverage", "Cross-encoder reranking, citation-count filter, domain restriction; results stratified by retrieval-success rate."],
+            ["Injection is an explicit, artificial upper bound", "Stated early and confidently; a 20–30 question paraphrase-robustness check is planned but currently a named protocol limitation (L2)."],
+            ["Proof-only benchmarks (BrokenMath / BrokenArXiv)", "Appendix-only, 0% answer-type retention; never used for CCR."],
+            ["Single-card compute ceiling", "4-bit 24–27B stack on one 96 GB card; concurrency (8 rows + CUDA graphs) is the lever, not a second GPU."],
+            ["Hyperparameter sensitivity (α, β)", "Grid search before the matrix is frozen; no sensitivity result exists yet."],
+            ["Trust signal may not change behaviour", "Dec 2026 calibration + pilot is the necessary condition; a negative result is reported honestly as a finding about when evidence-grounded trust does/doesn't influence aggregation."],
+          ]}
+        />
       </Section>
 
       {/* ───────────── 10. Edge Cases & Failure Handling ───────────── */}
@@ -1193,266 +836,113 @@ export function Idea1Content() {
           10. Edge Cases &amp; Failure Handling
         </SectionTitle>
         <p className="text-sm mb-4">
-          Per blueprint §10. Each failure mode has documented detection,
-          prevention, mitigation, and recovery.
+          Each failure mode has documented detection, mitigation, and recovery.
         </p>
-        <div className="overflow-x-auto rounded-lg shadow-sm">
-          <table className="w-full border-collapse text-xs sm:text-sm">
-            <thead>
-              <tr>
-                {[
-                  "Failure Scenario",
-                  "Detection",
-                  "Mitigation",
-                  "Recovery",
-                ].map((h) => (
-                  <th
-                    key={h}
-                    className="p-2.5 text-left font-bold bg-[#f1f5f9] dark:bg-[rgba(255,255,255,0.06)] border-b-2 border-[#e2e8f0] dark:border-[rgba(255,255,255,0.15)] whitespace-nowrap"
-                  >
-                    {h}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {failures.map((f, i) => (
-                <tr
-                  key={i}
-                  className="border-b border-[#e2e8f0] dark:border-[rgba(255,255,255,0.08)] last:border-0 hover:bg-[#dce4ff] dark:hover:bg-[rgba(59,91,219,0.12)] even:bg-[#f8fafc] dark:even:bg-[rgba(255,255,255,0.03)] transition-colors"
-                >
-                  <td className="p-2.5 font-medium">{f.scenario}</td>
-                  <td className="p-2.5">{f.detection}</td>
-                  <td className="p-2.5">{f.mitigation}</td>
-                  <td className="p-2.5">{f.recovery}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <DataTable
+          head={["Failure scenario", "Detection", "Mitigation", "Recovery"]}
+          rows={failures.map((f) => [
+            strong(f.scenario),
+            f.detection,
+            f.mitigation,
+            f.recovery,
+          ])}
+        />
       </Section>
 
       {/* ───────────── 11. Risk Assessment ───────────── */}
-      <Section id="risk-assessment" accent="amber" className="animate-fade-up animate-delay-4">
+      <Section
+        id="risk-assessment"
+        accent="amber"
+        className="animate-fade-up animate-delay-4"
+      >
         <SectionTitle icon={TriangleAlert}>11. Risk Assessment</SectionTitle>
         <p className="text-sm mb-4">
-          Per blueprint §11. The highest-likelihood risk (timeline overload from
-          the matrix plus benchmark) has a pre-planned mitigation: Core run
-          first, then the Full run only after it lands. A new risk (novelty
-          erosion) has emerged with the publication of ConsensAgent (ACL
-          Findings 2025) — see below.
+          The highest-likelihood risk is timeline overload from the matrix plus
+          benchmark; the pre-planned mitigation is Core first, then Full only
+          after Core lands. The critical risk remains Challenge C — trust must
+          change behaviour — and a failed pilot is reported honestly. A newer
+          novelty-erosion risk follows ConsensAgent (Findings of ACL 2025): the
+          related-work section must carry an explicit mechanism comparison.
         </p>
         <RiskTable rows={risks} />
-        <div className="text-xs text-[#64748b] dark:text-[#94a3b8] mt-3 space-y-2">
-          <p className="mb-0">
-            <strong>Critical risk:</strong> Trust signal doesn't behaviorally
-            change output (Challenge C) — mitigated by the 24-item calibration
-            and Dec 2026 pilot before the matrix. If the pilot fails, the project
-            reframes to report the negative result honestly as a finding about
-            when evidence-grounded trust does/doesn't influence LLM aggregation
-            behavior.
-          </p>
-          <p className="mb-0">
-            <strong>Novelty erosion (NEW):</strong> Published mitigation methods
-            (ConsensAgent, ACL Findings 2025) now exist where none were assumed
-            at project outset. Differentiation argument must be sharper than
-            originally drafted. <strong>Mitigation:</strong> explicit comparison
-            table + mechanism-level differentiation (prompt refinement vs.
-            evidence-grounded numeric trust) in the related-work section. See §9
-            for baseline inclusion strategy.
-          </p>
-        </div>
       </Section>
 
-      {/* ───────────── 12. Month-by-Month Roadmap ───────────── */}
+      {/* ───────────── 12. Roadmap & Gates ───────────── */}
       <Section id="roadmap" className="animate-fade-up animate-delay-5">
-        <SectionTitle icon={Calendar}>
-          12. Month-by-Month Roadmap (Nov 2026 – Dec 2027)
-        </SectionTitle>
-        <p className="text-sm mb-4">
-          Per the execution plan: P0 released Nov 2026; N1 96 GB smoke + FP8
-          precision replication, WP-18, 24-item calibration and verifier audit
-          precede the G2 pilot in Dec
-          2026; G3 Core run Jan 2027; G4/G5 Full run plus the benchmark ladder
+        <SectionTitle icon={Calendar}>12. Roadmap &amp; Gates</SectionTitle>
+        <p className="text-sm mb-0">
+          P0 released Nov 2026; pilot Dec 2026; Core Jan 2027; Full + benchmark
           Feb 2027; human eval/SDT Mar; results freeze Apr; thesis chapters May;
-          thesis submit Jun; defence Jun/Jul; paper after defence Aug–Dec 2027.
-          No fixed conference deadline drives the schedule; the thesis clock
-          comes first.
-          <strong className="block mt-1">Note:</strong> If ConsensAgent is added
-          as B10, budget ~1 week in the Full-run phase for a lightweight
-          reimplementation or use published numbers where directly comparable.
+          submission Jun; defence Jun–Jul; paper Aug–Dec 2027. The
+          month-by-month plan, Gantt chart, gates, and milestone timeline live
+          on the <Link to="/roadmap" className={ROADMAP_LINK}>Roadmap page</Link>.
         </p>
-        <GanttTable phases={ganttPhases} />
-        <Timeline items={milestones} />
       </Section>
 
       {/* ───────────── 13. Implementation Order ───────────── */}
-      <Section id="implementation-order" accent="teal" className="animate-fade-up">
+      <Section
+        id="implementation-order"
+        accent="teal"
+        className="animate-fade-up"
+      >
         <SectionTitle icon={ClipboardList}>
           13. Implementation Order
         </SectionTitle>
-        <p className="text-sm mb-4">
-          Per blueprint §13 — exact build sequence with dependency reasoning.
-          Never build step N before step N-1.
+        <p className="text-sm mb-0">
+          The full build sequence with dependency reasoning is maintained on the{" "}
+          <Link to="/roadmap" className={ROADMAP_LINK}>Roadmap page</Link>.
+          Non-negotiable order: retrieval before the trust update; the core loop
+          before B9 (iMAD); the Dec 2026 calibration + pilot before the matrix;
+          and the N1 smoke + FP8 precision check before full-scale runs.
         </p>
-        <div className="space-y-3">
-          {[
-            {
-              step: 1,
-              title: "vLLM multi-model serving",
-              desc: "Nothing else testable without this. Verify all 3 checkpoints load + generate in 4-bit quant before writing orchestration. Done — three-model serving verified 16 Sep 2026.",
-            },
-            {
-              step: 2,
-              title: "Vanilla MAD reproduction (Du et al. 2023)",
-              desc: "Gate 0. Validates base debate loop independent of our additions. Isolates later bugs to our code. Done — 10/10 debates ran all 3 rounds.",
-            },
-            {
-              step: 3,
-              title: "Injection protocol (§5.4 Steps 1–6)",
-              desc: "Must exist before trust mechanism — trust calibration is only evaluable against a working stress test. Protocol and B8 injection wiring are in place; GPU pilot next.",
-            },
-            {
-              step: 4,
-              title: "N1 smoke + FP8 precision check, calibration, verifier audit, then pilot (Nov–Dec 2026)",
-              desc: "Highest-risk assumption (Section 0). Run the N1 96 GB smoke + FP8 precision replication (600 debates, $5.21), WP-18 placebo/oracle, the 24-item calibration, and the verifier audit (150–200 pairs; lexical baseline 0.58 balanced accuracy; target ≥0.75, κ ≥0.60) before the 50-question Month-1 pilot and 100–150-question G2 pilot.",
-            },
-            {
-              step: 5,
-              title: "Claim decomposition + source-partitioned retrieval",
-              desc: "Trust formula inputs (Vᵢ, Hᵢ, nᵢ) are outputs of retrieval. Built in P0: claim decomposition, claim-domain routing, verifier interface, and retrieval endpoints. GPU pilot next.",
-            },
-            {
-              step: 6,
-              title: "Trust update function (logit accumulation → softmax → simplex projection)",
-              desc: "Built and unit-tested in P0: min ≥ floor, Σ = 1, max ≤ max(ceiling, 1/N) over 10k draws for N = 1, 3, 5. Clamp-then-renormalise is the wrong order.",
-            },
-            {
-              step: 7,
-              title: "Full debate loop (LangGraph state machine)",
-              desc: "Core loop, endpoints, manifest, and resume are wired at P0. P0 gate is 13/13; WP-13 (B8-no-trust prompt split) landed, and WP-18 remains for placebo/oracle.",
-            },
-            {
-              step: 8,
-              title: "Baselines B1–B4",
-              desc: "Built and mock-verified. B3 and B4-matched are part of the executable matrix.",
-            },
-            {
-              step: 9,
-              title: "Baselines B5–B6 (Self-Consistency, MoA)",
-              desc: "Independent of core mechanism. Can be built in parallel with step 10.",
-            },
-            {
-              step: 10,
-              title: "Baseline B9 (iMAD reimplementation)",
-              desc: "Highest difficulty (~10 days). Sequenced last — benefits from confidence-scoring-adjacent code from step 1.",
-            },
-            {
-              step: 11,
-              title: "N1 96 GB smoke + FP8 precision check (two-phase gate)",
-              desc: "The FP8 precision replication is 600 debates / $5.21 at $1.50/GPU-h all-in. Run 20 questions across the FP8 check stack — verify claim tags parse, injection works, trust math runs, LangGraph completes K=3. The offline check passes; the 96 GB hardware smoke has not yet been run. Fix any model-specific issues before the matrix.",
-            },
-            {
-              step: 12,
-              title: "Core run (24 runs) then Full run target",
-              desc: "G3 Core: 4 arms × GPQA 400 / MMLU-Pro 400 / HLE 200 × 2 seeds = 24 runs, 8,000 debates (≈46 GPU-h at 172.7 debates/h). Row 2/24 (GPQA-Main seed 1, B8 vs B8-no-trust) complete Nov 2026: 798 debates, McNemar p=0.086 (n.s.). G4/G5 Full primary: 32 rows at 300 items/dataset with the gold-evidence oracle on SciClaimBench (9,600 debates); the 36-row gold-answer alternate is 10,800 debates. Core + Full ≈ 81.06 GPU-h ≈ $121.59. B8-placebo/B8-oracle are WP-18.",
-            },
-            {
-              step: 13,
-              title: "Human evaluation + failure analysis (Mar 2027)",
-              desc: "Requires completed experimental results to annotate against.",
-            },
-          ].map(({ step, title, desc }) => (
-            <div
-              key={step}
-              className="flex gap-3 items-start bg-[#f0f2f7] dark:bg-[#1a1d35] border border-[#e2e8f0] dark:border-[rgba(255,255,255,0.1)] rounded-md p-3 sm:p-4 hover:border-[#3b5bdb] dark:hover:border-[#3b5bdb] transition-colors"
-            >
-              <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-[#3b5bdb] text-white font-bold text-xs flex-shrink-0 shadow-[0_2px_8px_rgba(59,91,219,.35)]">
-                {step}
-              </span>
-              <div className="min-w-0">
-                <div className="font-semibold text-sm">{title}</div>
-                <div className="text-xs text-[#64748b] dark:text-[#94a3b8] mt-0.5">
-                  {desc}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <Callout
-          variant="warning"
-          title="🚫 What Should Never Be Built Out of Order"
-          className="mt-4"
-        >
-          <ul className="text-sm space-y-1">
-            <li>
-              Never build trust update <strong>before</strong> retrieval exists
-              (step 6 before step 5) — it would have nothing real to operate on.
-            </li>
-            <li>
-              Never build B9 (iMAD) <strong>before</strong> the core system
-              (steps 1–7) — B9 reuses debate-loop infrastructure.
-            </li>
-            <li>
-              Never run the matrix (step 12) <strong>before</strong> the Dec 2026
-              calibration + pilot (step 4) confirms the core assumption.
-            </li>
-            <li>
-              Never skip the N1 smoke + FP8 precision check (step 11) — a $5.21
-              precision replication prevents discovering model-specific issues at full scale.
-            </li>
-          </ul>
-        </Callout>
       </Section>
 
       {/* ───────────── Q1 Justification ───────────── */}
-      <Section id="publication-justification" className="animate-fade-up animate-delay-1">
+      <Section
+        id="publication-justification"
+        className="animate-fade-up animate-delay-1"
+      >
         <SectionTitle icon={Target}>Q1 Publication Justification</SectionTitle>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="bg-[#d3f9d8] dark:bg-[rgba(12,166,120,0.15)] border border-[#0ca678] dark:border-[rgba(12,166,120,0.3)] rounded-md p-4">
-            <div className="font-bold text-xs uppercase tracking-wider text-[#0ca678] dark:text-[#6ee7b7] mb-1">
-              Novel Mechanism
-            </div>
-            <p className="text-sm">
+        <TwoCol>
+          <ColBox>
+            <h4 className="text-sm font-bold mb-2">Novel Mechanism</h4>
+            <p className="text-sm mb-0">
               No prior work provides an in-session, evidence-grounded trust
               calibration mechanism for multi-agent debate. CCR/MPR/ECR metrics
               are new.
             </p>
-          </div>
-          <div className="bg-[#dbe4ff] dark:bg-[rgba(28,126,214,0.15)] border border-[#1c7ed6] dark:border-[rgba(28,126,214,0.3)] rounded-md p-4">
-            <div className="font-bold text-xs uppercase tracking-wider text-[#1c7ed6] dark:text-[#93c5fd] mb-1">
-              Rigorous Evaluation
-            </div>
-            <p className="text-sm">
+          </ColBox>
+          <ColBox>
+            <h4 className="text-sm font-bold mb-2">Rigorous Evaluation</h4>
+            <p className="text-sm mb-0">
               4 executable arms with a 6-arm target, 3 Core datasets, 2 seeds,
-              and statistical testing with
-              95% CIs and effect sizes (Cohen's d).
+              and statistical testing with 95% CIs and effect sizes (Cohen's d).
             </p>
-          </div>
-          <div className="bg-[#d3f9d8] dark:bg-[rgba(12,166,120,0.15)] border border-[#0ca678] dark:border-[rgba(12,166,120,0.3)] rounded-md p-4">
-            <div className="font-bold text-xs uppercase tracking-wider text-[#0ca678] dark:text-[#6ee7b7] mb-1">
-              Open Reproducibility
-            </div>
-            <p className="text-sm">
-              Full protocol released as a benchmark for future sycophancy
-              mitigation research. Evaluation harness independently reusable.
+          </ColBox>
+          <ColBox>
+            <h4 className="text-sm font-bold mb-2">Open Reproducibility</h4>
+            <p className="text-sm mb-0">
+              The full protocol is released as a benchmark for future sycophancy
+              mitigation research; the evaluation harness is independently
+              reusable.
             </p>
-          </div>
-          <div className="bg-[#dbe4ff] dark:bg-[rgba(28,126,214,0.15)] border border-[#1c7ed6] dark:border-[rgba(28,126,214,0.3)] rounded-md p-4">
-            <div className="font-bold text-xs uppercase tracking-wider text-[#1c7ed6] dark:text-[#93c5fd] mb-1">
-              Timely Topic
-            </div>
-            <p className="text-sm">
+          </ColBox>
+          <ColBox>
+            <h4 className="text-sm font-bold mb-2">Timely Topic</h4>
+            <p className="text-sm mb-0">
               Inter-agent sycophancy is actively studied in 2025–2026. This
-              fills the missing mitigation piece at exactly the right time.
+              fills the missing mitigation piece.
             </p>
-          </div>
-        </div>
+          </ColBox>
+        </TwoCol>
       </Section>
 
       {/* ───────────── 14. Supervisor Explanation ───────────── */}
-      <Section id="supervisor-explanation" accent="blue" className="animate-fade-up">
+      <Section
+        id="supervisor-explanation"
+        accent="blue"
+        className="animate-fade-up"
+      >
         <SectionTitle icon={GraduationCap}>
           14. Supervisor Explanation (5-Minute Pitch)
         </SectionTitle>
@@ -1463,7 +953,7 @@ export function Idea1Content() {
               When AI systems debate each other to reach better answers, a
               confident-but-wrong majority can talk a correct minority into
               changing its answer — even with no new evidence — defeating the
-              whole purpose of having them debate.
+              purpose of having them debate.
             </p>
           </ColBox>
           <ColBox>
@@ -1472,81 +962,31 @@ export function Idea1Content() {
             </h4>
             <p className="text-sm leading-relaxed mb-0">
               We make each AI's vote worth more or less depending on whether its
-              claims actually check out against real scientific papers — not
-              based on how many other AIs agree with it.
+              claims actually check out against real scientific papers — not on
+              how many other AIs agree with it.
             </p>
           </ColBox>
         </TwoCol>
-        <h4 className="text-sm font-bold mt-4 mb-3">
-          Internal Workflow (Plain Language)
-        </h4>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 mb-4">
-          {[
-            {
-              step: "1",
-              title: "Independent Answers",
-              desc: "Three different AI models each independently answer the question.",
-            },
-            {
-              step: "2",
-              title: "Fact-Check Claims",
-              desc: "Each one's claims get checked against real papers — like a fact-checker.",
-            },
-            {
-              step: "3",
-              title: "Adjust Credibility",
-              desc: "Whoever's claims hold up gains credibility; whoever gets contradicted loses it.",
-            },
-            {
-              step: "4",
-              title: "Revise & Debate",
-              desc: "They see each other's answers and revise — aware of their own credibility standing.",
-            },
-            {
-              step: "5",
-              title: "Repeat (K=3)",
-              desc: "This repeats for a few rounds, building an evidence trail.",
-            },
-            {
-              step: "6",
-              title: "Weighted Vote",
-              desc: "Final answer decided by credibility-weighted vote, not simple majority.",
-            },
-          ].map((s) => (
-            <div
-              key={s.step}
-              className="bg-[#f0f2f7] dark:bg-[rgba(255,255,255,0.04)] border border-[#e2e8f0] dark:border-[rgba(255,255,255,0.1)] rounded-md p-3 text-center"
-            >
-              <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-[#3b5bdb] text-white font-bold text-sm mb-2 mx-auto shadow-[0_2px_8px_rgba(59,91,219,.35)]">
-                {s.step}
-              </span>
-              <div className="font-semibold text-xs mb-1">{s.title}</div>
-              <p className="text-xs text-[#64748b] dark:text-[#94a3b8] mb-0">
-                {s.desc}
-              </p>
-            </div>
-          ))}
-        </div>
-        <Callout
-          variant="warning"
-          title="🔬 Why this is different from ConsensAgent"
-        >
-          There's now a published paper (ConsensAgent, ACL Findings 2025) that
-          also tries to fix multi-agent sycophancy — but it works by{" "}
-          <strong>rewriting the prompts</strong>, not by scoring claims against
-          external evidence. We are the{" "}
-          <strong>evidence-fact-checking approach</strong>; they are the
-          <strong>prompt-tuning approach</strong>. Both aim to reduce
-          sycophancy; the mechanism difference (external retrieval vs. textual
-          refinement) is the key distinction.
-        </Callout>
+        <ColBox className="mt-4">
+          <h4 className="text-sm font-bold mb-2">
+            Internal Workflow (Plain Language)
+          </h4>
+          <ol className="text-sm space-y-1 mb-0 pl-4 list-decimal">
+            <li>Three different AI models answer the question independently.</li>
+            <li>Each answer's claims are checked against real papers, like a fact-checker.</li>
+            <li>Claims that hold up gain credibility; contradicted claims lose it.</li>
+            <li>Agents see peer answers and revise, aware of their own credibility standing.</li>
+            <li>The loop repeats for K=3 rounds, building an evidence trail.</li>
+            <li>The final answer is a credibility-weighted vote, not a simple majority.</li>
+          </ol>
+        </ColBox>
         <Callout variant="info" title="📖 Worked Example">
           Given one 2023 clinical trial paper and asked "Does Drug X lower blood
-          pressure in adults over 60?" — three reviewers give different answers.
-          The system checks each claim against the actual paper. The paper shows
-          a modest effect in patients with a specific condition — matching
-          Reviewer C. Their credibility goes up; A and B's go down.{" "}
-          <strong>Output:</strong> "Yes, but only in [that subgroup]" with
+          pressure in adults over 60?", three reviewers give different answers.
+          The system checks each claim against the paper. It shows a modest
+          effect in patients with a specific condition — matching Reviewer C.
+          Their credibility goes up; A and B's go down.{" "}
+          <strong>Output:</strong> "Yes, but only in [that subgroup]" with a
           citation.
         </Callout>
       </Section>
@@ -1557,131 +997,74 @@ export function Idea1Content() {
           15. Team Explanation (Beginner-Friendly)
         </SectionTitle>
         <p className="text-sm mb-4">
-          <strong>Simple overview:</strong> Think of three friends trying to
-          answer a hard trivia question. Normally, if two friends agree and one
-          disagrees, you'd go with the two. Our system instead weights each
+          <strong>Simple overview:</strong> think of three friends trying to
+          answer a hard trivia question. Normally, if two agree and one
+          disagrees, you would go with the two. Our system instead weights each
           friend's opinion by how well they can back it up with real sources —
           so the one friend with solid evidence can outvote the other two if
-          they're just guessing confidently.
+          they are just guessing confidently.
         </p>
-        <TwoCol>
-          <ColBox>
-            <h4 className="text-sm font-bold mb-2">🎯 How It Works</h4>
-            <ol className="text-sm space-y-1 mb-0 pl-4">
-              <li>Ask three different AI models the question</li>
-              <li>Each gives an answer with reasoning</li>
-              <li>We break their reasoning into individual claims</li>
-              <li>We look up real research papers to check each claim</li>
-              <li>
-                Claims that check out earn trust points; contradicted claims
-                lose them
-              </li>
-              <li>The AIs see each other's answers and may revise</li>
-              <li>Repeat steps 3–6 a few times</li>
-              <li>Final answer is based on trust points, not just agreement</li>
-            </ol>
-          </ColBox>
-          <ColBox>
-            <h4 className="text-sm font-bold mb-2">📖 Glossary</h4>
-            <div className="space-y-2 text-sm">
-              {[
-                [
-                  "LLM",
-                  "The AI model doing the reasoning (e.g., Qwen, Mistral)",
-                ],
-                [
-                  "Multi-Agent Debate",
-                  "Multiple AI models discussing a question together",
-                ],
-                [
-                  "Sycophancy",
-                  "An AI changing its answer to agree with others without good reason",
-                ],
-                [
-                  "RAG",
-                  "Looking up real documents to check an answer instead of relying on AI memory",
-                ],
-                [
-                  "Trust Score",
-                  "Our system's running credibility scorecard for each AI, updated each round",
-                ],
-                [
-                  "Baseline",
-                  "An existing method we compare against to prove ours is better",
-                ],
-                [
-                  "Ablation",
-                  "Removing one piece of the system to measure how much it matters",
-                ],
-              ].map(([term, def]) => (
-                <div key={term} className="flex gap-2">
-                  <span className="font-semibold text-[#3b5bdb] dark:text-[#93c5fd] whitespace-nowrap">
-                    {term}:
-                  </span>
-                  <span className="text-[#64748b] dark:text-[#94a3b8]">
-                    {def}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </ColBox>
-        </TwoCol>
-        <Callout variant="info" title="🤔 How we differ from ConsensAgent">
-          Another team also published a sycophancy fix (ConsensAgent, ACL 2025).
-          Their approach: <strong>rewrite the prompts</strong> to reduce
-          sycophancy. Ours:{" "}
-          <strong>score each claim against real papers</strong>
-          and weight votes by evidence. Both reduce sycophancy; the mechanism is
-          completely different.
-        </Callout>
+        <DataTable
+          head={["Term", "Meaning"]}
+          rows={[
+            ["LLM", "The AI model doing the reasoning (e.g., Qwen, Mistral)"],
+            ["Multi-Agent Debate", "Multiple AI models discussing a question together"],
+            ["Sycophancy", "An AI changing its answer to agree with others without good reason"],
+            ["RAG", "Looking up real documents to check an answer instead of relying on AI memory"],
+            ["Trust Score", "Our running credibility scorecard for each AI, updated each round"],
+            ["Baseline", "An existing method we compare against to prove ours is better"],
+            ["Ablation", "Removing one piece of the system to measure how much it matters"],
+          ]}
+        />
         <Callout variant="success" title="🧠 Analogy: Courtroom">
           Majority-vote debate is like a jury that goes with whichever two
-          jurors talk the loudest. Our system is more like a judge who actually
-          checks the evidence each juror cites — and rules based on whose
-          evidence holds up, not who's more persuasive or more numerous.
+          jurors talk the loudest. Our system is more like a judge who checks the
+          evidence each juror cites — and rules on whose evidence holds up, not
+          who is more persuasive or more numerous.
         </Callout>
       </Section>
 
       {/* ───────────── 16. Expected Research Outcome ───────────── */}
-      <Section id="expected-outcome" accent="teal" className="animate-fade-up animate-delay-2">
+      <Section
+        id="expected-outcome"
+        accent="teal"
+        className="animate-fade-up animate-delay-2"
+      >
         <SectionTitle icon={Trophy}>16. Expected Research Outcome</SectionTitle>
         <TwoCol>
           <ColBox>
             <h4 className="text-sm font-bold mb-2">Pre-Registered Targets</h4>
-            <ul className="text-sm space-y-1 mb-0 pl-4">
+            <ul className="text-sm space-y-1 mb-0 pl-4 list-disc">
               <li>
-                <strong>20–30% CCR reduction target</strong> vs. standard MAD on
+                <strong>20–30% CCR reduction</strong> vs standard MAD on
                 injected-pressure benchmarks — a target, not a result.
               </li>
               <li>
-                <strong>
-                  Comparison against ConsensAgent
-                </strong>{" "}
-                (closest published mitigation) on the same injected sets, with
-                the mechanism difference stated explicitly.
+                <strong>Comparison against ConsensAgent</strong> (closest
+                published mitigation) on the same injected sets, with the
+                mechanism difference stated explicitly.
               </li>
               <li>
-                <strong>ECR &gt; 0.80 target</strong> on GPQA-Main — trust scores
-                should track actual correctness, but the endpoint is frozen before
-                the matrix.
+                <strong>ECR &gt; 0.80</strong> on GPQA-Main; the endpoint is
+                frozen before the matrix.
               </li>
               <li>
-                <strong>No accuracy regression</strong> on GPQA-Main / MMLU-Pro
-                STEM — anti-sycophancy gains must not cost baseline correctness.
+                <strong>No accuracy regression</strong> on GPQA-Main /
+                MMLU-Pro STEM — anti-sycophancy gains must not cost baseline
+                correctness.
               </li>
             </ul>
           </ColBox>
           <ColBox>
             <h4 className="text-sm font-bold mb-2">Publication Plan</h4>
             <p className="text-sm mb-0">
-              The field has moved faster than anticipated — ACL Findings 2025
-              already has a published mitigation (ConsensAgent). This raises the
-              bar but sharpens our contribution: to our knowledge, the only
-              evidence-grounded, numeric, adversarially-tested approach.
-              Primary target: <strong>TACL (rolling)</strong>, written after the
-              thesis defence. Fallback: <strong>EMNLP 2028</strong>; workshop as
-              the safe floor. No result exists yet, so no venue claim is a
-              promise.
+              The field moved faster than anticipated — ACL Findings 2025
+              already has a published mitigation (ConsensAgent). That raises the
+              bar but sharpens the contribution: to our knowledge, the only
+              evidence-grounded, numeric, adversarially-tested approach. Primary
+              target: <strong>TACL (rolling)</strong>, written after the thesis
+              defence. Fallback: <strong>EMNLP 2028</strong>; a workshop is the
+              safe floor. No result exists yet, so no venue claim is a promise.
             </p>
           </ColBox>
         </TwoCol>
@@ -1692,95 +1075,84 @@ export function Idea1Content() {
           {[
             {
               icon: "📊",
-              label:
-                "Pre-registered CCR reduction over B8-no-trust on the injected sets, with 95% CIs; B3/B4-matched are controls, not headline competitors.",
+              text: "Pre-registered CCR reduction over B8-no-trust on the injected sets, with 95% CIs; B3/B4-matched are controls, not headline competitors.",
             },
             {
               icon: "📐",
-              label:
-                "ECR > 0.80 achieved on at least the primary evaluation dataset, or the calibration endpoint is reported as missed.",
+              text: "ECR > 0.80 on at least the primary evaluation dataset, or the calibration endpoint is reported as missed.",
             },
             {
               icon: "🧪",
-              label:
-                "Dec 2026 calibration + pilot confirms trust weight behaviourally affects aggregation output (necessary condition — reframes the result if it fails).",
+              text: "The Dec 2026 calibration + pilot confirms trust weight behaviourally affects aggregation output; this is a necessary condition and reframes the result if it fails.",
             },
             {
               icon: "📝",
-              label:
-                "Completed FYDP thesis + submitted paper (minimum workshop, target TACL), fully reproducible codebase released.",
+              text: "Completed FYDP thesis + submitted paper (minimum workshop, target TACL), with a fully reproducible codebase released.",
             },
           ].map((c) => (
             <div
-              key={c.label}
+              key={c.text}
               className="flex gap-3 items-start bg-[#f0f2f7] dark:bg-[rgba(255,255,255,0.04)] border border-[#e2e8f0] dark:border-[rgba(255,255,255,0.1)] rounded-md p-3"
             >
               <span className="text-lg flex-shrink-0">{c.icon}</span>
-              <p className="text-sm mb-0">{c.label}</p>
+              <p className="text-sm mb-0">{c.text}</p>
             </div>
           ))}
         </div>
       </Section>
 
       {/* ───────────── 17. Future Extensions ───────────── */}
-      <Section id="future-extensions" className="animate-fade-up animate-delay-3">
+      <Section
+        id="future-extensions"
+        className="animate-fade-up animate-delay-3"
+      >
         <SectionTitle icon={Telescope}>17. Future Extensions</SectionTitle>
         <TwoCol>
           <ColBox>
-            <div className="flex items-center gap-2 mb-2">
-              <span className="text-[#3b5bdb] dark:text-[#93c5fd]">🎓</span>
-              <h4 className="text-sm font-bold mb-0">MSc/PhD Research</h4>
-            </div>
+            <h4 className="text-sm font-bold mb-2">🎓 MSc/PhD Research</h4>
             <p className="text-sm leading-relaxed mb-0">
-              The trust mechanism's convergence properties for N &gt; 3 agents
-              are flagged as future work. A PhD-scope extension could pursue
-              formal convergence theorems rather than our bounded
-              design-property propositions.
+              Convergence properties for N &gt; 3 agents are future work. A
+              PhD-scope extension could pursue formal convergence theorems
+              rather than the bounded design-property propositions used here.
             </p>
           </ColBox>
           <ColBox>
-            <div className="flex items-center gap-2 mb-2">
-              <span className="text-[#3b5bdb] dark:text-[#93c5fd]">🌐</span>
-              <h4 className="text-sm font-bold mb-0">Open-Source Framework</h4>
-            </div>
+            <h4 className="text-sm font-bold mb-2">🌐 Open-Source Framework</h4>
             <p className="text-sm leading-relaxed mb-0">
-              The CCR/MPR/ECR evaluation harness is independently valuable as a
-              released tool — other researchers testing their own
-              anti-sycophancy methods could adopt it as a standard benchmark.
+              The CCR/MPR/ECR harness is independently valuable — other
+              researchers testing anti-sycophancy methods could adopt it as a
+              standard benchmark.
             </p>
           </ColBox>
           <ColBox>
-            <div className="flex items-center gap-2 mb-2">
-              <span className="text-[#3b5bdb] dark:text-[#93c5fd]">⚖️</span>
-              <h4 className="text-sm font-bold mb-0">
-                Cross-Domain Generalization
-              </h4>
-            </div>
+            <h4 className="text-sm font-bold mb-2">
+              ⚖️ Cross-Domain Generalization
+            </h4>
             <p className="text-sm leading-relaxed mb-0">
-              Source-partitioned retrieval + trust-calibration generalizes
+              Source-partitioned retrieval plus trust calibration generalises
               beyond scientific QA to legal reasoning against case law, medical
               reasoning against clinical literature, and other domains with
-              retrievable ground-truth-adjacent evidence.
+              retrievable, ground-truth-adjacent evidence.
             </p>
           </ColBox>
           <ColBox>
-            <div className="flex items-center gap-2 mb-2">
-              <span className="text-[#3b5bdb] dark:text-[#93c5fd]">🧠</span>
-              <h4 className="text-sm font-bold mb-0">
-                Cross-Session Trust Memory
-              </h4>
-            </div>
+            <h4 className="text-sm font-bold mb-2">🧠 Cross-Session Trust Memory</h4>
             <p className="text-sm leading-relaxed mb-0">
               Long-term trust memory across sessions, multimodal evidence
-              grounding, and domain-specific calibration — named in the original
-              proposal's future-directions FAQ as canonical extensions.
+              grounding, and domain-specific calibration — the canonical
+              extensions named in the original proposal's future-directions
+              FAQ.
             </p>
           </ColBox>
         </TwoCol>
       </Section>
 
       {/* ───────────── 18. Final Critical Review ───────────── */}
-      <Section id="final-review" accent="rose" className="animate-fade-up animate-delay-4">
+      <Section
+        id="final-review"
+        accent="rose"
+        className="animate-fade-up animate-delay-4"
+      >
         <SectionTitle icon={Search}>
           18. Final Critical Review (Reviewer #2 Mode)
         </SectionTitle>
@@ -1792,96 +1164,57 @@ export function Idea1Content() {
             </strong>{" "}
             Planned mitigation: a hyperparameter sensitivity analysis (grid
             search) before the matrix is frozen. No sensitivity result exists
-            yet. This section must be prominent in the paper, not buried in an
-            appendix.
+            yet. This must be prominent in the paper, not buried in an appendix.
           </p>
           <p className="mb-2">
             <strong>
               "Propositions 2–3 aren't real theorems — why call them
               Propositions at all?"
             </strong>{" "}
-            Already correctly reframed as "design properties, not global
-            convergence theorems." Expect at least one reviewer to push on this
-            framing.
+            They are already correctly reframed as "design properties, not
+            global convergence theorems." Expect at least one reviewer to push
+            on this framing.
           </p>
           <p className="mb-0">
             <strong>
               "Is 20–30% CCR reduction actually a big number, or is it modest
               window-dressing?"
             </strong>{" "}
-            Needs contextualization against the observed baseline collapse rate
-            in the pilot so readers understand the relative magnitude; no
-            baseline rate is assumed before the run.
+            It needs contextualisation against the observed baseline collapse
+            rate in the pilot; no baseline rate is assumed before the run.
           </p>
         </Callout>
         <h4 className="text-sm font-bold mt-4 mb-3">
           🧪 Missing Experiments a Sharp Reviewer Would Demand
         </h4>
-        <div className="space-y-2 mb-4">
-          {[
-            {
-              icon: "⏱️",
-              q: "Latency/Cost-Benefit Analysis",
-              a: "System runs ~9 forward passes vs. 1 for single-agent. Add a compute-cost-vs-CCR-reduction table as a supplementary result.",
-            },
-            {
-              icon: "🔄",
-              q: "Paraphrase Robustness",
-              a: "Currently named as a known protocol limitation (L2) but not tested. A small (20–30 question) check would strengthen the paper.",
-            },
-            {
-              icon: "🔢",
-              q: "K-Sensitivity (Debate Rounds)",
-              a: "N-scaling is planned, but K is fixed at 3 throughout. Reviewer may ask if results are an artifact of this specific round count.",
-            },
-          ].map((e) => (
-            <div
-              key={e.q}
-              className="flex gap-3 items-start bg-[#f0f2f7] dark:bg-[rgba(255,255,255,0.04)] border border-[#e2e8f0] dark:border-[rgba(255,255,255,0.1)] rounded-md p-3"
-            >
-              <span className="text-base flex-shrink-0">{e.icon}</span>
-              <div>
-                <span className="font-semibold text-sm">{e.q}:</span>
-                <span className="text-sm text-[#64748b] dark:text-[#94a3b8]">
-                  {" "}
-                  {e.a}
-                </span>
-              </div>
-            </div>
-          ))}
-        </div>
-        <Callout variant="warning" title="📖 Load-Bearing Reading">
-          Before the writing phase, schedule one dedicated reading/discussion
-          session on <strong>ConsensAgent</strong> (Pitre et al., ACL Findings
-          2025) and <strong>Estornell &amp; Liu</strong> (NeurIPS 2024 Main
-          Track). Both are load-bearing, not optional background — ConsensAgent
-          is our closest published competitor, and Estornell &amp; Liu provides
-          the formal context for Propositions 1–3. Re-verify both venues before
-          the thesis cites them.
-        </Callout>
-        <Callout
-          variant="warning"
-          title="🗣️ Reviewer Criticisms (Ranked by Severity)"
-        >
-          <ol className="text-sm space-y-1 mb-0 pl-4">
+        <DataTable
+          head={["Experiment", "What to add"]}
+          rows={[
+            ["⏱️ Latency/Cost-Benefit Analysis", "The system runs ~9 forward passes vs 1 for single-agent. Add a compute-cost-vs-CCR-reduction table as a supplementary result."],
+            ["🔄 Paraphrase Robustness", "Currently a named protocol limitation (L2), not tested. A small 20–30 question check would strengthen the paper."],
+            ["🔢 K-Sensitivity (Debate Rounds)", "N-scaling is planned, but K is fixed at 3 throughout. A reviewer may ask whether results are an artifact of the round count."],
+          ]}
+        />
+        <Callout variant="warning" title="🗣️ Reviewer Criticisms (Ranked by Severity)">
+          <ol className="text-sm space-y-1 mb-0 pl-4 list-decimal">
             <li>
               <strong>
                 "How is this different from ConsensAgent's prompt-refinement
                 mitigation?"
               </strong>{" "}
-              — ConsensAgent uses static/dynamic prompt refinement (textual
+              — ConsensAgent uses static/dynamic prompt refinement (a textual
               intervention); ours uses a numeric, formally bounded trust score
-              grounded in <em>external</em> retrieved evidence, not prompt-level
-              adjustment. We are tested against adversarial injected pressure;
-              they target naturally occurring sycophancy. Differentiation must
-              be explicit in §3 related-work table.
+              grounded in <em>external</em> retrieved evidence. We test against
+              adversarial injected pressure; they target naturally occurring
+              sycophancy. Differentiation must be explicit in the §3
+              related-work table.
             </li>
             <li>
               <strong>
                 "How is this different from iMAD's confidence-weighted
                 aggregation?"
               </strong>{" "}
-              — External evidence vs. same-context confidence signal: stated in
+              — External evidence vs same-context confidence signal; stated in
               the first paragraph of the results section.
             </li>
             <li>
@@ -1889,15 +1222,22 @@ export function Idea1Content() {
                 "Your injection protocol is artificially explicit — real
                 sycophancy is subtler."
               </strong>{" "}
-              — Honest upper-bound scenario, stated early and confidently.
+              — An honest upper-bound scenario, stated early and confidently.
             </li>
             <li>
               <strong>"Two core citations aren't peer-reviewed."</strong> —
-              Addressed via proactive disclosure; same framing in related-work
-              section.
+              Addressed via proactive disclosure and the same framing in the
+              related-work section.
             </li>
           </ol>
         </Callout>
+        <p className="text-xs text-[#64748b] dark:text-[#94a3b8] mb-0">
+          <strong>Load-bearing reading:</strong> schedule one dedicated session
+          on ConsensAgent (Pitre et al., Findings of ACL 2025) and Estornell
+          &amp; Liu (NeurIPS 2024 Main Track) before writing. Both are
+          load-bearing, not optional background; re-verify both venues before
+          the thesis cites them.
+        </p>
       </Section>
     </>
   );

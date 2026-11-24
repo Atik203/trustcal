@@ -12,7 +12,7 @@ import { cn } from "@/lib/utils";
  * Core is 24 runs / 8,000 debates. Full is 32 rows / 9,600 debates at
  * 300 items/dataset with the gold-evidence oracle on SciClaimBench; the
  * 36-row gold-answer alternate is 10,800 debates. The remaining
- * 23,798-debate programme is 137.80 GPU-h ≈ $209.26; hard stop $300.
+ * 23,798-debate programme is 139.13 GPU-h ≈ $209.25; hard stop $300.
  */
 
 interface Stage {
@@ -144,9 +144,9 @@ export function CostTable() {
                 All stages · 23,798 debates · hard stop $300
               </td>
               <td className="p-2.5 font-semibold whitespace-nowrap">—</td>
-              <td className="p-2.5 font-mono whitespace-nowrap">137.80</td>
+              <td className="p-2.5 font-mono whitespace-nowrap">139.13</td>
               <td className="p-2.5 font-mono font-extrabold whitespace-nowrap text-[#1e2d3d] dark:text-[#e2e8f0]">
-                $209.26
+                $209.25
               </td>
             </tr>
           </tbody>
@@ -161,7 +161,7 @@ export function CostTable() {
         debates: completed Core rows and reusable Core→Full cells are excluded.
         The 96 GB FP8 stack is not the main Full
         matrix: it covers the N1 smoke plus the 600-debate GPQA precision
-        replication. The remaining programme is 137.80 GPU-h ≈ $209.26 at
+        replication. The remaining programme is 139.13 GPU-h ≈ $209.25 at
         $1.50/GPU-h all-in; hard stop $300. Post-FYDP scaling-law testing is
         outside this budget.
       </p>
@@ -259,8 +259,8 @@ export function CostTable() {
         the old 2-way eager baseline: 3.3× faster and ~69% cheaper per debate.
         Core is 24 runs /
         8,000 debates (~46 GPU-h); Full is 32 rows / 9,600 debates; the 36-row
-        alternate is 10,800. The remaining 23,798-debate programme is 137.80
-        GPU-h ≈ $209.26; hard stop $300. Prices are volatile — re-run the
+        alternate is 10,800. The remaining 23,798-debate programme is 139.13
+        GPU-h ≈ $209.25; hard stop $300. Prices are volatile — re-run the
         market query before renting.
       </p>
 

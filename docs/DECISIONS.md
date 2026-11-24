@@ -73,7 +73,7 @@ Approved architecture, hardware, and environment decisions. Add an entry before 
 
 **What it cannot validate:** three real models at once, KV-cache pressure on the final stack, FP8 serving, final-model behavior, or the cloud hardware-smoke gate.
 
-**Expected effect:** the matrix GPU-hours do not change; the free slice reduces avoidable cloud debugging and retry overhead. Planning offset is **$20–50 direct**, with additional risk avoidance if it prevents a failed Core/Full rerun. The **$600** hard stop remains; the old **$500–600** planning range is superseded by the measured **≈ $104** Core + Full (172.7 debates/h at $1.50/GPU-h all-in, 24 Nov 2026).
+**Expected effect:** the matrix GPU-hours do not change; the free slice reduces avoidable cloud debugging and retry overhead. Planning offset is **$20–50 direct**, with additional risk avoidance if it prevents a failed Core/Full rerun. The **$300** project hard stop remains (tightened from $600 on 24 Nov 2026); the old **$500–600** planning range is superseded by the measured **≈ $104** Core + Full (172.7 debates/h at $1.50/GPU-h all-in, 24 Nov 2026).
 
 ## 2026-11-14 — University H200 MIG access
 

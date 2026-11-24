@@ -4,7 +4,8 @@ const QUICK_LINKS = [
   { to: '/', label: 'Overview' },
   { to: '/idea/1', label: 'Idea 1' },
   { to: '/roadmap', label: 'Roadmap' },
-  { to: '/proposal', label: 'Proposal' },
+  { to: '/methodology', label: 'Methodology' },
+  { to: '/results', label: 'Results' },
 ];
 
 const CONTACT_LINKS = [

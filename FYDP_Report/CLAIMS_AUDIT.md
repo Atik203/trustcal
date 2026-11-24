@@ -83,7 +83,7 @@ Line numbers are the current lines after editing. Old text is quoted in short fo
 | Verifier human audit not done; lexical default | `trustcal/IMPLEMENTATION_STATUS.md` | verified status |
 | Live retrieval APIs not exercised by tests | `trustcal/IMPLEMENTATION_STATUS.md` | verified status |
 | Code MIT licence | `LICENSE` at the repository root (MIT, Copyright 2026 Team Phantom Devs) | verified |
-| Core run USD 175--210; Full target USD 210 (36-row alternate USD 235); N1 smoke + precision replication USD 25--40; total USD 500--600; hard stop USD 600 | `docs/agent/08_COMPUTE_COST.md`; `docs/agent/03_EXPERIMENT_PLAN.md` | planning values at the retired 9 Nov spot rates; **superseded 24 Nov 2026** by the measured 172.7 debates/h at $1.50/GPU-h all-in (Core + Full ≈ 69.5 GPU-h ≈ $104) |
+| Core run USD 175--210; Full target USD 210 (36-row alternate USD 235); N1 smoke + precision replication USD 25--40; total USD 500--600; hard stop USD 600 | `docs/agent/08_COMPUTE_COST.md`; `docs/agent/03_EXPERIMENT_PLAN.md` | planning values at the retired 9 Nov spot rates; **superseded 24 Nov 2026** by the measured 172.7 debates/h at $1.50/GPU-h all-in (Core + Full ≈ 69.5 GPU-h ≈ $104); the USD 600 hard stop is **superseded by the $300 project hard stop** (24 Nov 2026) |
 | A100 80GB at USD 1.78/hour | Earlier report text only; not re-verified | placeholder — author estimate |
 | "about 77 billion parameters" for the final trio | Approximate from model names (27 + 26 + 24) | placeholder — approximate, not independently verified |
 

@@ -198,7 +198,7 @@ export function OverviewPage() {
           {[
             { label: "Full Blueprint →", href: "/idea/1" },
             { label: "Execution Roadmap →", href: "/roadmap" },
-            { label: "Formal Proposal →", href: "/proposal" },
+            { label: "Methodology", href: "/methodology" },
           ].map((link) => (
             <Link
               key={link.label}

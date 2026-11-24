@@ -49,12 +49,12 @@ const roadmapSections: RoadmapSection[] = [
       { num: 3, topic: 'Self-Consistency Decoding', level: 'Advanced', levelEmoji: '🟡', importance: 'Critical', whyNeeded: 'Major experimental baseline (B5)', link: { label: 'Wang et al. 2022', href: 'https://arxiv.org/abs/2203.11171' } },
       { num: 4, topic: 'Prompt Engineering', level: 'Intermediate', levelEmoji: '🟢', importance: 'High', whyNeeded: 'Agent orchestration and structured prompting', link: { label: 'OpenAI prompt guide', href: 'https://platform.openai.com/docs/guides/prompt-engineering' } },
       { num: 5, topic: 'Temperature & Sampling', level: 'Intermediate', levelEmoji: '🟢', importance: 'Medium', whyNeeded: 'Generating agent diversity', link: { label: 'HF docs', href: 'https://huggingface.co/docs' } },
-      { num: 6, topic: 'Hallucination in LLMs', level: 'Expert', levelEmoji: '🔴', importance: 'Critical', whyNeeded: 'Your main failure mode', link: { label: 'Your literature review', href: '/papers' } },
+      { num: 6, topic: 'Hallucination in LLMs', level: 'Expert', levelEmoji: '🔴', importance: 'Critical', whyNeeded: 'Your main failure mode', link: { label: 'Your literature review', href: '/idea/1' } },
       { num: 7, topic: 'Sycophancy in LLMs', level: 'Expert', levelEmoji: '🔴', importance: 'Critical', whyNeeded: 'Core research problem', link: { label: 'Sharma et al. 2023', href: 'https://arxiv.org/abs/2310.13548' } },
       { num: 8, topic: 'Model Calibration (ECE)', level: 'Expert', levelEmoji: '🔴', importance: 'Critical', whyNeeded: 'Foundation of trust calibration', link: { label: 'Guo et al. 2017', href: 'https://arxiv.org/abs/1706.04599' } },
       { num: 9, topic: 'Final-Stack Model Strategy', level: 'Intermediate', levelEmoji: '🟢', importance: 'High', whyNeeded: 'Dev stack retired → fourbit 4-bit main stack (Qwen3.8-27B-AWQ-INT4 ~21.0 GB / Gemma 4 26B-A4B AWQ ~17.2 GB / Mistral-24B-AWQ 15.06 GB; ~53.3 GB, one 96 GB RTX PRO 6000); final FP8 stack (73.68 GB) is N1 smoke + GPQA precision replication only', link: { label: 'Proposal §7', href: '/idea/1' } },
       { num: 10, topic: 'Sycophancy Injection Protocol Design', level: 'Expert', levelEmoji: '🔴', importance: 'Critical', whyNeeded: 'CCR operationalization; κ > 0.75 pilot check (Phase 1–2)', link: { label: 'Proposal §5.4', href: '/idea/1' } },
-      { num: 11, topic: 'LLM Uncertainty & Confidence Estimation', level: 'Advanced', levelEmoji: '🟡', importance: 'High', whyNeeded: 'Lightweight confidence gating (Phase 2)', link: { label: 'Your literature review', href: '/papers' } },
+      { num: 11, topic: 'LLM Uncertainty & Confidence Estimation', level: 'Advanced', levelEmoji: '🟡', importance: 'High', whyNeeded: 'Lightweight confidence gating (Phase 2)', link: { label: 'Your literature review', href: '/idea/1' } },
     ],
   },
   {
@@ -62,9 +62,9 @@ const roadmapSections: RoadmapSection[] = [
     topics: [
       { num: 1, topic: 'Multi-Agent Debate (MAD)', level: 'Expert', levelEmoji: '🔴', importance: 'Critical', whyNeeded: 'Main paradigm your work extends', link: { label: 'Du et al. 2023', href: 'https://arxiv.org/abs/2305.14325' } },
       { num: 2, topic: 'Mixture of Agents (MoA)', level: 'Advanced', levelEmoji: '🟡', importance: 'High', whyNeeded: 'Important baseline (B6)', link: { label: 'Wang et al. 2024', href: 'https://arxiv.org/abs/2406.04692' } },
-      { num: 3, topic: 'iMAD Framework', level: 'Advanced', levelEmoji: '🟡', importance: 'Critical', whyNeeded: 'Closest competitor baseline', link: { label: 'Your iMAD review', href: '/papers' } },
+      { num: 3, topic: 'iMAD Framework', level: 'Advanced', levelEmoji: '🟡', importance: 'Critical', whyNeeded: 'Closest competitor baseline', link: { label: 'Your iMAD review', href: '/idea/1' } },
       { num: 4, topic: 'Consensus Mechanisms', level: 'Advanced', levelEmoji: '🟡', importance: 'High', whyNeeded: 'Understanding majority-vote limitations' },
-      { num: 5, topic: 'Trust & Reputation Systems', level: 'Expert', levelEmoji: '🔴', importance: 'Critical', whyNeeded: 'Foundation of your contribution', link: { label: 'Your iMAD review', href: '/papers' } },
+      { num: 5, topic: 'Trust & Reputation Systems', level: 'Expert', levelEmoji: '🔴', importance: 'Critical', whyNeeded: 'Foundation of your contribution', link: { label: 'Your iMAD review', href: '/idea/1' } },
       { num: 6, topic: 'Agentic AI Paradigm', level: 'Intermediate', levelEmoji: '🟢', importance: 'Medium', whyNeeded: 'Broader research positioning', link: { label: 'LangGraph playlist (CampusX)', href: 'https://www.youtube.com/playlist?list=PLKnIA16_RmvYsvB8qkUQuJmJNuiCUJFPL' } },
       { num: 7, topic: 'Debate Prompt Design', level: 'Advanced', levelEmoji: '🟡', importance: 'High', whyNeeded: 'Structuring adversarial reasoning (Phase 1–2)', link: { label: 'LangGraph playlist (CampusX)', href: 'https://www.youtube.com/playlist?list=PLKnIA16_RmvYsvB8qkUQuJmJNuiCUJFPL' } },
       { num: 8, topic: 'Adaptive Triggering / Confidence Gating', level: 'Advanced', levelEmoji: '🟡', importance: 'High', whyNeeded: 'Gate full debate pipeline (Phase 2)', link: { label: 'Proposal §5.2', href: '/idea/1' } },
@@ -208,7 +208,7 @@ const resources: ResourceLink[] = [
   { title: 'Du et al. 2023 — Multi-Agent Debate', desc: 'Gate 0 reproduction target.', href: 'https://arxiv.org/abs/2305.14325' },
   { title: 'Wang et al. — Self-Consistency (B5)', desc: 'Baseline reference.', href: 'https://arxiv.org/abs/2203.11171' },
   { title: 'Wang et al. — Mixture-of-Agents (B6)', desc: 'Baseline reference.', href: 'https://arxiv.org/abs/2406.04692' },
-  { title: 'Local literature review', desc: 'Your own paper matrix + iMAD review — always check here before googling.', href: '/papers' },
+  { title: 'Local literature review', desc: 'Your own paper matrix + iMAD review — always check here before googling.', href: '/idea/1' },
 ];
 
 function RoadmapTable({ topics }: { topics: RoadmapTopic[] }) {
@@ -281,8 +281,8 @@ export function RoadmapPage() {
             in Jun; defence in Jun/Jul; paper after the defence (Aug–Dec 2027).
             Gates mark explicit go/no-go decisions. Core and Full are separate
             matrices on the same 4-bit main stack; do not assume Core cells are
-            reusable. The remaining 23,798-debate programme is 137.80 GPU-h
-            ≈ $209.26 at $1.50/GPU-h all-in, with the $300 hard stop unchanged;
+            reusable. The remaining 23,798-debate programme is 139.13 GPU-h
+            ≈ $209.25 at $1.50/GPU-h all-in, with the $300 hard stop unchanged;
             the main matrix runs the 4-bit 24–27B stack (~53.3 GB) on one 96 GB
             RTX PRO 6000, and the FP8 stack is limited to the N1 smoke and
             a small GPQA precision replication.

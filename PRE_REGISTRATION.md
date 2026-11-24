@@ -559,7 +559,9 @@ Full row count to WP-18, and its budget assumed the two-stack Dev/Final plan.
 This draft fills that placeholder: it records the execution plan the team
 intends to run — a 4-bit stack on one 80 GB A100 for the main causal matrix, a
 32-row Full default with a gold-evidence oracle on SciClaimBench, a 96 GB FP8
-precision replication, and a $500–600 budget with a $300 hard stop. It is
+precision replication, and a $500–600 budget with a $300 hard stop. That
+$500–600 range is the 9 November spot basis and is superseded by the measured
+note in §5 below; the $300 hard stop stands. It is
 recorded before any confirmatory Full row so the plan cannot be adjusted after
 seeing outcomes. It supersedes the v1.1 framing that treated the 36-run
 gold-answer plan as the target and left the oracle definition pending: the
@@ -644,7 +646,7 @@ main run.
 | Full matrix, 36-row alternate | 235 | 1,440 GPU-h, 20% overhead |
 | FP8 precision replication + N1 smoke | 25–40 | 60–100 GPU-h at $0.336/GPU-h |
 | Storage and bandwidth | 40–80 | persistent cache, ingress/egress |
-| **Total** | **500–600** | planning envelope |
+| **Total** | **500–600** | planning envelope (historical 9 Nov spot basis; superseded by the $300 hard stop) |
 | **Hard stop** | **300** | no spend beyond without a new signed amendment |
 
 > **Hard-stop change (24 Nov 2026).** The project hard stop is tightened from $600 to **$300 total**: ~$53 already spent + $219.25 committed for the remaining programme + ~$28 spare. Tightening a ceiling is conservative and changes no endpoint, hypothesis, or analysis rule.
@@ -658,7 +660,7 @@ ceiling, not a target. The main matrix is budgeted at $0.136/GPU-h (the retired
 9 November spot rate; measured $1.50/GPU-h all-in); the
 precision path at $0.336/GPU-h (also retired). The Full envelope is costed as a full 32-row
 run; any cell reuse where the stack and revisions match can only reduce actual
-spend, not raise it. Law-testing is outside this envelope and the $600 hard
+spend, not raise it. Law-testing is outside this envelope and the $300 hard
 stop; it requires a separate cost model and approval.
 
 **6. Fallback if the 80 GB A100 spot is unavailable.**
@@ -683,7 +685,7 @@ quoted as current guidance:
 | Pilot | $50–100 | historical; replaced by $15–20 |
 | Core run | $420–580 | historical; replaced by $175–210 |
 | Full run | $900–1,200 | historical; replaced by $210 (32-row) / $235 (36-row) |
-| Core + Full planning range | $1,320–1,780 | historical; replaced by the $500–600 total |
+| Core + Full planning range | $1,320–1,780 | historical; replaced by the $500–600 total, itself superseded by the $300 project hard stop (24 Nov 2026) |
 | Hard stop | $1,350 | historical; replaced by $300 |
 
 These figures still appear in some planning documents; this pre-registration
