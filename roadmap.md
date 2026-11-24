@@ -335,7 +335,7 @@ Then run `configs/experiments_precision.yaml`.
 
 **Scope:** q sweep, ρ measurement/manipulation, granularity (claim vs document vs shuffled), shared-error floor, N/K/α/β robustness, natural-divergence subset.
 
-**Rule:** run only if Core/Full show a real effect. R6 remains a **derived law** until an independent proof check signs it. This phase is **outside the $500–600 compute envelope and the $300 hard stop**; no spend without a separate cost model and approval.
+**Rule:** run only if Core/Full show a real effect. R6 remains a **derived law** until an independent proof check signs it. This phase is **outside the $300 project compute envelope and hard stop**; no spend without a separate cost model and approval.
 
 **Acceptance:** pre-registered contrasts; CIs; negative results reported. Results freeze at the end of April.
 
@@ -398,7 +398,7 @@ Then run `configs/experiments_precision.yaml`.
 | Setup + ingress | 1.33 | **$2.56** |
 | **Total (all-in)** | **139.13** | **$209.25** |
 | **+ 10 USD headroom** | - | **219.25 USD** under the **220 USD** cap |
-| **Hard stop** | — | **$600** |
+| **Hard stop** | — | **$300** |
 
 ### 14.3 Efficient path
 
@@ -416,7 +416,7 @@ With the free 18 GB tests and a signed Core → Full subset-reuse amendment:
 | Storage | $40–60 |
 | **Total** | **~$345–445** |
 
-Under $400 is possible with Core at the low end, storage around $40–60, and the A100 at $0.136/GPU-h. The **$500–600** envelope remains approved; the $400 path is a planning option only after the reuse amendment is signed.
+Under $400 is possible with Core at the low end, storage around $40–60, and the A100 at $0.136/GPU-h. Those spot-rate figures are planning arithmetic only; the live ceiling is the **$300** project hard stop (24 Nov 2026). The $400 path is a planning option only after the reuse amendment is signed and a new ceiling is approved.
 
 **Reuse is not authorized by the current v1.3 draft.** That draft sets Full to 300 items/dataset and says the envelope "does not assume reuse." Core uses 400/400/200. No row matches, so the 16-row reuse above requires a **new signed amendment (v1.5)** that sets Full `gpqa_main: 400`, `mmlu_pro: 400`, `sciclaim_180: 300`, adds the SciClaimBench loader, and records the new config hash. (v1.4 is the frozen B7-provider erratum.) Until then, budget Full at **$210** and the plan at **~$440–530**.
 

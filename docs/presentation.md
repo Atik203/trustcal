@@ -250,7 +250,7 @@ Thank you for your attention. We are happy to take your questions.
 - **Q: What are the generation settings?**
   **A:** Temperature zero point seven, one thousand and twenty-four output tokens, four thousand and ninety-six context on dev, and three retries per agent.
 - **Q: How much compute does this need?**
-  **A:** At the measured hundred and seventy-two point seven debates per hour and a dollar fifty per GPU-hour all-in, the remaining twenty-three thousand debates, including the 36-row Full, the cap increase, three ablations and the FP8 precision replication, cost two hundred two dollars and thirty-three cents: about a hundred and thirty-four and a half GPU-hours. We hold ten dollars of headroom, so the remaining-spend cap is two hundred and twenty dollars. The preregistered programme hard stop is still six hundred dollars.
+  **A:** At the measured hundred and seventy-two point seven debates per hour and a dollar fifty per GPU-hour all-in, the remaining twenty-three thousand debates, including the 36-row Full, the cap increase, three ablations and the FP8 precision replication, cost two hundred two dollars and thirty-three cents: about a hundred and thirty-four and a half GPU-hours. We hold ten dollars of headroom, so the remaining-spend cap is two hundred and twenty dollars. The preregistered programme hard stop is three hundred dollars, tightened from six hundred on twenty-four November.
 
 ### M5 — Md. Salman Rohoman Nayeem · Slides 10–11
 
@@ -346,7 +346,7 @@ Thank you for your attention. We are happy to take your questions.
 - **Q: What about ethics and bias?**
   **A:** Answers carry citations a reader can check. The adversarial sets test manipulation, and the human study will follow consent rules.
 - **Q: How much does the full study cost?**
-  **A:** About seventy GPU-hours across Core and Full — roughly a hundred and four dollars at the measured dollar-fifty per GPU-hour all-in, with a six hundred dollar hard stop. The old two-thousand-five-hundred-hour, hundred-and-seventy-five-to-two-hundred-and-thirty-five-dollar figures were the superseded spot-rate estimate.
+  **A:** About seventy GPU-hours across Core and Full — roughly a hundred and four dollars at the measured dollar-fifty per GPU-hour all-in, with a three hundred dollar project hard stop. The old two-thousand-five-hundred-hour, hundred-and-seventy-five-to-two-hundred-and-thirty-five-dollar figures were the superseded spot-rate estimate.
 - **Q: What is the most important measured result so far?**
   **A:** Gate 0: the three-model debate loop runs end to end — ten of ten debates, ninety of ninety positions, about three hundred seventy seconds per debate.
 

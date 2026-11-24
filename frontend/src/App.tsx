@@ -3,9 +3,9 @@ import { SiteNav } from "@/components/layout/SiteNav";
 import { ScrollToTop } from "@/components/shared/ScrollToTop";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { IdeaDetailPage } from "@/pages/IdeaDetailPage";
+import { MethodologyPage } from "@/pages/MethodologyPage";
 import { OverviewPage } from "@/pages/OverviewPage";
-import { PapersPage } from "@/pages/PapersPage";
-import { ProposalPage } from "@/pages/ProposalPage";
+import { ResultsPage } from "@/pages/ResultsPage";
 import { RoadmapPage } from "@/pages/RoadmapPage";
 import { FinalCompactSlidePage, FinalSlidePage } from "@/pages/FinalSlidePage";
 import { SlidePage } from "@/pages/SlidePage";
@@ -21,8 +21,8 @@ function SiteLayout() {
           <Route path="/" element={<OverviewPage />} />
           <Route path="/idea/1" element={<IdeaDetailPage />} />
           <Route path="/roadmap" element={<RoadmapPage />} />
-          <Route path="/papers" element={<PapersPage />} />
-          <Route path="/proposal" element={<ProposalPage />} />
+          <Route path="/methodology" element={<MethodologyPage />} />
+          <Route path="/results" element={<ResultsPage />} />
         </Routes>
       </div>
       <SiteFooter />
