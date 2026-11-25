@@ -1,32 +1,74 @@
-# 01 — Rater: label blind sheets row by row
+# 01 — Rater: label two blind sheets, row by row
 
-🎯 Goal
-Label every claim in your blind sheet from the cited passages only.
-Your sheet plus the second rater's sheet sets κ (≥ 0.75).
+## What you are doing
 
-📂 Your files
-- Your sheet: [rater1.csv](../private/calibration/sheets/rater1.csv) (Prottoy) or [rater2.csv](../private/calibration/sheets/rater2.csv) (Salman) — 216 rows each (24 items × 9 claims).
-- Verifier sheet: [rater1.csv](../../experiments/verifier_audit/private/scifact/sheets/rater1.csv) or [rater2.csv](../../experiments/verifier_audit/private/scifact/sheets/rater2.csv) — 180 rows each.
-- Effort log: [effort.csv](../private/calibration/sheets/effort.csv) · checklist: [annotation_submission_checklist.md](../templates/annotation_submission_checklist.md) · rules: [hub §4](../README.md)
+You get two spreadsheet sheets. Each row is one scientific claim plus the passages retrieved for it. You
+read both and type one label saying whether the passages back the claim. You do this alone, and so does
+the other rater. How often you two agree is the number the whole project is waiting on (κ ≥ 0.75).
 
-🟢 Steps
-1. Count rows first: expect 216 (+ 1 header) on calibration, 180 (+ 1 header) on verifier. In Excel use `=COUNTA(A:A)-1`; plain line counts lie on multiline cells.
-2. Confirm blinding: no `gold_verdict`, `verifier_label`, or arm column. If you see one, stop and tell Atik.
-3. Label top to bottom, one row at a time. Fill verdict + confidence (0–1) + notes on every hard row.
-4. Decide every row in this order: contradict first — any refuting passage wins; then support — ≥1 passage entails and none refutes; else neutral. SciClaimBench words: `support` · `contradict` · `neutral`. Verifier words: `supported` · `contradicted` · `unverifiable`.
-5. Log effort as you go, one row per item: `item_id,phase,minutes,annotator,notes`, e.g. `cal-001,rater1,22,AB,"steady pace"`. This feeds H ≤ 2.0 h/item.
-6. Submit: save a copy with your initials (`rater1_<initials>.csv`), finish the checklist, upload to the private folder, post filename + row count. Never overwrite the original.
-⏱ Time: 5–7 h practiced (8–10 h on your first sheet) per 216-row sheet; verifier 180-row sheet adds 5–6 h.
+New to this? [`MEMBER_GUIDE.md`](../MEMBER_GUIDE.md) has a filled row, six practice rows and the five
+mistakes to avoid. Ten minutes there saves hours here.
 
-🔴 Never
-- Never open `benchmark/private/items/` or any `cal-*.json` — they hold gold answers and break your blinding.
-- Never use outside knowledge or an LLM for labels; judge the cited passages only.
-- Never open the other rater's sheet or discuss rows before both sheets are in.
+## Your files
 
-✅ Done
-- [ ] Every row has a verdict (exact string) + confidence; hard rows have notes.
-- [ ] No blanks, no added/deleted columns, header unchanged; effort rows logged.
-- [ ] Initials copy + checklist uploaded privately; filename + row count posted.
+| What | Where | Rows |
+| --- | --- | --- |
+| SciClaimBench sheet | [rater1.csv](../private/calibration/sheets/rater1.csv) (Prottoy) or [rater2.csv](../private/calibration/sheets/rater2.csv) (Salman) | 216 |
+| Verifier audit sheet | [rater1.csv](../private/verifier/sheets/rater1.csv) (Prottoy) or [rater2.csv](../private/verifier/sheets/rater2.csv) (Salman) | 180 |
+| Verifier rules | [codebook](../private/verifier/codebook.md) | one page |
+| Effort log | SciClaimBench: [effort.csv](../private/calibration/sheets/effort.csv) · verifier: [effort.csv](../private/verifier/sheets/effort.csv) | one line per item |
+| Submission checklist | [annotation_submission_checklist.md](../templates/annotation_submission_checklist.md) | — |
 
-🆘 Ask
-Blinding, batch, or submission problem → Atik at once; codebook doubt → Atik; adjudication question → Rakib + Limu.
+## Steps
+
+1. Open the SciClaimBench sheet in Excel, LibreOffice, or Google Sheets. Confirm the header has no
+   `gold_verdict`, no `verifier_label`, no arm column. If one appears, stop and tell Atik.
+2. Count the rows: `=COUNTA(A:A)-1` must give 216. A raw line count lies, because cells contain line
+   breaks.
+3. Label top to bottom, one row at a time. Fill the **`verdict`** column on SciClaimBench and the
+   **`label`** column on the verifier sheet — different columns, different spellings, on purpose. Add a
+   confidence: 0.9 when the passages decide it plainly, 0.5 when you are arguing with yourself. A **hard
+   row** is one where two passages pull in different directions, the claim is ambiguous, or a locator is
+   missing; those get a short note.
+4. Decide in this order: **contradiction first** (any passage refutes the claim → `contradict`), then
+   **support** (at least one passage states it and none refutes it), else **neutral**. A reported null
+   result — "no significant difference" — is a refutation when the claim asserts the effect. Verifier
+   wording: `supported` · `contradicted` · `unverifiable`.
+5. Log minutes as you go. **One line per item**, so 24 lines for the SciClaimBench sheet, not 216. The
+   effort file columns are `item_id,phase,minutes,annotator,notes`:
+   - `item_id`: `cal-001` … `cal-024` on SciClaimBench; the `pair_id` value on the verifier sheet.
+   - `phase`: exactly one of `rater1`, `rater2` (SciClaimBench) or `verifier1`, `verifier2` (verifier sheet).
+   - `annotator`: your initials, `PR` or `SA`.
+   - `minutes`: whole minutes actually spent, breaks excluded.
+
+   Example: `cal-001,rater1,22,PR,"slow first pass"`. If one item takes several sittings, add its minutes
+   into the same line.
+6. Save as CSV UTF-8 named `rater1_PR.csv` or `rater2_SA.csv`, finish the checklist, and **send the file to
+   Atik** (WhatsApp or Drive). Post the filename and row count in the team group. Never overwrite the
+   blank sheet, never commit a filled one.
+
+Time: 5–7 h per 216-row sheet once practised (8–10 h the first time), plus 5–6 h for the verifier sheet.
+Due Fri 11 Dec 2026: both sheets, both files sent.
+
+## Never
+
+- Never open any file under `private/` except the two blank sheets you were given. That includes
+  `private/calibration_items.jsonl`, `private/calibration_*.jsonl`,
+  `private/freeze180/`, `private/full300/` and `private/pilot/` — all of them carry gold verdicts.
+- Never open the other rater's sheet, and never open the verifier answer key (Atik holds it outside this
+  folder).
+- Never use outside knowledge or an AI tool for a label. Only the printed passages decide.
+- Never discuss single rows before both sheets are in.
+- Never leave a row blank and never change a label after seeing the other sheet.
+
+## Done when
+
+- [ ] Every row has a label from the exact allowed strings, plus a confidence; hard rows have notes.
+- [ ] No blanks, no added or removed columns, header untouched.
+- [ ] Effort lines logged for every item.
+- [ ] Initials copy plus finished checklist sent to Atik, filename and row count posted.
+
+## Ask
+
+A row you cannot decide, a missing file, a broken passage → Atik in the group. A definition question →
+Atik. After the sheets are in, adjudication questions → Rakib + Limu.

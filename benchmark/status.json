@@ -35,7 +35,7 @@
     "sheet_templates": "benchmark/annotation/",
     "draft_batch": "benchmark/private/calibration_items.jsonl",
     "blind_sheets": "benchmark/private/calibration/sheets/",
-    "annotator_guide": "benchmark/private/ANNOTATOR_GUIDE.md"
+    "annotator_guide": "benchmark/MEMBER_GUIDE.md"
   },
   "next_command": "python benchmark/validate_items.py score --rater1 benchmark/private/calibration/sheets/rater1.csv --rater2 benchmark/private/calibration/sheets/rater2.csv --adjudication benchmark/private/calibration/sheets/adjudication.csv --effort benchmark/private/calibration/sheets/effort.csv --min-kappa 0.75 --max-defect 0.15 --max-hours 2.0 --max-unresolved 0.05"
 }

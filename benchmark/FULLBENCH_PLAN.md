@@ -88,25 +88,21 @@ benchmark/
   draft_items.py            generator (this production system; committed)
   FULLBENCH_PLAN.md         this file (committed)
   validate_items.py         validator / sheet builder / gate scorer (committed)
-  private/                  draft items + blank calibration sheets tracked; filled sheets, session manifests stay gitignored
-    items/cal-001..024.json 24-item calibration drafts (8/8/8)
+  private/                  blank sheets and drafted batches; filled sheets stay out of git
+    calibration_items.jsonl 24-item calibration batch (8/8/8), one object per line
     calibration/sheets/     S0 blind sheets (rater1/rater2/adjudication/effort/manifest)
     freeze180/
-      frz-001..180.json     180 per-item drafts (frz-001..024 are ID-renamed cal copies)
-      items.jsonl           same batch, one object per line (validator input)
+      items.jsonl           180-item freeze batch, one object per line (validator input)
       MANIFEST.json         batch provenance (generator, model, date, method, ID ranges)
-      sheets/               S2 blind sheets (regenerate after authoring edits)
     full300/
-      full-001..300.json    300 per-item drafts (full-001..180 mirror the freeze)
-      items.jsonl           same batch, one object per line (validator input)
+      items.jsonl           300-item full-target batch, one object per line (validator input)
       MANIFEST.json         batch provenance
-      sheets/               S3 blind sheets (regenerate after authoring edits)
 ```
 
-`items.jsonl` is the validator input; per-item JSON files are the authoring
-unit. If authoring edits any item, re-run `validate_items.py sheets` for that
-batch before labelling — sheets embed an `items_sha256` so stale sheets are
-detectable. Never hand-edit anything under `sheets/` except filling the blank
+`items.jsonl` is the batch of record and the validator input; there are no
+per-item copies. Blind sheets are generated on demand — run
+`validate_items.py sheets` for a batch the first time it is labelled. Sheets
+embed an `items_sha256` so a stale sheet is detectable. Never hand-edit anything under `sheets/` except filling the blank
 `verdict`/`confidence`/`notes` columns (raters) and the adjudication/effort
 rows (adjudicator).
 
@@ -121,8 +117,9 @@ comparison material under the same restriction.
 
 ## 6. Provenance convention
 
-**Explicit deviation from README §2.** README §2 requires LLM-drafted items
-to carry `draft_assisted: true`. This production system deliberately does not:
+**Deliberate deviation from a marker field.** An earlier protocol revision required LLM-drafted items
+to carry `draft_assisted: true`. The field is deprecated in [`schema.md`](schema.md) and this production
+system does not set it:
 
 - Item records carry **zero generator markings**: no `draft_assisted` field,
   no "draft"/"assisted"/"generated" labels, no AI fingerprints in any claim,
@@ -157,4 +154,4 @@ to carry `draft_assisted: true`. This production system deliberately does not:
 3. **Label the blind sheets** (both raters), **adjudicate** disagreements,
    run the **defect review**, and log **effort** — the gate needs all four.
 4. Decide S1 vs S2 after S0 scores; run the licence review before any freeze.
-5. Draft items and blank calibration sheets are committed so members start from a clone; filled `*_initials` sheets and session manifests stay gitignored and local.
+5. Draft items and blank calibration sheets are committed so members start from a clone; filled sheets (rater1_*.csv, rater2_*.csv, effort_*.csv) and session manifests stay gitignored and local.

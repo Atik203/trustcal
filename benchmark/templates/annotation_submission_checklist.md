@@ -5,7 +5,7 @@
 **Batch:** ____________________
 **Date:** ____________________
 
-Finish this list before you upload. One tick per line.
+Finish this list before you send the file. One tick per line.
 
 **Guide:** [`MEMBER_GUIDE.md`](../MEMBER_GUIDE.md)
 
@@ -15,7 +15,8 @@ Finish this list before you upload. One tick per line.
 - [ ] I did not touch the original batch or template.
 - [ ] The header row is unchanged.
 - [ ] I added no columns and deleted none.
-- [ ] Row count is right: calibration is 216 rows + header (217 lines); verifier is 180 rows + header.
+- [ ] Row count, measured with `=COUNTA(A:A)-1`, is 216 (SciClaimBench) or 180 (verifier). I did not
+      trust the editor's line numbers — a cell can hold a line break.
 - [ ] No comment lines sit above the header. They break CSV readers.
 - [ ] The file opens with no encoding error.
 
@@ -36,9 +37,10 @@ Finish this list before you upload. One tick per line.
 
 ## 📤 Send
 
-- [ ] I uploaded to the private folder. No email. No chat.
+- [ ] The file is named with my initials (`rater1_<initials>.csv`).
+- [ ] I sent it to Atik directly (WhatsApp or Drive), not committed, not emailed.
 - [ ] I posted the filename and row count in the team channel.
-- [ ] The original batch file is unchanged.
+- [ ] The blank sheet in the folder is unchanged.
 - [ ] My notes are ready for adjudication questions.
 
 ## Sign-off

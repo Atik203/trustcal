@@ -1,52 +1,75 @@
-# 00 — Overview: start here, then read only your pack
+# 00 — Overview: the map, then your own pack
 
-🎯 Goal
-This page maps the 24 → 180 → 300 ladder, the gates, and every file.
-Read it once, then open only your own role pack.
+Read this page once. Then open only your role pack and follow it top to bottom.
 
-📂 Your files
-- Rules and labels live here: [hub §4](../README.md) (codebook — read it there, not here).
-- Schema and skeleton: [schema.md](../schema.md) · [item.template.json](../item.template.json)
-- Validator: [validate_items.py](../validate_items.py)
-- Guide with examples: [MEMBER_GUIDE.md](../MEMBER_GUIDE.md)
+## The ladder
 
-🟢 Steps
-1. Run this Step 0 check once (Python 3.10 or newer, one package):
-   `python --version` · `python -c "import yaml"` (silent = ok, else `pip install pyyaml`) · `python benchmark/validate_items.py --help`
-2. Find your name in the table below and open only that pack.
-3. Learn the ladder: 24 calibration (8/8/8) → gate passes → 180 freeze (60/60/60, ~410 h) → 300 target (100/100/100, ~684 h).
-4. Learn the gate: κ ≥ 0.75, defect ≤ 0.15, H ≤ 2.0 h/item, unresolved ≤ 0.05. Fail κ or unresolved → keep batch, fix codebook, fresh batch. Fail H or defect → cut to 120 items, not 180.
-5. Only Atik runs the score below, last, after every sheet is in:
+24 calibration items → gate passes → 180 freeze → 300 full-run target. The 120 is a cut, not a rung: it
+replaces the 180 when effort or defects fail. The 600 and 800 rungs are not built.
 
-   ```bash
-   python benchmark/validate_items.py score \
-     --rater1 benchmark/private/calibration/sheets/rater1.csv \
-     --rater2 benchmark/private/calibration/sheets/rater2.csv \
-     --adjudication benchmark/private/calibration/sheets/adjudication.csv \
-     --effort benchmark/private/calibration/sheets/effort.csv \
-     --min-kappa 0.75 --max-defect 0.15 --max-hours 2.0 --max-unresolved 0.05
-   ```
+| Size | Split | Your part in it |
+| ---: | --- | --- |
+| 24 | 8 / 8 / 8 | this is the only batch that moves today: 216 claim rows, 180 verifier pairs, 24 drafts |
+| 180 | 60 / 60 / 60 | starts only if the 24 passes κ, defect, effort and unresolved |
+| 300 | 100 / 100 / 100 | starts only if the 180 freezes clean |
 
-🏷 Labels (same words in every pack)
-SciClaimBench labels (exact lowercase): `support` · `contradict` · `neutral`.
-Order on every row: contradict first — any refuting passage wins; then support — ≥1 passage entails and none refutes; else neutral. Full rules: [hub §4](../README.md).
+## Your pack
 
 | Pack | Who | Due |
 | --- | --- | --- |
-| [01_RATER.md](01_RATER.md) | Prottoy = rater 1, Salman = rater 2 — label 216 rows each | Fri 4 Dec |
-| [03_AUTHOR.md](03_AUTHOR.md) | Yousuf — verify the 24 drafts (12–16 h), sole verifier | Fri 4 Dec |
-| [02_ADJUDICATOR.md](02_ADJUDICATOR.md) | Rakib + Limu — settle disagreements, defect review | Fri 11 Dec |
-| [04_AGENT_PILOT.md](04_AGENT_PILOT.md) | Atik — helpers and score, LAST | Week of 14 Dec |
+| [01_RATER.md](01_RATER.md) | Prottoy (rater 1), Salman (rater 2) — 216 + 180 rows each | Fri 11 Dec 2026 |
+| [03_AUTHOR.md](03_AUTHOR.md) | Yousuf — verify the 24 drafts, 12–16 h | Fri 4 Dec 2026 |
+| [02_ADJUDICATOR.md](02_ADJUDICATOR.md) | Rakib + Limu — disagreements and defect review | Wed 16 Dec 2026 |
+| [04_AGENT_PILOT.md](04_AGENT_PILOT.md) | Atik — sheets, validator, score, last | Fri 18 Dec 2026 |
 
-🔴 Never
-- Never commit, email, or paste private sheets, labels, or evidence text anywhere public.
-- Never relabel rows to raise κ, and never start 180/300 work before the gate passes.
-- Never use gated text (GPQA, HLE, MMLU-Pro) in SciClaimBench, and never mark items with AI labels.
+Four weeks total, 25 Nov – 22 Dec 2026, no fifth week. The week-by-week table is in
+[`MEMBER_GUIDE.md`](../MEMBER_GUIDE.md) §7.
 
-✅ Done
-- [ ] Step 0 check prints clean, and you know your pack and due date.
-- [ ] You can state the 4 gate numbers (0.75 / 0.15 / 2.0 / 0.05) and the 216 / 180 row counts.
-- [ ] You know blinding: raters and adjudicators never open gold or item files early.
+## Step 0, for Atik and Yousuf only
 
-🆘 Ask
-Blockers on batch, blinding, or protocol → Atik (benchmark owner); adjudication questions → Rakib + Limu; verifier-audit questions → P6.
+```bash
+python --version                 # 3.10 or newer
+python -c "import yaml"          # silent = fine, else: pip install pyyaml
+python benchmark/validate_items.py --help
+```
+
+Raters and adjudicators never need Python or a terminal: a spreadsheet app and the sheet are enough.
+
+## The words, once
+
+| Word | Means |
+| --- | --- |
+| item | one question, with three agent positions and one gold answer |
+| position | one agent's answer inside an item; there are always three (agents 0, 1, 2) |
+| claim | one small checkable statement inside a position; 3–6 per position |
+| row | one claim, plus the passages retrieved for it — one line in your sheet |
+| passage | the quoted text a claim is checked against, with a locator and a licence |
+| triple | claim + passage + verdict, the unit the whole benchmark is built from |
+
+## Labels, in one line each
+
+SciClaimBench, the `verdict` column: `support` · `contradict` · `neutral`.
+Verifier audit, the `label` column: `supported` · `contradicted` · `unverifiable`.
+Order on every row: contradiction first, then support, else neutral. Definitions, worked examples and the
+five common mistakes: [`MEMBER_GUIDE.md`](../MEMBER_GUIDE.md).
+
+## Never
+
+- Never open the item files, the other rater's sheet, or the verifier answer key while labelling.
+- Never relabel a row to move a number, and never delete an unresolved row.
+- Never commit a filled sheet, email it, or paste claim text into an AI tool.
+
+## Done with this page when
+
+- [ ] You know your pack, your due date, and your row count.
+- [ ] You can say the four gate numbers: κ 0.75, defect 0.15, effort 2.0 h/item, unresolved 0.05.
+- [ ] You know the one column you fill and its exact label strings.
+
+## Ask
+
+| Question | Who |
+| --- | --- |
+| a row, a passage, a broken link, or a missing file | Atik, in the group |
+| how a label is defined | Atik |
+| the verifier audit's rules | its [codebook](../private/verifier/codebook.md), then Atik |
+| adjudication practice | Rakib + Limu |
