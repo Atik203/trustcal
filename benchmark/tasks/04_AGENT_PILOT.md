@@ -40,7 +40,9 @@ Agents may draft. They never produce a label, a gold verdict, or an adjudication
    enters a commit. On the verifier sheets the rows carry neutral IDs (`vf-001` … `vf-180`); before you
    score that audit, translate them back with `benchmark_pair_map.csv` in the private verifier folder,
    because the scorer joins on the original `pair_id`. That map is the only record of the original IDs:
-   never publish it.
+   never publish it. Build `effort.csv` from the raters' and adjudicators' effort files, keeping the
+   `cal-*` rows (phases `rater1`, `rater2`, `adjudication`, `defect`); drop the `vf-*` verifier rows
+   from that file and report them separately, or they would inflate the item count and deflate h/item.
 5. **Score once every sheet is in**, using the exact `next_command` from `status.json`:
 
    ```bash
