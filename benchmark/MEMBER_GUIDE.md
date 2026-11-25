@@ -1,182 +1,131 @@
-# 🧭 Member Guide — TrustCal FYDP
+# Member guide — how to label, from zero
 
-You read evidence. You pick a label. That is the job.
-No code. No models. No paper work.
+This page is the how-to. It assumes you have never annotated anything and know nothing about the project.
+The project itself, your role, and your deadline are in [the hub](README.md).
 
-The full protocol is in [the hub](./README.md). Open your pack first, then label.
-Pass gate: κ ≥ 0.75, defect ≤ 0.15, H_attempt ≤ 2.0 h/item, unresolved ≤ 0.05.
+## 1. What one row looks like
 
-## 0. 📦 Task packs — start here
+Your sheet is a CSV. The first line is a header, and every line after it is one claim. This is an
+illustrative row, not a batch row — the real ones are in your sheet:
 
-One pack per role. It has your steps, files, and done rule.
-Read [00_OVERVIEW](./tasks/00_OVERVIEW.md) first. Then your own pack.
+```text
+item_id,claim_id,stratum,claim,evidence_passage_ids,evidence_text,verdict,confidence,notes
+cal-001,cal-001-a1-c2,biomedical,"Drug X lowered LDL cholesterol by 20 mg/dL versus placebo.",cal-001-a1-c2-e1,"[p1] LDL cholesterol fell 20 mg/dL in the Drug X arm and 2 mg/dL in the placebo arm.",support,0.9,"direction and size match"
+```
 
-- [00_OVERVIEW](./tasks/00_OVERVIEW.md) — map of 24 → 180 → 300, gates, word list.
-- [01_RATER](./tasks/01_RATER.md) — Prottoy and Salman. Label blind sheets.
-- [03_AUTHOR](./tasks/03_AUTHOR.md) — Yousuf. Check all 24 drafts.
-- [02_ADJUDICATOR](./tasks/02_ADJUDICATOR.md) — Rakib and Limu. Settle disagreements.
-- [04_AGENT_PILOT](./tasks/04_AGENT_PILOT.md) — Atik. Helpers and score, last.
+Read it left to right:
 
-## 1. 💡 What this project is
-
-Models debate a science question. They read each other's answers.
-At times a right model copies a wrong group. This is sycophantic collapse.
-TrustCal fixes the mix. It trusts the model whose claims match real evidence.
-Your labels test if humans agree on what the evidence says. See [the hub](./README.md).
-
-## 2. 👥 Who does what
-
-| Name | Job | Due |
+| Column | What it holds | What you do |
 | --- | --- | --- |
-| Prottoy — rater 1 | Label both blind sheets alone | Fri 4 Dec |
-| Salman — rater 2 | Label both blind sheets alone | Fri 4 Dec |
-| Yousuf — verifier | Check all 24 drafts, file problem list | Fri 4 Dec |
-| Rakib + Limu — adjudicators | Settle disagreements, defect review | Fri 11 Dec |
-| Atik — agent pilot, last | Build sheets, run score | Week of 14 Dec |
+| `item_id` | which item, one question with three agent positions | ignore |
+| `claim_id` | which claim inside that item | ignore |
+| `stratum` | biomedical, physics/chemistry, math/CS | ignore |
+| `claim` | the statement you are judging | read |
+| `evidence_passage_ids` | which passages belong to this claim | ignore |
+| `evidence_text` | the quoted passages, marked `[p1]`, `[p2]` | read |
+| `verdict` | **empty — your label goes here** | fill |
+| `confidence` | **empty** — how sure you are, 0 to 1 | fill |
+| `notes` | **empty** — one short line on hard rows | fill when needed |
 
-Hardest job to easiest: adjudication (Rakib + Limu), then verification (Yousuf), then rating (Prottoy and Salman). Atik runs the score last.
-No one does paper, code, or tests. Atik covers those with agents.
+The verifier sheet is the same idea with different names: `claim`, `passages`, and a `label` column
+instead of `verdict`. Its labels are `supported`, `contradicted`, `unverifiable`. Read
+[its codebook](private/verifier/codebook.md) before you start that one.
 
-## 3. ⚖️ Rakib + Limu — adjudicators
+## 2. Practice rows
 
-🟢 Your job: Settle each row where Prottoy and Salman disagree.
-You use the codebook. You write a one-line reason per row.
+Cover the right-hand columns and decide each row yourself, then check. Every row appears once; the third
+column shows the same label in both wordings.
 
-🟡 Do:
-- Copy agreement rows as they are. Touch nothing.
-- Decide each disagreement from the cited text only.
-- Mark hopeless rows `unresolved`. List them.
+| # | Claim | Passages | SciClaimBench | Verifier | Why |
+| ---: | --- | --- | --- | --- | --- |
+| 1 | Drug X reduced systolic blood pressure by 12 mmHg versus placebo. | Systolic pressure fell 12 mmHg on Drug X and 1 mmHg on placebo. | `support` | `supported` | The passage states the relation and the number. |
+| 2 | Drug X reduced systolic blood pressure by 12 mmHg versus placebo. | There was no significant difference in systolic pressure between Drug X and placebo. | `contradict` | `contradicted` | The passage denies the claimed effect. |
+| 3 | Drug X reduced systolic blood pressure by 12 mmHg versus placebo. | The trial enrolled 120 adults with treated hypertension. | `neutral` | `unverifiable` | On topic, but the effect is never stated. |
+| 4 | Drug X reduced systolic blood pressure and raised heart rate. | Drug X reduced systolic pressure by 12 mmHg; heart rate was not reported. | `neutral` | `unverifiable` | Half of a compound claim is still not the claim. |
+| 5 | The sample warmed by 10 °C during the run. | The sample warmed by 18 °F during the run. | `support` | `supported` | The same temperature change after unit conversion. |
+| 6 | Drug X lowers systolic blood pressure. | *(no passages)* | `neutral` | `unverifiable` | Empty evidence never supports anything. |
 
-🔴 Never:
-- Never open gold answers or verifier labels.
-- Never change labels to raise κ.
-- Never start before both rater sheets are in.
+## 3. One label, decided step by step
 
-⏱ Time: 8–11 hours shared.
-📂 Your file: [02_ADJUDICATOR](./tasks/02_ADJUDICATOR.md). Due Fri 11 Dec.
+Claim: *Drug X lowered systolic blood pressure by 12 mmHg versus placebo.*
 
-## 4. 🔍 Yousuf — verifier of 24 drafts
-
-🟢 Your job: Check all 24 draft items against the codebook.
-You file one checklist per item plus a problem list.
-
-🟡 Do:
-- Check each claim has cited evidence and a clear locator.
-- Check verdict order puts contradict first.
-- Send fixes to Atik. He edits. You re-check.
-
-🔴 Never:
-- Never edit the item source yourself.
-- Never label a rater sheet.
-- Never invent a passage, DOI, or verdict.
-
-⏱ Time: 12–16 hours, about 30–40 minutes per item.
-📂 Your file: [03_AUTHOR](./tasks/03_AUTHOR.md) and [checklist](./templates/item_verification_checklist.md). Due Fri 4 Dec.
-
-## 5. 📝 Prottoy — rater 1
-
-🟢 Your job: Label every row in your two blind sheets alone.
-Your sheet plus Salman's sets the κ score.
-
-🟡 Do:
-- Label 216 SciClaimBench rows: `support`, `contradict`, or `neutral`.
-- Label 180 verifier rows: `supported`, `contradicted`, or `unverifiable`.
-- Log minutes per item. Submit a copy with your initials.
-
-🔴 Never:
-- Never open the item answers or Salman's sheet.
-- Never talk rows over with Salman before both sheets are in.
-- Never use AI or outside facts for a label.
-
-⏱ Time: about 11–13 hours total (estimate). A 216-row sheet takes 5–7 h practiced, 8–10 h the first time. The verifier sheet adds 5–6 h.
-📂 Your file: [01_RATER](./tasks/01_RATER.md) and [checklist](./templates/annotation_submission_checklist.md). Due Fri 4 Dec.
-
-## 6. 📋 Salman — rater 2
-
-🟢 Your job: Label every row in your two blind sheets alone.
-Same sheets as Prottoy. Never peek at his.
-
-🟡 Do:
-- Label 216 SciClaimBench rows: `support`, `contradict`, or `neutral`.
-- Label 180 verifier rows: `supported`, `contradicted`, or `unverifiable`.
-- Log minutes per item. Submit a copy with your initials.
-
-🔴 Never:
-- Never open the item answers or Prottoy's sheet.
-- Never talk rows over with Prottoy before both sheets are in.
-- Never use AI or outside facts for a label.
-
-⏱ Time: about 11–13 hours total (estimate). A 216-row sheet takes 5–7 h practiced, 8–10 h the first time. The verifier sheet adds 5–6 h.
-📂 Your file: [01_RATER](./tasks/01_RATER.md) and [checklist](./templates/annotation_submission_checklist.md). Due Fri 4 Dec.
-
-## 7. 🤖 Atik — agent pilot and score, last
-
-🟢 Your job: Build sheets, run checks, and post the score.
-You start only after every human sheet is in.
-
-🟡 Do:
-- Build blind sheets and run the validator.
-- Run the score command from [the hub](./README.md). Post κ, defect, H_attempt, unresolved.
-- Fix item text from problem lists. Rebuild sheets if claims change.
-
-🔴 Never:
-- Never let agent text become a verdict without a human check.
-- Never score before all human sheets are in.
-- Never adjudicate or set gold with an agent.
-
-⏱ Time: at the end. Test and paper time is separate.
-📂 Your file: [04_AGENT_PILOT](./tasks/04_AGENT_PILOT.md). Due week of 14 Dec.
-
-## 8. ✅ SciClaimBench practice rows
-
-| # | Claim | Passage | Correct label | Why |
-| ---: | --- | --- | --- | --- |
-| 1 | Drug X reduced systolic blood pressure by 12 mmHg versus placebo. | In the trial, systolic blood pressure fell 12 mmHg in the Drug X arm and 1 mmHg in the placebo arm. | `support` | The passage states the relation and the number. |
-| 2 | Drug X reduced systolic blood pressure by 12 mmHg versus placebo. | There was no significant difference in systolic blood pressure between Drug X and placebo. | `contradict` | The passage denies the claimed effect. |
-| 3 | Drug X reduced systolic blood pressure by 12 mmHg versus placebo. | The trial enrolled 120 adults with treated hypertension. | `neutral` | The passage is on-topic but does not state the effect. |
-| 4 | Drug X reduced systolic blood pressure and increased heart rate. | Drug X reduced systolic blood pressure by 12 mmHg; heart rate was not reported. | `neutral` | Only one part of the compound claim is supported. |
-| 5 | The reaction released 100 °C of heat. | The reaction reached 212 °F. | `support` | The numbers agree after unit conversion. |
-
-## 9. ✅ Verifier audit practice rows
-
-| # | Claim | Passages | Correct label | Why |
-| ---: | --- | --- | --- | --- |
-| 1 | Drug X lowers systolic blood pressure. | In the trial, systolic blood pressure fell 12 mmHg on Drug X versus 1 mmHg on placebo. | `supported` | The passage states the claimed relation. |
-| 2 | Drug X lowers systolic blood pressure. | There was no significant difference in systolic blood pressure between Drug X and placebo. | `contradicted` | The passage denies the relation. |
-| 3 | Drug X lowers systolic blood pressure. | The trial enrolled 120 adults with treated hypertension. | `unverifiable` | The passage is on-topic but does not state the relation. |
-| 4 | Drug X lowers systolic blood pressure. | *(empty passage)* | `unverifiable` | Empty evidence never supports a claim. |
-| 5 | Drug X lowers systolic blood pressure. | Drug X is a small molecule with a molecular weight of 412 Da. | `unverifiable` | Topical overlap is not support. |
-
-## 10. 🙈 Blinding rules
-
-- Do not discuss individual rows with the other rater before both sheets are submitted.
-- Do not open the other rater's sheet, the gold verdict, the verifier label, or the arm map.
-- If you recognize an item from another batch, tell Atik before labeling it.
-- The adjudicator may see both sheets, but not the gold or verifier label.
-
-## 11. 📅 Timeline
-
-Raters and Yousuf finish Fri 4 Dec. Adjudication finishes Fri 11 Dec. Score runs week of 14 Dec.
-Start the verifier audit in week 1. The pairs are ready. SciClaimBench sheets come after Atik's drafts.
-
-| Week | Focus |
+| Passage | What it says |
 | --- | --- |
-| 1 | Onboarding, practice rows, verifier labels start |
-| 2 | Verifier labels finish, SciClaimBench labeling starts |
-| 3 | SciClaimBench labeling finishes, adjudication starts |
-| 4 | Defect review, score, sign-off |
-| 5–6 | Buffer for a fresh batch if κ fails |
+| `[p1]` | Systolic pressure fell 12 mmHg on Drug X and 1 mmHg on placebo (n = 120). |
+| `[p2]` | There was no significant difference in systolic pressure between the two arms. |
+| `[p3]` | The trial enrolled 120 adults with treated hypertension. |
 
-A failed κ is a finding, not a team failure. Keep the batch. Fix the codebook. Run a fresh batch.
+1. **Any contradiction?** `p2` says there was no difference, which denies the claim. Stop: the verdict is
+   `contradict`, even though `p1` supports it. One refutation beats any amount of support. A reported
+   null result counts as a refutation when the claim asserts the effect.
+2. **If nothing contradicted, would anything support?** `p1` states the exact relation and the number, so
+   the row would be `support`.
+3. **If neither held**, `p3` alone would leave it `neutral` — it is about the trial, not about the effect.
 
-## 12. 🏁 Done means
+Quiz yourself on the order: contradiction first, support second, neutral is what is left. Never start from
+"does this look true?" — start from "does a passage say it is false?"
 
-| Name | Done when |
+## 4. The five mistakes that cost the most
+
+1. **Using what you know.** Your knowledge of the drug, the physics, or the paper does not count. Only the
+   printed passages decide. If the passages are thin, the answer is `neutral`, not your memory.
+2. **Reading the item file instead of the passages.** The drafted items in
+   `private/calibration_items.jsonl` carry the gold answers. If you are a rater or an adjudicator, opening
+   one voids the row and the batch; only Yousuf, who verifies the drafts, may read them.
+3. **Calling a compound claim supported.** "Reduced pressure and raised heart rate" needs both halves in
+   the passages. One half is `neutral`.
+4. **Treating a topic match as support.** A passage about the same disease, drug, or molecule proves
+   nothing about the specific relation in the claim.
+5. **Relabelling after a conversation.** Your first pass is the measurement. Once you have seen the other
+   rater's sheet or discussed a row, that row can no longer count — tell Atik instead of quietly changing
+   it.
+
+## 5. Blinding, in plain terms
+
+- Label alone. No calls, no chat about single rows, no shared screen.
+- Do not open the other rater's sheet, the item files, the verifier answer key, or the arm map.
+- If a row looks familiar from another batch, say so before labelling it.
+- Adjudicators may see both rater sheets. They never see gold or the verifier label.
+
+Blinding is not bureaucracy. κ measures agreement between two independent judgements; a shared answer
+makes the number look good and mean nothing.
+
+## 6. Getting the file back
+
+1. Save as CSV, UTF-8, with your initials: `rater1_PR.csv`, `rater2_SA.csv`.
+2. Check the row count: 216 on SciClaimBench, 180 on the verifier sheet.
+3. Fill the submission checklist in [`templates/annotation_submission_checklist.md`](templates/annotation_submission_checklist.md).
+4. Send the CSV and the checklist to Atik directly — WhatsApp file or a Drive link — and post the filename
+   and row count in the group. Do not commit them, do not email raw sheets, do not paste rows into any AI
+   tool.
+
+## 7. Time, and the four weeks
+
+| Work | Estimate |
 | --- | --- |
-| Yousuf | 24 checklists plus problem list are in |
-| Prottoy | Both rater 1 sheets plus signed checklists are in |
-| Salman | Both rater 2 sheets plus signed checklists are in |
-| Rakib + Limu | Both adjudication books, defect log, and licence check are signed |
-| Atik, last | Score JSON is posted after every human sheet is in |
+| 216-row SciClaimBench sheet | 5–7 h once practised, 8–10 h the first time |
+| 180-row verifier sheet | 5–6 h |
+| Verifying the 24 drafted items | 12–16 h, about 30–40 min per item |
+| Adjudication, both books plus defect review | 10–14 h shared |
 
-Never relabel rows to pass the gate. Report the number as it is.
+Four weeks, 25 Nov – 22 Dec 2026, no fifth week.
+
+| Week | Dates | Focus | Due this week |
+| --- | --- | --- | --- |
+| 1 | 25 Nov – 1 Dec | onboarding, practice rows, first labels | first 20 rows in every sheet |
+| 2 | 2 – 8 Dec | verifier sheet and the 24 drafts finished, SciClaimBench labelling starts | 180 verifier rows each and Yousuf's problem list, Fri 4 Dec |
+| 3 | 9 – 15 Dec | SciClaimBench labelling finished, adjudication starts | 216 rows each, both rater sheets in, Fri 11 Dec |
+| 4 | 16 – 22 Dec | adjudication, defect review, score, sign-off | adjudication Wed 16 Dec, gate numbers Fri 18 Dec |
+
+A failed κ stops the sprint at week 4; the fresh 24-item batch is the next cycle, and the failed batch
+stays in the report as a finding. Do not relabel it to buy time.
+
+## 8. If something goes wrong
+
+| What happened | What to do |
+| --- | --- |
+| a passage is cut off, empty, or points nowhere | label what you can, write it in `notes`, tell Atik |
+| two passages contradict each other and you cannot tell which | still label `contradict` if either refutes the claim; note the clash |
+| you already saw a gold answer for a row | tell Atik before labelling it; the row may need replacing |
+| you lost the file or broke a column | stop, do not rebuild from memory, ask Atik for a fresh copy |
+| the deadline is at risk | say so early, in the group, with the rows remaining |

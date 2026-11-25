@@ -1,74 +1,51 @@
-# Member templates
+# Templates — the forms you fill and send back
 
-Use these formats for the TrustCal annotation sprint. Do not make your own. Keep the header row unchanged.
+Every task has one form. Use the form as it is: same header row, same columns, nothing added. If a column
+is missing, ask Atik — do not invent one.
 
-**Guide:** [`MEMBER_GUIDE.md`](../MEMBER_GUIDE.md)
+**Guide:** [`MEMBER_GUIDE.md`](../MEMBER_GUIDE.md) · **Hub:** [`README.md`](../README.md)
 
-**Repository:** <https://github.com/Atik203/trustcal>
+## Which form do I use?
 
-## 📂 Which template do I use?
-
-| Task | Template | Who uses it | Submit as |
+| Task | Form | Who | Send back as |
 | --- | --- | --- | --- |
-| SciClaimBench item verification | [`item_verification_checklist.md`](item_verification_checklist.md) | Yousuf | `item_verification_<initials>.md` |
-| SciClaimBench rater sheet | [`rater1.template.csv`](../annotation/rater1.template.csv) | Prottoy and Salman | `rater1_<initials>.csv`, `rater2_<initials>.csv` |
-| SciClaimBench adjudication | [`adjudication.template.csv`](../annotation/adjudication.template.csv) | Rakib + Limu | `adjudication.csv` |
-| SciClaimBench effort log | [`effort.template.csv`](../annotation/effort.template.csv) | All raters | `effort_<initials>.csv` |
-| Verifier audit rater sheet | Made by the harness; do not make your own | Prottoy and Salman | `rater1_<initials>.csv`, `rater2_<initials>.csv` |
-| Verifier audit master sheet | [`audit_sheet.template.csv`](../../experiments/verifier_audit/audit_sheet.template.csv) | Rakib + Limu | `audit_sheet.csv` |
-| Rater calibration notes | [`calibration_notes.md`](calibration_notes.md) | Atik | `calibration_notes.md` |
+| SciClaimBench labelling | the sheet you were given, in `private/calibration/sheets/` | Prottoy and Salman | `rater1_PR.csv`, `rater2_SA.csv` |
+| Verifier audit labelling | the sheet you were given, in `private/verifier/sheets/` | Prottoy and Salman | same names, separate file |
+| SciClaimBench adjudication | the sheet in `private/calibration/sheets/adjudication.csv` | Rakib + Limu | `adjudication.csv` |
+| Verifier adjudication | the sheet in `private/verifier/adjudication.csv` | Rakib + Limu | `adjudication_verifier.csv` |
+| Effort log | [`effort.template.csv`](../annotation/effort.template.csv) | every rater and adjudicator | `effort_<initials>.csv` |
+| Item verification | [`item_verification_checklist.md`](item_verification_checklist.md) | Yousuf | one file per item, `item_verification_<item>.md` |
+| Submission checklist | [`annotation_submission_checklist.md`](annotation_submission_checklist.md) | every rater | `submission_<initials>.md` |
 | Weekly check-in | [`weekly_checkin.md`](weekly_checkin.md) | Atik | `checkin_week<N>.md` |
-| Annotation submission | [`annotation_submission_checklist.md`](annotation_submission_checklist.md) | Every rater | `submission_<initials>.md` |
+| Training record | [`calibration_notes.md`](calibration_notes.md) | Atik | `calibration_notes.md` |
 
-## 📤 Naming and submission
+The verifier adjudication sheet has no verifier label column on purpose; the answer key stays with Atik.
 
-1. Take the template, or copy it in the private folder.
-2. Save a copy with your initials. Use the pattern in the table.
-3. Fill every row. Do not cut rows or add columns.
-4. Check the row count against the batch manifest.
-5. Upload to the private folder. Do not email or chat raw sheets.
-6. Post the filename and row count in the team channel.
+## Sending files back
 
-Atik copies the per-person sheets (LAST, after all sheets are in) to the plain names (`rater1.csv`, `rater2.csv`) before scoring.
+1. Save with your initials and the right name from the table above.
+2. Keep the header row exactly as it was. Do not add, remove, or rename a column.
+3. Never leave a label blank, and never write a label that is not in the allowed list.
+4. Check the row count: 216 on SciClaimBench, 180 on the verifier sheet.
+5. Send the file and your checklist to Atik directly — WhatsApp file or Drive link — and post the filename
+   plus row count in the group.
+6. Never commit a filled sheet, never email it, and never paste rows into an AI tool. Atik copies your file
+   to the plain name (`rater1.csv`) only after every sheet is in.
 
-## 🔴 Rules
+## Rules that keep the data usable
 
-- Do not change the header row.
-- Do not add extra columns.
-- Do not leave a label blank. Use the exact label string from the codebook.
-- No names, emails, phones, addresses, or payment IDs in `notes`.
+- Exact label strings only: `support` / `contradict` / `neutral`, or `supported` / `contradicted` /
+  `unverifiable`. No capitals, no synonyms, no `maybe`.
+- No names, emails, phone numbers, addresses, or payment IDs in `notes`.
 - No private claim or passage text in a public issue, a public repo, or an external AI tool.
-- If unsure, set confidence low and write a short note.
-- Ask the annotation lead before you make a new category.
+- Unsure? Set confidence low and write one short note. A note is never a label.
+- A new category is Atik's call, not yours.
 
-## 🏷 Exact label strings
+## Need help?
 
-### SciClaimBench
-
-```text
-support
-contradict
-neutral
-```
-
-### Verifier audit
-
-```text
-supported
-contradicted
-unverifiable
-```
-
-### Adjudication
-
-Adjudicated verdict = codebook verdict string, or `unresolved`.
-
-## 🆘 Need help?
-
-| Problem | Contact |
+| Problem | Who |
 | --- | --- |
-| Batch, blinding, or submission | Atik (benchmark owner) |
-| Codebook or protocol question | Atik |
-| Adjudication question | Rakib + Limu |
-| Private data or PII worry | Atik in private; do not open a public issue |
-| Broken link or missing file | Atik in the team channel |
+| a row, a broken locator, a missing file | Atik, in the group |
+| how a label is defined | Atik |
+| adjudication practice | Rakib + Limu |
+| personal data or a suspected leak | Atik privately, never a public issue |
