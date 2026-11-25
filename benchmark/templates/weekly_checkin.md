@@ -44,7 +44,7 @@
 
 ## Checkpoint
 
-- [ ] All deliverables for the week are in the private folder.
+- [ ] All deliverables for the week are with Atik (sent directly, not committed).
 - [ ] Any codebook question is logged.
 - [ ] Any PII or private-data issue was reported privately.
 - [ ] The next week's batch is ready.

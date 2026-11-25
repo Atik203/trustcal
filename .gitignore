@@ -46,11 +46,24 @@ __pycache__/
 .venv/
 /trustcal/results/
 
-# Annotation / audit working data. These may contain non-redistributable
-# item text (SciFact is CC BY-NC 2.0; GPQA and HLE are gated; MMLU-Pro test
-# text should not be redistributed).
-/benchmark/private/
+# Verifier-audit working data: SciFact corpus, the 180-pair answer key and the
+# harness scratch files. Stays private; benchmark/private/ is published for the
+# team.
 /experiments/verifier_audit/private/
+
+# Local-only benchmark drafts that nothing in benchmark/ links to.
+/benchmark/private/pilot/
+/benchmark/private/calibration_biomedical.jsonl
+/benchmark/private/calibration_math_cs.jsonl
+/benchmark/private/calibration_physics_chemistry.jsonl
+
+# Filled annotation files: sent to Atik, never committed.
+/benchmark/private/**/rater1_*.csv
+/benchmark/private/**/rater2_*.csv
+/benchmark/private/**/effort_*.csv
+/benchmark/private/**/adjudication_verifier.csv
+/benchmark/private/**/submission_*.md
+/benchmark/private/**/item_verification_*.md
 
 docs/supervisor_report/main.aux
 docs/supervisor_report/main.out

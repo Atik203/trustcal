@@ -10,12 +10,9 @@ Human rater training. Not model training. Atik runs the session, answers codeboo
 ## 📂 Docs covered
 
 - [ ] [`README.md`](README.md) (this folder)
-- [ ] [`FYDP_Report/fydp.pdf`](../../FYDP_Report/fydp.pdf) (abstract, Chapters 3–4)
-- [ ] [`PRE_REGISTRATION.md`](../../PRE_REGISTRATION.md)
 - [ ] [`benchmark/README.md`](../README.md)
 - [ ] [`benchmark/schema.md`](../schema.md)
-- [ ] [`experiments/verifier_audit/README.md`](../../experiments/verifier_audit/README.md)
-- [ ] [`docs/GLOSSARY.md`](../../docs/GLOSSARY.md)
+- [ ] [verifier codebook](../private/verifier/codebook.md)
 - [ ] [`MEMBER_GUIDE.md`](../MEMBER_GUIDE.md)
 
 ## ✏️ Practice rows
@@ -42,7 +39,7 @@ Human rater training. Not model training. Atik runs the session, answers codeboo
 - [ ] No LLM-made labels.
 - [ ] No outside facts.
 - [ ] Exact label strings only.
-- [ ] Private folder only. No raw data on GitHub or public tools.
+- [ ] Filled sheets stay out of git: sent to Atik, never committed or posted.
 - [ ] Ask the annotation lead when the codebook is unclear.
 
 ## ❓ Open questions

@@ -2,7 +2,7 @@
 
 **Verifier:** ____________________
 **Date:** ____________________
-**Batch:** `benchmark/private/calibration_items.jsonl`
+**Batch:** `private/calibration_items.jsonl`, inside the benchmark folder
 **Guide:** [`MEMBER_GUIDE.md`](../MEMBER_GUIDE.md)
 
 One copy per item. Do not edit the source. Send this checklist and your problem list to Atik.
@@ -38,7 +38,7 @@ One copy per item. Do not edit the source. Send this checklist and your problem 
 - [ ] Each claim is one small checkable fact.
 - [ ] Compound claims are split. None is labeled as one claim.
 - [ ] The cited passages alone decide the claim.
-- [ ] Passages are quoted word for word. Each locator opens.
+- [ ] Passages are verbatim, or excerpts marked with an ellipsis; each locator opens.
 - [ ] Verdict order: `contradict` first, then `support`, else `neutral`.
 - [ ] Numbers match after unit change.
 - [ ] Negation is read the right way round.

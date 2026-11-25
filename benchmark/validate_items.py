@@ -3,7 +3,7 @@
     python benchmark/validate_items.py check \
         --items benchmark/items.seed.jsonl
     python benchmark/validate_items.py sheets \
-        --items benchmark/private/items.jsonl \
+        --items benchmark/private/calibration_items.jsonl \
         --out benchmark/private/sheets
     python benchmark/validate_items.py score \
         --rater1 .../rater1.csv --rater2 .../rater2.csv \
