@@ -9,8 +9,8 @@ is missing, ask Atik — do not invent one.
 
 | Task | Form | Who | Send back as |
 | --- | --- | --- | --- |
-| SciClaimBench labelling | the sheet you were given, in `private/calibration/sheets/` | Prottoy and Salman | `rater1_PR.csv`, `rater2_SA.csv` |
-| Verifier audit labelling | the sheet you were given, in `private/verifier/sheets/` | Prottoy and Salman | same names, separate file |
+| SciClaimBench labelling | the sheet you were given, in `private/calibration/sheets/` | Prottoy and Salman | `rater1_sci_PR.csv`, `rater2_sci_SA.csv` |
+| Verifier audit labelling | the sheet you were given, in `private/verifier/sheets/` | Prottoy and Salman | `rater1_ver_PR.csv`, `rater2_ver_SA.csv` |
 | SciClaimBench adjudication | the sheet in `private/calibration/sheets/adjudication.csv` | Rakib + Limu | `adjudication.csv` |
 | Verifier adjudication | the sheet in `private/verifier/adjudication.csv` | Rakib + Limu | `adjudication_verifier.csv` |
 | Effort log | [`effort.template.csv`](../annotation/effort.template.csv) | every rater and adjudicator | `effort_<initials>.csv` |

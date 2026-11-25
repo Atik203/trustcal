@@ -11,7 +11,7 @@ Finish this list before you send the file. One tick per line.
 
 ## 📂 File
 
-- [ ] I saved a copy with my initials (`rater1_<initials>.csv`).
+- [ ] I saved one file per sheet with my initials (`rater1_sci_<initials>.csv`, `rater1_ver_<initials>.csv`).
 - [ ] I did not touch the original batch or template.
 - [ ] The header row is unchanged.
 - [ ] I added no columns and deleted none.
@@ -30,14 +30,14 @@ Finish this list before you send the file. One tick per line.
 ## 🙈 Blinding
 
 - [ ] I did not open the other rater's sheet.
-- [ ] I did not open the gold verdict, verifier label, or arm map.
+- [ ] I did not open the gold verdict or the verifier answer key.
 - [ ] I did not discuss single rows with the other rater.
 - [ ] No LLM made my labels.
 - [ ] I judged each claim only from the cited passages. No outside facts.
 
 ## 📤 Send
 
-- [ ] The file is named with my initials (`rater1_<initials>.csv`).
+- [ ] Both files are named with my initials and the round (`_sci_`, `_ver_`).
 - [ ] I sent it to Atik directly (WhatsApp or Drive), not committed, not emailed.
 - [ ] I posted the filename and row count in the team channel.
 - [ ] The blank sheet in the folder is unchanged.
