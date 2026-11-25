@@ -26,7 +26,7 @@ jobs:
       - name: Render serve commands
         working-directory: trustcal
         run: |
-          python scripts/gen_serve_cmds.py --phase dev > /dev/null
+          python scripts/gen_serve_cmds.py --phase fourbit > /dev/null
           python scripts/gen_serve_cmds.py --phase final > /dev/null
       - name: Phase single-source guard
         working-directory: trustcal
