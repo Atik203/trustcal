@@ -83,7 +83,7 @@ Quiz yourself on the order: contradiction first, support second, neutral is what
 ## 5. Blinding, in plain terms
 
 - Label alone. No calls, no chat about single rows, no shared screen.
-- Do not open the other rater's sheet, the item files, the verifier answer key, or the arm map.
+- Do not open the other rater's sheet, the item files, or the verifier answer key.
 - If a row looks familiar from another batch, say so before labelling it.
 - Adjudicators may see both rater sheets. They never see gold or the verifier label.
 
@@ -92,7 +92,8 @@ makes the number look good and mean nothing.
 
 ## 6. Getting the file back
 
-1. Save as CSV, UTF-8, with your initials: `rater1_PR.csv`, `rater2_SA.csv`.
+1. Save as CSV, UTF-8, one file per sheet: `rater1_sci_PR.csv` and `rater1_ver_PR.csv` (Prottoy),
+   `rater2_sci_SA.csv` and `rater2_ver_SA.csv` (Salman), plus `effort_PR.csv` or `effort_SA.csv`.
 2. Check the row count: 216 on SciClaimBench, 180 on the verifier sheet.
 3. Fill the submission checklist in [`templates/annotation_submission_checklist.md`](templates/annotation_submission_checklist.md).
 4. Send the CSV and the checklist to Atik directly — WhatsApp file or a Drive link — and post the filename

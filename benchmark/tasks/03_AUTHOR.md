@@ -39,9 +39,9 @@ why the hub marks them off-limits for everyone else.
 6. **Check the writing.** Expert phrasing, no hedging, and no machine fingerprints: no "as an AI", no
    "drafted", "generated", "assisted", no model names, no leftover metadata fields. Items carry no AI
    markings at all.
-7. **Write the problem list** by `claim_id` and send it to Atik with the checklists. Atik edits, you
-   re-check the changed rows. Duplicate claim text across two positions is not a defect by itself; note it
-   only when the two positions are otherwise identical.
+7. **Write the problem list** by `claim_id`, one file `problems_<initials>.md`, and send it to Atik with
+   the checklists. Atik edits, you re-check the changed rows. Duplicate claim text across two positions
+   is not a defect by itself; note it only when the two positions are otherwise identical.
 8. **Run the structural check** before you hand anything back. You are allowed to run it; it only reads:
 
    ```bash

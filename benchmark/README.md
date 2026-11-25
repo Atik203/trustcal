@@ -36,7 +36,8 @@ as not finished, with the rows that remain.
 | Atik, benchmark owner | build sheets, run the score, **last** | — | [`tasks/04_AGENT_PILOT.md`](tasks/04_AGENT_PILOT.md) | Fri 18 Dec 2026 |
 
 First annotation of your life? Read [`MEMBER_GUIDE.md`](MEMBER_GUIDE.md) first. It shows a real sheet
-row, one worked label, and the five mistakes that waste the most time.
+row, one worked label, and the five mistakes that waste the most time. If you want the whole map on one
+page first — ladder, roles, vocabulary — that is [`tasks/00_OVERVIEW.md`](tasks/00_OVERVIEW.md).
 
 ## 3. The two sheets, and the one column you fill
 
@@ -50,8 +51,10 @@ are deliberate: SciClaimBench says `support`, the verifier audit says `supported
 sheet into the other is a broken row. The verifier sheet's rules are its own one-page
 [codebook](private/verifier/codebook.md) — read it before that sheet.
 
-Where the row counts come from: 216 rows = 24 items × 3 agent positions × 3 claims; 180 rows = 180
-claim–passage pairs. One row is always one claim, never one question.
+Where the row counts come from: this batch has 24 items x 3 agent positions x 3 claims = 216 rows, and
+180 claim–passage pairs in the verifier sheet. The schema allows 3–6 claims per position, so a later
+batch can be up to twice this size; always read the count off your own sheet. One row is always one
+claim, never one question.
 
 ## 4. Filling a sheet, first time
 
@@ -63,13 +66,15 @@ claim–passage pairs. One row is always one claim, never one question.
    on the verifier sheet). Type the label, a confidence, and a short note when the row was hard.
    Confidence is your own certainty: 0.9 means the passages decide it plainly, 0.5 means you would argue
    with yourself, and anything below 0.5 belongs in `notes` as well.
-4. **Save as CSV, UTF-8**, named `rater1_PR.csv` (Prottoy) or `rater2_SA.csv` (Salman). The pattern is
-   `rater<N>_<your initials>.csv`.
+4. **Save as CSV, UTF-8**, one file per sheet: `rater1_sci_PR.csv` and `rater1_ver_PR.csv` for
+   Prottoy; `rater2_sci_SA.csv` and `rater2_ver_SA.csv` for Salman. `sci` is the SciClaimBench sheet,
+   `ver` is the verifier sheet.
 5. **Count the rows** — `=COUNTA(A:A)-1` must give 216 or 180. A raw line count lies when a cell holds a
    line break, so use the formula, not the editor's line number.
-6. **Send the file to Atik** (WhatsApp file or Drive link) and post in the team group:
-   `rater1_PR.csv — 216 rows — 4 hard rows`. Ask Atik for the group link if you are not in it. Atik
-   renames your file to the plain name before scoring.
+6. **Send the files to Atik** (WhatsApp file or Drive link) and post in the team group:
+   `rater1_sci_PR.csv — 216 rows — 4 hard rows`. Contact details are deliberately not in this public
+   folder: use the team group you already have, or ask Atik in person. Atik assembles your files into
+   the plain names before scoring.
 
 Never commit a filled sheet. Never email it. Never paste a claim or passage into ChatGPT or any other AI
 tool. The sheets here are blank on purpose; a filled sheet is work that must not leak before
@@ -99,7 +104,7 @@ Worked examples for both wordings: [`MEMBER_GUIDE.md`](MEMBER_GUIDE.md) §2.
 | Quantity | Plain meaning | Pass |
 | --- | --- | --- |
 | Cohen's κ | how often the two raters agree beyond chance, 0 to 1 | **≥ 0.75** |
-| Defect rate | share of frozen triples an independent reviewer finds wrong or unsupported | **≤ 0.15** |
+| Defect rate | share of the 216 adjudicated rows an independent reviewer flags wrong or unsupported | **≤ 0.15** |
 | `H_attempt` | human hours per item, all phases counted | **≤ 2.0 h** |
 | Unresolved rate | share of rows the adjudicators had to abandon | **≤ 0.05** |
 
@@ -126,9 +131,9 @@ no-go markers and are not built.
 | `tasks/` | one pack per role, with the exact steps | everyone — open your own |
 | `templates/` | submission checklists and effort logs | everyone |
 | `schema.md`, `item.template.json` | the item format, one filled skeleton | Yousuf, Atik |
-| `annotation/*.template.csv` | empty sheets with the right headers | Yousuf, Atik |
+| `annotation/effort.template.csv` | the effort-log header members copy | everyone |
 | `validate_items.py`, `draft_items.py` | the validator and the item generator | Yousuf may run the check; Atik owns the rest |
-| `private/calibration/sheets/`, `private/verifier/sheets/` | the blank sheets you fill | **raters only, their own sheet** |
+| `private/calibration/sheets/`, `private/verifier/sheets/` | the blank sheets: two per round plus the adjudication file | **raters see only their own; adjudicators see the adjudication files** |
 | `private/calibration_items.jsonl` | the 24 drafted items **with gold answers** | **Yousuf and Atik only** |
 | `private/calibration_*.jsonl` | the same items split by subject | **Yousuf and Atik only** |
 | `private/freeze180/`, `private/full300/` | the 180 and 300 batches, not in play yet | **Atik only** |
@@ -189,7 +194,7 @@ Empty is never a pass. The 180 and 300 batches use the same commands against `pr
 | **blind sheet** | a sheet with the claims and passages but no gold verdict, so the label is really yours |
 | **adjudication** | settling one row where the two raters disagree, with a one-line reason |
 | **unresolved** | a row nobody can settle from the passages; it is reported, never deleted |
-| **defect review** | an independent check of frozen triples by someone who did not label them |
+| **defect review** | an independent check of the adjudicated rows by someone who did not label them, done before the freeze |
 | **freeze** | the batch is final and versioned; a later correction becomes `-v2`, never an overwrite |
 | **stratum** | the subject area of an item: biomedical, physics/chemistry, math/CS |
 | **κ (kappa)** | agreement between the two raters after chance is removed; 1.0 is perfect, 0 is chance |
